@@ -1,0 +1,26 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env & secrets
+.env
+
+# Build/Reports
+dist/
+build/
+.coverage
+htmlcov/
+
+# Project data (keine Versionskontrolle)
+data/
+routen/
+stats/
+logs/
+*.pdf
