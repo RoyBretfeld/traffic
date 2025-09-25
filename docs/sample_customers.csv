@@ -1,0 +1,6 @@
+customer_id,name,address,latitude,longitude,service_minutes,time_window_start,time_window_end
+C1,Autohaus Mitte,Löbtauer Str. 25,51.0471,13.7124,15,08:00,08:30
+C2,Kundenservice Süd,Stadtgutstr. 9,51.0115,13.7177,20,09:00,09:45
+C3,Baustelle West,Kesselsdorfer Str. 312,51.0389,13.6675,15,10:00,10:45
+C4,Bürozentrum Nord,Hansastr. 4,51.0738,13.7379,25,11:00,11:45
+C5,Lagerhaus Ost,Budapester Str. 21,51.0425,13.7264,20,12:15,13:00
