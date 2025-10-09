@@ -3,9 +3,29 @@ from typing import Optional, Iterable, Dict
 from db.core import ENGINE
 import unicodedata, re
 
+# Abkürzungen für besseres Matching (ohne Transliteration)
+_ABBR = [
+    (r"str\.", "straße"),   # Str. → Straße
+    (r"all?e?\.", "allee"),  # Allee-Abkürzungen
+    (r"pl\.", "platz"),     # Pl. → Platz
+    (r"weg\.", "weg"),      # Weg-Abkürzungen
+    (r"chaussee\.", "chaussee"),  # Chaussee-Varianten
+]
+
 # dieselbe Normalisierung wie im Ingest (ohne Transliteration)
 def normalize_addr(s: str) -> str:
     s = unicodedata.normalize("NFC", (s or ""))
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+def canon_addr(s: str) -> str:
+    """Kanonische Adress-Normalisierung für Fuzzy-Search (mehr Toleranz)."""
+    s = unicodedata.normalize("NFC", (s or ""))
+    s = s.lower()
+    # Abkürzungen vereinheitlichen
+    for pat, rep in _ABBR:
+        s = re.sub(pat, rep, s)
+    # Mehrfach-Whitespace entfernen
     s = re.sub(r"\s+", " ", s).strip()
     return s
 
