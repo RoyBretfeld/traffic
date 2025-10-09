@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrafficApp - Tourplan Management</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body { background-color: #f8f9fa; }
+        #map { height: calc(60vh - 60px); border-radius: 8px; width: 100%; }
+        .sidebar { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-height: calc(100vh - 120px); overflow-y: auto; }
+        
+        /* Debug-HUD Styles */
+        #hud {
+            position: fixed;
+            right: 8px;
+            top: 8px;
+            background: #111;
+            color: #eee;
+            padding: 6px 8px;
+            border-radius: 8px;
+            font: 12px/1.4 system-ui;
+            opacity: .9;
+            max-width: 40vw;
+            z-index: 9999;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        #hud b { color: #6cf; }
+        #hud .ok { color: #6f6; }
+        #hud .err { color: #f88; }
+        
+        /* Status-Bar */
+        #statusBar {
+            background: #e9ecef;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        /* Table Styles */
+        .table tr.ok { background-color: #d4edda; }
+        .table tr.warn { background-color: #fff3cd; }
+        .table tr.bad { background-color: #f8d7da; }
+    </style>
+</head>
+<body>
+    <!-- Debug-HUD -->
+    <div id="hud">HUD</div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Tourplan Management</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- File Selection -->
+                        <div class="form-group">
+                            <label for="fileSelect">CSV-Datei auswählen:</label>
+                            <select id="fileSelect" class="form-control">
+                                <option value="">Lade Dateien...</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Control Buttons -->
+                        <div class="form-group">
+                            <button id="loadBtn" class="btn btn-primary">Laden</button>
+                            <button id="geoBtn" class="btn btn-success ml-2">Geocode fehlende</button>
+                        </div>
+                        
+                        <!-- Geocoding Controls -->
+                        <div class="form-group">
+                            <label for="limitInput">Limit:</label>
+                            <input type="number" id="limitInput" class="form-control" value="20" min="1" max="100" style="width: 100px; display: inline-block;">
+                            <label for="dryRun" class="ml-3">
+                                <input type="checkbox" id="dryRun" checked> Dry Run
+                            </label>
+                        </div>
+                        
+                        <!-- Status Bar -->
+                        <div id="statusBar">Bereit</div>
+                        
+                        <!-- Results Table -->
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Zeile</th>
+                                        <th>Adresse</th>
+                                        <th>Geo-Daten</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">Keine Daten geladen</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="sidebar">
+                    <h5>Karte</h5>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
+    <script>
+        // API-Basis (Same-Origin)
+        const API_BASE = ""; // gleiche Origin
+        
+        // Debug-HUD
+        const HUD = (() => {
+            const el = document.getElementById('hud');
+            const log = (cls, msg) => {
+                const p = document.createElement('div');
+                p.className = cls || '';
+                p.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+                el.prepend(p);
+                // Begrenze auf 10 Einträge
+                while (el.children.length > 10) {
+                    el.removeChild(el.lastChild);
+                }
+            };
+            return {
+                note: (m) => log('', m),
+                ok: (m) => log('ok', `✔ ${m}`),
+                err: (e) => log('err', `✖ ${e?.message || e}`)
+            };
+        })();
+        
+        // Globale Fehlerbehandlung
+        window.addEventListener('error', e => HUD.err(e.error || e.message));
+        
+        // API-Funktionen
+        async function apiList() {
+            const r = await fetch(`${API_BASE}/api/tourplaene/list`);
+            if (!r.ok) throw new Error(`list failed ${r.status}`);
+            return r.json();
+        }
+        
+        async function apiMatch(filePath) {
+            const u = `${API_BASE}/api/tourplan/match?file=${encodeURIComponent(filePath)}`;
+            const r = await fetch(u);
+            const text = await r.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                throw new Error(`match invalid JSON: ${text.slice(0, 200)}`);
+            }
+        }
+        
+        async function apiGeoFill(filePath, limit = 20, dryRun = true) {
+            const u = `${API_BASE}/api/tourplan/geocode-missing?file=${encodeURIComponent(filePath)}&limit=${limit}&dry_run=${dryRun}`;
+            const r = await fetch(u);
+            if (!r.ok) {
+                const errorText = await r.text();
+                if (r.status === 400) {
+                    throw new Error(`Encoding-Bug erkannt: ${errorText.slice(0, 100)}...`);
+                } else if (r.status === 503) {
+                    throw new Error('DB nicht erreichbar');
+                }
+                throw new Error(`geofill failed ${r.status}: ${errorText}`);
+            }
+            return r.json();
+        }
+        
+        // UI-Funktionen
+        let CURRENT_FILE = null;
+        let map = null;
+        let markers = null;
+        
+        async function refreshFiles() {
+            HUD.note('list: start');
+            const j = await apiList();
+            const sel = document.querySelector('#fileSelect');
+            sel.innerHTML = '';
+            
+            j.files.forEach(f => {
+                const o = document.createElement('option');
+                o.value = f.path;
+                o.textContent = `${f.name} (${f.size} B)`;
+                sel.appendChild(o);
+            });
+            
+            CURRENT_FILE = j.files?.[0]?.path || null;
+            if (CURRENT_FILE) {
+                sel.value = CURRENT_FILE;
+            }
+            HUD.ok('list');
+        }
+        
+        async function loadMatch() {
+            if (!CURRENT_FILE) return;
+            HUD.note('match: start');
+            const j = await apiMatch(CURRENT_FILE);
+            const tb = document.querySelector('#tableBody');
+            tb.innerHTML = '';
+            
+            j.items.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = row.status;
+                tr.innerHTML = `<td>${row.row}</td><td>${row.address}</td>` +
+                    `<td>${row.has_geo ? `✅ (${row.geo.lat.toFixed(5)}, ${row.geo.lon.toFixed(5)})` : '❌'}</td>` +
+                    `<td>${row.status}${row.markers?.length ? ` · ${row.markers.join(', ')}` : ''}</td>`;
+                tb.appendChild(tr);
+            });
+            
+            document.querySelector('#statusBar').textContent = `OK ${j.ok} • WARN ${j.warn} • BAD ${j.bad}`;
+            HUD.ok('match');
+            
+            // Karte aktualisieren
+            updateMap(j.items);
+        }
+        
+        async function runGeoFill() {
+            if (!CURRENT_FILE) return;
+            const limit = parseInt(document.querySelector('#limitInput').value || '20', 10);
+            const dry = !!document.querySelector('#dryRun').checked;
+            HUD.note(`geofill: start limit=${limit} dry=${dry}`);
+            
+            const j = await apiGeoFill(CURRENT_FILE, limit, dry);
+            HUD.ok(`geofill: processed=${j.processed}`);
+            
+            // Nach Geocoding die Anzeige aktualisieren
+            await loadMatch();
+        }
+        
+        function initMap() {
+            if (map) {
+                map.remove();
+            }
+            map = L.map('map').setView([51.1657, 10.4515], 6); // Centered on Germany
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            markers = L.featureGroup();
+            markers.addTo(map);
+        }
+        
+        function updateMap(items) {
+            if (!map || !markers) return;
+            
+            markers.clearLayers();
+            const validItems = items.filter(item => item.has_geo && item.geo);
+            
+            validItems.forEach(item => {
+                const marker = L.marker([item.geo.lat, item.geo.lon], {
+                    icon: L.divIcon({
+                        className: `custom-div-icon ${item.status}-marker`,
+                        html: `<div style="background-color:${item.status === 'ok' ? 'green' : item.status === 'warn' ? 'orange' : 'red'}; width: 1rem; height: 1rem; display: block; left: -0.5rem; top: -0.5rem; position: relative; border-radius: 1rem; border: 1px solid #FFFFFF"></div>`,
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 16]
+                    })
+                }).bindPopup(`<b>Zeile ${item.row}</b><br>${item.address}<br>Status: ${item.status}`);
+                markers.addLayer(marker);
+            });
+            
+            if (validItems.length > 0) {
+                map.fitBounds(markers.getBounds());
+            }
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const sel = document.querySelector('#fileSelect');
+            const loadBtn = document.querySelector('#loadBtn');
+            const geoBtn = document.querySelector('#geoBtn');
+            
+            sel?.addEventListener('change', e => {
+                CURRENT_FILE = e.target.value;
+            });
+            
+            loadBtn?.addEventListener('click', () => {
+                loadMatch().catch(HUD.err);
+            });
+            
+            geoBtn?.addEventListener('click', () => {
+                runGeoFill().catch(HUD.err);
+            });
+            
+            // Initialisierung
+            initMap();
+            refreshFiles().then(() => {
+                if (CURRENT_FILE) {
+                    loadMatch().catch(HUD.err);
+                }
+            }).catch(HUD.err);
+        });
+    </script>
+</body>
+</html>

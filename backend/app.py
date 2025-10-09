@@ -9,9 +9,10 @@ import os
 import unicodedata
 from backend.utils.encoding_guards import trace_text, assert_no_mojibake, setup_utf8_logging, smoke_test_encoding
 
-# Importiere neue Route
+# Importiere neue Routen
 from routes.tourplan_match import router as tourplan_match_router
 from routes.tourplan_geofill import router as tourplan_geofill_router
+from routes.tourplaene_list import router as tourplaene_list_router
 
 def create_app():
     app = FastAPI(title="TrafficApp API", version="1.0.0")
@@ -31,6 +32,7 @@ def create_app():
     # Registriere neue Routen
     app.include_router(tourplan_match_router)
     app.include_router(tourplan_geofill_router)
+    app.include_router(tourplaene_list_router)
     
     # Encoding Setup (optional)
     try:
@@ -553,6 +555,21 @@ def get_kunde_by_id(kunde_id: int):
     except Exception as e:
         print(f"[DB-ERROR] Fehler beim Laden des Kunden {kunde_id}: {e}")
         return None
+
+@app.get("/ui/tourplan-management", response_class=HTMLResponse)
+async def tourplan_management():
+    """Tourplan Management Seite"""
+    try:
+        from ingest.http_responses import create_utf8_html_response
+        
+        with open("frontend/tourplan-management.html", "r", encoding="utf-8") as f:
+            content = f.read()
+        
+        return create_utf8_html_response(content)
+        
+    except Exception as e:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=500, detail=f"Fehler beim Laden der Seite: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
