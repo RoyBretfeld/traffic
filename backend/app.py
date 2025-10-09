@@ -11,6 +11,7 @@ from backend.utils.encoding_guards import trace_text, assert_no_mojibake, setup_
 
 # Importiere neue Route
 from routes.tourplan_match import router as tourplan_match_router
+from routes.tourplan_geofill import router as tourplan_geofill_router
 
 def create_app():
     app = FastAPI(title="TrafficApp API", version="1.0.0")
@@ -27,8 +28,9 @@ def create_app():
     # Static Files
     app.mount("/static", StaticFiles(directory="frontend"), name="static")
     
-    # Registriere neue Route
+    # Registriere neue Routen
     app.include_router(tourplan_match_router)
+    app.include_router(tourplan_geofill_router)
     
     # Encoding Setup (optional)
     try:
