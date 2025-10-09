@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAMO Routenplaner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .upload-section {
+            margin-bottom: 20px;
+        }
+        .routes {
+            margin-top: 20px;
+        }
+        .tour {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #eef6ff;
+            border-left: 4px solid #007bff;
+        }
+        .tour h3 {
+            margin: 0 0 10px 0;
+        }
+        .tour ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .tour li {
+            padding: 4px 0;
+        }
+        .bar {
+            color: #d9534f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FAMO Routenplaner (MVP)</h1>
+        <div class="upload-section">
+            <p>Laden Sie eine CSV-Datei mit Kundendaten hoch.</p>
+            <input type="file" id="file-input" accept=".csv,.txt">
+            <button id="upload-btn">Upload &amp; Berechnen</button>
+        </div>
+        <div id="status"></div>
+        <div class="routes" id="routes"></div>
+    </div>
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const uploadBtn = document.getElementById('upload-btn');
+        const statusEl = document.getElementById('status');
+        const routesEl = document.getElementById('routes');
+
+        uploadBtn.addEventListener('click', () => {
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Bitte wählen Sie eine CSV-Datei aus.');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+            statusEl.textContent = 'Berechnung läuft…';
+            routesEl.innerHTML = '';
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data.error) {
+                    statusEl.textContent = 'Fehler: ' + data.error;
+                    return;
+                }
+                statusEl.textContent = `Fertig – ${data.num_tours} Touren gefunden.`;
+                data.tours.forEach(tour => {
+                    const div = document.createElement('div');
+                    div.className = 'tour';
+                    const title = document.createElement('h3');
+                    title.textContent = `Tour ${tour.tour_index}`;
+                    div.appendChild(title);
+                    const list = document.createElement('ul');
+                    tour.customers.forEach(cust => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `${cust.order}. ${cust.name} – ${cust.street}, ${cust.plz} ${cust.city}` + (cust.bar ? ' <span class="bar">(Bar)</span>' : '');
+                        list.appendChild(li);
+                    });
+                    div.appendChild(list);
+                    routesEl.appendChild(div);
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                statusEl.textContent = 'Fehler beim Hochladen oder Verarbeiten der Datei.';
+            });
+        });
+    </script>
+</body>
+</html>

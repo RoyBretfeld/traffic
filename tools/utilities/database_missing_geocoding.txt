@@ -1,0 +1,503 @@
+DATENBANK - KUNDEN OHNE GEOKOORDINATEN
+================================================================================
+
+1. "Auto-Kavalier"- Admiral (ID: 1346)
+   Adresse: Georg-Mehrtens-Straáe 3, 01237 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+2. 1a Autoservice Alexander Heidecke (ID: 1331)
+   Adresse: Bahnhofstr. 2, 01847 Lohmen
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+3. 1a autoservice Menzel (ID: 1581)
+   Adresse: Bauernweg 12, 01109 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+4. 1a autoservice Oehlschlger (ID: 1493)
+   Adresse: Tharandter Straáe 26, 01159 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+5. A.T.L. Autoteileland (ID: 1357)
+   Adresse: Bismarckstraáe 57, 01257 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+6. A.T.U-Filiale Freital (ID: 1515)
+   Adresse: Wilsdruffer Str. 39, 01705 Freital
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+7. ACR bei Endlich (ID: 1590)
+   Adresse: Nickerner Weg 7, 01257 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+8. AH Franke GmbH & Co.KG Pulsn. (ID: 1359)
+   Adresse: Kamenzer Str. 10, 01896 Pulsnitz
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+9. AH Franke GmbH & Co.KG Radeb. (ID: 1579)
+   Adresse: An der Ziegelei 11, 01454 Radeberg
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+10. AIS Dresden GmbH (ID: 1463)
+   Adresse: Ktzschenbroder Strasse 193, 01139 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+11. AIS Dresden GmbH (ID: 1483)
+   Adresse: Wilsdruffer Strasse 41, 01705 Freital
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+12. AKF Fahrzeugteile GmbH (ID: 1424)
+   Adresse: Dresdener Straáe 70a, 02625 Bautzen
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+13. AS Frank Zimmermann (ID: 1300)
+   Adresse: Hauptstraáe 89, 01744 Dippoldiswalde
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+14. ASH Dirk Hger (ID: 1432)
+   Adresse: Am Mhlgraben 3, 01774 Klingenberg
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+15. ATM Reparaturzentrum (ID: 1390)
+   Adresse: uáere-Hainichener-Str. 5a, 09669 Frankenberg
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+16. ATW Fahrzeugteile (ID: 1612)
+   Adresse: Frbelstr. 51a, 01159 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+17. AUTECHNA (ID: 1601)
+   Adresse: Lindenstr. 8, 08280 Aue
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+18. AUTO LUST (ID: 1351)
+   Adresse: Krausestraáe 4, 01187 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+19. AUTO OTTO (ID: 1397)
+   Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+20. AUTOBOX DRESDEN GmbH (ID: 1342)
+   Adresse: Strasse des 17. Juni 17, 01257 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+21. AUTOMEISTEREI (ID: 1343)
+   Adresse: Lilienthalstraáe 3, 01257 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+22. AUTOTEILE BRNER (ID: 1450)
+   Adresse: Wolkensteiner Str. 18, 09514 Pockau - Lengefeld
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+23. Abschleppdienst Lesche GbR (ID: 1307)
+   Adresse: Hohe Straáe 79, 01796 Struppen/Siedlung
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+24. Adrian Glckner Automobile GmbH (ID: 1464)
+   Adresse: Dohnaer Strasse 103a, 01219 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+25. Agroservice Pirna GmbH (ID: 1374)
+   Adresse: Liebstdter Str. 45, 01796 Pirna
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+26. Alf Hse - Autoservice (ID: 1519)
+   Adresse: Geisingstr.30, 01309 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+27. Andreas Ebert (ID: 1439)
+   Adresse: Hauptstraáe 16, 01816 Bad Gottleuba-Berggieáhbel
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+28. Andreas Knop (ID: 1358)
+   Adresse: Bautzner Landstrasse 119, 01324 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+29. Andr Zerbst (ID: 1306)
+   Adresse: Niedersedlitzer Str. 67a, 01257 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+30. Apparatebau Moufang KG (ID: 1510)
+   Adresse: Rhnstr. 42-44, 63667 Nidda-Oberschmitten
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+31. Astral UG (ID: 1487)
+   Adresse: Lbtauer Straáe 80, 01159 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+32. Autechna Autoteile (ID: 1499)
+   Adresse: Am Abrahamschacht 4, 09496 Marienberg
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+33. Auto - Heller (ID: 1369)
+   Adresse: Gohliser Straáe 24, 01445 Radebeul
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+34. Auto Becker (ID: 1610)
+   Adresse: Altnossener Straáe 7, 01156 Dresden / Gompitz
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+35. Auto Brckner GmbH & Co. KG (ID: 1299)
+   Adresse: Drerstr.120, 01309 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+36. Auto Christen (ID: 1547)
+   Adresse: Schloáallee 9, 01468 Moritzburg
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+37. Auto Dienst Meissen (ID: 1422)
+   Adresse: Ossietzkystraáe 37a, 01662 Meiáen
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+38. Auto Eggert (ID: 1578)
+   Adresse: Wilhelm-Liebknecht-Str. 6, 01257 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+39. Auto Haase (ID: 1469)
+   Adresse: Coschtzer Straáe 46, 01705 Freital
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+40. Auto Jrgen Pfeiffer KG (ID: 1378)
+   Adresse: Reicker Str. 91, 01237 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+41. Auto Kaden KG (ID: 1312)
+   Adresse: Fichte Strasse 13c, 01705 Freital
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+42. Auto Lippmann (ID: 1635)
+   Adresse: Kleinhartmannsdorfer Str. 7, 09618 Brand-Erbisdorf
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+43. Auto Petzold GmbH (ID: 1537)
+   Adresse: Fritz-Reuter-Str. 45, 01097 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+44. Auto Service Meusel (ID: 1395)
+   Adresse: Alte Str. 33, 01768 Glashtte OT Hirschbach
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+45. Auto Trentzsch GbR (ID: 1472)
+   Adresse: Bodenbacher Strasse 109, 01277 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+46. Auto Werft Dresden (ID: 1577)
+   Adresse: Str. des 17. Juni 11, 01257 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+47. Auto mobile DW GmbH (ID: 1322)
+   Adresse: Gewerbering 4, 01744 Dippoldiswalde
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+48. Auto-Reparatur-Dienst (ID: 1381)
+   Adresse: Reinberger Weg 32, 01768 Hirschbach
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+49. Auto-Service Becker (ID: 1548)
+   Adresse: Frauensteiner Str. 31, 01744 Dippoldiswalde
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+50. Auto-Service Mller GbR (ID: 1427)
+   Adresse: Fritz-Schreiter-Strasse 31, 01259 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+51. Auto-Service Wagner (ID: 1382)
+   Adresse: Gewerbering 10, 01744 Dippoldiswalde
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+52. Auto-Service-Center Dresden (ID: 1525)
+   Adresse: Dohnaer Strasse 74, 01219 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+53. Auto-Teile-Zeitz (ID: 1467)
+   Adresse: Paul-Roland-Str.2, 06712 Zeitz
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+54. Auto-Walther GmbH & Co.KG (ID: 1356)
+   Adresse: Tannebergstrasse 12, 01477 Arnsdorf / Sachsen
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+55. Auto-Walther GmbH & Co.KG (ID: 1430)
+   Adresse: Brockhausstr. 12, 01471 Radeburg
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+56. Auto-Walther GmbH & Co.KG (ID: 1459)
+   Adresse: Stolpener Strasse 39, 01477 Arnsdorf / Sachsen
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+57. Auto23 GmbH (ID: 1396)
+   Adresse: Lohrmannstrasse 23, 01237 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+58. AutoHusler (ID: 1514)
+   Adresse: Am Gterbahnhof 18, 01640 Coswig
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+59. Autocenter Dresden GmbH (ID: 1533)
+   Adresse: Bremer Strasse 18 b, 01067 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+60. Autocenter Freital OHG (ID: 1647)
+   Adresse: Dresdner Strasse 314, 01705 Freital
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+61. Autodienst Tilo Bretschneider (ID: 1339)
+   Adresse: Altenberger Straáe 43, 01768 Glashtte
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+62. Autofreund-Lindner (ID: 1475)
+   Adresse: An der Bahra 9, 01816 Bad Gottleuba-Berggieáhbel
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+63. Autoglas Peschel GmbH (ID: 1413)
+   Adresse: Erlenweg 11, 01109 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+64. Autohaus (ID: 1477)
+   Adresse: Coschtzer Str. 1, 01187 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+65. Autohaus Borsbergstraáe GmbH (ID: 1466)
+   Adresse: Borsbergstraáe 39, 01309 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+66. Autohaus Dresden GmbH (ID: 1605)
+   Adresse: Possendorfer Strasse 38-40, 01217 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+67. Autohaus Emmrich e.K. (ID: 1501)
+   Adresse: Morgenrthe 1, 01705 Freital
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+68. Autohaus Fischer (ID: 1569)
+   Adresse: Meuálitzer Straáe 118, 01259 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+69. Autohaus Friedewald (ID: 1371)
+   Adresse: Altrcknitz 6, 01217 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+70. Autohaus Gaebel GmbH &Co.KG (ID: 1363)
+   Adresse: Hohe Str. 2-3, 01796 Dohma
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+71. Autohaus Godzik OHG (ID: 1440)
+   Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+72. Autohaus Hardtke GmbH (ID: 1399)
+   Adresse: Dresdner Landstrasse 1, 01728 Bannewitz
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+73. Autohaus Huth (ID: 1311)
+   Adresse: Cottaer Str. 1, 01796 Pirna-Neundorf
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+74. Autohaus Httel (ID: 1476)
+   Adresse: Dresdner Landstr. 14 F, 01744 Oberhslich
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+75. Autohaus Israel GmbH & Co. KG (ID: 1470)
+   Adresse: Dohnaer Strasse 310, 01257 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+76. Autohaus Lassotta GmbH (ID: 1401)
+   Adresse: Berghausstr. 2a, 01662 Meiáen
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+77. Autohaus Leuteritz GmbH (ID: 1618)
+   Adresse: Mglitztalstraáe 10, 01773 Altenberg OT Brenstein
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+78. Autohaus Liliensiek GmbH (ID: 1411)
+   Adresse: Alte Altenberger Str. 38, 01744 Dippoldiswalde
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+79. Autohaus Liliensiek GmbH (ID: 1536)
+   Adresse: Kesselsdorfer Str. 248, 01169 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+80. Autohaus Melkus GmbH (ID: 1626)
+   Adresse: Hamburger Strasse 30, 01067 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+81. Autohaus Olaf Streit (ID: 1552)
+   Adresse: Ringstraáe 25, 01809 Heidenau
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+82. Autohaus Pirna GmbH (ID: 1444)
+   Adresse: Knigsteiner Straáe 5, 01796 Pirna
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+83. Autohaus Rettberg GmbH (ID: 1354)
+   Adresse: Altenberger Str. 48, 01744 Dippoldiswalde
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+84. Autohaus Striesen (ID: 1292)
+   Adresse: Gottleubaer Straáe 1, 01277 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+85. Autohaus Welde GmbH (ID: 1602)
+   Adresse: Dresdner Strasse 5, 01796 Pirna
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+86. Autohaus Winter GmbH (ID: 1366)
+   Adresse: Dresdner Strasse 6, 01728 Bannewitz OT Hnichen
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+87. Autohaus Zimmermann (ID: 1303)
+   Adresse: Am Trachauer Bahnhof 9, 01139 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+88. Autohaus in Berggieáhbel GmbH (ID: 1355)
+   Adresse: Talstr. 4, 01816 Bad Gottleuba - Berggieáhbel
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+89. Autohof Dhlen (ID: 1452)
+   Adresse: Carl-Thieme-Str. 39, 01705 Freital
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+90. Autohof Radeburg GmbH (ID: 1377)
+   Adresse: Knigsbrckerstraáe 30, 01471 Radeburg
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+91. Automatikgetriebeservice (ID: 1447)
+   Adresse: Mgelner Str.29, 01237 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+92. Automobile Dresden (ID: 1400)
+   Adresse: Dresdner Str. 11, 01796 Pirna
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+93. Automobile Irrgang eGbR (ID: 1423)
+   Adresse: Dresdner Str. 16, 01773 Altenberg
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+94. Autopark Pirnaer Straáe (ID: 1498)
+   Adresse: Pirnaer Straáe 7, 01809 Heidenau
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+95. Autopflege und Reifendienst (ID: 1367)
+   Adresse: Am unteren Bach 5, 01723 Wilsdruff
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+96. Autoreparaturwerk Freital KG (ID: 1609)
+   Adresse: Cunnersdorferstraáe 12, 01705 Freital
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+97. Autoservice Arnold (ID: 1551)
+   Adresse: Talstr. 19, 01816 Berggieáhbel
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+98. Autoservice Baumeister (ID: 1586)
+   Adresse: Rethelstraáe 32, 01139 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+99. Autoservice Bernhardt (ID: 1639)
+   Adresse: Chamissostr.  2, 01157 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+
+100. Autoservice Grtner (ID: 1596)
+   Adresse: Seidnitzer Weg 11, 01237 Dresden
+   Koordinaten: lat=0.0, lon=0.0
+   Korrektur: _________________________
+

@@ -1,0 +1,1101 @@
+DATENBANK-KUNDEN FÜR GEOCODING
+================================================================================
+
+1. "Auto-Kavalier"- Admiral (ID: 1346)
+   Adresse: Georg-Mehrtens-Straáe 3, 01237 Dresden
+
+2. 1a Autoservice Alexander Heidecke (ID: 1331)
+   Adresse: Bahnhofstr. 2, 01847 Lohmen
+
+3. 1a autoservice Menzel (ID: 1581)
+   Adresse: Bauernweg 12, 01109 Dresden
+
+4. 1a autoservice Oehlschlger (ID: 1493)
+   Adresse: Tharandter Straáe 26, 01159 Dresden
+
+5. A.T.L. Autoteileland (ID: 1357)
+   Adresse: Bismarckstraáe 57, 01257 Dresden
+
+6. A.T.U-Filiale Freital (ID: 1515)
+   Adresse: Wilsdruffer Str. 39, 01705 Freital
+
+7. ACR bei Endlich (ID: 1590)
+   Adresse: Nickerner Weg 7, 01257 Dresden
+
+8. AH Franke GmbH & Co.KG Pulsn. (ID: 1359)
+   Adresse: Kamenzer Str. 10, 01896 Pulsnitz
+
+9. AH Franke GmbH & Co.KG Radeb. (ID: 1579)
+   Adresse: An der Ziegelei 11, 01454 Radeberg
+
+10. AIS Dresden GmbH (ID: 1463)
+   Adresse: Ktzschenbroder Strasse 193, 01139 Dresden
+
+11. AIS Dresden GmbH (ID: 1483)
+   Adresse: Wilsdruffer Strasse 41, 01705 Freital
+
+12. AKF Fahrzeugteile GmbH (ID: 1424)
+   Adresse: Dresdener Straáe 70a, 02625 Bautzen
+
+13. AS Frank Zimmermann (ID: 1300)
+   Adresse: Hauptstraáe 89, 01744 Dippoldiswalde
+
+14. ASH Dirk Hger (ID: 1432)
+   Adresse: Am Mhlgraben 3, 01774 Klingenberg
+
+15. ATM Reparaturzentrum (ID: 1390)
+   Adresse: uáere-Hainichener-Str. 5a, 09669 Frankenberg
+
+16. ATW Fahrzeugteile (ID: 1612)
+   Adresse: Frbelstr. 51a, 01159 Dresden
+
+17. AUTECHNA (ID: 1601)
+   Adresse: Lindenstr. 8, 08280 Aue
+
+18. AUTO LUST (ID: 1351)
+   Adresse: Krausestraáe 4, 01187 Dresden
+
+19. AUTO OTTO (ID: 1397)
+   Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+
+20. AUTOBOX DRESDEN GmbH (ID: 1342)
+   Adresse: Strasse des 17. Juni 17, 01257 Dresden
+
+21. AUTOMEISTEREI (ID: 1343)
+   Adresse: Lilienthalstraáe 3, 01257 Dresden
+
+22. AUTOTEILE BRNER (ID: 1450)
+   Adresse: Wolkensteiner Str. 18, 09514 Pockau - Lengefeld
+
+23. Abschleppdienst Lesche GbR (ID: 1307)
+   Adresse: Hohe Straáe 79, 01796 Struppen/Siedlung
+
+24. Adrian Glckner Automobile GmbH (ID: 1464)
+   Adresse: Dohnaer Strasse 103a, 01219 Dresden
+
+25. Agroservice Pirna GmbH (ID: 1374)
+   Adresse: Liebstdter Str. 45, 01796 Pirna
+
+26. Alf Hse - Autoservice (ID: 1519)
+   Adresse: Geisingstr.30, 01309 Dresden
+
+27. Andreas Ebert (ID: 1439)
+   Adresse: Hauptstraáe 16, 01816 Bad Gottleuba-Berggieáhbel
+
+28. Andreas Knop (ID: 1358)
+   Adresse: Bautzner Landstrasse 119, 01324 Dresden
+
+29. Andr Zerbst (ID: 1306)
+   Adresse: Niedersedlitzer Str. 67a, 01257 Dresden
+
+30. Apparatebau Moufang KG (ID: 1510)
+   Adresse: Rhnstr. 42-44, 63667 Nidda-Oberschmitten
+
+31. Astral UG (ID: 1487)
+   Adresse: Lbtauer Straáe 80, 01159 Dresden
+
+32. Autechna Autoteile (ID: 1499)
+   Adresse: Am Abrahamschacht 4, 09496 Marienberg
+
+33. Auto - Heller (ID: 1369)
+   Adresse: Gohliser Straáe 24, 01445 Radebeul
+
+34. Auto Becker (ID: 1610)
+   Adresse: Altnossener Straáe 7, 01156 Dresden / Gompitz
+
+35. Auto Brckner GmbH & Co. KG (ID: 1299)
+   Adresse: Drerstr.120, 01309 Dresden
+
+36. Auto Christen (ID: 1547)
+   Adresse: Schloáallee 9, 01468 Moritzburg
+
+37. Auto Dienst Meissen (ID: 1422)
+   Adresse: Ossietzkystraáe 37a, 01662 Meiáen
+
+38. Auto Eggert (ID: 1578)
+   Adresse: Wilhelm-Liebknecht-Str. 6, 01257 Dresden
+
+39. Auto Haase (ID: 1469)
+   Adresse: Coschtzer Straáe 46, 01705 Freital
+
+40. Auto Jrgen Pfeiffer KG (ID: 1378)
+   Adresse: Reicker Str. 91, 01237 Dresden
+
+41. Auto Kaden KG (ID: 1312)
+   Adresse: Fichte Strasse 13c, 01705 Freital
+
+42. Auto Lippmann (ID: 1635)
+   Adresse: Kleinhartmannsdorfer Str. 7, 09618 Brand-Erbisdorf
+
+43. Auto Petzold GmbH (ID: 1537)
+   Adresse: Fritz-Reuter-Str. 45, 01097 Dresden
+
+44. Auto Service Meusel (ID: 1395)
+   Adresse: Alte Str. 33, 01768 Glashtte OT Hirschbach
+
+45. Auto Trentzsch GbR (ID: 1472)
+   Adresse: Bodenbacher Strasse 109, 01277 Dresden
+
+46. Auto Werft Dresden (ID: 1577)
+   Adresse: Str. des 17. Juni 11, 01257 Dresden
+
+47. Auto mobile DW GmbH (ID: 1322)
+   Adresse: Gewerbering 4, 01744 Dippoldiswalde
+
+48. Auto-Reparatur-Dienst (ID: 1381)
+   Adresse: Reinberger Weg 32, 01768 Hirschbach
+
+49. Auto-Service Becker (ID: 1548)
+   Adresse: Frauensteiner Str. 31, 01744 Dippoldiswalde
+
+50. Auto-Service Mller GbR (ID: 1427)
+   Adresse: Fritz-Schreiter-Strasse 31, 01259 Dresden
+
+51. Auto-Service Wagner (ID: 1382)
+   Adresse: Gewerbering 10, 01744 Dippoldiswalde
+
+52. Auto-Service-Center Dresden (ID: 1525)
+   Adresse: Dohnaer Strasse 74, 01219 Dresden
+
+53. Auto-Teile-Zeitz (ID: 1467)
+   Adresse: Paul-Roland-Str.2, 06712 Zeitz
+
+54. Auto-Walther GmbH & Co.KG (ID: 1356)
+   Adresse: Tannebergstrasse 12, 01477 Arnsdorf / Sachsen
+
+55. Auto-Walther GmbH & Co.KG (ID: 1430)
+   Adresse: Brockhausstr. 12, 01471 Radeburg
+
+56. Auto-Walther GmbH & Co.KG (ID: 1459)
+   Adresse: Stolpener Strasse 39, 01477 Arnsdorf / Sachsen
+
+57. Auto23 GmbH (ID: 1396)
+   Adresse: Lohrmannstrasse 23, 01237 Dresden
+
+58. AutoHusler (ID: 1514)
+   Adresse: Am Gterbahnhof 18, 01640 Coswig
+
+59. Autocenter Dresden GmbH (ID: 1533)
+   Adresse: Bremer Strasse 18 b, 01067 Dresden
+
+60. Autocenter Freital OHG (ID: 1647)
+   Adresse: Dresdner Strasse 314, 01705 Freital
+
+61. Autodienst Tilo Bretschneider (ID: 1339)
+   Adresse: Altenberger Straáe 43, 01768 Glashtte
+
+62. Autofreund-Lindner (ID: 1475)
+   Adresse: An der Bahra 9, 01816 Bad Gottleuba-Berggieáhbel
+
+63. Autoglas Peschel GmbH (ID: 1413)
+   Adresse: Erlenweg 11, 01109 Dresden
+
+64. Autohaus (ID: 1477)
+   Adresse: Coschtzer Str. 1, 01187 Dresden
+
+65. Autohaus Borsbergstraáe GmbH (ID: 1466)
+   Adresse: Borsbergstraáe 39, 01309 Dresden
+
+66. Autohaus Dresden GmbH (ID: 1605)
+   Adresse: Possendorfer Strasse 38-40, 01217 Dresden
+
+67. Autohaus Emmrich e.K. (ID: 1501)
+   Adresse: Morgenrthe 1, 01705 Freital
+
+68. Autohaus Fischer (ID: 1569)
+   Adresse: Meuálitzer Straáe 118, 01259 Dresden
+
+69. Autohaus Friedewald (ID: 1371)
+   Adresse: Altrcknitz 6, 01217 Dresden
+
+70. Autohaus Gaebel GmbH &Co.KG (ID: 1363)
+   Adresse: Hohe Str. 2-3, 01796 Dohma
+
+71. Autohaus Godzik OHG (ID: 1440)
+   Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+
+72. Autohaus Hardtke GmbH (ID: 1399)
+   Adresse: Dresdner Landstrasse 1, 01728 Bannewitz
+
+73. Autohaus Huth (ID: 1311)
+   Adresse: Cottaer Str. 1, 01796 Pirna-Neundorf
+
+74. Autohaus Httel (ID: 1476)
+   Adresse: Dresdner Landstr. 14 F, 01744 Oberhslich
+
+75. Autohaus Israel GmbH & Co. KG (ID: 1470)
+   Adresse: Dohnaer Strasse 310, 01257 Dresden
+
+76. Autohaus Lassotta GmbH (ID: 1401)
+   Adresse: Berghausstr. 2a, 01662 Meiáen
+
+77. Autohaus Leuteritz GmbH (ID: 1618)
+   Adresse: Mglitztalstraáe 10, 01773 Altenberg OT Brenstein
+
+78. Autohaus Liliensiek GmbH (ID: 1411)
+   Adresse: Alte Altenberger Str. 38, 01744 Dippoldiswalde
+
+79. Autohaus Liliensiek GmbH (ID: 1536)
+   Adresse: Kesselsdorfer Str. 248, 01169 Dresden
+
+80. Autohaus Melkus GmbH (ID: 1626)
+   Adresse: Hamburger Strasse 30, 01067 Dresden
+
+81. Autohaus Olaf Streit (ID: 1552)
+   Adresse: Ringstraáe 25, 01809 Heidenau
+
+82. Autohaus Pirna GmbH (ID: 1444)
+   Adresse: Knigsteiner Straáe 5, 01796 Pirna
+
+83. Autohaus Rettberg GmbH (ID: 1354)
+   Adresse: Altenberger Str. 48, 01744 Dippoldiswalde
+
+84. Autohaus Striesen (ID: 1292)
+   Adresse: Gottleubaer Straáe 1, 01277 Dresden
+
+85. Autohaus Welde GmbH (ID: 1602)
+   Adresse: Dresdner Strasse 5, 01796 Pirna
+
+86. Autohaus Winter GmbH (ID: 1366)
+   Adresse: Dresdner Strasse 6, 01728 Bannewitz OT Hnichen
+
+87. Autohaus Zimmermann (ID: 1303)
+   Adresse: Am Trachauer Bahnhof 9, 01139 Dresden
+
+88. Autohaus in Berggieáhbel GmbH (ID: 1355)
+   Adresse: Talstr. 4, 01816 Bad Gottleuba - Berggieáhbel
+
+89. Autohof Dhlen (ID: 1452)
+   Adresse: Carl-Thieme-Str. 39, 01705 Freital
+
+90. Autohof Radeburg GmbH (ID: 1377)
+   Adresse: Knigsbrckerstraáe 30, 01471 Radeburg
+
+91. Automatikgetriebeservice (ID: 1447)
+   Adresse: Mgelner Str.29, 01237 Dresden
+
+92. Automobile Dresden (ID: 1400)
+   Adresse: Dresdner Str. 11, 01796 Pirna
+
+93. Automobile Irrgang eGbR (ID: 1423)
+   Adresse: Dresdner Str. 16, 01773 Altenberg
+
+94. Autopark Pirnaer Straáe (ID: 1498)
+   Adresse: Pirnaer Straáe 7, 01809 Heidenau
+
+95. Autopflege und Reifendienst (ID: 1367)
+   Adresse: Am unteren Bach 5, 01723 Wilsdruff
+
+96. Autoreparaturwerk Freital KG (ID: 1609)
+   Adresse: Cunnersdorferstraáe 12, 01705 Freital
+
+97. Autoservice Arnold (ID: 1551)
+   Adresse: Talstr. 19, 01816 Berggieáhbel
+
+98. Autoservice Baumeister (ID: 1586)
+   Adresse: Rethelstraáe 32, 01139 Dresden
+
+99. Autoservice Bernhardt (ID: 1639)
+   Adresse: Chamissostr.  2, 01157 Dresden
+
+100. Autoservice Grtner (ID: 1596)
+   Adresse: Seidnitzer Weg 11, 01237 Dresden
+
+101. Autoservice Hammer (ID: 1388)
+   Adresse: Querstrasse 10, 01705 Freital
+
+102. Autoservice Hartmann (ID: 1298)
+   Adresse: Altreick 26, 01237 Dresden
+
+103. Autoservice Hartmann (ID: 1454)
+   Adresse: Bauernweg 46, 01109 Dresden
+
+104. Autoservice Heinze GmbH (ID: 1535)
+   Adresse: Dohnaer Straáe 119, 01239 Dresden
+
+105. Autoservice Kartunov (ID: 1522)
+   Adresse: Gterhofstraáe 6, 01445 Radebeul
+
+106. Autoservice Kpnick (ID: 1632)
+   Adresse: Dresdner Str. 36A, 01737 Tharandt
+
+107. Autoservice Laubegast (ID: 1568)
+   Adresse: sterreicher Str. 63, 01279 Dresden
+
+108. Autoservice Leuthold (ID: 1513)
+   Adresse: Am Sgewerk 36, 01328 Dresden OT Schnfeld
+
+109. Autoservice Matthes (ID: 1633)
+   Adresse: Alt-Serkowitz 1, 01445 Radebeul
+
+110. Autoservice Mehlig (ID: 1482)
+   Adresse: Schulstraáe 25, 01468 Moritzburg (OT Boxdorf)
+
+111. Autoservice Petters GmbH (ID: 1545)
+   Adresse: Sternstraáe 14, 01139 Dresden
+
+112. Autoservice Pohlmann (ID: 1619)
+   Adresse: Hauptstraáe 70, 01705 Freital
+
+113. Autoservice Reichert GmbH (ID: 1389)
+   Adresse: Kesselsdorfer Strasse 99, 01159 Dresden
+
+114. Autoservice Schubert (ID: 1345)
+   Adresse: Fichtestraáe 8, 01705 Freital
+
+115. Autoservice Winkler (ID: 1479)
+   Adresse: Angerweg 1, 01662 Meiáen
+
+116. Autoservice Wolf (ID: 1412)
+   Adresse: Wiener Straáe 10, 01069 Dresden
+
+117. Autoservice und Fahrzeugbau Steglich (ID: 1480)
+   Adresse: Reisstraáe  37, 01257 Dresden
+
+118. Autoteam Schade (ID: 1553)
+   Adresse: Dresdner Strasse 119a, 01640 Coswig
+
+119. Autoteile Ehrlich (ID: 1588)
+   Adresse: Ktzschenbrodaer Str. 38, 01445 Radebeul
+
+120. Autoteile Heiko Ungermann (ID: 1410)
+   Adresse: Geisinger Str. 1, 01773 Altenberg
+
+121. Autoteile und Zubehr (ID: 1600)
+   Adresse: Reichenbacher Str. 190a, 08056 Zwickau
+
+122. Autovermietung Vetter (ID: 1630)
+   Adresse: Sternstraáe 47, 01139 Dresden
+
+123. Autowerkstatt MAUDRICH GmbH (ID: 1584)
+   Adresse: Ringstr. 43, 01468 Moritzburg OT Boxdorf
+
+124. BISTRA Bau GmbH & Co. KG (ID: 1490)
+   Adresse: Hohe Straáe, 01796 Dohma
+
+125. BOSSE Mechanik (ID: 1624)
+   Adresse: Mhlenstr. 5, 39397 Schwanebeck
+
+126. BRAUNE Autolackierbedarf GmbH (ID: 1429)
+   Adresse: Burgker Strasse 135, 01705 Freital
+
+127. Basti's KFZ-Werkstatt (ID: 1491)
+   Adresse: Tharandter Straáe 41b, 01159 Dresden
+
+128. Bauservice Tilo Richter (ID: 1542)
+   Adresse: Bielatalstraáe 34, 01824 Knigstein
+
+129. Bauservice Tilo Richter (ID: 1641)
+   Adresse: Pfaffenberg 5, 01824 Knigstein
+
+130. Bernd Forker GmbH (ID: 1338)
+   Adresse: Siegfried Rdel-Str.37, 01796 Pirna
+
+131. Bernd Schmiedgen (ID: 1481)
+   Adresse: Lindeberg 2, 01471 Radeburg
+
+132. Blizzboy Rthig (ID: 1634)
+   Adresse: Carl-Thieme-Str. 12, 01705 Freital
+
+133. Blumentritt Diesel-Einspritztechnik (ID: 1323)
+   Adresse: Straáe des 17.Juni 16, 01257 Dresden
+
+134. Boxenstop KFZ-Meisterwerkstatt (ID: 1409)
+   Adresse: Zum Grund 3, 01705 Freital
+
+135. CAR - Center (ID: 1334)
+   Adresse: Crimmitschauer Straáe 50a, 04626 Schmlln/Thr.
+
+136. CAR POINT (ID: 1417)
+   Adresse: Pillnitzer Str. 46, 01454 Radeberg
+
+137. CAR-ART GmbH (ID: 1370)
+   Adresse: Lbtauer Str. 55, 01159 Dresden
+
+138. CAR-ART GmbH (ID: 1526)
+   Adresse: Bismarkstr. 63, 01257 Dresden
+
+139. CAR-REPAIR (ID: 1348)
+   Adresse: Fritz-Reuter Straáe 43, 01097 Dresden
+
+140. CSM (ID: 1643)
+   Adresse: Altplauen 11, 01187 Dresden
+
+141. Carzone Pirna (ID: 1653)
+   Adresse: Lohmener Straáe 15a, 01796 Pirna
+
+142. Classic Style (ID: 1460)
+   Adresse: An der Walze 3, 01640 Coswig
+
+143. DISTREX Fahrzeugservice e.K. (ID: 1309)
+   Adresse: Wiener Straáe 10, 01069 Dresden
+
+144. Dachdeckerbetrieb Heber (ID: 1301)
+   Adresse: Berreuther Straáe 15a, 01744 Dippoldiswalde
+
+145. Die Maler GmbH (ID: 1308)
+   Adresse: Wilsdruffer Strasse 5, 01705 Freital
+
+146. Die Meister (ID: 1585)
+   Adresse: Bodelschwinghstrasse 1a, 01159 Dresden
+
+147. Die Meister (ID: 1604)
+   Adresse: bodelschwingh strasse 1A, 01159 Dresden
+
+148. Die-Autogesellschaft-Dresden.de (ID: 1473)
+   Adresse: Hauptstraáe 1, 01809 Heidenau
+
+149. Dietmar Beerwart (ID: 1451)
+   Adresse: Hertelstrasse 17, 01307 Dresden
+
+150. Dietze & Schindler (ID: 1540)
+   Adresse: Ladestraáe 2b, 09465 Sehmatal-OT Sehma
+
+151. Dieáner & Mske GbR (ID: 1337)
+   Adresse: Bockwener Ring 8, 01665 Klipphausen
+
+152. Dippser-Auto-Ecke (ID: 1484)
+   Adresse: Bergstraáe 93, 01744 Dippoldiswalde OT Seifersdorf
+
+153. Dippser-Auto-Ecke (ID: 1506)
+   Adresse: Obertorplatz 13A, 01744 Dippoldiswalde
+
+154. Dirk Krause (ID: 1645)
+   Adresse: Moritzburger Weg 13, 01109 Dresden
+
+155. Dreihundert Dresden (ID: 1302)
+   Adresse: Naumannstraáe 12 | Halle 14, 01809 Heidenau
+
+156. Dresdner Klassiker Handel GmbH (ID: 1521)
+   Adresse: Knigsbrcker Straáe 96, 01099 Dresden
+
+157. Dresdner Reifen Zentrale GmbH (ID: 1384)
+   Adresse: An der Prieánitzaue 6, 01328 Dresden
+
+158. Dresdner Reifen Zentrale GmbH (ID: 1435)
+   Adresse: Lohrmannstraáe 22, 01237 Dresden
+
+159. Dresdner Reifen Zentrale GmbH (ID: 1614)
+   Adresse: Lbtauer Strasse 34-38, 01159 Dresden
+
+160. Dressel Montage (ID: 1503)
+   Adresse: Zeisigweg 25, 01737 Kurort Hartha
+
+161. ERSA Automotive (ID: 1319)
+   Adresse: Geibeltstr. 2b, 01796 Pirna
+
+162. ESW Autoservice GmbH (ID: 1629)
+   Adresse: Knigsteiner Str. 46, 01824 Leupoldishain
+
+163. Elektroinstallation (ID: 1611)
+   Adresse: Rathenaustr. 10, 01689 Niederau
+
+164. Elektroinstallation Hennig (ID: 1453)
+   Adresse: Cotta B 27A, 01796 Dohma
+
+165. F & T Fahrzeug-Technik GmbH (ID: 1509)
+   Adresse: Dresdner Straáe 263, 01705 Freital
+
+166. F.H. Wheel Center GmbH (ID: 1404)
+   Adresse: Khlerstr. 16, 01239 Dresden
+
+167. FAMO Fahrzeug-und Motorenteile GmbH (ID: 1332)
+   Adresse: Kleine Baschtzer Str. 1, 02625 Bautzen
+
+168. FAMO Fahrzeug-und Motorenteile GmbH (ID: 1373)
+   Adresse: Stuttgarter Str. 33, 01189 Dresden
+
+169. FAMO Fahrzeug-und Motorenteile GmbH (ID: 1391)
+   Adresse: Dewitzer Str. 77f, 04425 Taucha
+
+170. FAMO Fahrzeug-und Motorenteile GmbH (ID: 1532)
+   Adresse: Am Telering 1, 03051 Cottbus
+
+171. FAMO Fahrzeug-und Motorenteile GmbH (ID: 1534)
+   Adresse: Brander Straáe 65, 09599 Freiberg
+
+172. FREIE KFZ-WERKSTATT (ID: 1362)
+   Adresse: Poststrasse 3, 01705 Freital
+
+173. FTT Fahrzeug Technik Tharandt (ID: 1589)
+   Adresse: Dresdner Straáe 36b, 01737 Tharandt
+
+174. Fa. Autohaus  Langenhan (ID: 1361)
+   Adresse: Justus -Liebig Straáe 30, 99087 Erfurt
+
+175. Fa. Flade Thomas (ID: 1562)
+   Adresse: Rungstockstr. 43, 09526 Olbernhau/Sa
+
+176. Fa.Wilms (ID: 1392)
+   Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+
+177. Fahrzeug Technik Maxen (ID: 1320)
+   Adresse: Maxener Straáe 12, 01809 Mglitztal / OT Maxen
+
+178. Fahrzeug und Systemtechnik Ehring GmbH (ID: 1520)
+   Adresse: Str. der MTS 1, 01737 Braunsdorf
+
+179. Fahrzeug-Service Bachmann (ID: 1508)
+   Adresse: Meiáner Landstraáe 111, 01157 Dresden
+
+180. Fahrzeughandel u. Service (ID: 1341)
+   Adresse: Zschorgulaer Str. 22, 07619 Schklen
+
+181. Fahrzeugservice Kaden (ID: 1418)
+   Adresse: Meiáner Landstraáe 5, 01157 Dresden
+
+182. Fahrzeugservice Kretzschmar (ID: 1616)
+   Adresse: Marie-Wittich-Strasse 1, 01237 Dresden
+
+183. Fahrzeugservice Reiche (ID: 1324)
+   Adresse: Gasanstaltstraáe 43d, 01237 Dresden
+
+184. Fahrzeugservice u. (ID: 1304)
+   Adresse: Grenzstr. 9, 01640 Coswig
+
+185. Fahrzeugservice und Handel (ID: 1403)
+   Adresse: Merbitzer Ring 9, 01156 Dresden
+
+186. Feldbinder & Rolfsmeyer (ID: 1437)
+   Adresse: Straáe des 17. Juni 11, 01257 Dresden
+
+187. Firma Dachboxhelden (ID: 1597)
+   Adresse: Robert-Bosch-Straáe 29, 55129 Mainz-Hechtsheim
+
+188. Firma Jens Drechsler (ID: 1650)
+   Adresse: Zur Bachwiese 2, 01156 Dresden
+
+189. Frank & Sohn Fahrzeugteile Leipzig GmbH (ID: 1636)
+   Adresse: Handelsstraáe 24, 04420 Markranstdt / Leipzig
+
+190. Frank's Motorradladen (ID: 1644)
+   Adresse: Kesselsdorfer Str. 3, 01705 Freital-Wurgwitz
+
+191. Franks Garage (ID: 1310)
+   Adresse: Deubener Strasse 13, 01705 Freital
+
+192. Freie KFZ-Meisterwerkstatt (ID: 1528)
+   Adresse: Poisentalstr. 12, 01705 Freital
+
+193. Freie Kfz-Werkstatt Peter Thomas (ID: 1607)
+   Adresse: Drrwiesenstr. 5, 01809 Dohna
+
+194. Freie Kfz.-Werkstatt (ID: 1621)
+   Adresse: Oberer Ladenberg 19, 01816 Berggieáhbel
+
+195. Freie Kfz.-Werkstatt Czerwonka (ID: 1295)
+   Adresse: Lbtauer Strasse 65, 01159 Dresden
+
+196. Garagentore u. Torantriebe (ID: 1638)
+   Adresse: Weiáeritzstraáe 3a, 01744 Dippoldiswalde
+
+197. Go-Cars-Autoservice (ID: 1294)
+   Adresse: Bautzner Landstrasse 127, 01324 Dresden
+
+198. Gomodrom Automobile (ID: 1563)
+   Adresse: Kesselsdorfer Str. 99, 01159 Dresden
+
+199. Gustavs Autohof (ID: 1376)
+   Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+
+200. Halle 13 - Teile (ID: 1550)
+   Adresse: Lohmener Str. 13, 01833 Drrrhrsdorf-Dittersbach
+
+201. Hanitzsch GmbH & Co. KG (ID: 1567)
+   Adresse: Zschoner Ring 18, 01723 Kesselsdorf
+
+202. Harry Schulze GmbH (ID: 1559)
+   Adresse: Im Stauster 6, 36088 Hnfeld
+
+203. Hartmann Karosserie- und Fahrzeugbau (ID: 1456)
+   Adresse: Altreick 26, 01237 Dresden
+
+204. Helmut Hammerschmidt KFZ (ID: 1570)
+   Adresse: Wilsdruffer Straáe 65, 01705 Freital
+
+205. Herkommer Kfz-Technik (ID: 1517)
+   Adresse: Crandorfer Str. 49, 08340 Schwarzenberg
+
+206. Hickmann, Matthias (ID: 1360)
+   Adresse: Am Tannenbusch 9, 01816 Bad Gottleuba
+
+207. Hoffmann Automobile (ID: 1449)
+   Adresse: Pirnaer Landstraáe 289, 01259 Dresden
+
+208. Joachim & Markus Reese GbR (ID: 1344)
+   Adresse: Nikolaus-Otto-Straáe 3, 55129 Mainz
+
+209. Jrgen Schiebel (ID: 1316)
+   Adresse: Cotta B 16G, 01796 Dohma
+
+210. Jkel Kfz-Meisterbetrieb GmbH (ID: 1554)
+   Adresse: Rudolf-Breitscheid-Straáe 29, 01809 Heidenau
+
+211. KENCAR UG(haftungsbeschrnkt) (ID: 1617)
+   Adresse: Dorfstraáe 13B, 01816 Bad Gottleuba-Berggieáhbel
+
+212. KFZ Meisterbetrieb Jan Opitz (ID: 1352)
+   Adresse: Frstereistr. 18, 01099 Dresden
+
+213. KFZ-Meisterbetrieb (ID: 1333)
+   Adresse: Dresdner Straáe 290, 01705 Freital
+
+214. KFZ-Meisterbetrieb Lscher (ID: 1393)
+   Adresse: Hauptstraáe 122, 01816 Bad Gottleuba-Berggieáhbel
+
+215. KFZ-Meisterhandwerk (ID: 1582)
+   Adresse: Heidenauer Str. 105, 01796 Pirna
+
+216. KFZ-Service Brill (ID: 1561)
+   Adresse: Burgstdteler Str. 3d, 01219 Dresden
+
+217. KFZ-Service Holger Garz (ID: 1368)
+   Adresse: Veteranenstr. 3, 01139 Dresden
+
+218. KFZ-Service Jrgen Hhle (ID: 1329)
+   Adresse: Hermann-Michel-Straáe 1, 01189 Dresden
+
+219. KFZ-Werkstatt Auto-Gut (ID: 1431)
+   Adresse: Poisentalstraáe 24, 01728 Bannewitz
+
+220. KLIEMT NUTZFAHRZEUGTEILE (ID: 1646)
+   Adresse: Am Flugplatz 22, 02828 Grlitz
+
+221. KMH-Team (ID: 1289)
+   Adresse: An der Niedermhle 3, 01257 Dresden
+
+222. Karosserie- & KfZ-Service Derlich (ID: 1594)
+   Adresse: Siedlung 17, 01809 Burkhardswalde
+
+223. Karosserie- und Fahrzeugbau (ID: 1564)
+   Adresse: Am Ring 4, 01665 Klipphausen
+
+224. Karosseriebau Henschke (ID: 1575)
+   Adresse: Rundteil 5a, 01728 Possendorf
+
+225. Karosseriebau Miersch (ID: 1486)
+   Adresse: Birkigter Strasse 14, 01705 Freital
+
+226. Karosseriebau Trompter (ID: 1416)
+   Adresse: Spenerstraáe 35, 01309 Dresden
+
+227. Karosseriefachbetrieb Kirchner (ID: 1555)
+   Adresse: Freitaler Straáe 8, 01737 Tharandt/Groáopitz
+
+228. Karsten Noack (ID: 1544)
+   Adresse: Reinberger Dorfstraáe 6a, 01744 Dippoldiswalde/OT Reinberg
+
+229. Kaute -Motoreninstandsetzung (ID: 1565)
+   Adresse: Groáenhainer Straáe 19, 01097 Dresden
+
+230. Keilig Willi Inh. A.Hhnel (ID: 1651)
+   Adresse: Wilsdruffer Str. 102, 01705 Freital
+
+231. Kfz - Kargel (ID: 1315)
+   Adresse: Raiffeisenstraáe 14, 55270 Klein-Winternheim
+
+232. Kfz Reparatur (ID: 1637)
+   Adresse: Alte Poststr. 4a, 01744 Dippoldiswalde
+
+233. Kfz Service - SHW Teubner UG (ID: 1387)
+   Adresse: Enderstraáe 94, 01277 Dresden
+
+234. Kfz Technik Bruer (ID: 1455)
+   Adresse: Potschappler Straáe 4, 01705 Freital
+
+235. Kfz-Aufbereitung Dresden (ID: 1497)
+   Adresse: Dohnaer Str. 79, 01219 Dresden
+
+236. Kfz-Betrieb "Die Meister" (ID: 1603)
+   Adresse: Lbtauer Strasse 54-56, 01159 Dresden
+
+237. Kfz-Meister Jens Jahn (ID: 1353)
+   Adresse: Straáe des Friedens 37, 01723 Kesselsdorf
+
+238. Kfz-Meisterbetrieb Heyde (ID: 1317)
+   Adresse: Am Anger 16, 01237 Dresden
+
+239. Kfz-Meisterbetrieb Lommatzsch (ID: 1327)
+   Adresse: Bismarckstr. 70, 01257 Dresden
+
+240. Kfz-Meisterbetrieb Stege (ID: 1502)
+   Adresse: Tolkewitzer Strasse 83, 01279 Dresden
+
+241. Kfz-Meisterbetrieb Sllner (ID: 1415)
+   Adresse: August Bebel Strasse 82, 01728 Bannewitz
+
+242. Kfz-Reparatur (ID: 1591)
+   Adresse: Pratzschwitzer Straáe 220, 01796 Pirna/Birkwitz
+
+243. Kfz-Sachverstndigenbro (ID: 1631)
+   Adresse: Werner-Seelenbinder-Straáe 1B, 01809 Heidenau
+
+244. Kfz-Service Hertling (ID: 1406)
+   Adresse: Herbert-Liebsch- Str. 4, 01796 Pirna-Sonnenstein
+
+245. Kfz-Service Schlegel (ID: 1587)
+   Adresse: August-Bebel-Str. 23, 01809 Heidenau
+
+246. Kfz-Service-Pahner (ID: 1458)
+   Adresse: Rhrsdorfer Straáe 24, 01257 Dresden
+
+247. Kfz-Werkstatt Hocker (ID: 1379)
+   Adresse: Pillnitzer Straáe 1, 01796 Pirna
+
+248. King Cars GmbH Nord (ID: 1448)
+   Adresse: Friedrich-Olbricht-Damm 66, 13627 Berlin
+
+249. Klassische Automobile Schwarz (ID: 1538)
+   Adresse: Rundteil 7b, 01728 Bannewitz OT Possendorf
+
+250. Klaus Brandner GbR (ID: 1305)
+   Adresse: Gewerbegebiet Kaltes Feld  36, 08468 Heinsdorfergrund
+
+251. Kloss Auto-Service (ID: 1627)
+   Adresse: Bahretalstr. 3a, 01796 Dohma
+
+252. Knoll GmbH (ID: 1580)
+   Adresse: Carl-Hamel-Str. 21, 09116 Chemnitz
+
+253. Kommunalfahrzeuge Heidrich GmbH (ID: 1598)
+   Adresse: Frsterlingstrasse 23, 01259 Dresden
+
+254. Korrosionsschutz Schiebold (ID: 1496)
+   Adresse: Lohmener Str. 13, 01833 Drrrhrsdorf-Dittersbach
+
+255. Kraftwagen-Reparatur (ID: 1314)
+   Adresse: Keppgrundstrasse 7, 01259 Dresden
+
+256. Kraftwagenpark Dresden (ID: 1296)
+   Adresse: Zum Lindenhof 9 b, 01665 Riemsdorf
+
+257. Kuli's Carpoint (ID: 1405)
+   Adresse: Reisstr. 40, 01257 Dresden
+
+258. Kurierdienst Cornelia Grfe (ID: 1365)
+   Adresse: Geibeltstraáe 2b, 01796 Pirna
+
+259. LB (ID: 1446)
+   Adresse: Kreisel 4, 09322 Penig
+
+260. Lackiererei (ID: 1523)
+   Adresse: Lindenallee 3, 02994 Bernsdorf
+
+261. Lackwerk LW GmbH (ID: 1419)
+   Adresse: Bremer Straáe 5, 01067 Dresden
+
+262. Land-Bau-&Fahrzeugtechnik (ID: 1349)
+   Adresse: Dorfstraáe 37, 01768 Glashtte OT Luchau
+
+263. Lars Richter (ID: 1293)
+   Adresse: An der Viehleite 30, 01796 Pirna
+
+264. Leon Automobile (ID: 1549)
+   Adresse: Kesselsdorfer Str. 20, 01705 Freital
+
+265. Leonhardt (ID: 1347)
+   Adresse: Weichselstraáe 2, 36043 Fulda
+
+266. LiLa metallinc (ID: 1402)
+   Adresse: Oberer Ladenberg 13, 01816 Bad Gottleuba OT Berggieáhbel
+
+267. Lindner, Thomas GmbH (ID: 1478)
+   Adresse: Am Bahndamm 8, 01728 Bannewitz
+
+268. MARTH Performance (ID: 1462)
+   Adresse: Bahnhofstr. 18, 04928 Plessa
+
+269. MELKUS Fahrzeugservice im SEC (ID: 1438)
+   Adresse: Enderstr. 59, 01277 Dresden
+
+270. MH-Fahrzeugservice (ID: 1425)
+   Adresse: Carl-Thieme-Straáe 28, 01705 Freital
+
+271. MLTec Automotive GmbH (ID: 1608)
+   Adresse: Weinbergstr. 4, 01445 Radebeul
+
+272. MOTORSTOPP (ID: 1436)
+   Adresse: Hallesche Str. 77, 04159 Leipzig
+
+273. MSM by HUBraum GmbH (ID: 1468)
+   Adresse: Frbelstraáe 20, 01159 Dresden
+
+274. MVS Oldtimerrestauration (ID: 1622)
+   Adresse: Lbtauer Strasse 54, 01159 Dresden
+
+275. Marcel Loreck (ID: 1572)
+   Adresse: Gegenber Prieánitztalstr. 14, 01768 Glashtte
+
+276. Marco Wagner (ID: 1465)
+   Adresse: Niedermhle 117, 01738 Dorfhain
+
+277. Maritimus (ID: 1408)
+   Adresse: Alte Dorfstraáe 5, 18356 Fuhlendorf
+
+278. Marko Heymann Kfz-Werkstatt (ID: 1364)
+   Adresse: Schulstr. 21, 01728 Bannewitz
+
+279. Marks Dieselmotorentechnik (ID: 1336)
+   Adresse: Enderstr. 63, 01277 Dresden
+
+280. Martin Faust (ID: 1375)
+   Adresse: Alt-Rottwerndorf 60-62, 01796 Pirna
+
+281. Meisterwerkstatt Weigel (ID: 1434)
+   Adresse: Rosa-Menzer-Straáe 23, 01309 Dresden
+
+282. Motoren-Frech GbR (ID: 1546)
+   Adresse: Hohensteiner Str. 101, 09212 Limbach-O./OT Pleiáa
+
+283. MotorenService BiebersteinGmbH (ID: 1428)
+   Adresse: Hauptstraáe 68, 02699 Knigswartha
+
+284. Motorenbau - KURZ (ID: 1642)
+   Adresse: Zwickauer Str. 192, 08468 Reichenbach
+
+285. Motoreninstandsetzung (ID: 1297)
+   Adresse: Am Trachauer Bahnhof 11, 01139 Dresden
+
+286. Motorenservice (ID: 1652)
+   Adresse: Thomas-Mntzer-Straáe 2, 99994 Schlotheim
+
+287. Musti Autoaufbereitung (ID: 1623)
+   Adresse: Altbriesnitz 8, 01157 Dresden
+
+288. NPR of Europe GmbH (ID: 1541)
+   Adresse: Siemensstr.56, 70825 Korntal-Mnchingen
+
+289. PKW & Nutzfahrzeug Service (ID: 1516)
+   Adresse: Alttorna 7, 01239 Dresden
+
+290. PM Car Parts (ID: 1504)
+   Adresse: Naumannstr. 12 / Halle 26F, 01809 Heidenau
+
+291. PMS Provocatione Motor Sport (ID: 1574)
+   Adresse: Lockwitzgrund 40, 01257 Dresden
+
+292. Paddock (ID: 1421)
+   Adresse: Dresdner Straáe 4, 01796 Pirna
+
+293. Pauls Garage (ID: 1330)
+   Adresse: Reicker Straáe 53, 01219 Dresden
+
+294. Peers Garage - Freie KFZ-Werkstatt (ID: 1606)
+   Adresse: Quohrener Str. 36, 01324 Dresden
+
+295. Peugeot Bttner (ID: 1543)
+   Adresse: Steigerstraáe 1, 01705 Freital
+
+296. Point S Hentschke (ID: 1442)
+   Adresse: Dresdner Straáe 51, 01796 Pirna
+
+297. Profi Parts Fahrzeugteile (ID: 1407)
+   Adresse: Sdring 39, 54634 Bitburg
+
+298. Profil 25 (ID: 1433)
+   Adresse: Buchholzweg 2, 01445 Radebeul
+
+299. QQ Moves GmbH (ID: 1640)
+   Adresse: Fabrikstraáe 54, 01159 Dresden
+
+300. R & A Fahrzeugservice und -han (ID: 1529)
+   Adresse: Frbelstr. 30-32, 01159 Dresden
+
+301. RR Auto- & Reifenservice GmbH Radebeul (ID: 1571)
+   Adresse: Schumannstraáe 18, 01445 Radebeul
+
+302. Rabe & Leuthold (ID: 1599)
+   Adresse: Saarstraáe 4, 08056 Zwickau
+
+303. Rasche, Thomas (ID: 1557)
+   Adresse: Friedrichswalde 59, 01819 Friedrichswalde
+
+304. Reifen + Auto Service Grosche GmbH (ID: 1443)
+   Adresse: Ktitzer Straáe 76, 01445 Radebeul
+
+305. Reifen Auto Service Glau (ID: 1558)
+   Adresse: Ferdinand v. Schill Str. 52, 01728 Bannewitz
+
+306. Reifen Roespel GmbH (ID: 1539)
+   Adresse: Wilsdruffer Straáe 7, 01705 Freital
+
+307. Reifen Rhle e.K. Autotechnik (ID: 1485)
+   Adresse: Lbtauer Straáe 42, 01159 Dresden
+
+308. Reifen-& Autoservice Roespel (ID: 1560)
+   Adresse: Wilsdruffer Strasse 11, 01723 Kesselsdorf
+
+309. ReifenCenter Dresden (ID: 1385)
+   Adresse: Bismarckstraáe 57, 01257 Dresden
+
+310. ReifenCenter Dresden (ID: 1576)
+   Adresse: Bismarckstr. 57, 01257 Dresden
+
+311. Reifendienst Schnherr (ID: 1489)
+   Adresse: Dorfstraáe 30, 01744 Dippoldiswalde
+
+312. Reifenhaus Freital GbR (ID: 1566)
+   Adresse: Dresdner Strasse 3, 01705 Freital
+
+313. Rob`s Kfz-Service (ID: 1290)
+   Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+
+314. Ronald Halla (ID: 1613)
+   Adresse: Schmiedeweg 30, 02906 Waldhufen
+
+315. Rudis-Garage (ID: 1441)
+   Adresse: Ktzschenbrodaer Str. 58, 01445 Radebeul
+
+316. SAG Sadisdorfer Agrar AG (ID: 1512)
+   Adresse: Frauensteiner Str. 9a, 01744 Dippoldiswalde
+
+317. SMP GmbH (ID: 1474)
+   Adresse: Alemannenstraáe 50, 01309 Dresden
+
+318. SachsenNetze GmbH (ID: 1414)
+   Adresse: Hauptstraáe 110, 01809 Heidenau
+
+319. SachsenNetze GmbH (ID: 1505)
+   Adresse: Fabrikstr.5, 01159 Dresden
+
+320. SachsenNetze HS.HD GmbH (ID: 1340)
+   Adresse: Zschoner Ring 3, 01723 Kesselsdorf
+
+321. Schaarschmidt-Autoteile (ID: 1595)
+   Adresse: Stollberger Straáe 18, 09419 Thum
+
+322. Schafferus (ID: 1383)
+   Adresse: Zwickauer Str. 194, 08468 Reichenbach
+
+323. Schaschke Ruhland (ID: 1620)
+   Adresse: Badeanstalt 10, 01945 Ruhland
+
+324. Schiba Bau GmbH (ID: 1527)
+   Adresse: Tharandter Str. 35, 01723 Grumbach
+
+325. Schmiede Vogel (ID: 1648)
+   Adresse: Zur Quelle 5, 01731 Kreischa OT Saida
+
+326. Schmiede Woggon Karsdorf (ID: 1524)
+   Adresse: Heidestr. 29, 01734 Karsdorf
+
+327. Schraubwerk Schulze (ID: 1461)
+   Adresse: Straáe der MTS 1, 01737 Braunsdorf
+
+328. Schubert - BVFS (ID: 1471)
+   Adresse: Sternstr. 47, 01139 Dresden
+
+329. Schtze Gersdorf (ID: 1511)
+   Adresse: Gersdorf 43, 01819 Bahretal OT Gersdorf
+
+330. Silbermann Fahrzeugservice (ID: 1494)
+   Adresse: Tharandter Strasse 63a, 01159 Dresden
+
+331. Smart Repair u. Lackservice (ID: 1380)
+   Adresse: Hamburger Str. 65a, 01157 Dresden
+
+332. Stender KFZ-Autoservice (ID: 1615)
+   Adresse: Alte Meiáner Landstraáe 28c, 01157 Dresden
+
+333. Sternclassics Autoservice (ID: 1328)
+   Adresse: Grenzstr. 9, 01640 Coswig
+
+334. Stockmann KFZ-Service (ID: 1318)
+   Adresse: Cowaplast 28, 01640 Coswig
+
+335. Sven Teichmann (ID: 1325)
+   Adresse: An der Triebe  25, 01468 Moritzburg / OT Boxdorf
+
+336. Sgner's Fahrzeugtechnik (ID: 1321)
+   Adresse: Burgstdter Str. 3, 01219 Dresden
+
+337. T & S Fahrzeugtechnik GmbH (ID: 1326)
+   Adresse: Brensteiner Str. 27-29, 01277 Dresden
+
+338. TD Performance (ID: 1291)
+   Adresse: Radeburger Straáe 211, 01109 Dresden
+
+339. TM Reifen und Autoservice (ID: 1583)
+   Adresse: Fischhausstr. 15b, 01099 Dresden
+
+340. TOM-Automobile.de GmbH (ID: 1593)
+   Adresse: Hubertusplatz 1, 01129 Dresden
+
+341. Testa Baresi (ID: 1420)
+   Adresse: Lausener Str. 4B, 04207 Leipzig
+
+342. Thomas Bode (ID: 1372)
+   Adresse: Rosenowstr. 8, 04357 Leipzig
+
+343. Tilo Hofmann (ID: 1628)
+   Adresse: Hauptstr. 11, 01728 Bannewitz / OT Possendorf
+
+344. Tom Tobisch (ID: 1457)
+   Adresse: Strasse des 17.Juni 30, 01257 Dresden
+
+345. Turboservice Ingo Barthel (ID: 1573)
+   Adresse: Bohnitzscher Str. 4, 01662 Meiáen
+
+346. V. Kluge GmbH (ID: 1592)
+   Adresse: Amalienstrasse 12, 09669 Frankenberg
+
+347. VGRDD GmbH (ID: 1488)
+   Adresse: Kesselsdorfer Str. 300, 01169 Dresden
+
+348. VGRDD GmbH (ID: 1495)
+   Adresse: Hamburger Str. 24, 01067 Dresden
+
+349. Vortrieb Dresden e.K. (ID: 1386)
+   Adresse: Hamburger Straáe 65 a, 01157 Dresden
+
+350. Wacker+Dbler (ID: 1556)
+   Adresse: Heiligkreuzweg 96, 55130 Mainz
+
+351. Waldek Cars (ID: 1518)
+   Adresse: Sternstraáe 47, 01139 Dresden
+
+352. Werk A KfZ Werkstatt (ID: 1394)
+   Adresse: Dresdner Straáe 46, 01796 Pirna
+
+353. Werkstatt Swen Vogel (ID: 1313)
+   Adresse: Friedrich-Ludwig-Jahn-Allee 6, 01471 Radeburg
+
+354. Willig Werkzeuge (ID: 1335)
+   Adresse: Kertitzer Str. 7, 04509 Delitzsch / OT Schenkenberg
+
+355. Wunderlich, Martin (ID: 1530)
+   Adresse: Hartmannsbach Nr. 25, 01816 Bad Gottleuba
+
+356. Wtschner Fahrzeugteile GmbH (ID: 1445)
+   Adresse: Clausthaler Straáe 14, 09599 Freiberg
+
+357. auto-technik24 GmbH (ID: 1507)
+   Adresse: Schlterstraáe 29, 01277 Dresden
+
+358. autoBURGK Lohse (ID: 1625)
+   Adresse: Burgker Straáe 145, 01705 Freital
+
+359. metiisto Werkstatt- und Handwerkerausr. (ID: 1398)
+   Adresse: Falkenauer Straáe 26, 09661 Hainichen
+
+360. mobilforum Classic GmbH (ID: 1350)
+   Adresse: Grumbacher Str. 9, 01723 Kesselsdorf
+
+361. mobilforum GmbH (ID: 1426)
+   Adresse: Longuyoner Str. 5, 01796 Pirna
+
+362. mobilforum GmbH (ID: 1654)
+   Adresse: Laugkfeld 28, 01968 Senftenberg
+
+363. natur + stein (ID: 1649)
+   Adresse: Lutherstraáe 5a, 01705 Freital
+
+364. p.r.o. Mobilien, Verwaltungs- (ID: 1492)
+   Adresse: Schachtstraáe 10 a, 01705 Freital
+
+365. pitstop.de GmbH (ID: 1531)
+   Adresse: Dresdner Str. 126, 01705 Freital
+
+366. s-part Fahrzeug- u. Teilehandel (ID: 1500)
+   Adresse: Mglitztalstraáe  76, 01809 Mhlbach
+

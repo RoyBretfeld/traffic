@@ -1,0 +1,14 @@
+import os
+from fs.safefs import init_policy
+from db.schema import ensure_schema
+
+# PathPolicy initialisieren
+init_policy(
+    os.getenv("ORIG_DIR","./tourplaene"), 
+    os.getenv("STAGING_DIR","./data/staging"), 
+    os.getenv("OUTPUT_DIR","./data/output"),
+    os.getenv("BACKUP_DIR","./routen")
+)
+
+# DB-Schema sicherstellen
+ensure_schema()

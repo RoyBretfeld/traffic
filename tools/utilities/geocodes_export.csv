@@ -1,0 +1,494 @@
+id,name,adresse,lat,lon,created_at
+2000,"""auto-kavalier""- admiral","georg-mehrtens-straße 3, 01237 dresden",51.0157765,13.7929846,2025-10-06 10:07:26
+4362,1#ls6259094,"dresdener straße 70a, 02625 bautzen",51.1836676,14.4030841,2025-10-06 10:07:26
+1331,1a Autoservice Alexander Heidecke,"Bahnhofstr. 2, 01847 Lohmen",50.9884922,13.9914958,2025-09-25 10:48:49
+1581,1a autoservice Menzel,"Bauernweg 12, 01109 Dresden",51.120311,13.7328053,2025-09-25 10:58:42
+1832,1a autoservice oehlschläger,"tharandter straße 26, 01159 dresden",51.0398963,13.7040483,2025-10-06 10:07:26
+5758,36 nici zu rp,"mügelner str.29, 01237 dresden",51.0131793,13.8045668,2025-10-06 10:39:56
+1682,41 roswitha,"wilsdruffer str. 65, 01705 freital",51.0152221,13.6423478,2025-10-06 09:54:01
+1515,A.T.U-Filiale Freital,"Wilsdruffer Str. 39, 01705 Freital",51.0141762,13.644937,2025-09-25 10:55:30
+1590,ACR bei Endlich,"Nickerner Weg 7, 01257 Dresden",50.991865,13.7982663,2025-09-25 10:59:08
+1359,AH Franke GmbH & Co.KG Pulsn.,"Kamenzer Str. 10, 01896 Pulsnitz",51.1896101,14.0173587,2025-09-25 10:49:57
+1579,AH Franke GmbH & Co.KG Radeb.,"An der Ziegelei 11, 01454 Radeberg",51.1294883,13.9131932,2025-09-25 10:58:36
+1483,AIS Dresden GmbH,"Wilsdruffer Strasse 41, 01705 Freital",51.0147957,13.6432993,2025-09-25 10:54:20
+1601,AUTECHNA,"Lindenstr. 8, 08280 Aue",50.5915302,12.7049145,2025-09-25 10:59:25
+1342,AUTOBOX DRESDEN GmbH,"Strasse des 17. Juni 17, 01257 Dresden",51.0054753,13.821373,2025-09-25 10:49:19
+1450,AUTOTEILE BRNER,"Wolkensteiner Str. 18, 09514 Pockau - Lengefeld",50.7179233,13.1885883,2025-09-25 10:52:55
+1464,Adrian Glckner Automobile GmbH,"Dohnaer Strasse 103a, 01219 Dresden",51.0146424,13.7751918,2025-09-25 10:53:34
+1519,Alf Hse - Autoservice,"Geisingstr.30, 01309 Dresden",51.04257,13.7821649,2025-09-25 10:55:42
+1358,Andreas Knop,"Bautzner Landstrasse 119, 01324 Dresden",51.0619361,13.8457637,2025-09-25 10:49:51
+1306,Andr Zerbst,"Niedersedlitzer Str. 67a, 01257 Dresden",51.0045803,13.8112225,2025-09-25 10:47:30
+1499,Autechna Autoteile,"Am Abrahamschacht 4, 09496 Marienberg",50.6599767,13.1526918,2025-09-25 10:54:54
+1578,Auto Eggert,"Wilhelm-Liebknecht-Str. 6, 01257 Dresden",51.010943,13.8108062,2025-09-25 10:58:30
+1378,Auto Jrgen Pfeiffer KG,"Reicker Str. 91, 01237 Dresden",51.0152092,13.7880566,2025-09-25 10:50:41
+1312,Auto Kaden KG,"Fichte Strasse 13c, 01705 Freital",51.0125652,13.669994,2025-09-25 10:47:50
+1635,Auto Lippmann,"Kleinhartmannsdorfer Str. 7, 09618 Brand-Erbisdorf",50.8348837,13.2933954,2025-09-25 11:00:58
+1537,Auto Petzold GmbH,"Fritz-Reuter-Str. 45, 01097 Dresden",51.0742945,13.7364956,2025-09-25 10:56:37
+1472,Auto Trentzsch GbR,"Bodenbacher Strasse 109, 01277 Dresden",51.0266657,13.8031083,2025-09-25 10:53:52
+1577,Auto Werft Dresden,"Str. des 17. Juni 11, 01257 Dresden",51.0058765,13.8198533,2025-09-25 10:58:25
+1322,Auto mobile DW GmbH,"Gewerbering 4, 01744 Dippoldiswalde",50.8972291,13.6901724,2025-09-25 10:48:20
+1381,Auto-Reparatur-Dienst,"Reinberger Weg 32, 01768 Hirschbach",50.9098876,13.7359945,2025-09-25 10:50:49
+1548,Auto-Service Becker,"Frauensteiner Str. 31, 01744 Dippoldiswalde",50.8394451,13.628246,2025-09-25 10:56:59
+1427,Auto-Service Mller GbR,"Fritz-Schreiter-Strasse 31, 01259 Dresden",50.9887591,13.8489049,2025-09-25 10:52:17
+1382,Auto-Service Wagner,"Gewerbering 10, 01744 Dippoldiswalde",50.8973719,13.6889308,2025-09-25 10:50:49
+1525,Auto-Service-Center Dresden,"Dohnaer Strasse 74, 01219 Dresden",51.0178207,13.7693172,2025-09-25 10:55:55
+1356,Auto-Walther GmbH & Co.KG,"Tannebergstrasse 12, 01477 Arnsdorf / Sachsen",51.100701,13.9980162,2025-09-25 10:49:45
+1430,Auto-Walther GmbH & Co.KG,"Brockhausstr. 12, 01471 Radeburg",51.2042092,13.7315272,2025-09-25 10:52:25
+1459,Auto-Walther GmbH & Co.KG,"Stolpener Strasse 39, 01477 Arnsdorf / Sachsen",51.0982269,13.9933394,2025-09-25 10:53:22
+1396,Auto23 GmbH,"Lohrmannstrasse 23, 01237 Dresden",51.0168634,13.7887411,2025-09-25 10:51:23
+1533,Autocenter Dresden GmbH,"Bremer Strasse 18 b, 01067 Dresden",51.0615673,13.7119264,2025-09-25 10:56:23
+1647,Autocenter Freital OHG,"Dresdner Strasse 314, 01705 Freital",50.9842965,13.633384,2025-09-25 11:01:48
+1413,Autoglas Peschel GmbH,"Erlenweg 11, 01109 Dresden",51.1121482,13.7319998,2025-09-25 10:51:58
+1605,Autohaus Dresden GmbH,"Possendorfer Strasse 38-40, 01217 Dresden",51.0169662,13.7293323,2025-09-25 10:59:37
+1363,Autohaus Gaebel GmbH &Co.KG,"Hohe Str. 2-3, 01796 Dohma",50.9273343,13.9308131,2025-09-25 10:50:10
+1399,Autohaus Hardtke GmbH,"Dresdner Landstrasse 1, 01728 Bannewitz",50.9913896,13.6961092,2025-09-25 10:51:25
+1311,Autohaus Huth,"Cottaer Str. 1, 01796 Pirna-Neundorf",50.9166961,13.9780054,2025-09-25 10:47:44
+1470,Autohaus Israel GmbH & Co. KG,"Dohnaer Strasse 310, 01257 Dresden",50.9885862,13.8122362,2025-09-25 10:53:46
+1411,Autohaus Liliensiek GmbH,"Alte Altenberger Str. 38, 01744 Dippoldiswalde",50.8879675,13.6693444,2025-09-25 10:51:51
+1536,Autohaus Liliensiek GmbH,"Kesselsdorfer Str. 248, 01169 Dresden",51.0398162,13.6515716,2025-09-25 10:56:31
+1626,Autohaus Melkus GmbH,"Hamburger Strasse 30, 01067 Dresden",51.0600328,13.6990011,2025-09-25 11:00:30
+1354,Autohaus Rettberg GmbH,"Altenberger Str. 48, 01744 Dippoldiswalde",50.8336065,13.680782,2025-09-25 10:49:36
+1602,Autohaus Welde GmbH,"Dresdner Strasse 5, 01796 Pirna",50.9571948,13.9290706,2025-09-25 10:59:25
+1303,Autohaus Zimmermann,"Am Trachauer Bahnhof 9, 01139 Dresden",51.089871,13.705012,2025-09-25 10:47:16
+1452,Autohof Dhlen,"Carl-Thieme-Str. 39, 01705 Freital",51.016171,13.6685233,2025-09-25 10:53:02
+1400,Automobile Dresden,"Dresdner Str. 11, 01796 Pirna",50.9574475,13.9266577,2025-09-25 10:51:32
+1423,Automobile Irrgang eGbR,"Dresdner Str. 16, 01773 Altenberg",50.764557,13.7573064,2025-09-25 10:52:16
+1367,Autopflege und Reifendienst,"Am unteren Bach 5, 01723 Wilsdruff",51.0546162,13.5361929,2025-09-25 10:50:18
+1639,Autoservice Bernhardt,"Chamissostr.  2, 01157 Dresden",51.0490359,13.6866982,2025-09-25 11:01:10
+1596,Autoservice Grtner,"Seidnitzer Weg 11, 01237 Dresden",51.0165856,13.7979589,2025-09-25 10:59:15
+1388,Autoservice Hammer,"Querstrasse 10, 01705 Freital",51.0039272,13.6152736,2025-09-25 10:50:59
+1298,Autoservice Hartmann,"Altreick 26, 01237 Dresden",51.0124328,13.7957514,2025-09-25 10:47:11
+1454,Autoservice Hartmann,"Bauernweg 46, 01109 Dresden",51.1192288,13.7382578,2025-09-25 10:53:14
+1632,Autoservice Kpnick,"Dresdner Str. 36A, 01737 Tharandt",50.9839817,13.5955328,2025-09-25 11:00:58
+1633,Autoservice Matthes,"Alt-Serkowitz 1, 01445 Radebeul",51.0956285,13.6594742,2025-09-25 11:00:58
+1389,Autoservice Reichert GmbH,"Kesselsdorfer Strasse 99, 01159 Dresden",51.0418779,13.6786036,2025-09-25 10:50:59
+1553,Autoteam Schade,"Dresdner Strasse 119a, 01640 Coswig",51.1239298,13.5838195,2025-09-25 10:57:15
+1410,Autoteile Heiko Ungermann,"Geisinger Str. 1, 01773 Altenberg",50.7621925,13.7673709,2025-09-25 10:51:51
+1600,Autoteile und Zubehr,"Reichenbacher Str. 190a, 08056 Zwickau",50.7018,12.4450945,2025-09-25 10:59:18
+1584,Autowerkstatt MAUDRICH GmbH,"Ringstr. 43, 01468 Moritzburg OT Boxdorf",51.1279636,13.7050795,2025-09-25 10:58:48
+1429,BRAUNE Autolackierbedarf GmbH,"Burgker Strasse 135, 01705 Freital",51.0031153,13.6793121,2025-09-25 10:52:25
+1481,Bernd Schmiedgen,"Lindeberg 2, 01471 Radeburg",51.1646429,13.7277549,2025-09-25 10:54:13
+1634,Blizzboy Rthig,"Carl-Thieme-Str. 12, 01705 Freital",51.0152853,13.6629131,2025-09-25 11:00:58
+1409,Boxenstop KFZ-Meisterwerkstatt,"Zum Grund 3, 01705 Freital",50.999933,13.6092654,2025-09-25 10:51:45
+1417,CAR POINT,"Pillnitzer Str. 46, 01454 Radeberg",51.1041614,13.9219928,2025-09-25 10:52:06
+1643,CSM,"Altplauen 11, 01187 Dresden",51.029123,13.7037018,2025-09-25 11:01:30
+1460,Classic Style,"An der Walze 3, 01640 Coswig",51.1194023,13.5874089,2025-09-25 10:53:27
+1308,Die Maler GmbH,"Wilsdruffer Strasse 5, 01705 Freital",51.0098464,13.655532,2025-09-25 10:47:37
+1585,Die Meister,"Bodelschwinghstrasse 1a, 01159 Dresden",51.047422,13.7086504,2025-09-25 10:58:54
+1604,Die Meister,"bodelschwingh strasse 1A, 01159 Dresden",51.047422,13.7086504,2025-09-25 10:59:32
+1451,Dietmar Beerwart,"Hertelstrasse 17, 01307 Dresden",51.0572247,13.7724086,2025-09-25 10:52:55
+1337,Dieáner & Mske GbR,"Bockwener Ring 8, 01665 Klipphausen",51.13624,13.4828238,2025-09-25 10:49:05
+1506,Dippser-Auto-Ecke,"Obertorplatz 13A, 01744 Dippoldiswalde",50.8956061,13.6701325,2025-09-25 10:55:09
+1645,Dirk Krause,"Moritzburger Weg 13, 01109 Dresden",51.1155063,13.7476071,2025-09-25 11:01:39
+1503,Dressel Montage,"Zeisigweg 25, 01737 Kurort Hartha",50.9799394,13.5641569,2025-09-25 10:55:03
+1319,ERSA Automotive,"Geibeltstr. 2b, 01796 Pirna",50.9597695,13.9217809,2025-09-25 10:48:14
+1611,Elektroinstallation,"Rathenaustr. 10, 01689 Niederau",51.1723829,13.5411909,2025-09-25 10:59:48
+1453,Elektroinstallation Hennig,"Cotta B 27A, 01796 Dohma",50.9025771,13.9787637,2025-09-25 10:53:08
+1373,FAMO Fahrzeug-und Motorenteile GmbH,"Stuttgarter Str. 33, 01189 Dresden",51.0111988,13.7016485,2025-09-25 10:50:27
+1391,FAMO Fahrzeug-und Motorenteile GmbH,"Dewitzer Str. 77f, 04425 Taucha",51.3844429,12.5245542,2025-09-25 10:50:59
+1532,FAMO Fahrzeug-und Motorenteile GmbH,"Am Telering 1, 03051 Cottbus",51.7029962,14.3630823,2025-09-25 10:56:17
+1362,FREIE KFZ-WERKSTATT,"Poststrasse 3, 01705 Freital",50.9976858,13.6451702,2025-09-25 10:50:03
+1562,Fa. Flade Thomas,"Rungstockstr. 43, 09526 Olbernhau/Sa",50.6541843,13.3260806,2025-09-25 10:57:35
+1392,Fa.Wilms,"Dresdner Str. 189, 01640 Coswig - OT Brockwitz",51.1292509,13.5462571,2025-09-25 10:51:13
+1520,Fahrzeug und Systemtechnik Ehring GmbH,"Str. der MTS 1, 01737 Braunsdorf",51.0153278,13.5745796,2025-09-25 10:55:42
+1616,Fahrzeugservice Kretzschmar,"Marie-Wittich-Strasse 1, 01237 Dresden",51.0132053,13.7784609,2025-09-25 11:00:04
+1304,Fahrzeugservice u.,"Grenzstr. 9, 01640 Coswig",51.1195323,13.5808799,2025-09-25 10:47:23
+1403,Fahrzeugservice und Handel,"Merbitzer Ring 9, 01156 Dresden",51.0674677,13.6411446,2025-09-25 10:51:42
+1650,Firma Jens Drechsler,"Zur Bachwiese 2, 01156 Dresden",51.0551995,13.636377,2025-09-25 11:01:57
+1644,Frank's Motorradladen,"Kesselsdorfer Str. 3, 01705 Freital-Wurgwitz",51.0220045,13.6263395,2025-09-25 11:01:30
+1310,Franks Garage,"Deubener Strasse 13, 01705 Freital",51.0080636,13.6600181,2025-09-25 10:47:44
+1528,Freie KFZ-Meisterwerkstatt,"Poisentalstr. 12, 01705 Freital",50.9961512,13.6517078,2025-09-25 10:56:03
+1294,Go-Cars-Autoservice,"Bautzner Landstrasse 127, 01324 Dresden",51.0619876,13.8475676,2025-09-25 10:47:11
+1563,Gomodrom Automobile,"Kesselsdorfer Str. 99, 01159 Dresden",51.0418779,13.6786036,2025-09-25 10:57:35
+1567,Hanitzsch GmbH & Co. KG,"Zschoner Ring 18, 01723 Kesselsdorf",51.0419688,13.6014206,2025-09-25 10:57:55
+1456,Hartmann Karosserie- und Fahrzeugbau,"Altreick 26, 01237 Dresden",51.0124328,13.7957514,2025-09-25 10:53:14
+1517,Herkommer Kfz-Technik,"Crandorfer Str. 49, 08340 Schwarzenberg",50.5121217,12.7865717,2025-09-25 10:55:36
+1360,"Hickmann, Matthias","Am Tannenbusch 9, 01816 Bad Gottleuba",50.8410818,13.9397699,2025-09-25 10:50:03
+1316,Jrgen Schiebel,"Cotta B 16G, 01796 Dohma",50.9020735,13.9762484,2025-09-25 10:48:01
+1582,KFZ-Meisterhandwerk,"Heidenauer Str. 105, 01796 Pirna",50.9570049,13.9046909,2025-09-25 10:58:48
+1368,KFZ-Service Holger Garz,"Veteranenstr. 3, 01139 Dresden",51.0873263,13.7047334,2025-09-25 10:50:18
+1594,Karosserie- & KfZ-Service Derlich,"Siedlung 17, 01809 Burkhardswalde",50.9246994,13.8557965,2025-09-25 10:59:15
+1564,Karosserie- und Fahrzeugbau,"Am Ring 4, 01665 Klipphausen",51.0943824,13.4976049,2025-09-25 10:57:42
+1575,Karosseriebau Henschke,"Rundteil 5a, 01728 Possendorf",50.9546296,13.6996097,2025-09-25 10:58:13
+1486,Karosseriebau Miersch,"Birkigter Strasse 14, 01705 Freital",51.0164831,13.676389,2025-09-25 10:54:22
+1651,Keilig Willi Inh. A.Hhnel,"Wilsdruffer Str. 102, 01705 Freital",51.0161646,13.642441,2025-09-25 11:01:57
+1637,Kfz Reparatur,"Alte Poststr. 4a, 01744 Dippoldiswalde",50.8907316,13.704637,2025-09-25 11:01:09
+1497,Kfz-Aufbereitung Dresden,"Dohnaer Str. 79, 01219 Dresden",51.0173023,13.7715311,2025-09-25 10:54:47
+1317,Kfz-Meisterbetrieb Heyde,"Am Anger 16, 01237 Dresden",51.0099681,13.7897546,2025-09-25 10:48:08
+1327,Kfz-Meisterbetrieb Lommatzsch,"Bismarckstr. 70, 01257 Dresden",51.0059057,13.8169837,2025-09-25 10:48:36
+1502,Kfz-Meisterbetrieb Stege,"Tolkewitzer Strasse 83, 01279 Dresden",51.0399257,13.818667,2025-09-25 10:54:56
+1415,Kfz-Meisterbetrieb Sllner,"August Bebel Strasse 82, 01728 Bannewitz",50.9856243,13.714338,2025-09-25 10:51:58
+1406,Kfz-Service Hertling,"Herbert-Liebsch- Str. 4, 01796 Pirna-Sonnenstein",50.9576234,13.9565829,2025-09-25 10:51:43
+1587,Kfz-Service Schlegel,"August-Bebel-Str. 23, 01809 Heidenau",50.976008,13.8616152,2025-09-25 10:59:00
+1448,King Cars GmbH Nord,"Friedrich-Olbricht-Damm 66, 13627 Berlin",52.5453666,13.313218,2025-09-25 10:52:55
+1627,Kloss Auto-Service,"Bahretalstr. 3a, 01796 Dohma",50.9232171,13.9247148,2025-09-25 11:00:37
+1580,Knoll GmbH,"Carl-Hamel-Str. 21, 09116 Chemnitz",50.8112709,12.8810601,2025-09-25 10:58:42
+1314,Kraftwagen-Reparatur,"Keppgrundstrasse 7, 01259 Dresden",51.0117615,13.8510592,2025-09-25 10:48:01
+1296,Kraftwagenpark Dresden,"Zum Lindenhof 9 b, 01665 Riemsdorf",51.1159804,13.4833595,2025-09-25 10:47:11
+1405,Kuli's Carpoint,"Reisstr. 40, 01257 Dresden",51.0055742,13.8229994,2025-09-25 10:51:43
+1446,LB,"Kreisel 4, 09322 Penig",50.9203775,12.7135931,2025-09-25 10:52:48
+1523,Lackiererei,"Lindenallee 3, 02994 Bernsdorf",51.3745638,14.0675455,2025-09-25 10:55:50
+1293,Lars Richter,"An der Viehleite 30, 01796 Pirna",50.9466172,13.9445564,2025-09-25 10:47:04
+1549,Leon Automobile,"Kesselsdorfer Str. 20, 01705 Freital",51.0234373,13.6216483,2025-09-25 10:57:05
+1478,"Lindner, Thomas GmbH","Am Bahndamm 8, 01728 Bannewitz",50.9866792,13.7125953,2025-09-25 10:54:04
+1462,MARTH Performance,"Bahnhofstr. 18, 04928 Plessa",51.4663719,13.6181459,2025-09-25 10:53:34
+1438,MELKUS Fahrzeugservice im SEC,"Enderstr. 59, 01277 Dresden",51.0295016,13.8034887,2025-09-25 10:52:35
+1608,MLTec Automotive GmbH,"Weinbergstr. 4, 01445 Radebeul",51.1104155,13.6611375,2025-09-25 10:59:38
+1436,MOTORSTOPP,"Hallesche Str. 77, 04159 Leipzig",51.3818957,12.2856795,2025-09-25 10:52:34
+1364,Marko Heymann Kfz-Werkstatt,"Schulstr. 21, 01728 Bannewitz",50.9649103,13.7160057,2025-09-25 10:50:10
+1336,Marks Dieselmotorentechnik,"Enderstr. 63, 01277 Dresden",51.0279533,13.8016246,2025-09-25 10:49:05
+1375,Martin Faust,"Alt-Rottwerndorf 60-62, 01796 Pirna",50.9272914,13.9565705,2025-09-25 10:50:34
+1642,Motorenbau - KURZ,"Zwickauer Str. 192, 08468 Reichenbach",50.6333228,12.3168624,2025-09-25 11:01:24
+1297,Motoreninstandsetzung,"Am Trachauer Bahnhof 11, 01139 Dresden",51.0902263,13.7049531,2025-09-25 10:47:11
+1623,Musti Autoaufbereitung,"Altbriesnitz 8, 01157 Dresden",51.0662344,13.6752244,2025-09-25 11:00:21
+1516,PKW & Nutzfahrzeug Service,"Alttorna 7, 01239 Dresden",51.0059203,13.7763267,2025-09-25 10:55:30
+1504,PM Car Parts,"Naumannstr. 12 / Halle 26F, 01809 Heidenau",50.9743184,13.8775532,2025-09-25 10:55:03
+1574,PMS Provocatione Motor Sport,"Lockwitzgrund 40, 01257 Dresden",50.9839995,13.7985211,2025-09-25 10:58:07
+1606,Peers Garage - Freie KFZ-Werkstatt,"Quohrener Str. 36, 01324 Dresden",51.0574021,13.8590472,2025-09-25 10:59:37
+1433,Profil 25,"Buchholzweg 2, 01445 Radebeul",51.1204705,13.6432992,2025-09-25 10:52:33
+1557,"Rasche, Thomas","Friedrichswalde 59, 01819 Friedrichswalde",50.8966274,13.8977118,2025-09-25 10:57:28
+1558,Reifen Auto Service Glau,"Ferdinand v. Schill Str. 52, 01728 Bannewitz",50.9668047,13.7014377,2025-09-25 10:57:34
+1560,Reifen-& Autoservice Roespel,"Wilsdruffer Strasse 11, 01723 Kesselsdorf",51.0342082,13.5840492,2025-09-25 10:57:34
+1576,ReifenCenter Dresden,"Bismarckstr. 57, 01257 Dresden",51.0051262,13.8174126,2025-09-25 10:58:19
+1566,Reifenhaus Freital GbR,"Dresdner Strasse 3, 01705 Freital",51.0318358,13.6646425,2025-09-25 10:57:49
+1613,Ronald Halla,"Schmiedeweg 30, 02906 Waldhufen",51.2232492,14.7865759,2025-09-25 10:59:56
+1512,SAG Sadisdorfer Agrar AG,"Frauensteiner Str. 9a, 01744 Dippoldiswalde",50.8420424,13.6376629,2025-09-25 10:55:21
+1505,SachsenNetze GmbH,"Fabrikstr.5, 01159 Dresden",51.0412688,13.7094879,2025-09-25 10:55:03
+1340,SachsenNetze HS.HD GmbH,"Zschoner Ring 3, 01723 Kesselsdorf",51.0407376,13.6005417,2025-09-25 10:49:12
+1383,Schafferus,"Zwickauer Str. 194, 08468 Reichenbach",50.6333821,12.3169973,2025-09-25 10:50:49
+1620,Schaschke Ruhland,"Badeanstalt 10, 01945 Ruhland",51.4583679,13.882635,2025-09-25 11:00:14
+1527,Schiba Bau GmbH,"Tharandter Str. 35, 01723 Grumbach",51.0229512,13.5565632,2025-09-25 10:56:03
+1524,Schmiede Woggon Karsdorf,"Heidestr. 29, 01734 Karsdorf",50.9400572,13.6965782,2025-09-25 10:55:55
+1471,Schubert - BVFS,"Sternstr. 47, 01139 Dresden",51.0779809,13.7047999,2025-09-25 10:53:52
+1494,Silbermann Fahrzeugservice,"Tharandter Strasse 63a, 01159 Dresden",51.0332679,13.7033184,2025-09-25 10:54:34
+1380,Smart Repair u. Lackservice,"Hamburger Str. 65a, 01157 Dresden",51.0608641,13.6872374,2025-09-25 10:50:49
+1328,Sternclassics Autoservice,"Grenzstr. 9, 01640 Coswig",51.1195323,13.5808799,2025-09-25 10:48:41
+1318,Stockmann KFZ-Service,"Cowaplast 28, 01640 Coswig",51.1206333,13.581384,2025-09-25 10:48:08
+1583,TM Reifen und Autoservice,"Fischhausstr. 15b, 01099 Dresden",51.0710785,13.7888478,2025-09-25 10:58:48
+1593,TOM-Automobile.de GmbH,"Hubertusplatz 1, 01129 Dresden",51.0894797,13.7232161,2025-09-25 10:59:08
+1420,Testa Baresi,"Lausener Str. 4B, 04207 Leipzig",51.3062117,12.2607924,2025-09-25 10:52:07
+1372,Thomas Bode,"Rosenowstr. 8, 04357 Leipzig",51.3677349,12.4041016,2025-09-25 10:50:27
+1457,Tom Tobisch,"Strasse des 17.Juni 30, 01257 Dresden",51.0018345,13.8287212,2025-09-25 10:53:14
+1592,V. Kluge GmbH,"Amalienstrasse 12, 09669 Frankenberg",50.9133954,13.0472126,2025-09-25 10:59:08
+1488,VGRDD GmbH,"Kesselsdorfer Str. 300, 01169 Dresden",51.0400066,13.6489063,2025-09-25 10:54:30
+1495,VGRDD GmbH,"Hamburger Str. 24, 01067 Dresden",51.0596051,13.7019919,2025-09-25 10:54:41
+1556,Wacker+Dbler,"Heiligkreuzweg 96, 55130 Mainz",49.9786256,8.2910137,2025-09-25 10:57:23
+1313,Werkstatt Swen Vogel,"Friedrich-Ludwig-Jahn-Allee 6, 01471 Radeburg",51.2186317,13.727842,2025-09-25 10:47:55
+1530,"Wunderlich, Martin","Hartmannsbach Nr. 25, 01816 Bad Gottleuba",50.844044,13.92751,2025-09-25 10:56:11
+2031,a.t.l. autoteileland,"bismarckstraße 57, 01257 dresden",51.0051262,13.8174126,2025-10-06 10:07:26
+2017,abschleppdienst lesche gbr,"hohe straße 79, 01796 struppen/siedlung",50.9206763,14.0136507,2025-10-06 10:07:26
+4001,adrian gl´┐¢ckner automobile gmbh,"dohnaer strasse 103a, 01219 dresden",51.0146424,13.7751918,2025-10-06 10:07:26
+1687,adrian glöckner automobile gmbh,"dohnaer strasse 103a, 01219 dresden",51.0146424,13.7751918,2025-10-06 10:07:26
+5752,ag,"dresdner straße 46, 01796 pirna",50.9578212,13.915125,2025-10-06 10:39:56
+2549,agroservice pirna gmbh,"liebstädter str. 45, 01796 pirna",50.93723,13.9206719,2025-10-06 10:07:26
+3168,ais dresden gmbh,"kötzschenbroder strasse 193, 01139 dresden",51.0926404,13.6695695,2025-10-06 10:07:26
+1993,akf fahrzeugteile gmbh,"dresdener straße 70a, 02625 bautzen",51.1836676,14.4030841,2025-10-06 10:07:26
+1769,alf häse - autoservice,"geisingstr.30, 01309 dresden",51.04257,13.7821649,2025-10-06 10:07:26
+2219,andreas ebert,"hauptstraße 16, 01816 bad gottleuba-berggießhübel",50.8817704,14.0215669,2025-10-06 10:07:26
+3318,andré zerbst,"niedersedlitzer str. 67a, 01257 dresden",51.0045803,13.8112225,2025-10-06 10:07:26
+4561,anhänger kunath e.k.,"obernaundorfer str. 1-2, 01705 freital",50.9737135,13.6347016,2025-10-06 10:07:26
+5394,as frank zimmermann,"hauptstraße 89, 01744 dippoldiswalde",50.8520712,13.6121613,2025-10-06 10:07:26
+1723,ash dirk häger,"am mühlgraben 3, 01774 klingenberg",50.9085343,13.5980112,2025-10-06 10:07:26
+1791,astral ug,"löbtauer straße 80, 01159 dresden",51.0470144,13.7081843,2025-10-06 10:07:26
+2223,atm reparaturzentrum,"äußere-hainichener-str. 5a, 09669 frankenberg",50.9304516,13.0636831,2025-10-06 10:07:26
+1710,atw fahrzeugteile,"fröbelstr. 51a, 01159 dresden",51.0508327,13.7062268,2025-10-06 10:07:26
+1714,auto - heller,"gohliser straße 24, 01445 radebeul",51.1016434,13.6637242,2025-10-06 10:07:26
+5663,auto - kühlerdienst henke kg,"heidestraße 4, 01734 karsdorf",50.9430535,13.7000263,2025-10-06 10:07:26
+1708,auto becker,"altnossener straße 7, 01156 dresden / gompitz",51.0416861,13.6414522,2025-10-06 10:07:26
+4022,auto brückner gmbh & co. kg,"dürerstr.120, 01309 dresden",51.0505584,13.7783743,2025-10-06 10:07:26
+1837,auto christen,"schloßallee 9, 01468 moritzburg",51.1624431,13.6801569,2025-10-06 10:07:26
+3061,auto damm e.k.,"äußere chemnitzer str. 49, 09669 frankenberg",50.9001792,13.0105823,2025-10-06 10:07:26
+2579,auto dienst meissen,"ossietzkystraße 37a, 01662 meißen",51.1367318,13.4590965,2025-10-06 10:07:26
+3986,auto doktor gbr,"dresdner strasse 268, 01705 freital",50.9903597,13.6420298,2025-10-06 10:07:26
+1771,auto haase,"coschützer straße 46, 01705 freital",51.0133979,13.6706673,2025-10-06 10:07:26
+3985,auto j´┐¢rgen pfeiffer kg,"reicker str. 91, 01237 dresden",51.0152092,13.7880566,2025-10-06 10:07:26
+1690,auto jürgen pfeiffer kg,"reicker str. 91, 01237 dresden",51.0152092,13.7880566,2025-10-06 10:07:26
+1686,auto lust,"krausestraße 4, 01187 dresden",51.0284324,13.7052704,2025-10-06 10:07:26
+1681,auto otto,"dresdener str. 5, 02977 hoyerswerda",51.4305207,14.2327649,2025-10-06 09:17:25
+5802,auto otto,"dresdner str. 5, 02977 hoyerswerda",51.430529315853775,14.232712811525964,2025-10-06 12:38:47
+5792,auto service meusel,"alte str. 33, 01768 glashã¼tte",50.9068000092539,13.741891670418902,2025-10-06 12:09:09
+5809,auto service meusel,"alte str. 33, 01768 glashütte ot hirschbach",50.9068223,13.7418928,2025-10-07 08:00:58
+3495,auto-mösch,"bismarckstrasse 98a, 01257 dresden",51.0091373,13.8116547,2025-10-06 10:07:26
+3987,auto-service m´┐¢ller gbr,"fritz-schreiter-strasse 31, 01259 dresden",50.9887591,13.8489049,2025-10-06 10:07:26
+1724,auto-service möller gbr,"fritz-schreiter-strasse 31, 01259 dresden",50.9887591,13.8489049,2025-10-06 10:07:26
+3546,auto-stäps gmbh,"lohmener straße 12a, 01796 pirna",50.978929,13.9444462,2025-10-06 10:07:26
+1947,auto-technik24 gmbh,"schlüterstraße 29, 01277 dresden",51.0400854,13.7926374,2025-10-06 10:07:26
+1770,autoburgk lohse,"burgker straße 145, 01705 freital",51.0032968,13.6813983,2025-10-06 10:07:26
+4851,autocenter dresden gmbh,"am hahnweg 2, 01328 dresden",51.0649082,13.8971337,2025-10-06 10:07:26
+5200,autocenter dresden gmbh,"altkaitz 9, 01217 dresden",51.0143818,13.7240171,2025-10-06 10:07:26
+3010,autocenter strehle e.k.,"kötzschenbroder strasse 189, 01139 dresden",51.0920476,13.671657,2025-10-06 10:07:26
+1847,autodienst tilo bretschneider,"altenberger straße 43, 01768 glashütte",50.8429053,13.7723458,2025-10-06 10:07:26
+3920,autoeck24.de,"wehlener strasse 35, 01279 dresden",51.0346759,13.8204322,2025-10-06 10:07:26
+4749,autofreund-lindner,"an der bahra 9, 01816 bad gottleuba-berggießhübel",50.8673422,14.0007677,2025-10-06 10:07:26
+1867,autohaus,"coschützer str. 1, 01187 dresden",51.0280608,13.7065611,2025-10-06 10:07:26
+1929,autohaus borsbergstraße gmbh,"borsbergstraße 39, 01309 dresden",51.0439775,13.7826131,2025-10-06 10:07:26
+3681,autohaus dresden gmbh,"bremer strasse 18 a, 01067 dresden",51.0615673,13.7119264,2025-10-06 10:07:26
+3242,autohaus emmrich e.k.,"morgenröthe 1, 01705 freital",51.0223739,13.6272344,2025-10-06 10:07:26
+1802,autohaus fischer,"meußlitzer straße 118, 01259 dresden",51.0015832,13.8495111,2025-10-06 10:07:26
+4908,autohaus frank grassel,"niederauer str. 36, 01689 weinböhla",51.1659538,13.5597793,2025-10-06 10:07:26
+2284,autohaus friedewald,"alträcknitz 6, 01217 dresden",51.0251343,13.7324274,2025-10-06 10:07:26
+5764,autohaus godzik ohg,"hauptstrasse 9a, 01728, bannewitz",50.9690182,13.7127659,2025-10-06 11:38:40
+5772,autohaus godzik ohg,"hauptstrasse 9a, 01728 bannewitz/ot possendorf",50.9690182,13.7127659,2025-10-06 11:46:39
+4481,autohaus gröbel gmbh,"wilsdruffer straße 106, 01705 freital",51.0168597,13.6412743,2025-10-06 10:07:26
+1982,autohaus hüttel,"dresdner landstr. 14 f, 01744 oberhäslich",50.9079507,13.6911283,2025-10-06 10:07:26
+1761,autohaus in berggießhübel gmbh,"talstr. 4, 01816 bad gottleuba - berggießhübel",50.875278,13.9497549,2025-10-06 10:07:26
+1747,autohaus lassotta gmbh,"berghausstr. 2a, 01662 meißen",51.1746496,13.4980076,2025-10-06 10:07:26
+1669,autohaus leuteritz gmbh,"müglitztalstraße 10, 01773 altenberg",50.7952312,13.8107163,2025-10-06 08:48:49
+1701,autohaus olaf streit,"ringstraße 25, 01809 heidenau",50.9784064,13.8684967,2025-10-06 10:07:26
+1698,autohaus pirna gmbh,"königsteiner straße 5, 01796 pirna",50.9576519,13.9374683,2025-10-06 10:07:26
+5680,autohaus rainer fiedler e.k.,"brückenstraße 13, 01157 dresden",51.0749541,13.6655625,2025-10-06 10:07:26
+3671,autohaus sachmann,"mittelstr. 15a, 01477 fischbach",51.0821382,14.020619,2025-10-06 10:07:26
+2493,autohaus striesen,"gottleubaer straße 1, 01277 dresden",51.0396725,13.7986569,2025-10-06 10:07:26
+1668,autohaus winter gmbh,"dresdner strasse 6, 01728 bannewitz",50.9803923,13.7166984,2025-10-06 08:48:49
+2007,autohof döhlen,"carl-thieme-str. 39, 01705 freital",51.016171,13.6685233,2025-10-06 10:07:26
+2385,autohof radeburg gmbh,"königsbrückerstraße 30, 01471 radeburg",51.2209208,13.726458,2025-10-06 10:07:26
+2938,autohäusler,"am güterbahnhof 18, 01640 coswig",51.1250592,13.5744328,2025-10-06 10:07:26
+3912,autoklimazentrum dresden,"gothaer str. 11, 01097 dresden",51.0696734,13.7340576,2025-10-06 10:07:26
+1689,automatikgetriebeservice,"mügelner str.29, 01237 dresden",51.0131793,13.8045668,2025-10-06 10:07:26
+2436,automeisterei,"lilienthalstraße 3, 01257 dresden",51.0065392,13.8216616,2025-10-06 10:07:26
+4715,automobile dresden weißig,"an der prießnitzaue 5, 01328 dresden",51.0672835,13.8911382,2025-10-06 10:07:26
+4424,automobile parts rhein-main ug,"altenberger str. 184, 35576 wetzlar",50.5590016,8.4674696,2025-10-06 10:07:26
+4406,autopark lohrmannstraße,"lohrmannstraße 28, 01237 dresden",51.0172122,13.7881287,2025-10-06 10:07:26
+4786,autopark pirnaer straße,"pirnaer straße 7, 01809 heidenau",50.9736383,13.8729306,2025-10-06 10:07:26
+1772,autoreparaturwerk freital kg,"cunnersdorferstraße 12, 01705 freital",51.0012598,13.6871355,2025-10-06 10:07:26
+1703,autoservice arnold,"talstr. 19, 01816 berggießhübel",50.8772761,13.9590601,2025-10-06 10:07:26
+2193,autoservice baumeister,"rethelstraße 32, 01139 dresden",51.0706303,13.6987237,2025-10-06 10:07:26
+1788,autoservice bernhardt,"chamissostr. 2, 01157 dresden",51.0490359,13.6866982,2025-10-06 10:07:26
+3680,autoservice dana böttcher,"potschappler straße 58, 01189 dresden",51.0153139,13.6823544,2025-10-06 10:07:26
+3992,autoservice g´┐¢rtner,"seidnitzer weg 11, 01237 dresden",51.0165856,13.7979589,2025-10-06 10:07:26
+1691,autoservice gärtner,"seidnitzer weg 11, 01237 dresden",51.0165856,13.7979589,2025-10-06 10:07:26
+1745,autoservice heinze gmbh,"dohnaer straße 119, 01239 dresden",51.0088798,13.7866596,2025-10-06 10:07:26
+2144,autoservice kartunov,"güterhofstraße 6, 01445 radebeul",51.1078091,13.626111,2025-10-06 10:07:26
+4005,autoservice k´┐¢pnick,"dresdner str. 36a, 01737 tharandt",50.9839817,13.5955328,2025-10-06 10:07:26
+2150,autoservice köpnick,"dresdner str. 36a, 01737 tharandt",50.9839817,13.5955328,2025-10-06 10:07:26
+1693,autoservice laubegast,"österreicher str. 63, 01279 dresden",51.0234555,13.8388761,2025-10-06 10:07:26
+5793,autoservice leuthold,"am sã¤gewerk 36, 01328 dresden",51.037132662689984,13.898555802661697,2025-10-06 12:09:56
+5807,autoservice leuthold,"am sägewerk 36, 01328 dresden ot schönfeld",51.0371182,13.8985008,2025-10-07 08:00:58
+1707,autoservice petters gmbh,"sternstraße 14, 01139 dresden",51.079083,13.7086283,2025-10-06 10:07:26
+1717,autoservice pohlmann,"hauptstraße 70, 01705 freital",50.9983521,13.6051361,2025-10-06 10:07:26
+4207,autoservice schubert,"fichtestraße 8, 01705 freital",51.0145478,13.6677926,2025-10-06 10:07:26
+2163,autoservice und fahrzeugbau steglich,"reisstraße 37, 01257 dresden",51.0059924,13.8238019,2025-10-06 10:07:26
+1838,autoservice winkler,"angerweg 1, 01662 meißen",51.147801,13.4595023,2025-10-06 10:07:26
+1826,autoservice wolf,"wiener straße 10, 01069 dresden",51.0385385,13.7397992,2025-10-06 10:07:26
+3994,autoteile b´┐¢rner,"wolkensteiner str. 18, 09514 pockau - lengefeld",50.7179233,13.1885883,2025-10-06 10:07:26
+1732,autoteile börner,"wolkensteiner str. 18, 09514 pockau - lengefeld",50.7179233,13.1885883,2025-10-06 10:07:26
+4798,autoteile ehrlich,"kötzschenbrodaer str. 38, 01445 radebeul",51.0960494,13.6605508,2025-10-06 10:07:26
+3995,autoteile und zubeh´┐¢r,"reichenbacher str. 190a, 08056 zwickau",50.7018,12.4450945,2025-10-06 10:07:26
+1733,autoteile und zubehör,"reichenbacher str. 190a, 08056 zwickau",50.7018,12.4450945,2025-10-06 10:07:26
+2643,autovermietung vetter,"sternstraße 47, 01139 dresden",51.0779809,13.7047999,2025-10-06 10:07:26
+1792,basti's kfz-werkstatt,"tharandter straße 41b, 01159 dresden",51.0367038,13.7055842,2025-10-06 10:07:26
+3130,bauservice tilo richter,"bielatalstraße 34, 01824 königstein",50.9145122,14.0700764,2025-10-06 10:07:26
+4137,bauservice tilo richter,"pfaffenberg 5, 01824 königstein",50.9175676,14.073961,2025-10-06 10:07:26
+4556,baywa ag döbeln,"heiterer blick 6, 04720 großweitzschen",51.1551293,13.1178253,2025-10-06 10:07:26
+3583,baywa ag miltach,"hauptstr. 1-3, 93468 miltach",49.1533046,12.7638977,2025-10-06 10:07:26
+2071,bernd forker gmbh,"siegfried rädel-str.37, 01796 pirna",50.9586446,13.9287252,2025-10-06 10:07:26
+4142,bistra bau gmbh & co. kg,"hohe straße, 01796 dohma",50.9273343,13.9308131,2025-10-06 10:07:26
+4002,blizzboy r´┐¢thig,"carl-thieme-str. 12, 01705 freital",51.0152853,13.6629131,2025-10-06 10:07:26
+2926,blizzboy röthig,"carl-thieme-str. 12, 01705 freital",51.0152853,13.6629131,2025-10-06 10:07:26
+5763,blumentritt,"str. des 17. juni 11, 01257 dresden",51.0058765,13.8198533,2025-10-06 10:39:56
+4203,blumentritt diesel-einspritztechnik,"straße des 17.juni 16, 01257 dresden",51.004845,13.8233346,2025-10-06 10:07:26
+2755,bosse mechanik,"mühlenstr. 5, 39397 schwanebeck",51.9662958,11.1252478,2025-10-06 10:07:26
+3675,brussig - der elektro-fachmann,"südstraße 16, 01328 dresden",51.057427,13.8864363,2025-10-06 10:07:26
+5751,büttner,"bergstrasse 86, 01069 dresden",51.0258756,13.7312554,2025-10-06 10:39:56
+5142,car repair,"fritz-reuter-straße 43, 01097 dresden",51.0741225,13.7368429,2025-10-06 10:07:26
+1677,car-art gmbh,"loebtauer str. 55, 01159 dresden",51.0462075,13.7084571,2025-10-06 09:15:25
+1685,car-art gmbh,"löbtauer str. 55, 01159 dresden",51.0462075,13.7084571,2025-10-06 10:07:26
+5788,car-art gmbh,"bismarkstr. 63, 01257 dresden",51.05,13.75,2025-10-06 11:55:13
+5789,car-art gmbh,"bismarckstraße 63b, 01257 dresden",51.0067456,13.8139753,2025-10-06 11:58:15
+1658,car-center,"crimmitschauer str. 50 a, 04626 schmoelln",50.8898627,12.3490547,2025-10-06 08:44:00
+2346,car-repair,"fritz-reuter straße 43, 01097 dresden",51.0741225,13.7368429,2025-10-06 10:07:26
+4983,car-wellness-dresden,"tharandter str. 200, 01187 dresden",51.0171983,13.6718594,2025-10-06 10:07:26
+1728,carzone pirna,"lohmener straße 15a, 01796 pirna",50.975675,13.9430363,2025-10-06 10:07:26
+3050,dachdeckerbetrieb heber,"berreuther straße 15a, 01744 dippoldiswalde",50.8988716,13.6582307,2025-10-06 10:07:26
+3094,dellentechnik andreas simßen,"steile straße 11, 01705 freital / weißig",51.0034194,13.6137064,2025-10-06 10:07:26
+3336,die meister,"bodelschwinghstrasse 1a, 01159 01159 dresden",51.047422,13.7086504,2025-10-06 10:07:26
+1821,die-autogesellschaft-dresden.d,"müglitztalstraße 43, 01809 dohna",50.9658225,13.8541572,2025-10-06 10:07:26
+1888,die-autogesellschaft-dresden.d,"hauptstraße 1, 01809 heidenau",50.9653679,13.8834978,2025-10-06 10:07:26
+1700,die-autogesellschaft-dresden.de,"hauptstraße 1, 01809 heidenau",50.9653679,13.8834978,2025-10-06 10:07:26
+3080,die-autogesellschaft-dresden.de,"müglitztalstraße 43, 01809 dohna",50.9658225,13.8541572,2025-10-06 10:07:26
+1655,dietze & schindler,"ladestraße 2b, 09465 sehmatal",50.5328184,12.9930792,2025-10-06 08:40:46
+1657,dietze & schindler,"ladestrasse 2b, 09465 sehmatal",50.5328184,12.9930792,2025-10-06 08:44:00
+5794,dietze & schindler,"ladestraãÿe 2b, 09465 sehmatal",50.53284447293193,12.993079829058024,2025-10-06 12:11:36
+5808,dietze & schindler,"ladestraße 2b, 09465 sehmatal-ot sehma",50.5328184,12.9930792,2025-10-07 08:00:58
+3998,die´┐¢ner & m´┐¢ske gbr,"bockwener ring 8, 01665 klipphausen",51.13624,13.4828238,2025-10-06 10:07:26
+2237,dießner & müske gbr,"bockwener ring 8, 01665 klipphausen",51.13624,13.4828238,2025-10-06 10:07:26
+1683,distrex fahrzeugservice e.k.,"wiener straße 10, 01069 dresden",51.0385385,13.7397992,2025-10-06 10:07:26
+1670,dreihundert dresden,"Naumannstraße 12, 01809 Heidenau",50.97514724289012,13.87650823780774,2025-10-06 08:48:49
+5811,dreihundert dresden,"naumannstraße 12 | halle 14, 01809 heidenau",50.97514724289012,13.87650823780774,2025-10-07 10:57:35
+2083,dresden-strehlener kfz-technik gmbh,"breitscheidstr. 32, 01237 dresden",51.0164227,13.8081963,2025-10-06 10:07:26
+3116,dresdner klassiker handel gmbh,"königsbrücker straße 96, 01099 dresden",51.0799304,13.7601418,2025-10-06 10:07:26
+1726,dresdner reifen zentrale gmbh,"an der prießnitzaue 6, 01328 dresden",51.0660188,13.8959452,2025-10-06 10:07:26
+1939,dresdner reifen zentrale gmbh,"löbtauer strasse 34-38, 01159 dresden",51.0459576,13.70716,2025-10-06 10:07:26
+2183,dresdner reifen zentrale gmbh,"sachsenallee 2a, 01723 kesselsdorf",51.0352573,13.5859152,2025-10-06 10:07:26
+3689,dresdner reifen zentrale gmbh,"lohrmannstraße 22, 01237 dresden",51.0179343,13.7885584,2025-10-06 10:07:26
+4976,dresdner reifen zentrale gmbh,"königsbrücker straße 96, 01099 dresden",51.0799304,13.7601418,2025-10-06 10:07:26
+3051,dresdner vorgebirgs agrar ag,"zur huhle 4, 01731 kreischa",50.953279,13.7292062,2025-10-06 10:07:26
+2090,drk rettungsdienst freital,"dresdner str. 124, 01705 freital",51.0066049,13.6559934,2025-10-06 10:07:26
+2555,esw autoservice gmbh,"königsteiner str. 46, 01824 leupoldishain",50.9165793,14.0284498,2025-10-06 10:07:26
+4803,f & t fahrzeug-technik gmbh,"dresdner straße 263, 01705 freital",50.9941199,13.645597,2025-10-06 10:07:26
+2983,f.h. wheel center gmbh,"köhlerstr. 16, 01239 dresden",51.0032938,13.7876899,2025-10-06 10:07:26
+5650,f.h. wheel center gmbh,"försterlingstr. 9, 01259 dresden",51.0044869,13.8368318,2025-10-06 10:07:26
+2397,fa. autohaus langenhan,"justus -liebig straße 30, 99087 erfurt",51.0174596,11.0366505,2025-10-06 10:07:26
+5790,fa. wilms,"dresdner str. 189, 01640 coswig",51.129440711425225,13.54610468376857,2025-10-06 12:05:05
+3446,fa. zwiener,"karl-liebknecht-str. 49, 15234 frankfurt/oder",52.3438659,14.5304526,2025-10-06 10:07:26
+3597,fa.broßmann gmbh,"kornweg 4, 01936 königsbrück",51.2585362,13.8884043,2025-10-06 10:07:26
+1664,fa.wilms,"dresdner str. 189, 01640 coswig",51.1292509,13.5462571,2025-10-06 08:48:49
+5005,fahrzeug-service bachmann,"meißner landstraße 111, 01157 dresden",51.0712743,13.6709561,2025-10-06 10:07:26
+2995,fahrzeughandel u. service,"zschorgulaer str. 22, 07619 schkölen",51.0411209,11.8354643,2025-10-06 10:07:26
+1862,fahrzeugservice kaden,"meißner landstraße 5, 01157 dresden",51.0621045,13.6799463,2025-10-06 10:07:26
+1942,fahrzeugservice reiche,"gasanstaltstraße 43d, 01237 dresden",51.0230296,13.7913659,2025-10-06 10:07:26
+3102,fam. diehl,"in den urwiesen 1, 35510 butzbach",50.4135931,8.6854551,2025-10-06 10:07:26
+1734,famo fahrzeug-und motorenteile gmbh,"kleine baschützer str. 1, 02625 bautzen",51.1873353,14.4581208,2025-10-06 10:07:26
+1735,famo fahrzeug-und motorenteile gmbh,"brander straße 65, 09599 freiberg",50.902012,13.3374773,2025-10-06 10:07:26
+4412,federn - schulze gbr,"am bogen 9, 01468 moritzburg / boxdorf",51.1274018,13.7079887,2025-10-06 10:07:26
+5457,feldbinder & rolfsmeyer,"straße des 17. juni 11, 01257 dresden",51.0058765,13.8198533,2025-10-06 10:07:26
+4336,fiedler karsten,"lübecker straße 20, 01159 dresden",51.0472296,13.7019683,2025-10-06 10:07:26
+2396,firma dachboxhelden,"robert-bosch-straße 29, 55129 mainz-hechtsheim",49.9582171,8.2585425,2025-10-06 10:07:26
+2754,frank & sohn fahrzeugteile leipzig gmbh,"handelsstraße 24, 04420 markranstädt / leipzig",51.3414675,12.2310916,2025-10-06 10:07:26
+2101,frank fahrzeugbau gmbh,"carl-hamel-str. 17a, 09116 chemnitz",50.8128775,12.8837209,2025-10-06 10:07:26
+2448,freie kfz-werkstatt peter thomas,"dürrwiesenstr. 5, 01809 dohna",50.9681058,13.8568552,2025-10-06 10:07:26
+2315,freie kfz.-werkstatt,"oberer ladenberg 19, 01816 berggießhübel",50.8829211,13.9576162,2025-10-06 10:07:26
+1897,freie kfz.-werkstatt czerwonka,"löbtauer strasse 65, 01159 dresden",51.0455538,13.7074037,2025-10-06 10:07:26
+1696,ftt fahrzeug technik tharandt,"dresdner straße 36b, 01737 tharandt",50.9836015,13.5944435,2025-10-06 10:07:26
+3129,garagentore u. torantriebe,"weißeritzstraße 3a, 01744 dippoldiswalde",50.895247,13.6609038,2025-10-06 10:07:26
+1662,gustavs autohof,"wittgensdorf nr. 16, 01731 kreischa",50.9393948,13.796119,2025-10-06 08:48:49
+5769,gustavs autohof,"wittgensdorf nr. 16, 01731 kreischa ot wittgensdorf",lat,lon,2025-10-06 11:45:12
+5791,gustavs autohof,,50.939367062684894,13.795193640644897,2025-10-06 12:08:51
+1731,halle 13 - teile,"lohmener str. 13, 01833 dürrröhrsdorf-dittersbach",51.009836,14.0001466,2025-10-06 10:07:26
+2041,harry schulze gmbh,"im stauster 6, 36088 hünfeld",50.6880123,9.7632826,2025-10-06 10:07:26
+1694,helmut hammerschmidt kfz,"wilsdruffer straße 65, 01705 freital",51.0152221,13.6423478,2025-10-06 10:07:26
+1725,hoffmann automobile,"pirnaer landstraße 289, 01259 dresden",50.9939904,13.8499402,2025-10-06 10:07:26
+3440,hofmeister & meincke se,"unkersdorfer straße 21-23, 01723 kesselsdorf",51.0415538,13.5855698,2025-10-06 10:07:26
+3996,holitschke werkstattausr´┐¢stung,"gewerbering 10, 09669 frankenberg",50.9029135,13.048736,2025-10-06 10:07:26
+5756,hubraum,"froebelstraße 20, 01159 dresden",51.0503439,13.7027566,2025-10-06 10:39:56
+5761,jens spahn - pf,"burgker straße 145, 01705 freital",51.0032968,13.6813983,2025-10-06 10:39:56
+1787,joachim & markus reese gbr,"nikolaus-otto-straße 3, 55129 mainz",49.9596944,8.2590335,2025-10-06 10:07:26
+5750,jochen - pf,"baerensteiner str. 27-29, 01277 dresden",51.0353473,13.8031489,2025-10-06 10:39:56
+3989,j´┐¢rgen schiebel,"cotta b 16g, 01796 dohma",50.9020735,13.9762484,2025-10-06 10:07:26
+1702,jäkel kfz-meisterbetrieb gmbh,"rudolf-breitscheid-straße 29, 01809 heidenau",50.985242,13.8487336,2025-10-06 10:07:26
+1758,jürgen schiebel,"cotta b 16g, 01796 dohma",50.9020735,13.9762484,2025-10-06 10:07:26
+2712,karosseriebau trompter,"spenerstraße 35, 01309 dresden",51.0453589,13.7840378,2025-10-06 10:07:26
+1752,karosseriefachbetrieb kirchner,"freitaler straße 8, 01737 tharandt/großopitz",50.9973062,13.6011504,2025-10-06 10:07:26
+1705,kaute -motoreninstandsetzung,"großenhainer straße 19, 01097 dresden",51.071486,13.7364314,2025-10-06 10:07:26
+4003,keilig willi inh. a.h´┐¢hnel,"wilsdruffer str. 102, 01705 freital",51.0161646,13.642441,2025-10-06 10:07:26
+1776,keilig willi inh. a.hähnel,"wilsdruffer str. 102, 01705 freital",51.0161646,13.642441,2025-10-06 10:07:26
+1730,kencar ug(haftungsbeschränkt),"dorfstraße 13b, 01816 bad gottleuba-berggießhübel",50.8405841,13.9870821,2025-10-06 10:07:26
+3831,kfz - kargel,"raiffeisenstraße 14, 55270 klein-winternheim",49.9424045,8.2121516,2025-10-06 10:07:26
+2863,kfz meisterbetrieb jan opitz,"förstereistr. 18, 01099 dresden",51.0687562,13.7521248,2025-10-06 10:07:26
+5704,kfz reparatur,"alte poststr. 4c, 01744 dippoldiswalde",50.8884895,13.7053768,2025-10-06 10:07:26
+3840,kfz service - shw teubner ug,"enderstraße 94, 01277 dresden",51.0298426,13.8011085,2025-10-06 10:07:26
+4694,kfz service zentrum zella-mehlis,"rennsteigstr. 2-6, 98544 zella-mehlis",50.6448641,10.6924302,2025-10-06 10:07:26
+1910,kfz technik bräuer,"potschappler straße 4, 01705 freital",51.0078137,13.6565676,2025-10-06 10:07:26
+1740,"kfz-betrieb ""die meister""","löbtauer strasse 54-56, 01159 dresden",51.0460479,13.7070961,2025-10-06 10:07:26
+3529,kfz-fachwerkstatt franke,"breitscheidstrasse 38b, 01237 dresden",51.0155552,13.8085398,2025-10-06 10:07:26
+3033,kfz-ing.-büro thiel gmbh,"wiener straße 10, 01069 dresden",51.0385385,13.7397992,2025-10-06 10:07:26
+1722,kfz-meister jens jahn,"straße des friedens 37, 01723 kesselsdorf",51.0319646,13.5967735,2025-10-06 10:07:26
+1773,kfz-meisterbetrieb,"dresdner straße 290, 01705 freital",50.9860493,13.6360722,2025-10-06 10:07:26
+1786,kfz-meisterbetrieb löscher,"hauptstraße 122, 01816 bad gottleuba-berggießhübel",50.890229,13.9989573,2025-10-06 10:07:26
+3993,kfz-meisterbetrieb s´┐¢llner,"august bebel strasse 82, 01728 bannewitz",50.9856243,13.714338,2025-10-06 10:07:26
+1815,kfz-meisterbetrieb söllner,"august bebel strasse 82, 01728 bannewitz",50.9856243,13.714338,2025-10-06 10:07:26
+1699,kfz-reparatur,"pratzschwitzer straße 220, 01796 pirna/birkwitz",50.9806061,13.8879316,2025-10-06 10:07:26
+1984,kfz-sachverständigenbüro,"werner-seelenbinder-straße 1b, 01809 heidenau",50.972238,13.8629371,2025-10-06 10:07:26
+1742,kfz-service brill,"burgstädteler str. 3d, 01219 dresden",51.0037724,13.7651802,2025-10-06 10:07:26
+2137,kfz-service jürgen hähle,"hermann-michel-straße 1, 01189 dresden",51.0054584,13.6889514,2025-10-06 10:07:26
+3708,kfz-service veit,"hilgestraße 14, 55294 bodenheim",49.9296351,8.3152745,2025-10-06 10:07:26
+1817,kfz-service-pahner,"röhrsdorfer straße 24, 01257 dresden",50.9848831,13.8066143,2025-10-06 10:07:26
+1778,kfz-werkstatt auto-gut,"poisentalstraße 24, 01728 bannewitz",50.9785504,13.705318,2025-10-06 10:07:26
+1957,kfz-werkstatt hocker,"pillnitzer straße 1, 01796 pirna",50.9721256,13.9353032,2025-10-06 10:07:26
+5806,klassische automobile schwarz,"rundteil 7b, 01728 bannewitz ot possendorf",50.954605,13.7007155,2025-10-07 08:00:58
+1661,klaus brandner gbr,"Gewerbegebiet Kaltes Feld 36, 08468 Heinsdorfergrund",50.59961711962114,12.330907317866167,2025-10-06 08:46:07
+1736,kliemt nutzfahrzeugteile,"am flugplatz 22, 02828 görlitz",51.1585651,14.9553013,2025-10-06 10:07:26
+5797,klinges autoteile,"am kirschgarten 59, 99428 grammetal",50.96664752514892,11.150910048579043,2025-10-06 12:13:53
+2002,kmh-team,"an der niedermühle 3, 01257 dresden",50.99213,13.8091708,2025-10-06 10:07:26
+1922,knoll autopflege service,"werner-seelenbinder straße 1b, 01809 heidenau",50.972238,13.8629371,2025-10-06 10:07:26
+2738,kommunalfahrzeuge heidrich gmbh,"försterlingstrasse 23, 01259 dresden",51.0023221,13.8323683,2025-10-06 10:07:26
+2453,korrosionsschutz schiebold,"lohmener str. 13, 01833 dürrröhrsdorf-dittersbach",51.009836,14.0001466,2025-10-06 10:07:26
+5773,kunde 2,"dorfstraße 37, 01768 glashütte",50.8670563,13.7387662,2025-10-06 11:47:43
+5774,kunde 3,"wittgensdorf nr. 16, 01731 kreischa",50.9393948,13.796119,2025-10-06 11:47:43
+5775,kunde 4,"an der triebe 25, 01468 moritzburg /",51.122929,13.6998414,2025-10-06 11:47:43
+5776,kunde 5,"gersdorf 43, 01819 bahretal",50.8767722,13.914521,2025-10-06 11:47:43
+5777,kunde 6,"ladestraße 2b, 09465 sehmatal",50.5328184,12.9930792,2025-10-06 11:47:43
+5778,kunde 7,"dresdner strasse 6, 01728 bannewitz",50.9803923,13.7166984,2025-10-06 11:47:43
+5779,kunde 8,"hauptstrasse 9a, 01728 bannewitz",50.9690182,13.7127659,2025-10-06 11:47:43
+2796,kurierdienst cornelia gräfe,"geibeltstraße 2b, 01796 pirna",50.9597695,13.9217809,2025-10-06 10:07:26
+1762,lackwerk lw gmbh,"bremer straße 5, 01067 dresden",51.0611002,13.7106931,2025-10-06 10:07:26
+1665,land-bau-&fahrzeugtechnik,"dorfstraße 37, 01768 glashütte",50.8670563,13.7387662,2025-10-06 08:48:49
+5768,land-bau-&fahrzeugtechnik,"dorfstraße 37, 01768 glashütte ot luchau",lat,lon,2025-10-06 11:45:12
+2624,leonhardt,"weichselstraße 2, 36043 fulda",50.5403498,9.6813873,2025-10-06 10:07:26
+5810,lila metallinc,"oberer ladenberg 13, 01816 bad gottleuba ot berggießhübel",50.8816626,13.957072,2025-10-07 08:00:58
+5190,maak fahrzeugtechnik gmbh,"linda 41, 07806 neustadt / orla",50.6867619,11.7772327,2025-10-06 10:07:26
+1754,marcel loreck,"gegenüber prießnitztalstr. 14, 01768 glashütte",50.8514123,13.7675313,2025-10-06 10:07:26
+1753,marco wagner,"niedermühle 117, 01738 dorfhain",50.9381101,13.5671455,2025-10-06 10:07:26
+4211,maritimus,"alte dorfstraße 5, 18356 fuhlendorf",54.3586284,12.6010305,2025-10-06 10:07:26
+2171,max bormann gmbh,"flensburger str. 35, 01157 dresden",51.0804227,13.6617993,2025-10-06 10:07:26
+3430,meisterwerkstatt weigel,"rosa-menzer-straße 23, 01309 dresden",51.046193,13.788141,2025-10-06 10:07:26
+2455,metiisto werkstatt- und handwerkerausr.,"falkenauer straße 26, 09661 hainichen",50.9816268,13.097308,2025-10-06 10:07:26
+5755,mfh - pf,"froebelstraße 20, 01159 dresden",51.0503439,13.7027566,2025-10-06 10:39:56
+1716,mh-fahrzeugservice,"carl-thieme-straße 28, 01705 freital",51.0152078,13.6645872,2025-10-06 10:07:26
+1350,mobilforum Classic GmbH,"Grumbacher Str. 9, 01723 Kesselsdorf",51.0322405,13.5843807,2025-09-25 10:49:33
+1426,mobilforum GmbH,"Longuyoner Str. 5, 01796 Pirna",50.9499543,13.9525715,2025-09-25 10:52:17
+1654,mobilforum GmbH,"Laugkfeld 28, 01968 Senftenberg",51.5270795,14.0151527,2025-09-25 11:02:07
+5757,motor mafia,"bärensteiner str. 27-29, 01277 dresden",51.0353473,13.8031489,2025-10-06 10:39:56
+5796,motoren-frech gbr,"Hohensteiner Str. 101, 09212 Limbach-Oberfrohna",50.847535909993624,12.773640459015994,2025-10-06 12:12:46
+2998,motorenservice,"thomas-müntzer-straße 2, 99994 schlotheim",51.2509577,10.6532337,2025-10-06 10:07:26
+5407,motorenservice biebersteingmbh,"hauptstraße 68, 02699 königswartha",51.3154698,14.3324011,2025-10-06 10:07:26
+5803,motro mafia,,51.03521318729545,13.803058284194414,2025-10-06 12:38:47
+1684,msm by hubraum gmbh,"fröbelstraße 20, 01159 dresden",51.0491695,13.698383,2025-10-06 10:07:26
+5754,msm by hubraum gmbh,"froebelstraße 20, 01159 dresden",51.0503439,13.7027566,2025-10-06 10:39:56
+2414,mvs oldtimerrestauration,"löbtauer strasse 54, 01159 dresden",51.0497057,13.7114137,2025-10-06 10:07:26
+1718,natur + stein,"lutherstraße 5a, 01705 freital",51.007453,13.6534113,2025-10-06 10:07:26
+2626,npr of europe gmbh,"siemensstr.56, 70825 korntal-münchingen",48.8512003,9.113394,2025-10-06 10:07:26
+3984,omsewitzer fahrzeugservice,"am lehmberg 54, 01157 dresden",51.0615272,13.6641951,2025-10-06 10:07:26
+1911,"p.r.o. mobilien, verwaltungs-","schachtstraße 10 a, 01705 freital",51.0058422,13.6450432,2025-10-06 10:07:26
+1697,paddock,"dresdner straße 4, 01796 pirna",50.9580277,13.9301881,2025-10-06 10:07:26
+3946,paul motorsport service,"hamburger str.65a, 01157 dresden",51.0608641,13.6872374,2025-10-06 10:07:26
+1744,pauls garage,"reicker straße 53, 01219 dresden",51.0216007,13.7776066,2025-10-06 10:07:26
+5760,peter söllner,"august bebel strasse 82, 01728 bannewitz",50.9856243,13.714338,2025-10-06 10:39:56
+1841,peugeot büttner,"steigerstraße 1, 01705 freital",50.998357,13.6879985,2025-10-06 10:07:26
+1531,pitstop.de GmbH,"Dresdner Str. 126, 01705 Freital",51.0060232,13.656258,2025-09-25 10:56:17
+2142,pitstop.de gmbh,"schandauer str. 44, 01277 dresden",51.0426445,13.7955751,2025-10-06 10:07:26
+3771,point s hentschke,"dresdner straße 51, 01796 pirna",50.9563056,13.912159,2025-10-06 10:07:26
+3317,profi parts fahrzeugteile,"südring 39, 54634 bitburg",49.9619323,6.5319514,2025-10-06 10:07:26
+2228,qq moves gmbh,"fabrikstraße 54, 01159 dresden",51.037077,13.7073587,2025-10-06 10:07:26
+2504,r & a fahrzeugservice und -han,"fröbelstr. 30-32, 01159 dresden",51.0511006,13.7051609,2025-10-06 10:07:26
+5330,rabe & leuthold,"saarstraße 4, 08056 zwickau",50.710986,12.4974458,2025-10-06 10:07:26
+2181,reifen + auto service grosche gmbh,"kötitzer straße 76, 01445 radebeul",51.1100325,13.6055051,2025-10-06 10:07:26
+1720,reifen roespel gmbh,"wilsdruffer straße 7, 01705 freital",51.0092545,13.653892,2025-10-06 10:07:26
+4013,reifen rühle e.k. autotechnik,"löbtauer straße 42, 01159 dresden",51.0508735,13.7133078,2025-10-06 10:07:26
+1970,reifencenter dresden,"bismarckstraße 57, 01257 dresden",51.0051262,13.8174126,2025-10-06 10:07:26
+2213,reifendienst schönherr,"dorfstraße 30, 01744 dippoldiswalde",50.8631144,13.6571199,2025-10-06 10:07:26
+5798,rob's kfz-service,"enno-heidebroeck-str. 11, 01237 dresden",51.016168338941654,13.7964844105141,2025-10-06 12:14:52
+1674,rob`s kfz-service,"Enno-Heidebroeck-Str. 11, 01237 Dresden",51.0160119,13.7961524,2025-10-06 09:14:04
+2117,rr auto- & reifenservice gmbh radebeul,"schumannstraße 18, 01445 radebeul",51.104257,13.6717286,2025-10-06 10:07:26
+3123,rudis-garage,"kötzschenbrodaer str. 58, 01445 radebeul",51.096997,13.6573255,2025-10-06 10:07:26
+2158,s-part fahrzeug- u. teilehandel,"müglitztalstraße 76, 01809 mühlbach",50.9155796,13.8269525,2025-10-06 10:07:26
+2018,sachsennetze gmbh,"hauptstraße 110, 01809 heidenau",50.958875,13.8974875,2025-10-06 10:07:26
+1673,saegner's fahrzeugtechnik,"burgstaedteler str. 3, 01219 dresden",51.0037703,13.7650329,2025-10-06 09:14:04
+2825,schaarschmidt-autoteile,"stollberger straße 18, 09419 thum",50.6699753,12.9477823,2025-10-06 10:07:26
+5762,schleich,"liebstädter str. 45, 01796 pirna",50.93723,13.9206719,2025-10-06 10:39:56
+1921,schmettau & fuchs gmbh,"margarete-steiff-straße 7, 28876 oyten",53.0503453,9.040118,2025-10-06 10:07:26
+5753,schrage/johne - pf,"friedrich-list-platz 2, 01069 dresden",51.0388207,13.7326534,2025-10-06 10:39:56
+1695,schraubwerk schulze,"straße der mts 1, 01737 braunsdorf",51.0153278,13.5745796,2025-10-06 10:07:26
+1671,schütze gersdorf,"gersdorf 43, 01819 bahretal",50.8767722,13.914521,2025-10-06 08:48:49
+5771,schütze gersdorf,"gersdorf 43, 01819 bahretal ot gersdorf",lat,lon,2025-10-06 11:45:12
+1835,smp gmbh,"alemannenstraße 50, 01309 dresden",51.0460813,13.7853128,2025-10-06 10:07:26
+1997,stender kfz-autoservice,"alte meißner landstraße 28c, 01157 dresden",51.0642623,13.6755018,2025-10-06 10:07:26
+5799,sven - pf,,51.00590347579738,13.819611653936176,2025-10-06 12:16:49
+5749,sven - pf (blumentritt),"str. des 17. juni 11, 01257 dresden",51.0058765,13.8198533,2025-10-06 10:39:56
+1672,sven teichmann,"an der triebe 25, 01468 moritzburg",51.122929,13.6998414,2025-10-06 08:48:49
+5770,sven teichmann,"an der triebe 25, 01468 moritzburg / ot boxdorf",lat,lon,2025-10-06 11:45:12
+5765,sägner's fahrzeugtechnik,"burgstädter str. 3, 01219 dresden",51.05,13.75,2025-10-06 11:39:20
+5766,sägner's fahrzeugtechnik,"burgstaedter str. 3, 01219, dresden",51.05,13.75,2025-10-06 11:40:57
+1692,t & s fahrzeugtechnik gmbh,"bärensteiner str. 27-29, 01277 dresden",51.0353473,13.8031489,2025-10-06 10:07:26
+1706,td performance,"radeburger straße 211, 01109 dresden",51.1236547,13.7315835,2025-10-06 10:07:26
+1715,turboservice ingo barthel,"bohnitzscher str. 4, 01662 meißen",51.1774606,13.4968326,2025-10-06 10:07:26
+5108,urban taxibetrieb gmbh & co. kg,"lohengrinstr. 19, 01796 pirna-graupa",50.9974545,13.9288928,2025-10-06 10:07:26
+2091,vgrdd gmbh,"wilsdruffer str. 37, 01705 freital",51.0138874,13.6461315,2025-10-06 10:07:26
+1829,vortrieb dresden e.k.,"hamburger straße 65 a, 01157 dresden",51.0608641,13.6872374,2025-10-06 10:07:26
+2997,wacker+döbler,"heiligkreuzweg 96, 55130 mainz",49.9786256,8.2910137,2025-10-06 10:07:26
+3971,wagner kfz-technik,"vorwerkstraße 24, 95326 kulmbach",50.1041405,11.4215906,2025-10-06 10:07:26
+1764,waldek cars,"sternstraße 47, 01139 dresden",51.0779809,13.7047999,2025-10-06 10:07:26
+1850,werk a kfz werkstatt,"dresdner straße 46, 01796 pirna",50.9578212,13.915125,2025-10-06 10:07:26
+2061,werk-zwo,"coschützer straße 63, 01705 freital",51.0144856,13.6744584,2025-10-06 10:07:26
+2693,wütschner fahrzeugteile gmbh,"clausthaler straße 14, 09599 freiberg",50.9295681,13.3318704,2025-10-06 10:07:26
+3862,xjm fahrzeugtechnik,"zum tälchen 2, 01723 kesselsdorf",51.0369497,13.5870478,2025-10-06 10:07:26

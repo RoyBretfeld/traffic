@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        #map { height: calc(60vh - 60px); border-radius: 8px; width: 100%; }
+        .sidebar { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-height: calc(100vh - 120px); overflow-y: auto; }
+        .tour-card-layout { display: flex; flex-direction: column; }
+        @media (min-width: 768px) { .tour-card-layout { flex-direction: row; } }
+        .tour-list-column { flex: 0 0 320px; padding: 1rem 1.5rem 1rem 0; border-right: 1px solid #dee2e6; }
+        @media (max-width: 767.98px) {
+            .tour-list-column { border-right: none; border-bottom: 1px solid #dee2e6; padding: 1rem 1.5rem; }
+        }
+        .tour-details-column { flex: 1 1 auto; padding: 1rem 1.5rem; }
+        .tour-card-layout .list-group-item { border-radius: 0; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">FAMO TrafficApp</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">
+                    <i class="fas fa-circle text-success"></i> Server online
+                    </span>
+                <span class="navbar-text me-3" id="llmStatus">
+                    <i class="fas fa-circle text-warning"></i> LLM prüfe...
+                </span>
+                <span class="navbar-text" id="dbStatus">
+                    <i class="fas fa-database text-info"></i> DB prüfe...
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+            <div class="sidebar" id="workflowSidebar">
+                <h5><i class="fas fa-project-diagram"></i> Workflow</h5>
+                <div id="workflowStatus" class="small text-muted mb-3">Noch kein Upload.</div>
+
+                <h5><i class="fas fa-upload"></i> CSV / Workflow</h5>
+                <input type="file" id="csvFile" class="form-control mb-2" accept=".csv,.txt" onchange="handleFileChange()">
+                <button class="btn btn-primary w-100 mb-2" onclick="uploadCSV()">
+                    <i class="fas fa-upload"></i> Nur parsen (Schritt 1)
+                </button>
+                <button class="btn btn-success w-100" onclick="runWorkflow()">
+                    <i class="fas fa-cogs"></i> Kompletten Workflow starten
+                </button>
+
+                <h5 class="mt-3"><i class="fas fa-tools"></i> Tools</h5>
+                <a href="tourplan-test.html" class="btn btn-outline-primary w-100 mb-2">
+                    <i class="fas fa-vial"></i> Tourplan Test
+                </a>
+                <a href="multi-tour-generator.html" class="btn btn-outline-secondary w-100 mb-3">
+                    <i class="fas fa-route"></i> Multi-Tour Generator
+                </a>
+
+                <h5 class="mt-3"><i class="fas fa-filter"></i> Filter</h5>
+                <div class="mb-2">
+                    <label class="form-label small">Tourtyp</label>
+                    <select id="tourTypeFilter" class="form-select form-select-sm" onchange="applyFilters()">
+                        <option value="all">Alle Touren</option>
+                        <option value="W">Nur W-Touren</option>
+                        <option value="PIR">Nur PIR</option>
+                        <option value="Anlief">Anlieferungen</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="barOnly" onchange="applyFilters()">
+                        <label class="form-check-label" for="barOnly">Nur BAR-Kunden hervorheben</label>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label small">Datum</label>
+                    <input type="date" id="tourDateFilter" class="form-control form-control-sm" onchange="applyFilters()">
+                </div>
+            </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h4><i class="fas a-map"></i> Karte</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4><i class="fas fa-route"></i> Tourübersicht</h4>
+                        <div class="small text-muted" id="tourSummary">Keine Daten</div>
+                    </div>
+                    <div class="card-body tour-card-layout">
+                        <div class="tour-list-column">
+                            <div id="tourList" class="list-group list-group-flush"></div>
+                        </div>
+                        <div class="tour-details-column">
+                            <div id="tourDetails" class="border rounded p-3 bg-light h-100">
+                                <div class="text-center text-muted py-4">
+                                    <i class="fas fa-info-circle"></i><br>
+                                    Noch keine Tourdaten. CSV hochladen oder Workflow starten.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let parsedData = null;
+        let workflowResult = null;
+        let activeTourKey = null;
+        let allTourCustomers = {};
+        let tourMarkers = [];
+        let currentFilename = null;
+        let geoCache = {};
+
+        // Initialisierung
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM geladen, starte...');
+            initializeMap();
+            loadStatusData();
+        });
+
+        // Karte initialisieren
+        function initializeMap() {
+            console.log('Initialisiere Karte...');
+            
+            if (typeof L === 'undefined') {
+                console.error('Leaflet nicht geladen!');
+                return;
+            }
+            
+            try {
+                // Karte auf FAMO Standort zentrieren (Gittersee)
+                map = L.map('map').setView([51.01127, 13.70161], 15);
+                console.log('Karte erstellt');
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+                
+                // FAMO Dresden Marker - Korrekte Position (rotes Kreuz)
+                L.marker([51.01127, 13.70161]).addTo(map)
+                    .bindPopup('<b>🏭 FAMO Dresden</b><br>Stuttgarter Str. 33<br>01189 Dresden<br><br>🏭 Industriegebiet Gittersee')
+                    .openPopup();
+                
+                console.log('Karte erfolgreich initialisiert!');
+            } catch (error) {
+                console.error('Fehler beim Initialisieren der Karte:', error);
+            }
+        }
+
+        function updateWorkflowStatus(message) {
+            document.getElementById('workflowStatus').innerHTML = message;
+        }
+
+        function handleFileChange() {
+            const input = document.getElementById('csvFile');
+            if (!input.files || !input.files.length) {
+                currentFilename = null;
+                return;
+            }
+            const file = input.files[0];
+            currentFilename = file.name;
+            updateWorkflowStatus(`<span class="text-muted">Datei ausgewählt: ${currentFilename}</span>`);
+        }
+
+        // CSV hochladen
+        async function uploadCSV() {
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Bitte wählen Sie eine Datei aus!');
+                return;
+            }
+            
+            try {
+                console.log('Lade CSV hoch:', file.name);
+                updateWorkflowStatus('<span class="text-info"><i class="fas fa-spinner fa-spin"></i> CSV wird hochgeladen und Adressen werden geokodiert...</span>');
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch('/api/parse-csv-tourplan', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    parsedData = result;
+                    workflowResult = null;
+                    renderToursFromParsedData();
+                    
+                    // Geocoding-Statistik anzeigen
+                    const geo = result.geocoding || {};
+                    const totalSuccess = (geo.from_db || 0) + (geo.from_geocoding || 0);
+                    const successRate = geo.total > 0 ? Math.round((totalSuccess / geo.total) * 100) : 0;
+                    const geoClass = successRate >= 90 ? 'text-success' : successRate >= 70 ? 'text-warning' : 'text-danger';
+                    
+                    let statusMsg = `<span class="text-success">[OK] CSV geparst - ${geo.total} Kunden</span><br><small class="${geoClass}">`;
+                    
+                    if (geo.from_db > 0) {
+                        statusMsg += `💾 ${geo.from_db} aus Datenbank geladen<br>`;
+                    }
+                    if (geo.from_geocoding > 0) {
+                        statusMsg += `🌍 ${geo.from_geocoding} neu geocodiert<br>`;
+                    }
+                    if (geo.new_customers_saved > 0) {
+                        statusMsg += `[OK] ${geo.new_customers_saved} neue Kunden gespeichert<br>`;
+                    }
+                    if (geo.failed > 0) {
+                        statusMsg += `[FEHLER] ${geo.failed} fehlgeschlagen`;
+                    }
+                    statusMsg += `<br><strong>Erfolgsquote: ${successRate}%</strong></small>`;
+                    
+                    updateWorkflowStatus(statusMsg);
+                } else {
+                    const error = await response.text();
+                    console.error('Fehler beim Hochladen:', error);
+                    updateWorkflowStatus('<span class="text-danger">[FEHLER] Fehler beim Hochladen</span>');
+                    alert(`[FEHLER] Fehler beim Hochladen:\n${error}`);
+                }
+            } catch (error) {
+                console.error('Fehler beim Hochladen:', error);
+                updateWorkflowStatus('<span class="text-danger">[FEHLER] Fehler beim Hochladen</span>');
+                alert(`[FEHLER] Fehler beim Hochladen:\n${error.message}`);
+            }
+        }
+
+        // Daten aktualisieren
+        async function runWorkflow() {
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Bitte wählen Sie eine CSV-Datei aus.');
+                return;
+            }
+
+            try {
+                updateWorkflowStatus('<span class="text-info">Workflow wird ausgeführt...</span>');
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const response = await fetch('/api/process-csv-modular', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    workflowResult = data.workflow_results;
+                    parsedData = null;
+                    renderToursFromWorkflow();
+                    updateWorkflowStatus(`<span class="text-success">Workflow erfolgreich. ${workflowResult.final_results.routes.total_routes} Touren verarbeitet.</span>`);
+                } else {
+                    updateWorkflowStatus(`<span class="text-danger">Workflow fehlgeschlagen: ${data.error || data.message}</span>`);
+                }
+            } catch (error) {
+                console.error('Workflow Fehler:', error);
+                updateWorkflowStatus('<span class="text-danger">Workflow Fehler. Details in der Konsole.</span>');
+            }
+        }
+
+        // Status-Daten laden (LLM + DB)
+        async function loadStatusData() {
+            try {
+                // LLM-Status laden
+                const llmResponse = await fetch('/api/llm-status');
+                if (llmResponse.ok) {
+                    const llmData = await llmResponse.json();
+                    updateLLMStatus(llmData);
+                }
+                
+                // DB-Status laden
+                const dbResponse = await fetch('/api/db-status');
+                if (dbResponse.ok) {
+                    const dbData = await dbResponse.json();
+                    updateDBStatus(dbData);
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Status-Daten:', error);
+            }
+        }
+
+        // LLM-Status aktualisieren
+        function updateLLMStatus(data) {
+            const llmStatus = document.getElementById('llmStatus');
+            if (data.available) {
+                llmStatus.innerHTML = `<i class="fas fa-circle text-success"></i> LLM ${data.provider}`;
+                } else {
+                llmStatus.innerHTML = `<i class="fas fa-circle text-danger"></i> LLM offline`;
+            }
+        }
+
+        // DB-Status aktualisieren
+        function updateDBStatus(data) {
+            const dbStatus = document.getElementById('dbStatus');
+            if (data.status === 'online') {
+                dbStatus.innerHTML = `<i class="fas fa-database text-success"></i> DB ${data.total_customers} Kunden`;
+            } else {
+                dbStatus.innerHTML = `<i class="fas fa-database text-danger"></i> DB offline`;
+            }
+        }
+
+        // CSV Tour Processor
+        async function processAllCSV() {
+            try {
+                console.log('Starte CSV Tour Processing...');
+                
+                const response = await fetch('/api/csv-tour-process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('CSV Tour Processing erfolgreich:', result);
+                    alert(`[OK] CSV Tour Processing erfolgreich!\n\n` +
+                          `Kunden verarbeitet: ${result.total_customers || 0}\n` +
+                          `Eindeutige Kunden: ${result.unique_customers || 0}\n` +
+                          `In DB gespeichert: ${result.saved_customers || 0}\n` +
+                          `Touren gefunden: ${result.tours_found || 0}\n` +
+                          `Touren gespeichert: ${result.saved_tours || 0}\n` +
+                          `BAR-Touren: ${result.bar_tours || 0}\n` +
+                          `Normale Touren: ${result.normal_tours || 0}\n` +
+                          `Geocoding Erfolg: ${result.geocoding_success || 0}\n` +
+                          `Geocoding Fehler: ${result.geocoding_failed || 0}\n` +
+                          `Geocoding Rate: ${result.geocoding_rate || '0%'}\n` +
+                          `Dateien verarbeitet: ${result.files_processed || 0}`);
+                    await refreshData();
+                } else {
+                    const error = await response.text();
+                    console.error('Fehler beim CSV Tour Processing:', error);
+                    alert(`[FEHLER] Fehler beim CSV Tour Processing:\n${error}`);
+                }
+            } catch (error) {
+                console.error('Fehler beim CSV Tour Processing:', error);
+                alert(`[FEHLER] Fehler beim CSV Tour Processing:\n${error.message}`);
+            }
+        }
+
+        // Touren-Details laden
+        function renderToursFromParsedData() {
+            if (!parsedData || !parsedData.parsed_data) {
+                renderEmptyTours();
+                return;
+            }
+
+            const data = parsedData.parsed_data;
+            const tours = (data.tours || []).filter(passFilter);
+            if (!tours.length) {
+                renderEmptyTours();
+                return;
+            }
+
+            document.getElementById('tourSummary').textContent = `${tours.length} Touren · ${data.stats.total_customers} Kunden`;
+
+            const tourList = document.getElementById('tourList');
+            tourList.innerHTML = tours.map((tour, index) => {
+                const key = `parsed-${index}`;
+                const barCount = tour.customers.filter(c => c.bar_flag).length;
+                const badge = barCount ? `<span class="badge bg-warning text-dark ms-2">${barCount} BAR</span>` : '';
+                const normalizedCustomers = tour.customers.map(customer => ({
+                    customer_number: customer.customer_number,
+                    name: customer.name,
+                    street: customer.street,
+                    postal_code: customer.postal_code,
+                    city: customer.city,
+                    bar_flag: customer.bar_flag,
+                    latitude: customer.latitude,
+                    longitude: customer.longitude,
+                    address: `${customer.street}, ${customer.postal_code} ${customer.city}`
+                }));
+
+                allTourCustomers[key] = {
+                    name: tour.name,
+                    type: tour.tour_type,
+                    time: tour.time,
+                    customers: normalizedCustomers
+                };
+                return `
+                    <button class="list-group-item list-group-item-action" id="tour-${key}" data-tour-key="${key}">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>${tour.name}</strong>${badge}
+                                <div class="small text-muted">${tour.customer_count} Kunden · ${tour.tour_type} · ${tour.time || 'Zeit n/a'}</div>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">${tour.customer_count}</span>
+                        </div>
+                    </button>`;
+            }).join('');
+
+            bindTourListEvents();
+
+            const firstKey = tours.length ? `parsed-0` : null;
+            if (firstKey) {
+                selectTour(firstKey);
+            }
+        }
+
+        function renderToursFromWorkflow() {
+            const finalResults = workflowResult?.final_results;
+            const routes = finalResults?.routes;
+            const headers = (routes?.route_headers || []).filter(header => passWorkflowFilter(header, finalResults?.subtours?.[header] || {}));
+
+            if (!headers.length) {
+                renderEmptyTours();
+                return;
+            }
+
+            document.getElementById('tourSummary').textContent = `${routes.total_routes} Touren (Workflow)`;
+
+            const tourList = document.getElementById('tourList');
+            tourList.innerHTML = headers.map((header, index) => {
+                const info = finalResults?.subtours?.[header] || {};
+                const key = `workflow-${index}`;
+                const customerCount = info?.ai_result?.customers?.length || 0;
+                const barCount = info.has_bar ? `<span class="badge bg-warning text-dark ms-2">BAR</span>` : '';
+                const customers = (info.customers || info.ai_result?.customers || []).map(c => ({
+                    customer_number: c.customer_number || c.kdnr || '',
+                    name: c.name || c.customer_name || 'Unbekannt',
+                    street: c.street || c.address || '',
+                    postal_code: c.postal_code || c.zip || '',
+                    city: c.city || '',
+                    bar_flag: !!(c.bar_flag || c.bar),
+                    latitude: c.latitude,
+                    longitude: c.longitude,
+                    address: `${c.street || c.address || ''}, ${c.postal_code || c.zip || ''} ${c.city || ''}`
+                }));
+
+                allTourCustomers[key] = {
+                    name: header,
+                    type: info.tour_type || 'Workflow',
+                    time: info.tour_time || '',
+                    customers
+                };
+
+                return `
+                    <button class="list-group-item list-group-item-action" id="tour-${key}" data-tour-key="${key}">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>${header}</strong>${barCount}
+                                <div class="small text-muted">${customerCount} Kunden · ${info.status || 'Workflow'}</div>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">${customerCount}</span>
+                        </div>
+                    </button>`;
+            }).join('');
+
+            bindTourListEvents();
+
+            const firstKey = headers.length ? `workflow-0` : null;
+            if (firstKey) {
+                selectTour(firstKey);
+            }
+        }
+
+        function renderCustomerList(customers) {
+            if (!customers || !customers.length) {
+                return '<span class="text-muted">Keine Kunden vorhanden.</span>';
+            }
+
+            return `
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr><th>#</th><th>Kunde</th><th>Adresse</th><th>KdNr</th><th class="text-center">Geo</th></tr>
+                        </thead>
+                        <tbody>
+                            ${customers.map((c, idx) => {
+                                const key = `${c.customer_number || idx}-${idx}`;
+                                c._geoKey = key;
+                                const rowClass = hasCoordinates(c) ? '' : ' class="table-danger"';
+                                return `
+                                <tr${rowClass}>
+                                    <td>${idx + 1}</td>
+                                    <td>${c.name}${c.bar_flag ? ' <span class="badge bg-warning text-dark ms-1">BAR</span>' : ''}</td>
+                                    <td>${c.street}, ${c.postal_code} ${c.city}</td>
+                                    <td>${c.customer_number}</td>
+                                    <td class="text-center">
+                                        <span class="geo-status" data-geokey="${key}">${getGeoStatusIcon(c)}</span>
+                                    </td>
+                                </tr>`;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>`;
+        }
+
+        function hasCoordinates(customer) {
+            const lat = parseFloat(customer?.latitude);
+            const lon = parseFloat(customer?.longitude);
+            return !isNaN(lat) && !isNaN(lon);
+        }
+
+        function getGeoStatusIcon(customerOrFlag) {
+            const hasCoords = typeof customerOrFlag === 'boolean' ? customerOrFlag : hasCoordinates(customerOrFlag);
+            if (hasCoords) {
+                return '<i class="fas fa-check-circle text-success"></i>';
+            }
+            return '<i class="fas fa-times-circle text-danger"></i>';
+        }
+
+        function updateGeoIndicator(customer, hasCoords) {
+            if (!customer || !customer._geoKey) {
+                return;
+            }
+            const el = document.querySelector(`.geo-status[data-geokey="${customer._geoKey}"]`);
+            if (el) {
+                el.innerHTML = getGeoStatusIcon(hasCoords);
+            }
+        }
+
+        function bindTourListEvents() {
+            const buttons = document.querySelectorAll('#tourList .list-group-item');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const key = btn.getAttribute('data-tour-key');
+                    selectTour(key);
+                });
+            });
+        }
+
+        function selectTour(key) {
+            if (!key || !allTourCustomers[key]) {
+                return;
+            }
+
+            activeTourKey = key;
+            updateTourListSelection(key);
+            renderTourDetails(allTourCustomers[key]);
+        }
+
+        function updateTourListSelection(key) {
+            const buttons = document.querySelectorAll('#tourList .list-group-item');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-tour-key') === key) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function renderTourDetails(tourData) {
+            if (!tourData) {
+                document.getElementById('tourDetails').innerHTML = '<span class="text-muted">Keine Tour ausgewählt.</span>';
+                clearTourMarkers();
+                return;
+            }
+
+            const details = document.getElementById('tourDetails');
+            details.innerHTML = `
+                <h5>${tourData.name}</h5>
+                <div class="mb-2 text-muted">${tourData.type || ''} ${tourData.time ? '· ' + tourData.time : ''}</div>
+                ${renderCustomerList(tourData.customers)}
+            `;
+
+            highlightTourOnMap(tourData.customers);
+        }
+
+        function renderWorkflowDetails(info) {
+            if (!info || !info.ai_result) {
+                return '<span class="text-muted">Keine Detaildaten verfügbar.</span>';
+            }
+
+            const tours = info.subtours || [];
+            if (!tours.length) {
+                return '<span class="text-muted">Keine Untertouren erstellt.</span>';
+            }
+
+            return tours.map((tour, idx) => `
+                <div class="mb-3">
+                    <h6>Untertour ${idx + 1}</h6>
+                    <pre class="bg-light p-2">${JSON.stringify(tour, null, 2)}</pre>
+                </div>`).join('');
+        }
+
+        function renderEmptyTours() {
+            document.getElementById('tourSummary').textContent = 'Keine Tourdaten';
+            document.getElementById('tourList').innerHTML = '';
+            document.getElementById('tourDetails').innerHTML = `
+                <div class="text-center text-muted py-4">
+                    <i class="fas fa-info-circle"></i><br>
+                    Noch keine Tourdaten. CSV hochladen oder Workflow starten.
+                </div>`;
+            clearTourMarkers();
+        }
+
+        function passFilter(tour) {
+            const typeFilter = document.getElementById('tourTypeFilter').value;
+            const barOnly = document.getElementById('barOnly').checked;
+            const dateFilter = document.getElementById('tourDateFilter').value;
+
+            if (typeFilter !== 'all') {
+                const tourType = (tour.tour_type || '').toUpperCase();
+                if (!tourType.startsWith(typeFilter.toUpperCase())) {
+                    return false;
+                }
+            }
+
+            if (barOnly) {
+                const hasBar = tour.customers.some(c => c.bar_flag);
+                if (!hasBar) return false;
+            }
+
+            if (dateFilter) {
+                const metaDate = parsedData?.parsed_data?.metadata?.delivery_date;
+                if (metaDate !== dateFilter) return false;
+            }
+
+            return true;
+        }
+
+        function passWorkflowFilter(header, info) {
+            const typeFilter = document.getElementById('tourTypeFilter').value;
+            const barOnly = document.getElementById('barOnly').checked;
+
+            if (typeFilter !== 'all') {
+                if (!header.toUpperCase().includes(typeFilter.toUpperCase())) {
+                    return false;
+                }
+            }
+
+            if (barOnly) {
+                return info && info.has_bar;
+            }
+
+            return true;
+        }
+
+        function applyFilters() {
+            if (workflowResult) {
+                renderToursFromWorkflow();
+            } else if (parsedData) {
+                renderToursFromParsedData();
+            }
+        }
+
+        function clearTourMarkers() {
+            if (!map || !tourMarkers.length) {
+                return;
+            }
+            tourMarkers.forEach(marker => map.removeLayer(marker));
+            tourMarkers = [];
+        }
+
+        async function highlightTourOnMap(customers) {
+            if (!map) {
+                return;
+            }
+
+            clearTourMarkers();
+
+            if (!customers || !customers.length) {
+                return;
+            }
+
+            const bounds = [];
+
+            for (const customer of customers) {
+                // Koordinaten sind jetzt direkt im Customer-Objekt vom Server
+                const hasCoords = hasCoordinates(customer);
+                updateGeoIndicator(customer, hasCoords);
+                
+                if (!hasCoords) {
+                    console.warn(`Keine Koordinaten für ${customer.name}`);
+                    continue;
+                }
+
+                const lat = parseFloat(customer.latitude);
+                const lon = parseFloat(customer.longitude);
+                
+                const marker = L.marker([lat, lon], {
+                    icon: L.icon({
+                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41]
+                    })
+                }).addTo(map);
+                marker.bindPopup(`<strong>${customer.name}</strong><br>${customer.street}<br>${customer.postal_code} ${customer.city}`);
+                tourMarkers.push(marker);
+                bounds.push([lat, lon]);
+            }
+
+            if (bounds.length) {
+                const featureGroup = L.featureGroup(tourMarkers);
+                map.fitBounds(featureGroup.getBounds().pad(0.2));
+            }
+        }
+
+        async function resolveCustomerCoordinates(customer) {
+            const lat = parseFloat(customer.latitude);
+            const lon = parseFloat(customer.longitude);
+            if (!isNaN(lat) && !isNaN(lon)) {
+                return [lat, lon];
+            }
+
+            const key = `${customer.street || ''}|${customer.postal_code || ''}|${customer.city || ''}`;
+            if (geoCache[key]) {
+                return geoCache[key];
+            }
+
+            const parts = [customer.street, customer.postal_code, customer.city].filter(Boolean);
+            if (!parts.length) {
+                return null;
+            }
+
+            const address = encodeURIComponent(parts.join(', '));
+            try {
+                const response = await fetch(`/api/geocode?address=${address}`);
+                if (!response.ok) {
+                    return null;
+                }
+                const result = await response.json();
+                if (result.lat !== undefined && result.lon !== undefined) {
+                    const coords = [parseFloat(result.lat), parseFloat(result.lon)];
+                    if (!isNaN(coords[0]) && !isNaN(coords[1])) {
+                        geoCache[key] = coords;
+                        customer.latitude = coords[0];
+                        customer.longitude = coords[1];
+                        return coords;
+                    }
+                }
+            } catch (error) {
+                console.warn('Geocoding fehlgeschlagen:', error);
+            }
+
+            return null;
+        }
+    </script>
+</body>
+</html>

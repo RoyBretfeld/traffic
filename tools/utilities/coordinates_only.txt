@@ -1,0 +1,357 @@
+# Koordinaten-Liste (Lat, Lon)
+# Export: 08.10.2025 07:25:29
+# Gesamt: 493 Koordinaten
+
+51.015777,13.792985  # "auto-kavalier"- admiral
+51.183668,14.403084  # 1#ls6259094
+50.988492,13.991496  # 1a Autoservice Alexander Heidecke
+51.120311,13.732805  # 1a autoservice Menzel
+51.039896,13.704048  # 1a autoservice oehlschläger
+51.013179,13.804567  # 36 nici zu rp
+51.015222,13.642348  # 41 roswitha
+51.014176,13.644937  # A.T.U-Filiale Freital
+50.991865,13.798266  # ACR bei Endlich
+51.189610,14.017359  # AH Franke GmbH & Co.KG Pulsn.
+51.129488,13.913193  # AH Franke GmbH & Co.KG Radeb.
+51.014796,13.643299  # AIS Dresden GmbH
+50.591530,12.704914  # AUTECHNA
+51.005475,13.821373  # AUTOBOX DRESDEN GmbH
+50.717923,13.188588  # AUTOTEILE BRNER
+51.014642,13.775192  # Adrian Glckner Automobile GmbH
+51.042570,13.782165  # Alf Hse - Autoservice
+51.061936,13.845764  # Andreas Knop
+51.004580,13.811222  # Andr Zerbst
+50.659977,13.152692  # Autechna Autoteile
+51.010943,13.810806  # Auto Eggert
+51.015209,13.788057  # Auto Jrgen Pfeiffer KG
+51.012565,13.669994  # Auto Kaden KG
+50.834884,13.293395  # Auto Lippmann
+51.074295,13.736496  # Auto Petzold GmbH
+51.026666,13.803108  # Auto Trentzsch GbR
+51.005876,13.819853  # Auto Werft Dresden
+50.897229,13.690172  # Auto mobile DW GmbH
+50.909888,13.735995  # Auto-Reparatur-Dienst
+50.839445,13.628246  # Auto-Service Becker
+50.988759,13.848905  # Auto-Service Mller GbR
+50.897372,13.688931  # Auto-Service Wagner
+51.017821,13.769317  # Auto-Service-Center Dresden
+51.100701,13.998016  # Auto-Walther GmbH & Co.KG
+51.204209,13.731527  # Auto-Walther GmbH & Co.KG
+51.098227,13.993339  # Auto-Walther GmbH & Co.KG
+51.016863,13.788741  # Auto23 GmbH
+51.061567,13.711926  # Autocenter Dresden GmbH
+50.984296,13.633384  # Autocenter Freital OHG
+51.112148,13.732000  # Autoglas Peschel GmbH
+51.016966,13.729332  # Autohaus Dresden GmbH
+50.927334,13.930813  # Autohaus Gaebel GmbH &Co.KG
+50.991390,13.696109  # Autohaus Hardtke GmbH
+50.916696,13.978005  # Autohaus Huth
+50.988586,13.812236  # Autohaus Israel GmbH & Co. KG
+50.887968,13.669344  # Autohaus Liliensiek GmbH
+51.039816,13.651572  # Autohaus Liliensiek GmbH
+51.060033,13.699001  # Autohaus Melkus GmbH
+50.833607,13.680782  # Autohaus Rettberg GmbH
+50.957195,13.929071  # Autohaus Welde GmbH
+51.089871,13.705012  # Autohaus Zimmermann
+51.016171,13.668523  # Autohof Dhlen
+50.957448,13.926658  # Automobile Dresden
+50.764557,13.757306  # Automobile Irrgang eGbR
+51.054616,13.536193  # Autopflege und Reifendienst
+51.049036,13.686698  # Autoservice Bernhardt
+51.016586,13.797959  # Autoservice Grtner
+51.003927,13.615274  # Autoservice Hammer
+51.012433,13.795751  # Autoservice Hartmann
+51.119229,13.738258  # Autoservice Hartmann
+50.983982,13.595533  # Autoservice Kpnick
+51.095628,13.659474  # Autoservice Matthes
+51.041878,13.678604  # Autoservice Reichert GmbH
+51.123930,13.583820  # Autoteam Schade
+50.762192,13.767371  # Autoteile Heiko Ungermann
+50.701800,12.445094  # Autoteile und Zubehr
+51.127964,13.705080  # Autowerkstatt MAUDRICH GmbH
+51.003115,13.679312  # BRAUNE Autolackierbedarf GmbH
+51.164643,13.727755  # Bernd Schmiedgen
+51.015285,13.662913  # Blizzboy Rthig
+50.999933,13.609265  # Boxenstop KFZ-Meisterwerkstatt
+51.104161,13.921993  # CAR POINT
+51.029123,13.703702  # CSM
+51.119402,13.587409  # Classic Style
+51.009846,13.655532  # Die Maler GmbH
+51.047422,13.708650  # Die Meister
+51.047422,13.708650  # Die Meister
+51.057225,13.772409  # Dietmar Beerwart
+51.136240,13.482824  # Dieáner & Mske GbR
+50.895606,13.670132  # Dippser-Auto-Ecke
+51.115506,13.747607  # Dirk Krause
+50.979939,13.564157  # Dressel Montage
+50.959770,13.921781  # ERSA Automotive
+51.172383,13.541191  # Elektroinstallation
+50.902577,13.978764  # Elektroinstallation Hennig
+51.011199,13.701648  # FAMO Fahrzeug-und Motorenteile GmbH
+51.384443,12.524554  # FAMO Fahrzeug-und Motorenteile GmbH
+51.702996,14.363082  # FAMO Fahrzeug-und Motorenteile GmbH
+50.997686,13.645170  # FREIE KFZ-WERKSTATT
+50.654184,13.326081  # Fa. Flade Thomas
+51.129251,13.546257  # Fa.Wilms
+51.015328,13.574580  # Fahrzeug und Systemtechnik Ehring GmbH
+51.013205,13.778461  # Fahrzeugservice Kretzschmar
+51.119532,13.580880  # Fahrzeugservice u.
+51.067468,13.641145  # Fahrzeugservice und Handel
+51.055200,13.636377  # Firma Jens Drechsler
+51.022005,13.626340  # Frank's Motorradladen
+51.008064,13.660018  # Franks Garage
+50.996151,13.651708  # Freie KFZ-Meisterwerkstatt
+51.061988,13.847568  # Go-Cars-Autoservice
+51.041878,13.678604  # Gomodrom Automobile
+51.041969,13.601421  # Hanitzsch GmbH & Co. KG
+51.012433,13.795751  # Hartmann Karosserie- und Fahrzeugbau
+50.512122,12.786572  # Herkommer Kfz-Technik
+50.841082,13.939770  # Hickmann, Matthias
+50.902074,13.976248  # Jrgen Schiebel
+50.957005,13.904691  # KFZ-Meisterhandwerk
+51.087326,13.704733  # KFZ-Service Holger Garz
+50.924699,13.855797  # Karosserie- & KfZ-Service Derlich
+51.094382,13.497605  # Karosserie- und Fahrzeugbau
+50.954630,13.699610  # Karosseriebau Henschke
+51.016483,13.676389  # Karosseriebau Miersch
+51.016165,13.642441  # Keilig Willi Inh. A.Hhnel
+50.890732,13.704637  # Kfz Reparatur
+51.017302,13.771531  # Kfz-Aufbereitung Dresden
+51.009968,13.789755  # Kfz-Meisterbetrieb Heyde
+51.005906,13.816984  # Kfz-Meisterbetrieb Lommatzsch
+51.039926,13.818667  # Kfz-Meisterbetrieb Stege
+50.985624,13.714338  # Kfz-Meisterbetrieb Sllner
+50.957623,13.956583  # Kfz-Service Hertling
+50.976008,13.861615  # Kfz-Service Schlegel
+52.545367,13.313218  # King Cars GmbH Nord
+50.923217,13.924715  # Kloss Auto-Service
+50.811271,12.881060  # Knoll GmbH
+51.011761,13.851059  # Kraftwagen-Reparatur
+51.115980,13.483360  # Kraftwagenpark Dresden
+51.005574,13.822999  # Kuli's Carpoint
+50.920378,12.713593  # LB
+51.374564,14.067545  # Lackiererei
+50.946617,13.944556  # Lars Richter
+51.023437,13.621648  # Leon Automobile
+50.986679,13.712595  # Lindner, Thomas GmbH
+51.466372,13.618146  # MARTH Performance
+51.029502,13.803489  # MELKUS Fahrzeugservice im SEC
+51.110416,13.661138  # MLTec Automotive GmbH
+51.381896,12.285680  # MOTORSTOPP
+50.964910,13.716006  # Marko Heymann Kfz-Werkstatt
+51.027953,13.801625  # Marks Dieselmotorentechnik
+50.927291,13.956570  # Martin Faust
+50.633323,12.316862  # Motorenbau - KURZ
+51.090226,13.704953  # Motoreninstandsetzung
+51.066234,13.675224  # Musti Autoaufbereitung
+51.005920,13.776327  # PKW & Nutzfahrzeug Service
+50.974318,13.877553  # PM Car Parts
+50.984000,13.798521  # PMS Provocatione Motor Sport
+51.057402,13.859047  # Peers Garage - Freie KFZ-Werkstatt
+51.120471,13.643299  # Profil 25
+50.896627,13.897712  # Rasche, Thomas
+50.966805,13.701438  # Reifen Auto Service Glau
+51.034208,13.584049  # Reifen-& Autoservice Roespel
+51.005126,13.817413  # ReifenCenter Dresden
+51.031836,13.664642  # Reifenhaus Freital GbR
+51.223249,14.786576  # Ronald Halla
+50.842042,13.637663  # SAG Sadisdorfer Agrar AG
+51.041269,13.709488  # SachsenNetze GmbH
+51.040738,13.600542  # SachsenNetze HS.HD GmbH
+50.633382,12.316997  # Schafferus
+51.458368,13.882635  # Schaschke Ruhland
+51.022951,13.556563  # Schiba Bau GmbH
+50.940057,13.696578  # Schmiede Woggon Karsdorf
+51.077981,13.704800  # Schubert - BVFS
+51.033268,13.703318  # Silbermann Fahrzeugservice
+51.060864,13.687237  # Smart Repair u. Lackservice
+51.119532,13.580880  # Sternclassics Autoservice
+51.120633,13.581384  # Stockmann KFZ-Service
+51.071078,13.788848  # TM Reifen und Autoservice
+51.089480,13.723216  # TOM-Automobile.de GmbH
+51.306212,12.260792  # Testa Baresi
+51.367735,12.404102  # Thomas Bode
+51.001835,13.828721  # Tom Tobisch
+50.913395,13.047213  # V. Kluge GmbH
+51.040007,13.648906  # VGRDD GmbH
+51.059605,13.701992  # VGRDD GmbH
+49.978626,8.291014  # Wacker+Dbler
+51.218632,13.727842  # Werkstatt Swen Vogel
+50.844044,13.927510  # Wunderlich, Martin
+51.005126,13.817413  # a.t.l. autoteileland
+50.920676,14.013651  # abschleppdienst lesche gbr
+51.014642,13.775192  # adrian gl´┐¢ckner automobile gmbh
+51.014642,13.775192  # adrian glöckner automobile gmbh
+50.957821,13.915125  # ag
+50.937230,13.920672  # agroservice pirna gmbh
+51.092640,13.669569  # ais dresden gmbh
+51.183668,14.403084  # akf fahrzeugteile gmbh
+51.042570,13.782165  # alf häse - autoservice
+50.881770,14.021567  # andreas ebert
+51.004580,13.811222  # andré zerbst
+50.973714,13.634702  # anhänger kunath e.k.
+50.852071,13.612161  # as frank zimmermann
+50.908534,13.598011  # ash dirk häger
+51.047014,13.708184  # astral ug
+50.930452,13.063683  # atm reparaturzentrum
+51.050833,13.706227  # atw fahrzeugteile
+51.101643,13.663724  # auto - heller
+50.943053,13.700026  # auto - kühlerdienst henke kg
+51.041686,13.641452  # auto becker
+51.050558,13.778374  # auto brückner gmbh & co. kg
+51.162443,13.680157  # auto christen
+50.900179,13.010582  # auto damm e.k.
+51.136732,13.459096  # auto dienst meissen
+50.990360,13.642030  # auto doktor gbr
+51.013398,13.670667  # auto haase
+51.015209,13.788057  # auto j´┐¢rgen pfeiffer kg
+51.015209,13.788057  # auto jürgen pfeiffer kg
+51.028432,13.705270  # auto lust
+51.430521,14.232765  # auto otto
+51.430529,14.232713  # auto otto
+50.906800,13.741892  # auto service meusel
+50.906822,13.741893  # auto service meusel
+51.009137,13.811655  # auto-mösch
+50.988759,13.848905  # auto-service m´┐¢ller gbr
+50.988759,13.848905  # auto-service möller gbr
+50.978929,13.944446  # auto-stäps gmbh
+51.040085,13.792637  # auto-technik24 gmbh
+51.003297,13.681398  # autoburgk lohse
+51.064908,13.897134  # autocenter dresden gmbh
+51.014382,13.724017  # autocenter dresden gmbh
+51.092048,13.671657  # autocenter strehle e.k.
+50.842905,13.772346  # autodienst tilo bretschneider
+51.034676,13.820432  # autoeck24.de
+50.867342,14.000768  # autofreund-lindner
+51.028061,13.706561  # autohaus
+51.043977,13.782613  # autohaus borsbergstraße gmbh
+51.061567,13.711926  # autohaus dresden gmbh
+51.022374,13.627234  # autohaus emmrich e.k.
+51.001583,13.849511  # autohaus fischer
+51.165954,13.559779  # autohaus frank grassel
+51.025134,13.732427  # autohaus friedewald
+50.969018,13.712766  # autohaus godzik ohg
+50.969018,13.712766  # autohaus godzik ohg
+51.016860,13.641274  # autohaus gröbel gmbh
+50.907951,13.691128  # autohaus hüttel
+50.875278,13.949755  # autohaus in berggießhübel gmbh
+51.174650,13.498008  # autohaus lassotta gmbh
+50.795231,13.810716  # autohaus leuteritz gmbh
+50.978406,13.868497  # autohaus olaf streit
+50.957652,13.937468  # autohaus pirna gmbh
+51.074954,13.665563  # autohaus rainer fiedler e.k.
+51.082138,14.020619  # autohaus sachmann
+51.039673,13.798657  # autohaus striesen
+50.980392,13.716698  # autohaus winter gmbh
+51.016171,13.668523  # autohof döhlen
+51.220921,13.726458  # autohof radeburg gmbh
+51.125059,13.574433  # autohäusler
+51.069673,13.734058  # autoklimazentrum dresden
+51.013179,13.804567  # automatikgetriebeservice
+51.006539,13.821662  # automeisterei
+51.067284,13.891138  # automobile dresden weißig
+50.559002,8.467470  # automobile parts rhein-main ug
+51.017212,13.788129  # autopark lohrmannstraße
+50.973638,13.872931  # autopark pirnaer straße
+51.001260,13.687136  # autoreparaturwerk freital kg
+50.877276,13.959060  # autoservice arnold
+51.070630,13.698724  # autoservice baumeister
+51.049036,13.686698  # autoservice bernhardt
+51.015314,13.682354  # autoservice dana böttcher
+51.016586,13.797959  # autoservice g´┐¢rtner
+51.016586,13.797959  # autoservice gärtner
+51.008880,13.786660  # autoservice heinze gmbh
+51.107809,13.626111  # autoservice kartunov
+50.983982,13.595533  # autoservice k´┐¢pnick
+50.983982,13.595533  # autoservice köpnick
+51.023455,13.838876  # autoservice laubegast
+51.037133,13.898556  # autoservice leuthold
+51.037118,13.898501  # autoservice leuthold
+51.079083,13.708628  # autoservice petters gmbh
+50.998352,13.605136  # autoservice pohlmann
+51.014548,13.667793  # autoservice schubert
+51.005992,13.823802  # autoservice und fahrzeugbau steglich
+51.147801,13.459502  # autoservice winkler
+51.038539,13.739799  # autoservice wolf
+50.717923,13.188588  # autoteile b´┐¢rner
+50.717923,13.188588  # autoteile börner
+51.096049,13.660551  # autoteile ehrlich
+50.701800,12.445094  # autoteile und zubeh´┐¢r
+50.701800,12.445094  # autoteile und zubehör
+51.077981,13.704800  # autovermietung vetter
+51.036704,13.705584  # basti's kfz-werkstatt
+50.914512,14.070076  # bauservice tilo richter
+50.917568,14.073961  # bauservice tilo richter
+51.155129,13.117825  # baywa ag döbeln
+49.153305,12.763898  # baywa ag miltach
+50.958645,13.928725  # bernd forker gmbh
+50.927334,13.930813  # bistra bau gmbh & co. kg
+51.015285,13.662913  # blizzboy r´┐¢thig
+51.015285,13.662913  # blizzboy röthig
+51.005876,13.819853  # blumentritt
+51.004845,13.823335  # blumentritt diesel-einspritztechnik
+51.966296,11.125248  # bosse mechanik
+51.057427,13.886436  # brussig - der elektro-fachmann
+51.025876,13.731255  # büttner
+51.074123,13.736843  # car repair
+51.046208,13.708457  # car-art gmbh
+51.046208,13.708457  # car-art gmbh
+51.050000,13.750000  # car-art gmbh
+51.006746,13.813975  # car-art gmbh
+50.889863,12.349055  # car-center
+51.074123,13.736843  # car-repair
+51.017198,13.671859  # car-wellness-dresden
+50.975675,13.943036  # carzone pirna
+50.898872,13.658231  # dachdeckerbetrieb heber
+51.003419,13.613706  # dellentechnik andreas simßen
+51.047422,13.708650  # die meister
+50.965823,13.854157  # die-autogesellschaft-dresden.d
+50.965368,13.883498  # die-autogesellschaft-dresden.d
+50.965368,13.883498  # die-autogesellschaft-dresden.de
+50.965823,13.854157  # die-autogesellschaft-dresden.de
+50.532818,12.993079  # dietze & schindler
+50.532818,12.993079  # dietze & schindler
+50.532844,12.993080  # dietze & schindler
+50.532818,12.993079  # dietze & schindler
+51.136240,13.482824  # die´┐¢ner & m´┐¢ske gbr
+51.136240,13.482824  # dießner & müske gbr
+51.038539,13.739799  # distrex fahrzeugservice e.k.
+50.975147,13.876508  # dreihundert dresden
+50.975147,13.876508  # dreihundert dresden
+51.016423,13.808196  # dresden-strehlener kfz-technik gmbh
+51.079930,13.760142  # dresdner klassiker handel gmbh
+51.066019,13.895945  # dresdner reifen zentrale gmbh
+51.045958,13.707160  # dresdner reifen zentrale gmbh
+51.035257,13.585915  # dresdner reifen zentrale gmbh
+51.017934,13.788558  # dresdner reifen zentrale gmbh
+51.079930,13.760142  # dresdner reifen zentrale gmbh
+50.953279,13.729206  # dresdner vorgebirgs agrar ag
+51.006605,13.655993  # drk rettungsdienst freital
+50.916579,14.028450  # esw autoservice gmbh
+50.994120,13.645597  # f & t fahrzeug-technik gmbh
+51.003294,13.787690  # f.h. wheel center gmbh
+51.004487,13.836832  # f.h. wheel center gmbh
+51.017460,11.036651  # fa. autohaus langenhan
+51.129441,13.546105  # fa. wilms
+52.343866,14.530453  # fa. zwiener
+51.258536,13.888404  # fa.broßmann gmbh
+51.129251,13.546257  # fa.wilms
+51.071274,13.670956  # fahrzeug-service bachmann
+51.041121,11.835464  # fahrzeughandel u. service
+51.062104,13.679946  # fahrzeugservice kaden
+51.023030,13.791366  # fahrzeugservice reiche
+50.413593,8.685455  # fam. diehl
+51.187335,14.458121  # famo fahrzeug-und motorenteile gmbh
+50.902012,13.337477  # famo fahrzeug-und motorenteile gmbh
+51.127402,13.707989  # federn - schulze gbr
+51.005876,13.819853  # feldbinder & rolfsmeyer
+51.047230,13.701968  # fiedler karsten
+49.958217,8.258543  # firma dachboxhelden
+51.341468,12.231092  # frank & sohn fahrzeugteile leipzig gmbh
+50.812877,12.883721  # frank fahrzeugbau gmbh
+50.968106,13.856855  # freie kfz-werkstatt peter thomas
+50.882921,13.957616  # freie kfz.-werkstatt
+51.045554,13.707404  # freie kfz.-werkstatt czerwonka
+50.983601,13.594444  # ftt fahrzeug technik tharandt
+50.895247,13.660904  # garagentore u. torantriebe
+50.939395,13.796119  # gustavs autohof

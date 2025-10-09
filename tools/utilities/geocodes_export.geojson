@@ -1,0 +1,7897 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2000,
+        "name": "\"auto-kavalier\"- admiral",
+        "adresse": "georg-mehrtens-straße 3, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7929846,
+          51.0157765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4362,
+        "name": "1#ls6259094",
+        "adresse": "dresdener straße 70a, 02625 bautzen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.4030841,
+          51.1836676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1331,
+        "name": "1a Autoservice Alexander Heidecke",
+        "adresse": "Bahnhofstr. 2, 01847 Lohmen",
+        "created_at": "2025-09-25 10:48:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9914958,
+          50.9884922
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1581,
+        "name": "1a autoservice Menzel",
+        "adresse": "Bauernweg 12, 01109 Dresden",
+        "created_at": "2025-09-25 10:58:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7328053,
+          51.120311
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1832,
+        "name": "1a autoservice oehlschläger",
+        "adresse": "tharandter straße 26, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7040483,
+          51.0398963
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5758,
+        "name": "36 nici zu rp",
+        "adresse": "mügelner str.29, 01237 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8045668,
+          51.0131793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1682,
+        "name": "41 roswitha",
+        "adresse": "wilsdruffer str. 65, 01705 freital",
+        "created_at": "2025-10-06 09:54:01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6423478,
+          51.0152221
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1515,
+        "name": "A.T.U-Filiale Freital",
+        "adresse": "Wilsdruffer Str. 39, 01705 Freital",
+        "created_at": "2025-09-25 10:55:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.644937,
+          51.0141762
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1590,
+        "name": "ACR bei Endlich",
+        "adresse": "Nickerner Weg 7, 01257 Dresden",
+        "created_at": "2025-09-25 10:59:08"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7982663,
+          50.991865
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1359,
+        "name": "AH Franke GmbH & Co.KG Pulsn.",
+        "adresse": "Kamenzer Str. 10, 01896 Pulsnitz",
+        "created_at": "2025-09-25 10:49:57"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0173587,
+          51.1896101
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1579,
+        "name": "AH Franke GmbH & Co.KG Radeb.",
+        "adresse": "An der Ziegelei 11, 01454 Radeberg",
+        "created_at": "2025-09-25 10:58:36"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9131932,
+          51.1294883
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1483,
+        "name": "AIS Dresden GmbH",
+        "adresse": "Wilsdruffer Strasse 41, 01705 Freital",
+        "created_at": "2025-09-25 10:54:20"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6432993,
+          51.0147957
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1601,
+        "name": "AUTECHNA",
+        "adresse": "Lindenstr. 8, 08280 Aue",
+        "created_at": "2025-09-25 10:59:25"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.7049145,
+          50.5915302
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1342,
+        "name": "AUTOBOX DRESDEN GmbH",
+        "adresse": "Strasse des 17. Juni 17, 01257 Dresden",
+        "created_at": "2025-09-25 10:49:19"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.821373,
+          51.0054753
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1450,
+        "name": "AUTOTEILE BRNER",
+        "adresse": "Wolkensteiner Str. 18, 09514 Pockau - Lengefeld",
+        "created_at": "2025-09-25 10:52:55"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1885883,
+          50.7179233
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1464,
+        "name": "Adrian Glckner Automobile GmbH",
+        "adresse": "Dohnaer Strasse 103a, 01219 Dresden",
+        "created_at": "2025-09-25 10:53:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7751918,
+          51.0146424
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1519,
+        "name": "Alf Hse - Autoservice",
+        "adresse": "Geisingstr.30, 01309 Dresden",
+        "created_at": "2025-09-25 10:55:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7821649,
+          51.04257
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1358,
+        "name": "Andreas Knop",
+        "adresse": "Bautzner Landstrasse 119, 01324 Dresden",
+        "created_at": "2025-09-25 10:49:51"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8457637,
+          51.0619361
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1306,
+        "name": "Andr Zerbst",
+        "adresse": "Niedersedlitzer Str. 67a, 01257 Dresden",
+        "created_at": "2025-09-25 10:47:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8112225,
+          51.0045803
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1499,
+        "name": "Autechna Autoteile",
+        "adresse": "Am Abrahamschacht 4, 09496 Marienberg",
+        "created_at": "2025-09-25 10:54:54"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1526918,
+          50.6599767
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1578,
+        "name": "Auto Eggert",
+        "adresse": "Wilhelm-Liebknecht-Str. 6, 01257 Dresden",
+        "created_at": "2025-09-25 10:58:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8108062,
+          51.010943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1378,
+        "name": "Auto Jrgen Pfeiffer KG",
+        "adresse": "Reicker Str. 91, 01237 Dresden",
+        "created_at": "2025-09-25 10:50:41"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7880566,
+          51.0152092
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1312,
+        "name": "Auto Kaden KG",
+        "adresse": "Fichte Strasse 13c, 01705 Freital",
+        "created_at": "2025-09-25 10:47:50"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.669994,
+          51.0125652
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1635,
+        "name": "Auto Lippmann",
+        "adresse": "Kleinhartmannsdorfer Str. 7, 09618 Brand-Erbisdorf",
+        "created_at": "2025-09-25 11:00:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.2933954,
+          50.8348837
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1537,
+        "name": "Auto Petzold GmbH",
+        "adresse": "Fritz-Reuter-Str. 45, 01097 Dresden",
+        "created_at": "2025-09-25 10:56:37"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7364956,
+          51.0742945
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1472,
+        "name": "Auto Trentzsch GbR",
+        "adresse": "Bodenbacher Strasse 109, 01277 Dresden",
+        "created_at": "2025-09-25 10:53:52"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8031083,
+          51.0266657
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1577,
+        "name": "Auto Werft Dresden",
+        "adresse": "Str. des 17. Juni 11, 01257 Dresden",
+        "created_at": "2025-09-25 10:58:25"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8198533,
+          51.0058765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1322,
+        "name": "Auto mobile DW GmbH",
+        "adresse": "Gewerbering 4, 01744 Dippoldiswalde",
+        "created_at": "2025-09-25 10:48:20"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6901724,
+          50.8972291
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1381,
+        "name": "Auto-Reparatur-Dienst",
+        "adresse": "Reinberger Weg 32, 01768 Hirschbach",
+        "created_at": "2025-09-25 10:50:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7359945,
+          50.9098876
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1548,
+        "name": "Auto-Service Becker",
+        "adresse": "Frauensteiner Str. 31, 01744 Dippoldiswalde",
+        "created_at": "2025-09-25 10:56:59"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.628246,
+          50.8394451
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1427,
+        "name": "Auto-Service Mller GbR",
+        "adresse": "Fritz-Schreiter-Strasse 31, 01259 Dresden",
+        "created_at": "2025-09-25 10:52:17"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8489049,
+          50.9887591
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1382,
+        "name": "Auto-Service Wagner",
+        "adresse": "Gewerbering 10, 01744 Dippoldiswalde",
+        "created_at": "2025-09-25 10:50:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6889308,
+          50.8973719
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1525,
+        "name": "Auto-Service-Center Dresden",
+        "adresse": "Dohnaer Strasse 74, 01219 Dresden",
+        "created_at": "2025-09-25 10:55:55"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7693172,
+          51.0178207
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1356,
+        "name": "Auto-Walther GmbH & Co.KG",
+        "adresse": "Tannebergstrasse 12, 01477 Arnsdorf / Sachsen",
+        "created_at": "2025-09-25 10:49:45"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9980162,
+          51.100701
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1430,
+        "name": "Auto-Walther GmbH & Co.KG",
+        "adresse": "Brockhausstr. 12, 01471 Radeburg",
+        "created_at": "2025-09-25 10:52:25"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7315272,
+          51.2042092
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1459,
+        "name": "Auto-Walther GmbH & Co.KG",
+        "adresse": "Stolpener Strasse 39, 01477 Arnsdorf / Sachsen",
+        "created_at": "2025-09-25 10:53:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9933394,
+          51.0982269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1396,
+        "name": "Auto23 GmbH",
+        "adresse": "Lohrmannstrasse 23, 01237 Dresden",
+        "created_at": "2025-09-25 10:51:23"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7887411,
+          51.0168634
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1533,
+        "name": "Autocenter Dresden GmbH",
+        "adresse": "Bremer Strasse 18 b, 01067 Dresden",
+        "created_at": "2025-09-25 10:56:23"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7119264,
+          51.0615673
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1647,
+        "name": "Autocenter Freital OHG",
+        "adresse": "Dresdner Strasse 314, 01705 Freital",
+        "created_at": "2025-09-25 11:01:48"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.633384,
+          50.9842965
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1413,
+        "name": "Autoglas Peschel GmbH",
+        "adresse": "Erlenweg 11, 01109 Dresden",
+        "created_at": "2025-09-25 10:51:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7319998,
+          51.1121482
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1605,
+        "name": "Autohaus Dresden GmbH",
+        "adresse": "Possendorfer Strasse 38-40, 01217 Dresden",
+        "created_at": "2025-09-25 10:59:37"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7293323,
+          51.0169662
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1363,
+        "name": "Autohaus Gaebel GmbH &Co.KG",
+        "adresse": "Hohe Str. 2-3, 01796 Dohma",
+        "created_at": "2025-09-25 10:50:10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9308131,
+          50.9273343
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1399,
+        "name": "Autohaus Hardtke GmbH",
+        "adresse": "Dresdner Landstrasse 1, 01728 Bannewitz",
+        "created_at": "2025-09-25 10:51:25"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6961092,
+          50.9913896
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1311,
+        "name": "Autohaus Huth",
+        "adresse": "Cottaer Str. 1, 01796 Pirna-Neundorf",
+        "created_at": "2025-09-25 10:47:44"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9780054,
+          50.9166961
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1470,
+        "name": "Autohaus Israel GmbH & Co. KG",
+        "adresse": "Dohnaer Strasse 310, 01257 Dresden",
+        "created_at": "2025-09-25 10:53:46"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8122362,
+          50.9885862
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1411,
+        "name": "Autohaus Liliensiek GmbH",
+        "adresse": "Alte Altenberger Str. 38, 01744 Dippoldiswalde",
+        "created_at": "2025-09-25 10:51:51"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6693444,
+          50.8879675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1536,
+        "name": "Autohaus Liliensiek GmbH",
+        "adresse": "Kesselsdorfer Str. 248, 01169 Dresden",
+        "created_at": "2025-09-25 10:56:31"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6515716,
+          51.0398162
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1626,
+        "name": "Autohaus Melkus GmbH",
+        "adresse": "Hamburger Strasse 30, 01067 Dresden",
+        "created_at": "2025-09-25 11:00:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6990011,
+          51.0600328
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1354,
+        "name": "Autohaus Rettberg GmbH",
+        "adresse": "Altenberger Str. 48, 01744 Dippoldiswalde",
+        "created_at": "2025-09-25 10:49:36"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.680782,
+          50.8336065
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1602,
+        "name": "Autohaus Welde GmbH",
+        "adresse": "Dresdner Strasse 5, 01796 Pirna",
+        "created_at": "2025-09-25 10:59:25"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9290706,
+          50.9571948
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1303,
+        "name": "Autohaus Zimmermann",
+        "adresse": "Am Trachauer Bahnhof 9, 01139 Dresden",
+        "created_at": "2025-09-25 10:47:16"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.705012,
+          51.089871
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1452,
+        "name": "Autohof Dhlen",
+        "adresse": "Carl-Thieme-Str. 39, 01705 Freital",
+        "created_at": "2025-09-25 10:53:02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6685233,
+          51.016171
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1400,
+        "name": "Automobile Dresden",
+        "adresse": "Dresdner Str. 11, 01796 Pirna",
+        "created_at": "2025-09-25 10:51:32"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9266577,
+          50.9574475
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1423,
+        "name": "Automobile Irrgang eGbR",
+        "adresse": "Dresdner Str. 16, 01773 Altenberg",
+        "created_at": "2025-09-25 10:52:16"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7573064,
+          50.764557
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1367,
+        "name": "Autopflege und Reifendienst",
+        "adresse": "Am unteren Bach 5, 01723 Wilsdruff",
+        "created_at": "2025-09-25 10:50:18"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5361929,
+          51.0546162
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1639,
+        "name": "Autoservice Bernhardt",
+        "adresse": "Chamissostr.  2, 01157 Dresden",
+        "created_at": "2025-09-25 11:01:10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6866982,
+          51.0490359
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1596,
+        "name": "Autoservice Grtner",
+        "adresse": "Seidnitzer Weg 11, 01237 Dresden",
+        "created_at": "2025-09-25 10:59:15"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7979589,
+          51.0165856
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1388,
+        "name": "Autoservice Hammer",
+        "adresse": "Querstrasse 10, 01705 Freital",
+        "created_at": "2025-09-25 10:50:59"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6152736,
+          51.0039272
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1298,
+        "name": "Autoservice Hartmann",
+        "adresse": "Altreick 26, 01237 Dresden",
+        "created_at": "2025-09-25 10:47:11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7957514,
+          51.0124328
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1454,
+        "name": "Autoservice Hartmann",
+        "adresse": "Bauernweg 46, 01109 Dresden",
+        "created_at": "2025-09-25 10:53:14"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7382578,
+          51.1192288
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1632,
+        "name": "Autoservice Kpnick",
+        "adresse": "Dresdner Str. 36A, 01737 Tharandt",
+        "created_at": "2025-09-25 11:00:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5955328,
+          50.9839817
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1633,
+        "name": "Autoservice Matthes",
+        "adresse": "Alt-Serkowitz 1, 01445 Radebeul",
+        "created_at": "2025-09-25 11:00:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6594742,
+          51.0956285
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1389,
+        "name": "Autoservice Reichert GmbH",
+        "adresse": "Kesselsdorfer Strasse 99, 01159 Dresden",
+        "created_at": "2025-09-25 10:50:59"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6786036,
+          51.0418779
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1553,
+        "name": "Autoteam Schade",
+        "adresse": "Dresdner Strasse 119a, 01640 Coswig",
+        "created_at": "2025-09-25 10:57:15"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5838195,
+          51.1239298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1410,
+        "name": "Autoteile Heiko Ungermann",
+        "adresse": "Geisinger Str. 1, 01773 Altenberg",
+        "created_at": "2025-09-25 10:51:51"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7673709,
+          50.7621925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1600,
+        "name": "Autoteile und Zubehr",
+        "adresse": "Reichenbacher Str. 190a, 08056 Zwickau",
+        "created_at": "2025-09-25 10:59:18"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.4450945,
+          50.7018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1584,
+        "name": "Autowerkstatt MAUDRICH GmbH",
+        "adresse": "Ringstr. 43, 01468 Moritzburg OT Boxdorf",
+        "created_at": "2025-09-25 10:58:48"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7050795,
+          51.1279636
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1429,
+        "name": "BRAUNE Autolackierbedarf GmbH",
+        "adresse": "Burgker Strasse 135, 01705 Freital",
+        "created_at": "2025-09-25 10:52:25"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6793121,
+          51.0031153
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1481,
+        "name": "Bernd Schmiedgen",
+        "adresse": "Lindeberg 2, 01471 Radeburg",
+        "created_at": "2025-09-25 10:54:13"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7277549,
+          51.1646429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1634,
+        "name": "Blizzboy Rthig",
+        "adresse": "Carl-Thieme-Str. 12, 01705 Freital",
+        "created_at": "2025-09-25 11:00:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6629131,
+          51.0152853
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1409,
+        "name": "Boxenstop KFZ-Meisterwerkstatt",
+        "adresse": "Zum Grund 3, 01705 Freital",
+        "created_at": "2025-09-25 10:51:45"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6092654,
+          50.999933
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1417,
+        "name": "CAR POINT",
+        "adresse": "Pillnitzer Str. 46, 01454 Radeberg",
+        "created_at": "2025-09-25 10:52:06"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9219928,
+          51.1041614
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1643,
+        "name": "CSM",
+        "adresse": "Altplauen 11, 01187 Dresden",
+        "created_at": "2025-09-25 11:01:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7037018,
+          51.029123
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1460,
+        "name": "Classic Style",
+        "adresse": "An der Walze 3, 01640 Coswig",
+        "created_at": "2025-09-25 10:53:27"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5874089,
+          51.1194023
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1308,
+        "name": "Die Maler GmbH",
+        "adresse": "Wilsdruffer Strasse 5, 01705 Freital",
+        "created_at": "2025-09-25 10:47:37"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.655532,
+          51.0098464
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1585,
+        "name": "Die Meister",
+        "adresse": "Bodelschwinghstrasse 1a, 01159 Dresden",
+        "created_at": "2025-09-25 10:58:54"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7086504,
+          51.047422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1604,
+        "name": "Die Meister",
+        "adresse": "bodelschwingh strasse 1A, 01159 Dresden",
+        "created_at": "2025-09-25 10:59:32"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7086504,
+          51.047422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1451,
+        "name": "Dietmar Beerwart",
+        "adresse": "Hertelstrasse 17, 01307 Dresden",
+        "created_at": "2025-09-25 10:52:55"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7724086,
+          51.0572247
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1337,
+        "name": "Dieáner & Mske GbR",
+        "adresse": "Bockwener Ring 8, 01665 Klipphausen",
+        "created_at": "2025-09-25 10:49:05"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4828238,
+          51.13624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1506,
+        "name": "Dippser-Auto-Ecke",
+        "adresse": "Obertorplatz 13A, 01744 Dippoldiswalde",
+        "created_at": "2025-09-25 10:55:09"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6701325,
+          50.8956061
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1645,
+        "name": "Dirk Krause",
+        "adresse": "Moritzburger Weg 13, 01109 Dresden",
+        "created_at": "2025-09-25 11:01:39"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7476071,
+          51.1155063
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1503,
+        "name": "Dressel Montage",
+        "adresse": "Zeisigweg 25, 01737 Kurort Hartha",
+        "created_at": "2025-09-25 10:55:03"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5641569,
+          50.9799394
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1319,
+        "name": "ERSA Automotive",
+        "adresse": "Geibeltstr. 2b, 01796 Pirna",
+        "created_at": "2025-09-25 10:48:14"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9217809,
+          50.9597695
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1611,
+        "name": "Elektroinstallation",
+        "adresse": "Rathenaustr. 10, 01689 Niederau",
+        "created_at": "2025-09-25 10:59:48"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5411909,
+          51.1723829
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1453,
+        "name": "Elektroinstallation Hennig",
+        "adresse": "Cotta B 27A, 01796 Dohma",
+        "created_at": "2025-09-25 10:53:08"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9787637,
+          50.9025771
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1373,
+        "name": "FAMO Fahrzeug-und Motorenteile GmbH",
+        "adresse": "Stuttgarter Str. 33, 01189 Dresden",
+        "created_at": "2025-09-25 10:50:27"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7016485,
+          51.0111988
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1391,
+        "name": "FAMO Fahrzeug-und Motorenteile GmbH",
+        "adresse": "Dewitzer Str. 77f, 04425 Taucha",
+        "created_at": "2025-09-25 10:50:59"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.5245542,
+          51.3844429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1532,
+        "name": "FAMO Fahrzeug-und Motorenteile GmbH",
+        "adresse": "Am Telering 1, 03051 Cottbus",
+        "created_at": "2025-09-25 10:56:17"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.3630823,
+          51.7029962
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1362,
+        "name": "FREIE KFZ-WERKSTATT",
+        "adresse": "Poststrasse 3, 01705 Freital",
+        "created_at": "2025-09-25 10:50:03"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6451702,
+          50.9976858
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1562,
+        "name": "Fa. Flade Thomas",
+        "adresse": "Rungstockstr. 43, 09526 Olbernhau/Sa",
+        "created_at": "2025-09-25 10:57:35"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.3260806,
+          50.6541843
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1392,
+        "name": "Fa.Wilms",
+        "adresse": "Dresdner Str. 189, 01640 Coswig - OT Brockwitz",
+        "created_at": "2025-09-25 10:51:13"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5462571,
+          51.1292509
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1520,
+        "name": "Fahrzeug und Systemtechnik Ehring GmbH",
+        "adresse": "Str. der MTS 1, 01737 Braunsdorf",
+        "created_at": "2025-09-25 10:55:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5745796,
+          51.0153278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1616,
+        "name": "Fahrzeugservice Kretzschmar",
+        "adresse": "Marie-Wittich-Strasse 1, 01237 Dresden",
+        "created_at": "2025-09-25 11:00:04"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7784609,
+          51.0132053
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1304,
+        "name": "Fahrzeugservice u.",
+        "adresse": "Grenzstr. 9, 01640 Coswig",
+        "created_at": "2025-09-25 10:47:23"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5808799,
+          51.1195323
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1403,
+        "name": "Fahrzeugservice und Handel",
+        "adresse": "Merbitzer Ring 9, 01156 Dresden",
+        "created_at": "2025-09-25 10:51:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6411446,
+          51.0674677
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1650,
+        "name": "Firma Jens Drechsler",
+        "adresse": "Zur Bachwiese 2, 01156 Dresden",
+        "created_at": "2025-09-25 11:01:57"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.636377,
+          51.0551995
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1644,
+        "name": "Frank's Motorradladen",
+        "adresse": "Kesselsdorfer Str. 3, 01705 Freital-Wurgwitz",
+        "created_at": "2025-09-25 11:01:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6263395,
+          51.0220045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1310,
+        "name": "Franks Garage",
+        "adresse": "Deubener Strasse 13, 01705 Freital",
+        "created_at": "2025-09-25 10:47:44"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6600181,
+          51.0080636
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1528,
+        "name": "Freie KFZ-Meisterwerkstatt",
+        "adresse": "Poisentalstr. 12, 01705 Freital",
+        "created_at": "2025-09-25 10:56:03"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6517078,
+          50.9961512
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1294,
+        "name": "Go-Cars-Autoservice",
+        "adresse": "Bautzner Landstrasse 127, 01324 Dresden",
+        "created_at": "2025-09-25 10:47:11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8475676,
+          51.0619876
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1563,
+        "name": "Gomodrom Automobile",
+        "adresse": "Kesselsdorfer Str. 99, 01159 Dresden",
+        "created_at": "2025-09-25 10:57:35"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6786036,
+          51.0418779
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1567,
+        "name": "Hanitzsch GmbH & Co. KG",
+        "adresse": "Zschoner Ring 18, 01723 Kesselsdorf",
+        "created_at": "2025-09-25 10:57:55"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6014206,
+          51.0419688
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1456,
+        "name": "Hartmann Karosserie- und Fahrzeugbau",
+        "adresse": "Altreick 26, 01237 Dresden",
+        "created_at": "2025-09-25 10:53:14"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7957514,
+          51.0124328
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1517,
+        "name": "Herkommer Kfz-Technik",
+        "adresse": "Crandorfer Str. 49, 08340 Schwarzenberg",
+        "created_at": "2025-09-25 10:55:36"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.7865717,
+          50.5121217
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1360,
+        "name": "Hickmann, Matthias",
+        "adresse": "Am Tannenbusch 9, 01816 Bad Gottleuba",
+        "created_at": "2025-09-25 10:50:03"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9397699,
+          50.8410818
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1316,
+        "name": "Jrgen Schiebel",
+        "adresse": "Cotta B 16G, 01796 Dohma",
+        "created_at": "2025-09-25 10:48:01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9762484,
+          50.9020735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1582,
+        "name": "KFZ-Meisterhandwerk",
+        "adresse": "Heidenauer Str. 105, 01796 Pirna",
+        "created_at": "2025-09-25 10:58:48"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9046909,
+          50.9570049
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1368,
+        "name": "KFZ-Service Holger Garz",
+        "adresse": "Veteranenstr. 3, 01139 Dresden",
+        "created_at": "2025-09-25 10:50:18"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7047334,
+          51.0873263
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1594,
+        "name": "Karosserie- & KfZ-Service Derlich",
+        "adresse": "Siedlung 17, 01809 Burkhardswalde",
+        "created_at": "2025-09-25 10:59:15"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8557965,
+          50.9246994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1564,
+        "name": "Karosserie- und Fahrzeugbau",
+        "adresse": "Am Ring 4, 01665 Klipphausen",
+        "created_at": "2025-09-25 10:57:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4976049,
+          51.0943824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1575,
+        "name": "Karosseriebau Henschke",
+        "adresse": "Rundteil 5a, 01728 Possendorf",
+        "created_at": "2025-09-25 10:58:13"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6996097,
+          50.9546296
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1486,
+        "name": "Karosseriebau Miersch",
+        "adresse": "Birkigter Strasse 14, 01705 Freital",
+        "created_at": "2025-09-25 10:54:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.676389,
+          51.0164831
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1651,
+        "name": "Keilig Willi Inh. A.Hhnel",
+        "adresse": "Wilsdruffer Str. 102, 01705 Freital",
+        "created_at": "2025-09-25 11:01:57"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.642441,
+          51.0161646
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1637,
+        "name": "Kfz Reparatur",
+        "adresse": "Alte Poststr. 4a, 01744 Dippoldiswalde",
+        "created_at": "2025-09-25 11:01:09"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.704637,
+          50.8907316
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1497,
+        "name": "Kfz-Aufbereitung Dresden",
+        "adresse": "Dohnaer Str. 79, 01219 Dresden",
+        "created_at": "2025-09-25 10:54:47"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7715311,
+          51.0173023
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1317,
+        "name": "Kfz-Meisterbetrieb Heyde",
+        "adresse": "Am Anger 16, 01237 Dresden",
+        "created_at": "2025-09-25 10:48:08"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7897546,
+          51.0099681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1327,
+        "name": "Kfz-Meisterbetrieb Lommatzsch",
+        "adresse": "Bismarckstr. 70, 01257 Dresden",
+        "created_at": "2025-09-25 10:48:36"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8169837,
+          51.0059057
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1502,
+        "name": "Kfz-Meisterbetrieb Stege",
+        "adresse": "Tolkewitzer Strasse 83, 01279 Dresden",
+        "created_at": "2025-09-25 10:54:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.818667,
+          51.0399257
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1415,
+        "name": "Kfz-Meisterbetrieb Sllner",
+        "adresse": "August Bebel Strasse 82, 01728 Bannewitz",
+        "created_at": "2025-09-25 10:51:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.714338,
+          50.9856243
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1406,
+        "name": "Kfz-Service Hertling",
+        "adresse": "Herbert-Liebsch- Str. 4, 01796 Pirna-Sonnenstein",
+        "created_at": "2025-09-25 10:51:43"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9565829,
+          50.9576234
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1587,
+        "name": "Kfz-Service Schlegel",
+        "adresse": "August-Bebel-Str. 23, 01809 Heidenau",
+        "created_at": "2025-09-25 10:59:00"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8616152,
+          50.976008
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1448,
+        "name": "King Cars GmbH Nord",
+        "adresse": "Friedrich-Olbricht-Damm 66, 13627 Berlin",
+        "created_at": "2025-09-25 10:52:55"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.313218,
+          52.5453666
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1627,
+        "name": "Kloss Auto-Service",
+        "adresse": "Bahretalstr. 3a, 01796 Dohma",
+        "created_at": "2025-09-25 11:00:37"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9247148,
+          50.9232171
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1580,
+        "name": "Knoll GmbH",
+        "adresse": "Carl-Hamel-Str. 21, 09116 Chemnitz",
+        "created_at": "2025-09-25 10:58:42"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.8810601,
+          50.8112709
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1314,
+        "name": "Kraftwagen-Reparatur",
+        "adresse": "Keppgrundstrasse 7, 01259 Dresden",
+        "created_at": "2025-09-25 10:48:01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8510592,
+          51.0117615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1296,
+        "name": "Kraftwagenpark Dresden",
+        "adresse": "Zum Lindenhof 9 b, 01665 Riemsdorf",
+        "created_at": "2025-09-25 10:47:11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4833595,
+          51.1159804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1405,
+        "name": "Kuli's Carpoint",
+        "adresse": "Reisstr. 40, 01257 Dresden",
+        "created_at": "2025-09-25 10:51:43"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8229994,
+          51.0055742
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1446,
+        "name": "LB",
+        "adresse": "Kreisel 4, 09322 Penig",
+        "created_at": "2025-09-25 10:52:48"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.7135931,
+          50.9203775
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1523,
+        "name": "Lackiererei",
+        "adresse": "Lindenallee 3, 02994 Bernsdorf",
+        "created_at": "2025-09-25 10:55:50"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0675455,
+          51.3745638
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1293,
+        "name": "Lars Richter",
+        "adresse": "An der Viehleite 30, 01796 Pirna",
+        "created_at": "2025-09-25 10:47:04"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9445564,
+          50.9466172
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1549,
+        "name": "Leon Automobile",
+        "adresse": "Kesselsdorfer Str. 20, 01705 Freital",
+        "created_at": "2025-09-25 10:57:05"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6216483,
+          51.0234373
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1478,
+        "name": "Lindner, Thomas GmbH",
+        "adresse": "Am Bahndamm 8, 01728 Bannewitz",
+        "created_at": "2025-09-25 10:54:04"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7125953,
+          50.9866792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1462,
+        "name": "MARTH Performance",
+        "adresse": "Bahnhofstr. 18, 04928 Plessa",
+        "created_at": "2025-09-25 10:53:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6181459,
+          51.4663719
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1438,
+        "name": "MELKUS Fahrzeugservice im SEC",
+        "adresse": "Enderstr. 59, 01277 Dresden",
+        "created_at": "2025-09-25 10:52:35"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8034887,
+          51.0295016
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1608,
+        "name": "MLTec Automotive GmbH",
+        "adresse": "Weinbergstr. 4, 01445 Radebeul",
+        "created_at": "2025-09-25 10:59:38"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6611375,
+          51.1104155
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1436,
+        "name": "MOTORSTOPP",
+        "adresse": "Hallesche Str. 77, 04159 Leipzig",
+        "created_at": "2025-09-25 10:52:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.2856795,
+          51.3818957
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1364,
+        "name": "Marko Heymann Kfz-Werkstatt",
+        "adresse": "Schulstr. 21, 01728 Bannewitz",
+        "created_at": "2025-09-25 10:50:10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7160057,
+          50.9649103
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1336,
+        "name": "Marks Dieselmotorentechnik",
+        "adresse": "Enderstr. 63, 01277 Dresden",
+        "created_at": "2025-09-25 10:49:05"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8016246,
+          51.0279533
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1375,
+        "name": "Martin Faust",
+        "adresse": "Alt-Rottwerndorf 60-62, 01796 Pirna",
+        "created_at": "2025-09-25 10:50:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9565705,
+          50.9272914
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1642,
+        "name": "Motorenbau - KURZ",
+        "adresse": "Zwickauer Str. 192, 08468 Reichenbach",
+        "created_at": "2025-09-25 11:01:24"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.3168624,
+          50.6333228
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1297,
+        "name": "Motoreninstandsetzung",
+        "adresse": "Am Trachauer Bahnhof 11, 01139 Dresden",
+        "created_at": "2025-09-25 10:47:11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7049531,
+          51.0902263
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1623,
+        "name": "Musti Autoaufbereitung",
+        "adresse": "Altbriesnitz 8, 01157 Dresden",
+        "created_at": "2025-09-25 11:00:21"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6752244,
+          51.0662344
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1516,
+        "name": "PKW & Nutzfahrzeug Service",
+        "adresse": "Alttorna 7, 01239 Dresden",
+        "created_at": "2025-09-25 10:55:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7763267,
+          51.0059203
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1504,
+        "name": "PM Car Parts",
+        "adresse": "Naumannstr. 12 / Halle 26F, 01809 Heidenau",
+        "created_at": "2025-09-25 10:55:03"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8775532,
+          50.9743184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1574,
+        "name": "PMS Provocatione Motor Sport",
+        "adresse": "Lockwitzgrund 40, 01257 Dresden",
+        "created_at": "2025-09-25 10:58:07"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7985211,
+          50.9839995
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1606,
+        "name": "Peers Garage - Freie KFZ-Werkstatt",
+        "adresse": "Quohrener Str. 36, 01324 Dresden",
+        "created_at": "2025-09-25 10:59:37"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8590472,
+          51.0574021
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1433,
+        "name": "Profil 25",
+        "adresse": "Buchholzweg 2, 01445 Radebeul",
+        "created_at": "2025-09-25 10:52:33"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6432992,
+          51.1204705
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1557,
+        "name": "Rasche, Thomas",
+        "adresse": "Friedrichswalde 59, 01819 Friedrichswalde",
+        "created_at": "2025-09-25 10:57:28"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8977118,
+          50.8966274
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1558,
+        "name": "Reifen Auto Service Glau",
+        "adresse": "Ferdinand v. Schill Str. 52, 01728 Bannewitz",
+        "created_at": "2025-09-25 10:57:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7014377,
+          50.9668047
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1560,
+        "name": "Reifen-& Autoservice Roespel",
+        "adresse": "Wilsdruffer Strasse 11, 01723 Kesselsdorf",
+        "created_at": "2025-09-25 10:57:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5840492,
+          51.0342082
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1576,
+        "name": "ReifenCenter Dresden",
+        "adresse": "Bismarckstr. 57, 01257 Dresden",
+        "created_at": "2025-09-25 10:58:19"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8174126,
+          51.0051262
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1566,
+        "name": "Reifenhaus Freital GbR",
+        "adresse": "Dresdner Strasse 3, 01705 Freital",
+        "created_at": "2025-09-25 10:57:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6646425,
+          51.0318358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1613,
+        "name": "Ronald Halla",
+        "adresse": "Schmiedeweg 30, 02906 Waldhufen",
+        "created_at": "2025-09-25 10:59:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.7865759,
+          51.2232492
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1512,
+        "name": "SAG Sadisdorfer Agrar AG",
+        "adresse": "Frauensteiner Str. 9a, 01744 Dippoldiswalde",
+        "created_at": "2025-09-25 10:55:21"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6376629,
+          50.8420424
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1505,
+        "name": "SachsenNetze GmbH",
+        "adresse": "Fabrikstr.5, 01159 Dresden",
+        "created_at": "2025-09-25 10:55:03"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7094879,
+          51.0412688
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1340,
+        "name": "SachsenNetze HS.HD GmbH",
+        "adresse": "Zschoner Ring 3, 01723 Kesselsdorf",
+        "created_at": "2025-09-25 10:49:12"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6005417,
+          51.0407376
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1383,
+        "name": "Schafferus",
+        "adresse": "Zwickauer Str. 194, 08468 Reichenbach",
+        "created_at": "2025-09-25 10:50:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.3169973,
+          50.6333821
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1620,
+        "name": "Schaschke Ruhland",
+        "adresse": "Badeanstalt 10, 01945 Ruhland",
+        "created_at": "2025-09-25 11:00:14"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.882635,
+          51.4583679
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1527,
+        "name": "Schiba Bau GmbH",
+        "adresse": "Tharandter Str. 35, 01723 Grumbach",
+        "created_at": "2025-09-25 10:56:03"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5565632,
+          51.0229512
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1524,
+        "name": "Schmiede Woggon Karsdorf",
+        "adresse": "Heidestr. 29, 01734 Karsdorf",
+        "created_at": "2025-09-25 10:55:55"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6965782,
+          50.9400572
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1471,
+        "name": "Schubert - BVFS",
+        "adresse": "Sternstr. 47, 01139 Dresden",
+        "created_at": "2025-09-25 10:53:52"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7047999,
+          51.0779809
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1494,
+        "name": "Silbermann Fahrzeugservice",
+        "adresse": "Tharandter Strasse 63a, 01159 Dresden",
+        "created_at": "2025-09-25 10:54:34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7033184,
+          51.0332679
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1380,
+        "name": "Smart Repair u. Lackservice",
+        "adresse": "Hamburger Str. 65a, 01157 Dresden",
+        "created_at": "2025-09-25 10:50:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6872374,
+          51.0608641
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1328,
+        "name": "Sternclassics Autoservice",
+        "adresse": "Grenzstr. 9, 01640 Coswig",
+        "created_at": "2025-09-25 10:48:41"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5808799,
+          51.1195323
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1318,
+        "name": "Stockmann KFZ-Service",
+        "adresse": "Cowaplast 28, 01640 Coswig",
+        "created_at": "2025-09-25 10:48:08"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.581384,
+          51.1206333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1583,
+        "name": "TM Reifen und Autoservice",
+        "adresse": "Fischhausstr. 15b, 01099 Dresden",
+        "created_at": "2025-09-25 10:58:48"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7888478,
+          51.0710785
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1593,
+        "name": "TOM-Automobile.de GmbH",
+        "adresse": "Hubertusplatz 1, 01129 Dresden",
+        "created_at": "2025-09-25 10:59:08"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7232161,
+          51.0894797
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1420,
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "created_at": "2025-09-25 10:52:07"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.2607924,
+          51.3062117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1372,
+        "name": "Thomas Bode",
+        "adresse": "Rosenowstr. 8, 04357 Leipzig",
+        "created_at": "2025-09-25 10:50:27"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.4041016,
+          51.3677349
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1457,
+        "name": "Tom Tobisch",
+        "adresse": "Strasse des 17.Juni 30, 01257 Dresden",
+        "created_at": "2025-09-25 10:53:14"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8287212,
+          51.0018345
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1592,
+        "name": "V. Kluge GmbH",
+        "adresse": "Amalienstrasse 12, 09669 Frankenberg",
+        "created_at": "2025-09-25 10:59:08"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.0472126,
+          50.9133954
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1488,
+        "name": "VGRDD GmbH",
+        "adresse": "Kesselsdorfer Str. 300, 01169 Dresden",
+        "created_at": "2025-09-25 10:54:30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6489063,
+          51.0400066
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1495,
+        "name": "VGRDD GmbH",
+        "adresse": "Hamburger Str. 24, 01067 Dresden",
+        "created_at": "2025-09-25 10:54:41"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7019919,
+          51.0596051
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1556,
+        "name": "Wacker+Dbler",
+        "adresse": "Heiligkreuzweg 96, 55130 Mainz",
+        "created_at": "2025-09-25 10:57:23"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2910137,
+          49.9786256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1313,
+        "name": "Werkstatt Swen Vogel",
+        "adresse": "Friedrich-Ludwig-Jahn-Allee 6, 01471 Radeburg",
+        "created_at": "2025-09-25 10:47:55"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.727842,
+          51.2186317
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1530,
+        "name": "Wunderlich, Martin",
+        "adresse": "Hartmannsbach Nr. 25, 01816 Bad Gottleuba",
+        "created_at": "2025-09-25 10:56:11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.92751,
+          50.844044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2031,
+        "name": "a.t.l. autoteileland",
+        "adresse": "bismarckstraße 57, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8174126,
+          51.0051262
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2017,
+        "name": "abschleppdienst lesche gbr",
+        "adresse": "hohe straße 79, 01796 struppen/siedlung",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0136507,
+          50.9206763
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4001,
+        "name": "adrian gl´┐¢ckner automobile gmbh",
+        "adresse": "dohnaer strasse 103a, 01219 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7751918,
+          51.0146424
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1687,
+        "name": "adrian glöckner automobile gmbh",
+        "adresse": "dohnaer strasse 103a, 01219 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7751918,
+          51.0146424
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5752,
+        "name": "ag",
+        "adresse": "dresdner straße 46, 01796 pirna",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.915125,
+          50.9578212
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2549,
+        "name": "agroservice pirna gmbh",
+        "adresse": "liebstädter str. 45, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9206719,
+          50.93723
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3168,
+        "name": "ais dresden gmbh",
+        "adresse": "kötzschenbroder strasse 193, 01139 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6695695,
+          51.0926404
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1993,
+        "name": "akf fahrzeugteile gmbh",
+        "adresse": "dresdener straße 70a, 02625 bautzen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.4030841,
+          51.1836676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1769,
+        "name": "alf häse - autoservice",
+        "adresse": "geisingstr.30, 01309 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7821649,
+          51.04257
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2219,
+        "name": "andreas ebert",
+        "adresse": "hauptstraße 16, 01816 bad gottleuba-berggießhübel",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0215669,
+          50.8817704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3318,
+        "name": "andré zerbst",
+        "adresse": "niedersedlitzer str. 67a, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8112225,
+          51.0045803
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4561,
+        "name": "anhänger kunath e.k.",
+        "adresse": "obernaundorfer str. 1-2, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6347016,
+          50.9737135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5394,
+        "name": "as frank zimmermann",
+        "adresse": "hauptstraße 89, 01744 dippoldiswalde",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6121613,
+          50.8520712
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1723,
+        "name": "ash dirk häger",
+        "adresse": "am mühlgraben 3, 01774 klingenberg",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5980112,
+          50.9085343
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1791,
+        "name": "astral ug",
+        "adresse": "löbtauer straße 80, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7081843,
+          51.0470144
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2223,
+        "name": "atm reparaturzentrum",
+        "adresse": "äußere-hainichener-str. 5a, 09669 frankenberg",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.0636831,
+          50.9304516
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1710,
+        "name": "atw fahrzeugteile",
+        "adresse": "fröbelstr. 51a, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7062268,
+          51.0508327
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1714,
+        "name": "auto - heller",
+        "adresse": "gohliser straße 24, 01445 radebeul",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6637242,
+          51.1016434
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5663,
+        "name": "auto - kühlerdienst henke kg",
+        "adresse": "heidestraße 4, 01734 karsdorf",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7000263,
+          50.9430535
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1708,
+        "name": "auto becker",
+        "adresse": "altnossener straße 7, 01156 dresden / gompitz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6414522,
+          51.0416861
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4022,
+        "name": "auto brückner gmbh & co. kg",
+        "adresse": "dürerstr.120, 01309 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7783743,
+          51.0505584
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1837,
+        "name": "auto christen",
+        "adresse": "schloßallee 9, 01468 moritzburg",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6801569,
+          51.1624431
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3061,
+        "name": "auto damm e.k.",
+        "adresse": "äußere chemnitzer str. 49, 09669 frankenberg",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.0105823,
+          50.9001792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2579,
+        "name": "auto dienst meissen",
+        "adresse": "ossietzkystraße 37a, 01662 meißen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4590965,
+          51.1367318
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3986,
+        "name": "auto doktor gbr",
+        "adresse": "dresdner strasse 268, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6420298,
+          50.9903597
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1771,
+        "name": "auto haase",
+        "adresse": "coschützer straße 46, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6706673,
+          51.0133979
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3985,
+        "name": "auto j´┐¢rgen pfeiffer kg",
+        "adresse": "reicker str. 91, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7880566,
+          51.0152092
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1690,
+        "name": "auto jürgen pfeiffer kg",
+        "adresse": "reicker str. 91, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7880566,
+          51.0152092
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1686,
+        "name": "auto lust",
+        "adresse": "krausestraße 4, 01187 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7052704,
+          51.0284324
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1681,
+        "name": "auto otto",
+        "adresse": "dresdener str. 5, 02977 hoyerswerda",
+        "created_at": "2025-10-06 09:17:25"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.2327649,
+          51.4305207
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5802,
+        "name": "auto otto",
+        "adresse": "dresdner str. 5, 02977 hoyerswerda",
+        "created_at": "2025-10-06 12:38:47"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.232712811525964,
+          51.430529315853775
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5792,
+        "name": "auto service meusel",
+        "adresse": "alte str. 33, 01768 glashã¼tte",
+        "created_at": "2025-10-06 12:09:09"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.741891670418902,
+          50.9068000092539
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5809,
+        "name": "auto service meusel",
+        "adresse": "alte str. 33, 01768 glashütte ot hirschbach",
+        "created_at": "2025-10-07 08:00:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7418928,
+          50.9068223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3495,
+        "name": "auto-mösch",
+        "adresse": "bismarckstrasse 98a, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8116547,
+          51.0091373
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3987,
+        "name": "auto-service m´┐¢ller gbr",
+        "adresse": "fritz-schreiter-strasse 31, 01259 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8489049,
+          50.9887591
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1724,
+        "name": "auto-service möller gbr",
+        "adresse": "fritz-schreiter-strasse 31, 01259 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8489049,
+          50.9887591
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3546,
+        "name": "auto-stäps gmbh",
+        "adresse": "lohmener straße 12a, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9444462,
+          50.978929
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1947,
+        "name": "auto-technik24 gmbh",
+        "adresse": "schlüterstraße 29, 01277 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7926374,
+          51.0400854
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1770,
+        "name": "autoburgk lohse",
+        "adresse": "burgker straße 145, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6813983,
+          51.0032968
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4851,
+        "name": "autocenter dresden gmbh",
+        "adresse": "am hahnweg 2, 01328 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8971337,
+          51.0649082
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5200,
+        "name": "autocenter dresden gmbh",
+        "adresse": "altkaitz 9, 01217 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7240171,
+          51.0143818
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3010,
+        "name": "autocenter strehle e.k.",
+        "adresse": "kötzschenbroder strasse 189, 01139 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.671657,
+          51.0920476
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1847,
+        "name": "autodienst tilo bretschneider",
+        "adresse": "altenberger straße 43, 01768 glashütte",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7723458,
+          50.8429053
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3920,
+        "name": "autoeck24.de",
+        "adresse": "wehlener strasse 35, 01279 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8204322,
+          51.0346759
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4749,
+        "name": "autofreund-lindner",
+        "adresse": "an der bahra 9, 01816 bad gottleuba-berggießhübel",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0007677,
+          50.8673422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1867,
+        "name": "autohaus",
+        "adresse": "coschützer str. 1, 01187 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7065611,
+          51.0280608
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1929,
+        "name": "autohaus borsbergstraße gmbh",
+        "adresse": "borsbergstraße 39, 01309 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7826131,
+          51.0439775
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3681,
+        "name": "autohaus dresden gmbh",
+        "adresse": "bremer strasse 18 a, 01067 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7119264,
+          51.0615673
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3242,
+        "name": "autohaus emmrich e.k.",
+        "adresse": "morgenröthe 1, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6272344,
+          51.0223739
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1802,
+        "name": "autohaus fischer",
+        "adresse": "meußlitzer straße 118, 01259 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8495111,
+          51.0015832
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4908,
+        "name": "autohaus frank grassel",
+        "adresse": "niederauer str. 36, 01689 weinböhla",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5597793,
+          51.1659538
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2284,
+        "name": "autohaus friedewald",
+        "adresse": "alträcknitz 6, 01217 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7324274,
+          51.0251343
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5764,
+        "name": "autohaus godzik ohg",
+        "adresse": "hauptstrasse 9a, 01728, bannewitz",
+        "created_at": "2025-10-06 11:38:40"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7127659,
+          50.9690182
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5772,
+        "name": "autohaus godzik ohg",
+        "adresse": "hauptstrasse 9a, 01728 bannewitz/ot possendorf",
+        "created_at": "2025-10-06 11:46:39"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7127659,
+          50.9690182
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4481,
+        "name": "autohaus gröbel gmbh",
+        "adresse": "wilsdruffer straße 106, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6412743,
+          51.0168597
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1982,
+        "name": "autohaus hüttel",
+        "adresse": "dresdner landstr. 14 f, 01744 oberhäslich",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6911283,
+          50.9079507
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1761,
+        "name": "autohaus in berggießhübel gmbh",
+        "adresse": "talstr. 4, 01816 bad gottleuba - berggießhübel",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9497549,
+          50.875278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1747,
+        "name": "autohaus lassotta gmbh",
+        "adresse": "berghausstr. 2a, 01662 meißen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4980076,
+          51.1746496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1669,
+        "name": "autohaus leuteritz gmbh",
+        "adresse": "müglitztalstraße 10, 01773 altenberg",
+        "created_at": "2025-10-06 08:48:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8107163,
+          50.7952312
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1701,
+        "name": "autohaus olaf streit",
+        "adresse": "ringstraße 25, 01809 heidenau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8684967,
+          50.9784064
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1698,
+        "name": "autohaus pirna gmbh",
+        "adresse": "königsteiner straße 5, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9374683,
+          50.9576519
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5680,
+        "name": "autohaus rainer fiedler e.k.",
+        "adresse": "brückenstraße 13, 01157 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6655625,
+          51.0749541
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3671,
+        "name": "autohaus sachmann",
+        "adresse": "mittelstr. 15a, 01477 fischbach",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.020619,
+          51.0821382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2493,
+        "name": "autohaus striesen",
+        "adresse": "gottleubaer straße 1, 01277 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7986569,
+          51.0396725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1668,
+        "name": "autohaus winter gmbh",
+        "adresse": "dresdner strasse 6, 01728 bannewitz",
+        "created_at": "2025-10-06 08:48:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7166984,
+          50.9803923
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2007,
+        "name": "autohof döhlen",
+        "adresse": "carl-thieme-str. 39, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6685233,
+          51.016171
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2385,
+        "name": "autohof radeburg gmbh",
+        "adresse": "königsbrückerstraße 30, 01471 radeburg",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.726458,
+          51.2209208
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2938,
+        "name": "autohäusler",
+        "adresse": "am güterbahnhof 18, 01640 coswig",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5744328,
+          51.1250592
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3912,
+        "name": "autoklimazentrum dresden",
+        "adresse": "gothaer str. 11, 01097 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7340576,
+          51.0696734
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1689,
+        "name": "automatikgetriebeservice",
+        "adresse": "mügelner str.29, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8045668,
+          51.0131793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2436,
+        "name": "automeisterei",
+        "adresse": "lilienthalstraße 3, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8216616,
+          51.0065392
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4715,
+        "name": "automobile dresden weißig",
+        "adresse": "an der prießnitzaue 5, 01328 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8911382,
+          51.0672835
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4424,
+        "name": "automobile parts rhein-main ug",
+        "adresse": "altenberger str. 184, 35576 wetzlar",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.4674696,
+          50.5590016
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4406,
+        "name": "autopark lohrmannstraße",
+        "adresse": "lohrmannstraße 28, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7881287,
+          51.0172122
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4786,
+        "name": "autopark pirnaer straße",
+        "adresse": "pirnaer straße 7, 01809 heidenau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8729306,
+          50.9736383
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1772,
+        "name": "autoreparaturwerk freital kg",
+        "adresse": "cunnersdorferstraße 12, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6871355,
+          51.0012598
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1703,
+        "name": "autoservice arnold",
+        "adresse": "talstr. 19, 01816 berggießhübel",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9590601,
+          50.8772761
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2193,
+        "name": "autoservice baumeister",
+        "adresse": "rethelstraße 32, 01139 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6987237,
+          51.0706303
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1788,
+        "name": "autoservice bernhardt",
+        "adresse": "chamissostr. 2, 01157 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6866982,
+          51.0490359
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3680,
+        "name": "autoservice dana böttcher",
+        "adresse": "potschappler straße 58, 01189 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6823544,
+          51.0153139
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3992,
+        "name": "autoservice g´┐¢rtner",
+        "adresse": "seidnitzer weg 11, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7979589,
+          51.0165856
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1691,
+        "name": "autoservice gärtner",
+        "adresse": "seidnitzer weg 11, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7979589,
+          51.0165856
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1745,
+        "name": "autoservice heinze gmbh",
+        "adresse": "dohnaer straße 119, 01239 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7866596,
+          51.0088798
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2144,
+        "name": "autoservice kartunov",
+        "adresse": "güterhofstraße 6, 01445 radebeul",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.626111,
+          51.1078091
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4005,
+        "name": "autoservice k´┐¢pnick",
+        "adresse": "dresdner str. 36a, 01737 tharandt",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5955328,
+          50.9839817
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2150,
+        "name": "autoservice köpnick",
+        "adresse": "dresdner str. 36a, 01737 tharandt",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5955328,
+          50.9839817
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1693,
+        "name": "autoservice laubegast",
+        "adresse": "österreicher str. 63, 01279 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8388761,
+          51.0234555
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5793,
+        "name": "autoservice leuthold",
+        "adresse": "am sã¤gewerk 36, 01328 dresden",
+        "created_at": "2025-10-06 12:09:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.898555802661697,
+          51.037132662689984
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5807,
+        "name": "autoservice leuthold",
+        "adresse": "am sägewerk 36, 01328 dresden ot schönfeld",
+        "created_at": "2025-10-07 08:00:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8985008,
+          51.0371182
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1707,
+        "name": "autoservice petters gmbh",
+        "adresse": "sternstraße 14, 01139 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7086283,
+          51.079083
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1717,
+        "name": "autoservice pohlmann",
+        "adresse": "hauptstraße 70, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6051361,
+          50.9983521
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4207,
+        "name": "autoservice schubert",
+        "adresse": "fichtestraße 8, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6677926,
+          51.0145478
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2163,
+        "name": "autoservice und fahrzeugbau steglich",
+        "adresse": "reisstraße 37, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8238019,
+          51.0059924
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1838,
+        "name": "autoservice winkler",
+        "adresse": "angerweg 1, 01662 meißen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4595023,
+          51.147801
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1826,
+        "name": "autoservice wolf",
+        "adresse": "wiener straße 10, 01069 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7397992,
+          51.0385385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3994,
+        "name": "autoteile b´┐¢rner",
+        "adresse": "wolkensteiner str. 18, 09514 pockau - lengefeld",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1885883,
+          50.7179233
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1732,
+        "name": "autoteile börner",
+        "adresse": "wolkensteiner str. 18, 09514 pockau - lengefeld",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1885883,
+          50.7179233
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4798,
+        "name": "autoteile ehrlich",
+        "adresse": "kötzschenbrodaer str. 38, 01445 radebeul",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6605508,
+          51.0960494
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3995,
+        "name": "autoteile und zubeh´┐¢r",
+        "adresse": "reichenbacher str. 190a, 08056 zwickau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.4450945,
+          50.7018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1733,
+        "name": "autoteile und zubehör",
+        "adresse": "reichenbacher str. 190a, 08056 zwickau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.4450945,
+          50.7018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2643,
+        "name": "autovermietung vetter",
+        "adresse": "sternstraße 47, 01139 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7047999,
+          51.0779809
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1792,
+        "name": "basti's kfz-werkstatt",
+        "adresse": "tharandter straße 41b, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7055842,
+          51.0367038
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3130,
+        "name": "bauservice tilo richter",
+        "adresse": "bielatalstraße 34, 01824 königstein",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0700764,
+          50.9145122
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4137,
+        "name": "bauservice tilo richter",
+        "adresse": "pfaffenberg 5, 01824 königstein",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.073961,
+          50.9175676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4556,
+        "name": "baywa ag döbeln",
+        "adresse": "heiterer blick 6, 04720 großweitzschen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1178253,
+          51.1551293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3583,
+        "name": "baywa ag miltach",
+        "adresse": "hauptstr. 1-3, 93468 miltach",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.7638977,
+          49.1533046
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2071,
+        "name": "bernd forker gmbh",
+        "adresse": "siegfried rädel-str.37, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9287252,
+          50.9586446
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4142,
+        "name": "bistra bau gmbh & co. kg",
+        "adresse": "hohe straße, 01796 dohma",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9308131,
+          50.9273343
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4002,
+        "name": "blizzboy r´┐¢thig",
+        "adresse": "carl-thieme-str. 12, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6629131,
+          51.0152853
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2926,
+        "name": "blizzboy röthig",
+        "adresse": "carl-thieme-str. 12, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6629131,
+          51.0152853
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5763,
+        "name": "blumentritt",
+        "adresse": "str. des 17. juni 11, 01257 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8198533,
+          51.0058765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4203,
+        "name": "blumentritt diesel-einspritztechnik",
+        "adresse": "straße des 17.juni 16, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8233346,
+          51.004845
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2755,
+        "name": "bosse mechanik",
+        "adresse": "mühlenstr. 5, 39397 schwanebeck",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.1252478,
+          51.9662958
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3675,
+        "name": "brussig - der elektro-fachmann",
+        "adresse": "südstraße 16, 01328 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8864363,
+          51.057427
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5751,
+        "name": "büttner",
+        "adresse": "bergstrasse 86, 01069 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7312554,
+          51.0258756
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5142,
+        "name": "car repair",
+        "adresse": "fritz-reuter-straße 43, 01097 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7368429,
+          51.0741225
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1677,
+        "name": "car-art gmbh",
+        "adresse": "loebtauer str. 55, 01159 dresden",
+        "created_at": "2025-10-06 09:15:25"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7084571,
+          51.0462075
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1685,
+        "name": "car-art gmbh",
+        "adresse": "löbtauer str. 55, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7084571,
+          51.0462075
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5788,
+        "name": "car-art gmbh",
+        "adresse": "bismarkstr. 63, 01257 dresden",
+        "created_at": "2025-10-06 11:55:13"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.75,
+          51.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5789,
+        "name": "car-art gmbh",
+        "adresse": "bismarckstraße 63b, 01257 dresden",
+        "created_at": "2025-10-06 11:58:15"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8139753,
+          51.0067456
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1658,
+        "name": "car-center",
+        "adresse": "crimmitschauer str. 50 a, 04626 schmoelln",
+        "created_at": "2025-10-06 08:44:00"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.3490547,
+          50.8898627
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2346,
+        "name": "car-repair",
+        "adresse": "fritz-reuter straße 43, 01097 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7368429,
+          51.0741225
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4983,
+        "name": "car-wellness-dresden",
+        "adresse": "tharandter str. 200, 01187 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6718594,
+          51.0171983
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1728,
+        "name": "carzone pirna",
+        "adresse": "lohmener straße 15a, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9430363,
+          50.975675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3050,
+        "name": "dachdeckerbetrieb heber",
+        "adresse": "berreuther straße 15a, 01744 dippoldiswalde",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6582307,
+          50.8988716
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3094,
+        "name": "dellentechnik andreas simßen",
+        "adresse": "steile straße 11, 01705 freital / weißig",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6137064,
+          51.0034194
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3336,
+        "name": "die meister",
+        "adresse": "bodelschwinghstrasse 1a, 01159 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7086504,
+          51.047422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1821,
+        "name": "die-autogesellschaft-dresden.d",
+        "adresse": "müglitztalstraße 43, 01809 dohna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8541572,
+          50.9658225
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1888,
+        "name": "die-autogesellschaft-dresden.d",
+        "adresse": "hauptstraße 1, 01809 heidenau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8834978,
+          50.9653679
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1700,
+        "name": "die-autogesellschaft-dresden.de",
+        "adresse": "hauptstraße 1, 01809 heidenau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8834978,
+          50.9653679
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3080,
+        "name": "die-autogesellschaft-dresden.de",
+        "adresse": "müglitztalstraße 43, 01809 dohna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8541572,
+          50.9658225
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1655,
+        "name": "dietze & schindler",
+        "adresse": "ladestraße 2b, 09465 sehmatal",
+        "created_at": "2025-10-06 08:40:46"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.9930792,
+          50.5328184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1657,
+        "name": "dietze & schindler",
+        "adresse": "ladestrasse 2b, 09465 sehmatal",
+        "created_at": "2025-10-06 08:44:00"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.9930792,
+          50.5328184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5794,
+        "name": "dietze & schindler",
+        "adresse": "ladestraãÿe 2b, 09465 sehmatal",
+        "created_at": "2025-10-06 12:11:36"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.993079829058024,
+          50.53284447293193
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5808,
+        "name": "dietze & schindler",
+        "adresse": "ladestraße 2b, 09465 sehmatal-ot sehma",
+        "created_at": "2025-10-07 08:00:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.9930792,
+          50.5328184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3998,
+        "name": "die´┐¢ner & m´┐¢ske gbr",
+        "adresse": "bockwener ring 8, 01665 klipphausen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4828238,
+          51.13624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2237,
+        "name": "dießner & müske gbr",
+        "adresse": "bockwener ring 8, 01665 klipphausen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4828238,
+          51.13624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1683,
+        "name": "distrex fahrzeugservice e.k.",
+        "adresse": "wiener straße 10, 01069 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7397992,
+          51.0385385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1670,
+        "name": "dreihundert dresden",
+        "adresse": "Naumannstraße 12, 01809 Heidenau",
+        "created_at": "2025-10-06 08:48:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.87650823780774,
+          50.97514724289012
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5811,
+        "name": "dreihundert dresden",
+        "adresse": "naumannstraße 12 | halle 14, 01809 heidenau",
+        "created_at": "2025-10-07 10:57:35"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.87650823780774,
+          50.97514724289012
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2083,
+        "name": "dresden-strehlener kfz-technik gmbh",
+        "adresse": "breitscheidstr. 32, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8081963,
+          51.0164227
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3116,
+        "name": "dresdner klassiker handel gmbh",
+        "adresse": "königsbrücker straße 96, 01099 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7601418,
+          51.0799304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1726,
+        "name": "dresdner reifen zentrale gmbh",
+        "adresse": "an der prießnitzaue 6, 01328 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8959452,
+          51.0660188
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1939,
+        "name": "dresdner reifen zentrale gmbh",
+        "adresse": "löbtauer strasse 34-38, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.70716,
+          51.0459576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2183,
+        "name": "dresdner reifen zentrale gmbh",
+        "adresse": "sachsenallee 2a, 01723 kesselsdorf",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5859152,
+          51.0352573
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3689,
+        "name": "dresdner reifen zentrale gmbh",
+        "adresse": "lohrmannstraße 22, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7885584,
+          51.0179343
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4976,
+        "name": "dresdner reifen zentrale gmbh",
+        "adresse": "königsbrücker straße 96, 01099 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7601418,
+          51.0799304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3051,
+        "name": "dresdner vorgebirgs agrar ag",
+        "adresse": "zur huhle 4, 01731 kreischa",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7292062,
+          50.953279
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2090,
+        "name": "drk rettungsdienst freital",
+        "adresse": "dresdner str. 124, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6559934,
+          51.0066049
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2555,
+        "name": "esw autoservice gmbh",
+        "adresse": "königsteiner str. 46, 01824 leupoldishain",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0284498,
+          50.9165793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4803,
+        "name": "f & t fahrzeug-technik gmbh",
+        "adresse": "dresdner straße 263, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.645597,
+          50.9941199
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2983,
+        "name": "f.h. wheel center gmbh",
+        "adresse": "köhlerstr. 16, 01239 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7876899,
+          51.0032938
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5650,
+        "name": "f.h. wheel center gmbh",
+        "adresse": "försterlingstr. 9, 01259 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8368318,
+          51.0044869
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2397,
+        "name": "fa. autohaus langenhan",
+        "adresse": "justus -liebig straße 30, 99087 erfurt",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.0366505,
+          51.0174596
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5790,
+        "name": "fa. wilms",
+        "adresse": "dresdner str. 189, 01640 coswig",
+        "created_at": "2025-10-06 12:05:05"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.54610468376857,
+          51.129440711425225
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3446,
+        "name": "fa. zwiener",
+        "adresse": "karl-liebknecht-str. 49, 15234 frankfurt/oder",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.5304526,
+          52.3438659
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3597,
+        "name": "fa.broßmann gmbh",
+        "adresse": "kornweg 4, 01936 königsbrück",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8884043,
+          51.2585362
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1664,
+        "name": "fa.wilms",
+        "adresse": "dresdner str. 189, 01640 coswig",
+        "created_at": "2025-10-06 08:48:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5462571,
+          51.1292509
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5005,
+        "name": "fahrzeug-service bachmann",
+        "adresse": "meißner landstraße 111, 01157 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6709561,
+          51.0712743
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2995,
+        "name": "fahrzeughandel u. service",
+        "adresse": "zschorgulaer str. 22, 07619 schkölen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.8354643,
+          51.0411209
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1862,
+        "name": "fahrzeugservice kaden",
+        "adresse": "meißner landstraße 5, 01157 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6799463,
+          51.0621045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1942,
+        "name": "fahrzeugservice reiche",
+        "adresse": "gasanstaltstraße 43d, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7913659,
+          51.0230296
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3102,
+        "name": "fam. diehl",
+        "adresse": "in den urwiesen 1, 35510 butzbach",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.6854551,
+          50.4135931
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1734,
+        "name": "famo fahrzeug-und motorenteile gmbh",
+        "adresse": "kleine baschützer str. 1, 02625 bautzen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.4581208,
+          51.1873353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1735,
+        "name": "famo fahrzeug-und motorenteile gmbh",
+        "adresse": "brander straße 65, 09599 freiberg",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.3374773,
+          50.902012
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4412,
+        "name": "federn - schulze gbr",
+        "adresse": "am bogen 9, 01468 moritzburg / boxdorf",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7079887,
+          51.1274018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5457,
+        "name": "feldbinder & rolfsmeyer",
+        "adresse": "straße des 17. juni 11, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8198533,
+          51.0058765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4336,
+        "name": "fiedler karsten",
+        "adresse": "lübecker straße 20, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7019683,
+          51.0472296
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2396,
+        "name": "firma dachboxhelden",
+        "adresse": "robert-bosch-straße 29, 55129 mainz-hechtsheim",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2585425,
+          49.9582171
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2754,
+        "name": "frank & sohn fahrzeugteile leipzig gmbh",
+        "adresse": "handelsstraße 24, 04420 markranstädt / leipzig",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.2310916,
+          51.3414675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2101,
+        "name": "frank fahrzeugbau gmbh",
+        "adresse": "carl-hamel-str. 17a, 09116 chemnitz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.8837209,
+          50.8128775
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2448,
+        "name": "freie kfz-werkstatt peter thomas",
+        "adresse": "dürrwiesenstr. 5, 01809 dohna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8568552,
+          50.9681058
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2315,
+        "name": "freie kfz.-werkstatt",
+        "adresse": "oberer ladenberg 19, 01816 berggießhübel",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9576162,
+          50.8829211
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1897,
+        "name": "freie kfz.-werkstatt czerwonka",
+        "adresse": "löbtauer strasse 65, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7074037,
+          51.0455538
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1696,
+        "name": "ftt fahrzeug technik tharandt",
+        "adresse": "dresdner straße 36b, 01737 tharandt",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5944435,
+          50.9836015
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3129,
+        "name": "garagentore u. torantriebe",
+        "adresse": "weißeritzstraße 3a, 01744 dippoldiswalde",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6609038,
+          50.895247
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1662,
+        "name": "gustavs autohof",
+        "adresse": "wittgensdorf nr. 16, 01731 kreischa",
+        "created_at": "2025-10-06 08:48:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.796119,
+          50.9393948
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5769,
+        "name": "gustavs autohof",
+        "adresse": "wittgensdorf nr. 16, 01731 kreischa ot wittgensdorf",
+        "created_at": "2025-10-06 11:45:12"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "lon",
+          "lat"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5791,
+        "name": "gustavs autohof",
+        "adresse": "",
+        "created_at": "2025-10-06 12:08:51"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.795193640644897,
+          50.939367062684894
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1731,
+        "name": "halle 13 - teile",
+        "adresse": "lohmener str. 13, 01833 dürrröhrsdorf-dittersbach",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0001466,
+          51.009836
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2041,
+        "name": "harry schulze gmbh",
+        "adresse": "im stauster 6, 36088 hünfeld",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.7632826,
+          50.6880123
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1694,
+        "name": "helmut hammerschmidt kfz",
+        "adresse": "wilsdruffer straße 65, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6423478,
+          51.0152221
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1725,
+        "name": "hoffmann automobile",
+        "adresse": "pirnaer landstraße 289, 01259 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8499402,
+          50.9939904
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3440,
+        "name": "hofmeister & meincke se",
+        "adresse": "unkersdorfer straße 21-23, 01723 kesselsdorf",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5855698,
+          51.0415538
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3996,
+        "name": "holitschke werkstattausr´┐¢stung",
+        "adresse": "gewerbering 10, 09669 frankenberg",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.048736,
+          50.9029135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5756,
+        "name": "hubraum",
+        "adresse": "froebelstraße 20, 01159 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7027566,
+          51.0503439
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5761,
+        "name": "jens spahn - pf",
+        "adresse": "burgker straße 145, 01705 freital",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6813983,
+          51.0032968
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1787,
+        "name": "joachim & markus reese gbr",
+        "adresse": "nikolaus-otto-straße 3, 55129 mainz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2590335,
+          49.9596944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5750,
+        "name": "jochen - pf",
+        "adresse": "baerensteiner str. 27-29, 01277 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8031489,
+          51.0353473
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3989,
+        "name": "j´┐¢rgen schiebel",
+        "adresse": "cotta b 16g, 01796 dohma",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9762484,
+          50.9020735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1702,
+        "name": "jäkel kfz-meisterbetrieb gmbh",
+        "adresse": "rudolf-breitscheid-straße 29, 01809 heidenau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8487336,
+          50.985242
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1758,
+        "name": "jürgen schiebel",
+        "adresse": "cotta b 16g, 01796 dohma",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9762484,
+          50.9020735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2712,
+        "name": "karosseriebau trompter",
+        "adresse": "spenerstraße 35, 01309 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7840378,
+          51.0453589
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1752,
+        "name": "karosseriefachbetrieb kirchner",
+        "adresse": "freitaler straße 8, 01737 tharandt/großopitz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6011504,
+          50.9973062
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1705,
+        "name": "kaute -motoreninstandsetzung",
+        "adresse": "großenhainer straße 19, 01097 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7364314,
+          51.071486
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4003,
+        "name": "keilig willi inh. a.h´┐¢hnel",
+        "adresse": "wilsdruffer str. 102, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.642441,
+          51.0161646
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1776,
+        "name": "keilig willi inh. a.hähnel",
+        "adresse": "wilsdruffer str. 102, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.642441,
+          51.0161646
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1730,
+        "name": "kencar ug(haftungsbeschränkt)",
+        "adresse": "dorfstraße 13b, 01816 bad gottleuba-berggießhübel",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9870821,
+          50.8405841
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3831,
+        "name": "kfz - kargel",
+        "adresse": "raiffeisenstraße 14, 55270 klein-winternheim",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2121516,
+          49.9424045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2863,
+        "name": "kfz meisterbetrieb jan opitz",
+        "adresse": "förstereistr. 18, 01099 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7521248,
+          51.0687562
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5704,
+        "name": "kfz reparatur",
+        "adresse": "alte poststr. 4c, 01744 dippoldiswalde",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7053768,
+          50.8884895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3840,
+        "name": "kfz service - shw teubner ug",
+        "adresse": "enderstraße 94, 01277 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8011085,
+          51.0298426
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4694,
+        "name": "kfz service zentrum zella-mehlis",
+        "adresse": "rennsteigstr. 2-6, 98544 zella-mehlis",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.6924302,
+          50.6448641
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1910,
+        "name": "kfz technik bräuer",
+        "adresse": "potschappler straße 4, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6565676,
+          51.0078137
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1740,
+        "name": "kfz-betrieb \"die meister\"",
+        "adresse": "löbtauer strasse 54-56, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7070961,
+          51.0460479
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3529,
+        "name": "kfz-fachwerkstatt franke",
+        "adresse": "breitscheidstrasse 38b, 01237 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8085398,
+          51.0155552
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3033,
+        "name": "kfz-ing.-büro thiel gmbh",
+        "adresse": "wiener straße 10, 01069 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7397992,
+          51.0385385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1722,
+        "name": "kfz-meister jens jahn",
+        "adresse": "straße des friedens 37, 01723 kesselsdorf",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5967735,
+          51.0319646
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1773,
+        "name": "kfz-meisterbetrieb",
+        "adresse": "dresdner straße 290, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6360722,
+          50.9860493
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1786,
+        "name": "kfz-meisterbetrieb löscher",
+        "adresse": "hauptstraße 122, 01816 bad gottleuba-berggießhübel",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9989573,
+          50.890229
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3993,
+        "name": "kfz-meisterbetrieb s´┐¢llner",
+        "adresse": "august bebel strasse 82, 01728 bannewitz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.714338,
+          50.9856243
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1815,
+        "name": "kfz-meisterbetrieb söllner",
+        "adresse": "august bebel strasse 82, 01728 bannewitz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.714338,
+          50.9856243
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1699,
+        "name": "kfz-reparatur",
+        "adresse": "pratzschwitzer straße 220, 01796 pirna/birkwitz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8879316,
+          50.9806061
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1984,
+        "name": "kfz-sachverständigenbüro",
+        "adresse": "werner-seelenbinder-straße 1b, 01809 heidenau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8629371,
+          50.972238
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1742,
+        "name": "kfz-service brill",
+        "adresse": "burgstädteler str. 3d, 01219 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7651802,
+          51.0037724
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2137,
+        "name": "kfz-service jürgen hähle",
+        "adresse": "hermann-michel-straße 1, 01189 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6889514,
+          51.0054584
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3708,
+        "name": "kfz-service veit",
+        "adresse": "hilgestraße 14, 55294 bodenheim",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.3152745,
+          49.9296351
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1817,
+        "name": "kfz-service-pahner",
+        "adresse": "röhrsdorfer straße 24, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8066143,
+          50.9848831
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1778,
+        "name": "kfz-werkstatt auto-gut",
+        "adresse": "poisentalstraße 24, 01728 bannewitz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.705318,
+          50.9785504
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1957,
+        "name": "kfz-werkstatt hocker",
+        "adresse": "pillnitzer straße 1, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9353032,
+          50.9721256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5806,
+        "name": "klassische automobile schwarz",
+        "adresse": "rundteil 7b, 01728 bannewitz ot possendorf",
+        "created_at": "2025-10-07 08:00:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7007155,
+          50.954605
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1661,
+        "name": "klaus brandner gbr",
+        "adresse": "Gewerbegebiet Kaltes Feld 36, 08468 Heinsdorfergrund",
+        "created_at": "2025-10-06 08:46:07"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.330907317866167,
+          50.59961711962114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1736,
+        "name": "kliemt nutzfahrzeugteile",
+        "adresse": "am flugplatz 22, 02828 görlitz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.9553013,
+          51.1585651
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5797,
+        "name": "klinges autoteile",
+        "adresse": "am kirschgarten 59, 99428 grammetal",
+        "created_at": "2025-10-06 12:13:53"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.150910048579043,
+          50.96664752514892
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2002,
+        "name": "kmh-team",
+        "adresse": "an der niedermühle 3, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8091708,
+          50.99213
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1922,
+        "name": "knoll autopflege service",
+        "adresse": "werner-seelenbinder straße 1b, 01809 heidenau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8629371,
+          50.972238
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2738,
+        "name": "kommunalfahrzeuge heidrich gmbh",
+        "adresse": "försterlingstrasse 23, 01259 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8323683,
+          51.0023221
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2453,
+        "name": "korrosionsschutz schiebold",
+        "adresse": "lohmener str. 13, 01833 dürrröhrsdorf-dittersbach",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0001466,
+          51.009836
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5773,
+        "name": "kunde 2",
+        "adresse": "dorfstraße 37, 01768 glashütte",
+        "created_at": "2025-10-06 11:47:43"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7387662,
+          50.8670563
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5774,
+        "name": "kunde 3",
+        "adresse": "wittgensdorf nr. 16, 01731 kreischa",
+        "created_at": "2025-10-06 11:47:43"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.796119,
+          50.9393948
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5775,
+        "name": "kunde 4",
+        "adresse": "an der triebe 25, 01468 moritzburg /",
+        "created_at": "2025-10-06 11:47:43"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6998414,
+          51.122929
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5776,
+        "name": "kunde 5",
+        "adresse": "gersdorf 43, 01819 bahretal",
+        "created_at": "2025-10-06 11:47:43"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.914521,
+          50.8767722
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5777,
+        "name": "kunde 6",
+        "adresse": "ladestraße 2b, 09465 sehmatal",
+        "created_at": "2025-10-06 11:47:43"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.9930792,
+          50.5328184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5778,
+        "name": "kunde 7",
+        "adresse": "dresdner strasse 6, 01728 bannewitz",
+        "created_at": "2025-10-06 11:47:43"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7166984,
+          50.9803923
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5779,
+        "name": "kunde 8",
+        "adresse": "hauptstrasse 9a, 01728 bannewitz",
+        "created_at": "2025-10-06 11:47:43"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7127659,
+          50.9690182
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2796,
+        "name": "kurierdienst cornelia gräfe",
+        "adresse": "geibeltstraße 2b, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9217809,
+          50.9597695
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1762,
+        "name": "lackwerk lw gmbh",
+        "adresse": "bremer straße 5, 01067 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7106931,
+          51.0611002
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1665,
+        "name": "land-bau-&fahrzeugtechnik",
+        "adresse": "dorfstraße 37, 01768 glashütte",
+        "created_at": "2025-10-06 08:48:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7387662,
+          50.8670563
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5768,
+        "name": "land-bau-&fahrzeugtechnik",
+        "adresse": "dorfstraße 37, 01768 glashütte ot luchau",
+        "created_at": "2025-10-06 11:45:12"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "lon",
+          "lat"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2624,
+        "name": "leonhardt",
+        "adresse": "weichselstraße 2, 36043 fulda",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.6813873,
+          50.5403498
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5810,
+        "name": "lila metallinc",
+        "adresse": "oberer ladenberg 13, 01816 bad gottleuba ot berggießhübel",
+        "created_at": "2025-10-07 08:00:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.957072,
+          50.8816626
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5190,
+        "name": "maak fahrzeugtechnik gmbh",
+        "adresse": "linda 41, 07806 neustadt / orla",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.7772327,
+          50.6867619
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1754,
+        "name": "marcel loreck",
+        "adresse": "gegenüber prießnitztalstr. 14, 01768 glashütte",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7675313,
+          50.8514123
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1753,
+        "name": "marco wagner",
+        "adresse": "niedermühle 117, 01738 dorfhain",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5671455,
+          50.9381101
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4211,
+        "name": "maritimus",
+        "adresse": "alte dorfstraße 5, 18356 fuhlendorf",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.6010305,
+          54.3586284
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2171,
+        "name": "max bormann gmbh",
+        "adresse": "flensburger str. 35, 01157 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6617993,
+          51.0804227
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3430,
+        "name": "meisterwerkstatt weigel",
+        "adresse": "rosa-menzer-straße 23, 01309 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.788141,
+          51.046193
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2455,
+        "name": "metiisto werkstatt- und handwerkerausr.",
+        "adresse": "falkenauer straße 26, 09661 hainichen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.097308,
+          50.9816268
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5755,
+        "name": "mfh - pf",
+        "adresse": "froebelstraße 20, 01159 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7027566,
+          51.0503439
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1716,
+        "name": "mh-fahrzeugservice",
+        "adresse": "carl-thieme-straße 28, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6645872,
+          51.0152078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1350,
+        "name": "mobilforum Classic GmbH",
+        "adresse": "Grumbacher Str. 9, 01723 Kesselsdorf",
+        "created_at": "2025-09-25 10:49:33"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5843807,
+          51.0322405
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1426,
+        "name": "mobilforum GmbH",
+        "adresse": "Longuyoner Str. 5, 01796 Pirna",
+        "created_at": "2025-09-25 10:52:17"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9525715,
+          50.9499543
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1654,
+        "name": "mobilforum GmbH",
+        "adresse": "Laugkfeld 28, 01968 Senftenberg",
+        "created_at": "2025-09-25 11:02:07"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0151527,
+          51.5270795
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5757,
+        "name": "motor mafia",
+        "adresse": "bärensteiner str. 27-29, 01277 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8031489,
+          51.0353473
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5796,
+        "name": "motoren-frech gbr",
+        "adresse": "Hohensteiner Str. 101, 09212 Limbach-Oberfrohna",
+        "created_at": "2025-10-06 12:12:46"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.773640459015994,
+          50.847535909993624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2998,
+        "name": "motorenservice",
+        "adresse": "thomas-müntzer-straße 2, 99994 schlotheim",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.6532337,
+          51.2509577
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5407,
+        "name": "motorenservice biebersteingmbh",
+        "adresse": "hauptstraße 68, 02699 königswartha",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.3324011,
+          51.3154698
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5803,
+        "name": "motro mafia",
+        "adresse": "",
+        "created_at": "2025-10-06 12:38:47"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.803058284194414,
+          51.03521318729545
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1684,
+        "name": "msm by hubraum gmbh",
+        "adresse": "fröbelstraße 20, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.698383,
+          51.0491695
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5754,
+        "name": "msm by hubraum gmbh",
+        "adresse": "froebelstraße 20, 01159 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7027566,
+          51.0503439
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2414,
+        "name": "mvs oldtimerrestauration",
+        "adresse": "löbtauer strasse 54, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7114137,
+          51.0497057
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1718,
+        "name": "natur + stein",
+        "adresse": "lutherstraße 5a, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6534113,
+          51.007453
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2626,
+        "name": "npr of europe gmbh",
+        "adresse": "siemensstr.56, 70825 korntal-münchingen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.113394,
+          48.8512003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3984,
+        "name": "omsewitzer fahrzeugservice",
+        "adresse": "am lehmberg 54, 01157 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6641951,
+          51.0615272
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1911,
+        "name": "p.r.o. mobilien, verwaltungs-",
+        "adresse": "schachtstraße 10 a, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6450432,
+          51.0058422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1697,
+        "name": "paddock",
+        "adresse": "dresdner straße 4, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9301881,
+          50.9580277
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3946,
+        "name": "paul motorsport service",
+        "adresse": "hamburger str.65a, 01157 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6872374,
+          51.0608641
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1744,
+        "name": "pauls garage",
+        "adresse": "reicker straße 53, 01219 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7776066,
+          51.0216007
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5760,
+        "name": "peter söllner",
+        "adresse": "august bebel strasse 82, 01728 bannewitz",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.714338,
+          50.9856243
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1841,
+        "name": "peugeot büttner",
+        "adresse": "steigerstraße 1, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6879985,
+          50.998357
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1531,
+        "name": "pitstop.de GmbH",
+        "adresse": "Dresdner Str. 126, 01705 Freital",
+        "created_at": "2025-09-25 10:56:17"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.656258,
+          51.0060232
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2142,
+        "name": "pitstop.de gmbh",
+        "adresse": "schandauer str. 44, 01277 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7955751,
+          51.0426445
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3771,
+        "name": "point s hentschke",
+        "adresse": "dresdner straße 51, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.912159,
+          50.9563056
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3317,
+        "name": "profi parts fahrzeugteile",
+        "adresse": "südring 39, 54634 bitburg",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.5319514,
+          49.9619323
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2228,
+        "name": "qq moves gmbh",
+        "adresse": "fabrikstraße 54, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7073587,
+          51.037077
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2504,
+        "name": "r & a fahrzeugservice und -han",
+        "adresse": "fröbelstr. 30-32, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7051609,
+          51.0511006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5330,
+        "name": "rabe & leuthold",
+        "adresse": "saarstraße 4, 08056 zwickau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.4974458,
+          50.710986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2181,
+        "name": "reifen + auto service grosche gmbh",
+        "adresse": "kötitzer straße 76, 01445 radebeul",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6055051,
+          51.1100325
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1720,
+        "name": "reifen roespel gmbh",
+        "adresse": "wilsdruffer straße 7, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.653892,
+          51.0092545
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4013,
+        "name": "reifen rühle e.k. autotechnik",
+        "adresse": "löbtauer straße 42, 01159 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7133078,
+          51.0508735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1970,
+        "name": "reifencenter dresden",
+        "adresse": "bismarckstraße 57, 01257 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8174126,
+          51.0051262
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2213,
+        "name": "reifendienst schönherr",
+        "adresse": "dorfstraße 30, 01744 dippoldiswalde",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6571199,
+          50.8631144
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5798,
+        "name": "rob's kfz-service",
+        "adresse": "enno-heidebroeck-str. 11, 01237 dresden",
+        "created_at": "2025-10-06 12:14:52"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7964844105141,
+          51.016168338941654
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1674,
+        "name": "rob`s kfz-service",
+        "adresse": "Enno-Heidebroeck-Str. 11, 01237 Dresden",
+        "created_at": "2025-10-06 09:14:04"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7961524,
+          51.0160119
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2117,
+        "name": "rr auto- & reifenservice gmbh radebeul",
+        "adresse": "schumannstraße 18, 01445 radebeul",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6717286,
+          51.104257
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3123,
+        "name": "rudis-garage",
+        "adresse": "kötzschenbrodaer str. 58, 01445 radebeul",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6573255,
+          51.096997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2158,
+        "name": "s-part fahrzeug- u. teilehandel",
+        "adresse": "müglitztalstraße 76, 01809 mühlbach",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8269525,
+          50.9155796
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2018,
+        "name": "sachsennetze gmbh",
+        "adresse": "hauptstraße 110, 01809 heidenau",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8974875,
+          50.958875
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1673,
+        "name": "saegner's fahrzeugtechnik",
+        "adresse": "burgstaedteler str. 3, 01219 dresden",
+        "created_at": "2025-10-06 09:14:04"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7650329,
+          51.0037703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2825,
+        "name": "schaarschmidt-autoteile",
+        "adresse": "stollberger straße 18, 09419 thum",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.9477823,
+          50.6699753
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5762,
+        "name": "schleich",
+        "adresse": "liebstädter str. 45, 01796 pirna",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9206719,
+          50.93723
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1921,
+        "name": "schmettau & fuchs gmbh",
+        "adresse": "margarete-steiff-straße 7, 28876 oyten",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.040118,
+          53.0503453
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5753,
+        "name": "schrage/johne - pf",
+        "adresse": "friedrich-list-platz 2, 01069 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7326534,
+          51.0388207
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1695,
+        "name": "schraubwerk schulze",
+        "adresse": "straße der mts 1, 01737 braunsdorf",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5745796,
+          51.0153278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1671,
+        "name": "schütze gersdorf",
+        "adresse": "gersdorf 43, 01819 bahretal",
+        "created_at": "2025-10-06 08:48:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.914521,
+          50.8767722
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5771,
+        "name": "schütze gersdorf",
+        "adresse": "gersdorf 43, 01819 bahretal ot gersdorf",
+        "created_at": "2025-10-06 11:45:12"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "lon",
+          "lat"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1835,
+        "name": "smp gmbh",
+        "adresse": "alemannenstraße 50, 01309 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7853128,
+          51.0460813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1997,
+        "name": "stender kfz-autoservice",
+        "adresse": "alte meißner landstraße 28c, 01157 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6755018,
+          51.0642623
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5799,
+        "name": "sven - pf",
+        "adresse": "",
+        "created_at": "2025-10-06 12:16:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.819611653936176,
+          51.00590347579738
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5749,
+        "name": "sven - pf (blumentritt)",
+        "adresse": "str. des 17. juni 11, 01257 dresden",
+        "created_at": "2025-10-06 10:39:56"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8198533,
+          51.0058765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1672,
+        "name": "sven teichmann",
+        "adresse": "an der triebe 25, 01468 moritzburg",
+        "created_at": "2025-10-06 08:48:49"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6998414,
+          51.122929
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5770,
+        "name": "sven teichmann",
+        "adresse": "an der triebe 25, 01468 moritzburg / ot boxdorf",
+        "created_at": "2025-10-06 11:45:12"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "lon",
+          "lat"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5765,
+        "name": "sägner's fahrzeugtechnik",
+        "adresse": "burgstädter str. 3, 01219 dresden",
+        "created_at": "2025-10-06 11:39:20"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.75,
+          51.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5766,
+        "name": "sägner's fahrzeugtechnik",
+        "adresse": "burgstaedter str. 3, 01219, dresden",
+        "created_at": "2025-10-06 11:40:57"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.75,
+          51.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1692,
+        "name": "t & s fahrzeugtechnik gmbh",
+        "adresse": "bärensteiner str. 27-29, 01277 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8031489,
+          51.0353473
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1706,
+        "name": "td performance",
+        "adresse": "radeburger straße 211, 01109 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7315835,
+          51.1236547
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1715,
+        "name": "turboservice ingo barthel",
+        "adresse": "bohnitzscher str. 4, 01662 meißen",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4968326,
+          51.1774606
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5108,
+        "name": "urban taxibetrieb gmbh & co. kg",
+        "adresse": "lohengrinstr. 19, 01796 pirna-graupa",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9288928,
+          50.9974545
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2091,
+        "name": "vgrdd gmbh",
+        "adresse": "wilsdruffer str. 37, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6461315,
+          51.0138874
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1829,
+        "name": "vortrieb dresden e.k.",
+        "adresse": "hamburger straße 65 a, 01157 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6872374,
+          51.0608641
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2997,
+        "name": "wacker+döbler",
+        "adresse": "heiligkreuzweg 96, 55130 mainz",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2910137,
+          49.9786256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3971,
+        "name": "wagner kfz-technik",
+        "adresse": "vorwerkstraße 24, 95326 kulmbach",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.4215906,
+          50.1041405
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1764,
+        "name": "waldek cars",
+        "adresse": "sternstraße 47, 01139 dresden",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7047999,
+          51.0779809
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1850,
+        "name": "werk a kfz werkstatt",
+        "adresse": "dresdner straße 46, 01796 pirna",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.915125,
+          50.9578212
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2061,
+        "name": "werk-zwo",
+        "adresse": "coschützer straße 63, 01705 freital",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6744584,
+          51.0144856
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2693,
+        "name": "wütschner fahrzeugteile gmbh",
+        "adresse": "clausthaler straße 14, 09599 freiberg",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.3318704,
+          50.9295681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3862,
+        "name": "xjm fahrzeugtechnik",
+        "adresse": "zum tälchen 2, 01723 kesselsdorf",
+        "created_at": "2025-10-06 10:07:26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5870478,
+          51.0369497
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "export_timestamp": "2025-10-08T07:24:38.599277",
+    "total_features": 493
+  }
+}

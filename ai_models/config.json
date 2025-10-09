@@ -1,0 +1,20 @@
+{
+  "preferred_model": "qwen2.5:0.5b",
+  "fallback_models": [
+    "qwen2.5:1.5b",
+    "llama3.2:1b"
+  ],
+  "ollama_url": "http://localhost:11434",
+  "model_timeout": 30,
+  "use_local_models": true,
+  "models_path": "C:\\Workflow\\TrafficApp\\ai_models",
+  "optimization_settings": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "num_predict": 300,
+    "stop": [
+      "\n\n",
+      "```"
+    ]
+  }
+}

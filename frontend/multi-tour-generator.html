@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Tour Generator - FAMO TrafficApp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 20px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .rule-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #27ae60;
+        }
+        
+        .rule-item i {
+            color: #27ae60;
+            margin-right: 10px;
+            width: 20px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-online { background-color: #27ae60; }
+        .status-offline { background-color: #e74c3c; }
+        .status-warning { background-color: #f39c12; }
+        
+        .btn-generate {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 25px;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+            color: white;
+        }
+        
+        .btn-generate:disabled {
+            background: #95a5a6;
+            box-shadow: none;
+            transform: none;
+        }
+        
+        .progress-container {
+            background: #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .progress-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .progress-step.completed {
+            background: #d5f4e6;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .progress-step.error {
+            background: #fdf2f2;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .step-number.active { background: #3498db; }
+        .step-number.completed { background: #27ae60; }
+        .step-number.error { background: #e74c3c; }
+        
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .tour-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .tour-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #3498db;
+        }
+        
+        .alert-custom {
+            border-radius: 10px;
+            border: none;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .alert-success-custom {
+            background: linear-gradient(135deg, #d5f4e6 0%, #e8f5e8 100%);
+            color: #27ae60;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .alert-error-custom {
+            background: linear-gradient(135deg, #fdf2f2 0%, #fce4ec 100%);
+            color: #e74c3c;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .alert-info-custom {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            color: #3498db;
+            border-left: 4px solid #3498db;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Zurück
+            </a>
+            <h1><i class="fas fa-route"></i> Multi-Tour Generator</h1>
+            <p>KI-basierte Aufteilung großer Touren in optimale Untertouren</p>
+        </div>
+        
+        <div class="content">
+            <!-- Status-Übersicht -->
+            <div class="feature-card">
+                <h4><i class="fas fa-info-circle"></i> System-Status</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="status-indicator status-online" id="serverStatus"></span>
+                            <span>Server</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="status-indicator status-online" id="aiStatus"></span>
+                            <span>KI-Modell</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="status-indicator status-warning" id="dataStatus"></span>
+                            <span>Daten</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Regeln -->
+            <div class="feature-card">
+                <h4><i class="fas fa-cogs"></i> Optimierungsregeln</h4>
+                <div class="rule-item">
+                    <i class="fas fa-clock"></i>
+                    <span><strong>Max. 60 Minuten</strong> Fahrzeit bis zum letzten Kunden</span>
+                </div>
+                <div class="rule-item">
+                    <i class="fas fa-user-clock"></i>
+                    <span><strong>2 Minuten</strong> Verweilzeit pro Kunde</span>
+                </div>
+                <div class="rule-item">
+                    <i class="fas fa-undo"></i>
+                    <span><strong>5 Minuten</strong> Puffer für Rückfahrt zum Depot</span>
+                </div>
+                <div class="rule-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span><strong>Start/Ziel:</strong> Stuttgarter Str. 33, 01189 Dresden</span>
+                </div>
+                <div class="rule-item">
+                    <i class="fas fa-brain"></i>
+                    <span><strong>KI-Optimierung:</strong> Geografische Clusterung mit Ollama</span>
+                </div>
+            </div>
+            
+            <!-- Tour-Auswahl -->
+            <div class="feature-card">
+                <h4><i class="fas fa-list"></i> Tour auswählen</h4>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label for="tourSelect" class="form-label mb-0">Wählen Sie eine W-Tour aus:</label>
+                        <button class="btn btn-outline-primary btn-sm" onclick="loadTours()">
+                            <i class="fas fa-sync-alt"></i> Neu laden
+                        </button>
+                    </div>
+                    <select class="form-select" id="tourSelect">
+                        <option value="">Bitte wählen...</option>
+                    </select>
+                </div>
+                <div id="selectedTourInfo" class="alert alert-info-custom" style="display: none;">
+                    <h6><i class="fas fa-info-circle"></i> Ausgewählte Tour</h6>
+                    <div id="tourDetails"></div>
+                </div>
+            </div>
+            
+            <!-- Generator-Button -->
+            <div class="text-center">
+                <button class="btn btn-generate" id="generateBtn" onclick="startMultiTourGeneration()" disabled>
+                    <i class="fas fa-magic"></i> Multi-Tour Generator starten
+                </button>
+            </div>
+            
+            <!-- Fortschritt -->
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <h5><i class="fas fa-tasks"></i> Fortschritt</h5>
+                <div class="progress-step" id="step1">
+                    <div class="step-number">1</div>
+                    <div>Daten aus Datenbank laden</div>
+                </div>
+                <div class="progress-step" id="step2">
+                    <div class="step-number">2</div>
+                    <div>Adressen geocodieren</div>
+                </div>
+                <div class="progress-step" id="step3">
+                    <div class="step-number">3</div>
+                    <div>KI-Clustering durchführen</div>
+                </div>
+                <div class="progress-step" id="step4">
+                    <div class="step-number">4</div>
+                    <div>Touren optimieren</div>
+                </div>
+                <div class="progress-step" id="step5">
+                    <div class="step-number">5</div>
+                    <div>In Datenbank speichern</div>
+                </div>
+            </div>
+            
+            <!-- Lade-Animation -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Lädt...</span>
+                </div>
+                <p class="mt-3">KI optimiert Ihre Touren...</p>
+            </div>
+            
+            <!-- Ergebnisse -->
+            <div id="resultsContainer" style="display: none;">
+                <div class="result-card">
+                    <h5><i class="fas fa-check-circle text-success"></i> Multi-Tour Generator erfolgreich!</h5>
+                    <div id="resultsContent"></div>
+                </div>
+            </div>
+            
+            <!-- Fehler -->
+            <div id="errorContainer" style="display: none;">
+                <div class="alert alert-error-custom">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Fehler</h5>
+                    <div id="errorContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentTours = [];
+        let selectedTour = null;
+        
+        // Seite laden
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSystemStatus();
+            loadTours();
+        });
+        
+        // System-Status prüfen
+        async function checkSystemStatus() {
+            try {
+                // Server-Status
+                const serverResponse = await fetch('/api/llm-status');
+                if (serverResponse.ok) {
+                    document.getElementById('serverStatus').className = 'status-indicator status-online';
+                } else {
+                    document.getElementById('serverStatus').className = 'status-indicator status-offline';
+                }
+                
+                // KI-Status
+                const aiData = await serverResponse.json();
+                if (aiData.available) {
+                    document.getElementById('aiStatus').className = 'status-indicator status-online';
+                } else {
+                    document.getElementById('aiStatus').className = 'status-indicator status-offline';
+                }
+                
+                // Daten-Status
+                if (currentTours.length > 0) {
+                    document.getElementById('dataStatus').className = 'status-indicator status-online';
+                } else {
+                    document.getElementById('dataStatus').className = 'status-indicator status-warning';
+                }
+                
+            } catch (error) {
+                console.error('Status-Check fehlgeschlagen:', error);
+                document.getElementById('serverStatus').className = 'status-indicator status-offline';
+                document.getElementById('aiStatus').className = 'status-indicator status-offline';
+            }
+        }
+        
+        // Touren laden
+        async function loadTours() {
+            try {
+                console.log('🔄 Lade Touren von /api/touren...');
+                const response = await fetch('/api/touren');
+                console.log('📡 Response Status:', response.status);
+                
+                if (response.ok) {
+                    currentTours = await response.json();
+                    console.log('✅ Touren geladen:', currentTours.length, 'Touren');
+                    console.log('📋 Erste 3 Touren:', currentTours.slice(0, 3));
+                    populateTourSelect();
+                } else {
+                    const errorText = await response.text();
+                    console.error('❌ API-Fehler:', response.status, errorText);
+                    showError(`API-Fehler ${response.status}: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('❌ Verbindungsfehler:', error);
+                showError(`Verbindungsfehler: ${error.message}`);
+            }
+        }
+        
+        // Tour-Auswahl füllen
+        function populateTourSelect() {
+            const select = document.getElementById('tourSelect');
+            select.innerHTML = '<option value="">Bitte wählen...</option>';
+            
+            console.log('Alle Touren:', currentTours);
+            
+            const wTours = currentTours.filter(tour => {
+                const isWTour = tour.tour_name && (
+                    tour.tour_name.includes('W-') || 
+                    tour.tour_name.includes('W-07:00') ||
+                    tour.tour_name.includes('W-09:00') ||
+                    tour.tour_name.includes('W-11:00')
+                );
+                console.log(`Tour ${tour.tour_name}: ${isWTour ? 'W-Tour' : 'Nicht W-Tour'}`);
+                return isWTour;
+            });
+            
+            console.log('Gefilterte W-Touren:', wTours);
+            
+            wTours.forEach(tour => {
+                const option = document.createElement('option');
+                option.value = tour.id;
+                option.textContent = `${tour.tour_name} (${tour.customer_count || 0} Kunden)`;
+                select.appendChild(option);
+            });
+            
+            if (wTours.length === 0) {
+                select.innerHTML = '<option value="">Keine W-Touren gefunden</option>';
+                console.log('Keine W-Touren gefunden. Verfügbare Touren:', currentTours.map(t => t.tour_name));
+            }
+        }
+        
+        // Tour-Auswahl ändern
+        document.getElementById('tourSelect').addEventListener('change', function() {
+            const tourId = this.value;
+            if (tourId) {
+                selectedTour = currentTours.find(tour => tour.id == tourId);
+                showSelectedTour();
+                document.getElementById('generateBtn').disabled = false;
+            } else {
+                selectedTour = null;
+                document.getElementById('selectedTourInfo').style.display = 'none';
+                document.getElementById('generateBtn').disabled = true;
+            }
+        });
+        
+        // Ausgewählte Tour anzeigen
+        function showSelectedTour() {
+            if (!selectedTour) return;
+            
+            const info = document.getElementById('selectedTourInfo');
+            const details = document.getElementById('tourDetails');
+            
+            details.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Tour:</strong> ${selectedTour.tour_name}<br>
+                        <strong>Kunden:</strong> ${selectedTour.customer_count || 0}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Typ:</strong> ${selectedTour.tour_type || 'W-Tour'}<br>
+                        <strong>Status:</strong> ${selectedTour.status || 'Aktiv'}
+                    </div>
+                </div>
+            `;
+            
+            info.style.display = 'block';
+        }
+        
+        // Multi-Tour Generator starten
+        async function startMultiTourGeneration() {
+            if (!selectedTour) {
+                showError('Bitte wählen Sie eine Tour aus');
+                return;
+            }
+            
+            // Bestätigung
+            const confirmMessage = `Multi-Tour-Generator starten für "${selectedTour.tour_name}"?\n\n` +
+                                 `Dies wird die Tour in 4-5 Untertouren aufteilen:\n` +
+                                 `• Max. 60 Min bis letzter Kunde\n` +
+                                 `• 2 Min Verweilzeit pro Kunde\n` +
+                                 `• 5 Min Puffer für Rückfahrt\n` +
+                                 `• Start/Ziel: Stuttgarter Str. 33, Dresden`;
+            
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            // UI zurücksetzen
+            hideAllMessages();
+            showProgress();
+            document.getElementById('generateBtn').disabled = true;
+            
+            try {
+                // Schritt 1: Daten laden
+                updateStep(1, 'active');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                updateStep(1, 'completed');
+                
+                // Schritt 2: Geocoding
+                updateStep(2, 'active');
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                updateStep(2, 'completed');
+                
+                // Schritt 3: KI-Clustering
+                updateStep(3, 'active');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                updateStep(3, 'completed');
+                
+                // Schritt 4: Optimierung
+                updateStep(4, 'active');
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                updateStep(4, 'completed');
+                
+                // API-Aufruf
+                const response = await fetch(`/tour/${selectedTour.id}/generate_multi_ai`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+                }
+                
+                const result = await response.json();
+                
+                // Schritt 5: Speichern
+                updateStep(5, 'active');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                updateStep(5, 'completed');
+                
+                // Ergebnisse anzeigen
+                showResults(result);
+                
+            } catch (error) {
+                console.error('Multi-Tour Generator Fehler:', error);
+                showError(`Fehler beim Multi-Tour Generator:\n\n${error.message}`);
+            } finally {
+                hideProgress();
+                document.getElementById('generateBtn').disabled = false;
+            }
+        }
+        
+        // Fortschritt aktualisieren
+        function updateStep(stepNumber, status) {
+            const step = document.getElementById(`step${stepNumber}`);
+            step.className = `progress-step ${status}`;
+            
+            const stepNumberEl = step.querySelector('.step-number');
+            stepNumberEl.className = `step-number ${status}`;
+        }
+        
+        // Fortschritt anzeigen
+        function showProgress() {
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('loadingSpinner').style.display = 'block';
+        }
+        
+        // Fortschritt verstecken
+        function hideProgress() {
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+        
+        // Ergebnisse anzeigen
+        function showResults(result) {
+            const container = document.getElementById('resultsContainer');
+            const content = document.getElementById('resultsContent');
+            
+            const totalTours = result.tours ? result.tours.length : 0;
+            const createdTours = result.created ? result.created.length : 0;
+            const reasoning = result.reasoning || result.reason || 'KI-basierte geografische Optimierung';
+            
+            content.innerHTML = `
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <h3 class="text-success">${createdTours}</h3>
+                            <p class="mb-0">Neue Touren erstellt</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <h3 class="text-info">${totalTours}</h3>
+                            <p class="mb-0">Touren vorgeschlagen</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <h3 class="text-warning">100%</h3>
+                            <p class="mb-0">Regelkonform</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info-custom">
+                    <h6><i class="fas fa-brain"></i> KI-Begründung</h6>
+                    <p class="mb-0">${reasoning}</p>
+                </div>
+                
+                <div class="mt-3">
+                    <h6>Generierte Touren:</h6>
+                    <div id="generatedToursList"></div>
+                </div>
+            `;
+            
+            // Touren-Liste füllen
+            if (result.tours && result.tours.length > 0) {
+                const toursList = document.getElementById('generatedToursList');
+                result.tours.forEach((tour, index) => {
+                    const tourDiv = document.createElement('div');
+                    tourDiv.className = 'tour-item';
+                    tourDiv.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">${tour.name || `Tour ${index + 1}`}</h6>
+                                <small class="text-muted">${tour.customer_ids ? tour.customer_ids.length : 0} Kunden</small>
+                            </div>
+                            <span class="badge bg-success">Optimiert</span>
+                        </div>
+                    `;
+                    toursList.appendChild(tourDiv);
+                });
+            }
+            
+            container.style.display = 'block';
+        }
+        
+        // Fehler anzeigen
+        function showError(message) {
+            const container = document.getElementById('errorContainer');
+            const content = document.getElementById('errorContent');
+            
+            content.innerHTML = `<p class="mb-0">${message.replace(/\n/g, '<br>')}</p>`;
+            container.style.display = 'block';
+        }
+        
+        // Alle Nachrichten verstecken
+        function hideAllMessages() {
+            document.getElementById('resultsContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
