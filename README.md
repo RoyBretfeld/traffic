@@ -4,20 +4,18 @@ On-Prem Routenplanung mit KI für die FAMO GmbH. Dieses System ermöglicht die V
 
 ## 🚀 Schnellstart
 
-### Lokale Entwicklung
+### Setup in 60 Sekunden
 
-1. **Repository klonen**
+1. **Umgebungsvariablen einrichten**
    ```bash
-   git clone <repository-url>
-   cd TrafficApp
+   cp env.example .env
+   # Optional: DATABASE_URL anpassen
    ```
 
-2. **Python-Umgebung einrichten**
+2. **Original-CSV-Dateien ablegen**
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   # oder
-   venv\Scripts\activate     # Windows
+   # Kopiere deine CSV-Dateien nach ./Tourplaene/
+   # Diese werden NICHT verändert (read-only)
    ```
 
 3. **Abhängigkeiten installieren**
@@ -25,21 +23,43 @@ On-Prem Routenplanung mit KI für die FAMO GmbH. Dieses System ermöglicht die V
    pip install -r requirements.txt
    ```
 
-4. **Pre-commit-Hooks installieren**
+4. **Pre-commit optional**
    ```bash
-   pip install pre-commit
-   pre-commit install
+   pip install pre-commit && pre-commit install
    ```
 
-5. **App starten**
+5. **Starten & prüfen**
    ```bash
+   # Integrität der Original-CSVs prüfen
+   python -m tools.orig_integrity build
+   
+   # App starten
    python backend/app.py
+   
+   # Health-Check
+   curl http://127.0.0.1:8111/health/db
+   # Sollte {"ok": true} zurückgeben
+   
+   # CSV-Liste prüfen
+   curl http://127.0.0.1:8111/api/tourplaene/list
+   # Sollte verfügbare CSVs anzeigen
+   
+   # App öffnen
+   # http://127.0.0.1:8111
    ```
 
-6. **App öffnen**
-   ```
-   http://127.0.0.1:8111
-   ```
+### Smoke-Test (lokal)
+
+Backend starten, dann:
+```bash
+python -m tools.smoke
+```
+
+**Erwartet:**
+- ✔ list (mind. eine CSV)
+- ✔ match (zeigt ok/warn/bad Summen)
+- ✔ geofill dry (HTTP 200)
+- ✔ status (Zähler sichtbar)
 
 ### Docker-Entwicklung
 
