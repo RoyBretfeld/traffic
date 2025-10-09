@@ -8,6 +8,7 @@ import unicodedata
 import os
 from ingest.reader import read_tourplan
 from repositories.geo_repo import bulk_get, normalize_addr
+from repositories.geo_alias_repo import resolve_aliases
 from ingest.guards import BAD_MARKERS
 
 router = APIRouter()
@@ -50,28 +51,33 @@ def api_tourplan_match(file: str = Query(..., description="Pfad zur Original-CSV
     
     addrs = data.iloc[:, col].fillna("").astype(str).map(_norm).tolist()
 
-    # 4) DB-Lookup (bulk)
-    geo = bulk_get(addrs)
+    # 4) Alias-Auflösung und DB-Lookup (bulk)
+    aliases = resolve_aliases(addrs)  # map: query_norm -> canonical_norm
+    geo = bulk_get(addrs + list(aliases.values()))  # beide Mengen laden
 
     # 5) Ergebnis bauen (ok/warn + optional Marker-Hinweis)
     out = []
     for i, row in data.iterrows():
         addr_raw = str(row.iloc[col] or "")
         addr_norm = _norm(addr_raw)
-        has_geo = addr_norm in geo
         marks = [m for m in BAD_MARKERS if m in addr_norm]
+        
+        # Alias-Auflösung
+        canon = aliases.get(addr_norm)
+        rec = geo.get(addr_norm) or (geo.get(canon) if canon else None)
         
         # Status-Logik:
         # ok: hat Geo-Daten UND keine Mojibake-Marker
         # warn: keine Geo-Daten ABER keine Mojibake-Marker  
         # bad: Mojibake-Marker vorhanden
-        status = "ok" if (has_geo and not marks) else ("warn" if (not marks and not has_geo) else "bad")
+        status = "ok" if (rec and not marks) else ("warn" if (not marks and not rec) else "bad")
         
         out.append({
             "row": int(i + 1),
             "address": addr_norm,
-            "has_geo": bool(has_geo),
-            "geo": geo.get(addr_norm),
+            "alias_of": canon,  # neu: zeigt, wenn Alias greift
+            "has_geo": bool(rec),
+            "geo": rec,
             "markers": marks,
             "status": status,
         })

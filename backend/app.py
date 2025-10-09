@@ -15,6 +15,7 @@ from routes.tourplan_geofill import router as tourplan_geofill_router
 from routes.tourplaene_list import router as tourplaene_list_router
 from routes.tourplan_status import router as tourplan_status_router
 from routes.tourplan_suggest import router as tourplan_suggest_router
+from routes.tourplan_accept import router as tourplan_accept_router
 
 def create_app():
     app = FastAPI(title="TrafficApp API", version="1.0.0")
@@ -37,6 +38,7 @@ def create_app():
     app.include_router(tourplaene_list_router)
     app.include_router(tourplan_status_router)
     app.include_router(tourplan_suggest_router)
+    app.include_router(tourplan_accept_router)
     
     # Encoding Setup (optional)
     try:
