@@ -13,6 +13,7 @@ from backend.utils.encoding_guards import trace_text, assert_no_mojibake, setup_
 from routes.tourplan_match import router as tourplan_match_router
 from routes.tourplan_geofill import router as tourplan_geofill_router
 from routes.tourplaene_list import router as tourplaene_list_router
+from routes.tourplan_status import router as tourplan_status_router
 
 def create_app():
     app = FastAPI(title="TrafficApp API", version="1.0.0")
@@ -33,6 +34,7 @@ def create_app():
     app.include_router(tourplan_match_router)
     app.include_router(tourplan_geofill_router)
     app.include_router(tourplaene_list_router)
+    app.include_router(tourplan_status_router)
     
     # Encoding Setup (optional)
     try:

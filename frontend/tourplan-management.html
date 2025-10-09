@@ -276,6 +276,37 @@
             }
         }
         
+        // Polling-Funktionen
+        const POLL_MS = 5000;
+        let pollTimer = null;
+
+        async function refreshStatus() {
+            if (!CURRENT_FILE) return;
+            try {
+                const r = await fetch(`/api/tourplan/status?file=${encodeURIComponent(CURRENT_FILE)}`);
+                if (!r.ok) throw new Error(`status ${r.status}`);
+                const j = await r.json();
+                const text = `Total ${j.total} • Cached ${j.cached} • Missing ${j.missing}` + (j.marker_hits ? ` • Marker ${j.marker_hits}` : '');
+                const el = document.querySelector('#statusBar');
+                if (el) el.textContent = text;
+                HUD.ok(`status: miss=${j.missing}`);
+            } catch (e) {
+                HUD.err(e);
+            }
+        }
+
+        function startPolling() {
+            if (pollTimer) clearInterval(pollTimer);
+            pollTimer = setInterval(refreshStatus, POLL_MS);
+        }
+
+        function stopPolling() {
+            if (pollTimer) {
+                clearInterval(pollTimer);
+                pollTimer = null;
+            }
+        }
+
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
             const sel = document.querySelector('#fileSelect');
@@ -284,21 +315,28 @@
             
             sel?.addEventListener('change', e => {
                 CURRENT_FILE = e.target.value;
+                startPolling(); // Polling bei Dateiwechsel starten
             });
             
             loadBtn?.addEventListener('click', () => {
-                loadMatch().catch(HUD.err);
+                loadMatch().then(() => {
+                    startPolling(); // Polling nach Laden starten
+                }).catch(HUD.err);
             });
             
             geoBtn?.addEventListener('click', () => {
-                runGeoFill().catch(HUD.err);
+                runGeoFill().then(() => {
+                    startPolling(); // Polling nach Geocoding starten
+                }).catch(HUD.err);
             });
             
             // Initialisierung
             initMap();
             refreshFiles().then(() => {
                 if (CURRENT_FILE) {
-                    loadMatch().catch(HUD.err);
+                    loadMatch().then(() => {
+                        startPolling(); // Polling nach initialem Laden starten
+                    }).catch(HUD.err);
                 }
             }).catch(HUD.err);
         });
