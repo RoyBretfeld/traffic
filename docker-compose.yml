@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8111:8111"
+    volumes:
+      # Originale nur lesen (read-only)
+      - ./Tourplaene:/app/Tourplaene:ro
+      - ./routen:/app/routen:ro
+      # Daten-Verzeichnisse beschreibbar
+      - ./data:/app/data:rw
+      # Logs beschreibbar
+      - ./logs:/app/logs:rw
+    environment:
+      - ORIG_DIR=/app/Tourplaene
+      - STAGING_DIR=/app/data/staging
+      - OUTPUT_DIR=/app/data/output
+      - BACKUP_DIR=/app/routen
+      - DATABASE_URL=sqlite:///app/data/traffic.db
+      - GEOCODER_BASE=https://nominatim.openstreetmap.org/search
+      - GEOCODER_CONTACT=contact@example.com
+      - GEOCODER_RPS=1
+      - GEOCODER_TIMEOUT_S=20
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8111/health/db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
