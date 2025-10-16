@@ -15,6 +15,16 @@ import re
 from collections import OrderedDict
 from dataclasses import dataclass
 from pathlib import Path
+from common.normalize import normalize_address
+
+def _heuristic_decode(raw: bytes) -> tuple[str, str]:
+    """Heuristische Dekodierung mit Encoding-Erkennung."""
+    for enc in ("cp850", "utf-8-sig", "latin-1"):
+        try:
+            return raw.decode(enc), enc
+        except UnicodeDecodeError:
+            continue
+    return raw.decode("utf-8", errors="replace"), "utf-8*replace"
 from typing import Dict, Iterable, List, Optional, Tuple, Union
 
 
@@ -178,8 +188,8 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         if not any(row):
             continue
 
-        first_cell = row[0].strip() if len(row) > 0 and row[0] else ""
-        header_cell = row[1].strip() if len(row) > 1 and row[1] else ""
+        first_cell = str(row[0]).strip() if len(row) > 0 and row[0] is not None and str(row[0]) != 'nan' else ""
+        header_cell = str(row[1]).strip() if len(row) > 1 and row[1] is not None and str(row[1]) != 'nan' else ""
 
         # Tour-Header-Zeilen beginnen mit leerem ersten Feld
         if not first_cell and header_cell:
@@ -208,10 +218,10 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         if not first_cell.isdigit():
             continue  # keine Kundenzeile
 
-        name = row[1].strip() if len(row) > 1 else ""
-        street = row[2].strip() if len(row) > 2 else ""
-        postal_code = row[3].strip() if len(row) > 3 else ""
-        city = row[4].strip() if len(row) > 4 else ""
+        name = str(row[1]).strip() if len(row) > 1 and row[1] is not None else ""
+        street = str(row[2]).strip() if len(row) > 2 and row[2] is not None else ""
+        postal_code = str(row[3]).strip() if len(row) > 3 and row[3] is not None else ""
+        city = str(row[4]).strip() if len(row) > 4 and row[4] is not None else ""
 
         customer = TourStop(
             customer_number=first_cell,
@@ -251,8 +261,10 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
 
 def parse_tour_plan(file_path: Union[str, Path]) -> TourPlan:
     path = Path(file_path)
-    raw_text = path.read_text(encoding="latin1")
-    delivery_date = _parse_delivery_date(raw_text)
+    # Kopf der Datei mit Heuristik lesen (Umlaute sicher)
+    raw = path.read_bytes()
+    raw_text, _enc = _heuristic_decode(raw)
+    delivery_date = _parse_delivery_date(raw_text[:4000])  # nur Kopf scannen
 
     order, tour_map = _extract_tours(path)
 
@@ -298,6 +310,7 @@ def tour_plan_to_dict(plan: TourPlan) -> Dict[str, object]:
                 "postal_code": stop.postal_code,
                 "city": stop.city,
                 "bar_flag": stop.is_bar_stop,
+                "address": normalize_address(f"{stop.street}, {stop.postal_code} {stop.city}", stop.name, stop.postal_code),
             }
             customers_payload.append(customer_dict)
 
@@ -379,7 +392,6 @@ __all__ = [
     "tour_plan_to_dict",
     "parse_tour_plan",
     "parse_tour_plan_to_dict",
-    "tour_plan_to_dict",
     "export_tour_plan_markdown",
 ]
 

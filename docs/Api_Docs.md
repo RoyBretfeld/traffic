@@ -1,6 +1,6 @@
 # FAMO TrafficApp – API Dokumentation
 
-Diese Dokumentation beschreibt die wichtigsten REST-Endpunkte der TrafficApp. Die API orientiert sich an der 8-Schritte-Architektur aus `docs/Neu/Neue Prompts.md`. Alle Endpunkte geben JSON zurück und laufen standardmäßig unter `http://127.0.0.1:8000` (lokal) bzw. `http://127.0.0.1:5000` beim Flask-MVP.
+Diese Dokumentation beschreibt die wichtigsten REST-Endpunkte der TrafficApp. Die API orientiert sich an der 8-Schritte-Architektur aus `docs/Neu/Neue Prompts.md`. Alle Endpunkte geben JSON zurück und laufen standardmäßig unter `http://127.0.0.1:8111` (lokal).
 
 ---
 
@@ -9,6 +9,39 @@ Diese Dokumentation beschreibt die wichtigsten REST-Endpunkte der TrafficApp. Di
 - Format: JSON UTF-8
 - Authentifizierung: Noch nicht aktiv (künftige Version: API-Key / Rollen)
 - Fehlerformat: `{ "detail": "Beschreibung", "error_code": "OPTIONAL", "timestamp": "ISO-8601" }`
+
+---
+
+## Manuelle Koordinaten-Eingabe
+
+### POST /api/tourplan/manual-geo
+Speichert manuelle Koordinaten für Adressen ohne Geocoding-Ergebnis.
+
+**Request Body:**
+```json
+{
+  "address": "Teststraße 123, Dresden",
+  "latitude": 51.0504,
+  "longitude": 13.7373,
+  "by_user": "admin"
+}
+```
+
+**Response (200):**
+```json
+{
+  "ok": true,
+  "message": "Koordinaten für 'Teststraße 123, Dresden' gespeichert",
+  "coordinates": {"lat": 51.0504, "lon": 13.7373}
+}
+```
+
+**Validierung:**
+- `latitude`: -90 bis 90
+- `longitude`: -180 bis 180
+- `address`: min. 3 Zeichen
+
+**Verwendung:** Für Adressen die vom automatischen Geocoding nicht gefunden werden, können Koordinaten manuell eingegeben werden. Diese werden in der `geo_cache` Tabelle mit `source="manual"` gespeichert.
 
 ---
 

@@ -21,6 +21,12 @@ class AddressMapper:
     
     def load_config(self):
         """Lade Konfiguration aus JSON-Datei"""
+        # Initialisiere alle Attribute mit Standardwerten
+        self.mappings = []
+        self.rules = []
+        self.fallback_strategies = []
+        self.bar_sondernamen = []
+        
         try:
             if os.path.exists(self.config_file):
                 with open(self.config_file, 'r', encoding='utf-8') as f:
@@ -31,9 +37,9 @@ class AddressMapper:
                     self.bar_sondernamen = config.get('bar_sondernamen', [])
                 print(f"[AddressMapper] Konfiguration geladen: {len(self.mappings)} Mappings, {len(self.rules)} Regeln, {len(self.bar_sondernamen)} BAR-Sondernamen")
             else:
-                print(f"[AddressMapper] WARNUNG: Konfigurationsdatei {self.config_file} nicht gefunden")
+                print(f"[AddressMapper] WARNUNG: Konfigurationsdatei {self.config_file} nicht gefunden - verwende Standardwerte")
         except Exception as e:
-            print(f"[AddressMapper] FEHLER beim Laden der Konfiguration: {e}")
+            print(f"[AddressMapper] FEHLER beim Laden der Konfiguration: {e} - verwende Standardwerte")
     
     def find_exact_mapping(self, address: str) -> Optional[Dict]:
         """Suche exakte Adress-Übereinstimmung in Mappings"""

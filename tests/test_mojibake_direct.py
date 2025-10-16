@@ -9,7 +9,7 @@ sys.path.append('backend')
 
 from pathlib import Path
 import pandas as pd
-from canonicalize_csv_pipeline import repair_all_mojibake
+from tools.utilities.canonicalize_csv_pipeline import repair_all_mojibake
 
 def test_mojibake_repair():
     """Teste Mojibake-Reparatur direkt."""

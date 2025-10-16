@@ -44,6 +44,235 @@
         .table tr.ok { background-color: #d4edda; }
         .table tr.warn { background-color: #fff3cd; }
         .table tr.bad { background-color: #f8d7da; }
+        
+        /* Vorschlag-Button */
+        .suggBtn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .suggBtn:hover { background: #0056b3; }
+        
+        /* Manuelle Koordinaten-Button */
+        .manualGeoBtn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+        .manualGeoBtn:hover { background: #1e7e34; }
+        
+        /* Modal für manuelle Koordinaten */
+        #modalManualGeo {
+            position: fixed;
+            inset: 0;
+            background: #0006;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #modalManualGeo .card {
+            background: #fff;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px #0003;
+        }
+        #modalManualGeo .form-group {
+            margin-bottom: 15px;
+        }
+        #modalManualGeo label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        #modalManualGeo input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        #modalManualGeo .address-display {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+        
+        /* Modal Styles */
+        #modal {
+            position: fixed;
+            inset: 0;
+            background: #0006;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #modal .card {
+            background: #fff;
+            max-width: 800px;
+            width: 92%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px #0003;
+        }
+        #modal header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        #modal .body {
+            padding: 10px 12px;
+            max-height: 70vh;
+            overflow: auto;
+            font-size: 14px;
+        }
+        #modal .list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #modal .list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        #modal footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 8px 12px;
+            border-top: 1px solid #eee;
+        }
+        .acceptBtn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .acceptBtn:hover { background: #1e7e34; }
+        .muted { color: #6c757d; font-size: 12px; }
+        
+        /* Navigation Styles */
+        .navbar-nav .nav-link {
+            color: #007bff;
+            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            transition: all 0.15s ease-in-out;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #0056b3;
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+        .navbar-nav .nav-link.active {
+            color: #fff;
+            background-color: #007bff;
+        }
+        
+        /* Audit Modal Styles */
+        #modalAudit {
+            position: fixed;
+            inset: 0;
+            background: #0006;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #modalAudit .card {
+            background: #fff;
+            max-width: 900px;
+            width: 94%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px #0003;
+        }
+        #modalAudit header, #modalAudit footer {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        #modalAudit footer {
+            border-top: 1px solid #eee;
+        }
+        #modalAudit .body {
+            padding: 8px 12px;
+            max-height: 70vh;
+            overflow: auto;
+        }
+        #modalAudit table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #modalAudit th, #modalAudit td {
+            border: 1px solid #eee;
+            padding: 6px;
+            font-size: 12px;
+        }
+        
+        /* Fail-Cache Modal Styles */
+        #modalFail {
+            position: fixed;
+            inset: 0;
+            background: #0006;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #modalFail .card {
+            background: #fff;
+            max-width: 800px;
+            width: 92%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px #0003;
+        }
+        #modalFail header, #modalFail footer {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        #modalFail footer {
+            border-top: 1px solid #eee;
+        }
+        #modalFail .body {
+            padding: 8px 12px;
+            max-height: 70vh;
+            overflow: auto;
+        }
+        #modalFail table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #modalFail th, #modalFail td {
+            border: 1px solid #eee;
+            padding: 6px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -55,7 +284,25 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Tourplan Management</h3>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="mb-0">FAMO TrafficApp</h3>
+                            <nav class="navbar-nav">
+                                <ul class="navbar-nav d-flex flex-row">
+                                    <li class="nav-item mr-3">
+                                        <a class="nav-link" href="/">Hauptseite</a>
+                                    </li>
+                                    <li class="nav-item mr-3">
+                                        <a class="nav-link active" href="/ui/tourplan-management">Tourplan Management</a>
+                                    </li>
+                                    <li class="nav-item mr-3">
+                                        <a class="nav-link" href="/ui/tourplan-visual-test">Visual Test</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/docs">API Docs</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                     <div class="card-body">
                         <!-- File Selection -->
@@ -70,6 +317,9 @@
                         <div class="form-group">
                             <button id="loadBtn" class="btn btn-primary">Laden</button>
                             <button id="geoBtn" class="btn btn-success ml-2">Geocode fehlende</button>
+                            <button id="btnSuggestAll" class="btn btn-info ml-2">Vorschläge für fehlende (Top 3)</button>
+                            <button id="btnAudit" class="btn btn-secondary ml-2">Audit-Log</button>
+                            <button id="btnFail" class="btn btn-warning ml-2">Fail-Cache</button>
                         </div>
                         
                         <!-- Geocoding Controls -->
@@ -215,9 +465,14 @@
             j.items.forEach(row => {
                 const tr = document.createElement('tr');
                 tr.className = row.status;
+                
+                // Button für manuelle Koordinaten-Eingabe (nur wenn keine Geo-Daten vorhanden)
+                const manualBtn = (!row.has_geo) ? 
+                    `<button class="manualGeoBtn" data-addr="${encodeURIComponent(row.address)}">Koordinaten eingeben</button>` : '';
+                
                 tr.innerHTML = `<td>${row.row}</td><td>${row.address}</td>` +
                     `<td>${row.has_geo ? `✅ (${row.geo.lat.toFixed(5)}, ${row.geo.lon.toFixed(5)})` : '❌'}</td>` +
-                    `<td>${row.status}${row.markers?.length ? ` · ${row.markers.join(', ')}` : ''}</td>`;
+                    `<td>${row.status}${row.markers?.length ? ` · ${row.markers.join(', ')}` : ''} ${manualBtn}</td>`;
                 tb.appendChild(tr);
             });
             
@@ -339,7 +594,285 @@
                     }).catch(HUD.err);
                 }
             }).catch(HUD.err);
+
+            // Audit-Log Funktionen
+            async function apiAudit({limit=100, action='', q='', since=''}={}){
+                const p = new URLSearchParams(); 
+                p.set('limit', limit);
+                if(action) p.set('action', action); 
+                if(q) p.set('q', q); 
+                if(since) p.set('since', since);
+                const r = await fetch('/api/audit/geo?' + p.toString()); 
+                if(!r.ok) throw new Error('audit '+r.status);
+                return r.json();
+            }
+
+            function openAudit(){ 
+                document.getElementById('modalAudit').style.display='flex'; 
+                loadAudit().catch(HUD.err); 
+            }
+            
+            function closeAudit(){ 
+                document.getElementById('modalAudit').style.display='none'; 
+            }
+
+            async function loadAudit(){
+                const q = document.getElementById('auditQ').value.trim();
+                const action = document.getElementById('auditAction').value;
+                const since = document.getElementById('auditSince').value; // datetime-local → ISO
+                const j = await apiAudit({limit:100, action, q, since});
+                const tb = document.getElementById('auditBody'); 
+                tb.innerHTML='';
+                j.items.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${r.ts}</td><td>${r.action}</td><td>${r.query||''}</td><td>${r.canonical||''}</td><td>${r.by_user||''}</td>`;
+                    tb.appendChild(tr);
+                });
+                document.getElementById('auditMeta').textContent = `${j.count} Einträge`;
+            }
+
+            // Event Listeners für Audit-Modal
+            document.getElementById('btnAudit')?.addEventListener('click', openAudit);
+            document.getElementById('auditClose')?.addEventListener('click', closeAudit);
+            document.getElementById('auditReload')?.addEventListener('click', ()=>loadAudit().catch(HUD.err));
+
+            // Fail-Cache Funktionen
+            async function apiFailCache({active_only=true, reason='', q='', limit=100}={}){
+                const p = new URLSearchParams(); 
+                p.set('limit', limit); 
+                if(active_only) p.set('active_only','true'); 
+                if(reason) p.set('reason',reason); 
+                if(q) p.set('q',q);
+                const r = await fetch('/api/geocode/fail-cache?' + p.toString()); 
+                if(!r.ok) throw new Error('fail-cache '+r.status);
+                return r.json();
+            }
+
+            function openFail(){ 
+                document.getElementById('modalFail').style.display='flex'; 
+                loadFail().catch(HUD.err); 
+            }
+            
+            function closeFail(){ 
+                document.getElementById('modalFail').style.display='none'; 
+            }
+
+            async function loadFail(){
+                const active = document.getElementById('failActive').checked;
+                const reason = document.getElementById('failReason').value;
+                const q = document.getElementById('failQ').value.trim();
+                const j = await apiFailCache({active_only: active, reason, q});
+                const tb = document.getElementById('failBody'); 
+                tb.innerHTML='';
+                j.items.forEach(it => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td><label><input class="fsel" type="checkbox" data-addr="${it.address}"> ${it.address}</label></td>`+
+                                   `<td>${it.reason||''}</td><td>${it.ttl_min ?? ''}</td><td>${it.until||''}</td>`+
+                                   `<td><button class="fclear" data-addr="${it.address}">Clear</button></td>`; 
+                    tb.appendChild(tr);
+                });
+                document.getElementById('failMeta').textContent = `${j.count} Einträge`;
+            }
+
+            // Event Listeners für Fail-Cache-Modal
+            document.getElementById('btnFail')?.addEventListener('click', openFail);
+            document.getElementById('failClose')?.addEventListener('click', closeFail);
+            document.getElementById('failReload')?.addEventListener('click', ()=>loadFail().catch(HUD.err));
+
+            // Fail-Cache Clear Funktionen
+            async function apiFailClear(addresses){
+                const r = await fetch('/api/geocode/fail-cache/clear', {
+                    method:'POST', 
+                    headers:{'Content-Type':'application/json'}, 
+                    body: JSON.stringify({addresses})
+                });
+                if(!r.ok){ 
+                    const t = await r.text(); 
+                    throw new Error('clear '+r.status+': '+t); 
+                }
+                return r.json();
+            }
+
+            // Einzel-Clear (Button in Zeile)
+            document.getElementById('failBody')?.addEventListener('click', async (e)=>{
+                const b = e.target.closest('.fclear'); 
+                if(!b) return;
+                const addr = b.dataset.addr; 
+                if(!confirm(`Eintrag freigeben?\n${addr}`)) return;
+                try { 
+                    const j = await apiFailClear([addr]); 
+                    HUD.ok(`cleared ${j.cleared}`); 
+                    await loadFail(); 
+                }
+                catch(err){ HUD.err(err); }
+            });
+
+            // Auswahl-Clear (Header-Knopf)
+            document.getElementById('failClearSel')?.addEventListener('click', async ()=>{
+                const sel = [...document.querySelectorAll('.fsel:checked')].map(x=>x.dataset.addr);
+                if(!sel.length) { 
+                    HUD.note('keine Auswahl'); 
+                    return; 
+                }
+                if(!confirm(`Freigeben von ${sel.length} Einträgen?`)) return;
+                try { 
+                    const j = await apiFailClear(sel); 
+                    HUD.ok(`cleared ${j.cleared}`); 
+                    await loadFail(); 
+                }
+                catch(err){ HUD.err(err); }
+            });
+            
+            // Manuelle Koordinaten-Eingabe Funktionen
+            async function apiManualGeo(address, lat, lon, byUser) {
+                const r = await fetch('/api/tourplan/manual-geo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address, latitude: lat, longitude: lon, by_user: byUser })
+                });
+                if (!r.ok) {
+                    const t = await r.text();
+                    throw new Error(`manual-geo ${r.status}: ${t.slice(0, 200)}`);
+                }
+                return r.json();
+            }
+            
+            function openManualGeo(address) {
+                document.getElementById('manualGeoAddress').textContent = address;
+                document.getElementById('manualGeoLat').value = '';
+                document.getElementById('manualGeoLon').value = '';
+                document.getElementById('manualGeoUser').value = '';
+                document.getElementById('modalManualGeo').style.display = 'flex';
+            }
+            
+            function closeManualGeo() {
+                document.getElementById('modalManualGeo').style.display = 'none';
+            }
+            
+            // Event Listeners für manuelle Koordinaten
+            document.getElementById('manualGeoClose').onclick = closeManualGeo;
+            document.getElementById('manualGeoCancel').onclick = closeManualGeo;
+            
+            document.getElementById('manualGeoSave').onclick = async () => {
+                const address = document.getElementById('manualGeoAddress').textContent;
+                const lat = parseFloat(document.getElementById('manualGeoLat').value);
+                const lon = parseFloat(document.getElementById('manualGeoLon').value);
+                const byUser = document.getElementById('manualGeoUser').value.trim() || 'ui';
+                
+                if (isNaN(lat) || isNaN(lon)) {
+                    alert('Bitte geben Sie gültige Koordinaten ein');
+                    return;
+                }
+                
+                try {
+                    HUD.note(`speichere: ${address} → ${lat}, ${lon}`);
+                    await apiManualGeo(address, lat, lon, byUser);
+                    HUD.ok('Koordinaten gespeichert');
+                    closeManualGeo();
+                    await loadMatch(); // Tabelle aktualisieren
+                    await refreshStatus?.(); // Status aktualisieren
+                } catch (err) {
+                    HUD.err(err);
+                }
+            };
+            
+            // Event Delegation für "Koordinaten eingeben" Buttons
+            document.querySelector('#tableBody').addEventListener('click', (e) => {
+                const btn = e.target.closest('.manualGeoBtn');
+                if (!btn) return;
+                const address = decodeURIComponent(btn.dataset.addr);
+                openManualGeo(address);
+            });
         });
     </script>
+    
+    <!-- Modal für Vorschläge -->
+    <div id="modal">
+        <div class="card">
+            <header>
+                <b id="mTitle">Vorschläge</b>
+                <button id="mClose">×</button>
+            </header>
+            <div class="body">
+                <div id="mInfo" class="muted"></div>
+                <ul id="mList" class="list"></ul>
+            </div>
+            <footer>
+                <button id="mCancel">Schließen</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Modal für Audit-Log -->
+    <div id="modalAudit"><div class="card">
+        <header>
+            <b>Audit-Log</b>
+            <div style="display:flex;gap:6px">
+                <input id="auditQ" placeholder="Suche…" />
+                <select id="auditAction"><option value="">alle</option><option>alias_set</option><option>alias_remove</option></select>
+                <input id="auditSince" type="datetime-local" />
+                <button id="auditReload">Neu laden</button>
+                <button id="auditClose">×</button>
+            </div>
+        </header>
+        <div class="body">
+            <table><thead><tr><th>ts</th><th>action</th><th>query</th><th>canonical</th><th>user</th></tr></thead>
+                <tbody id="auditBody"></tbody>
+            </table>
+        </div>
+        <footer>
+            <span id="auditMeta" class="muted"></span>
+        </footer>
+    </div></div>
+
+    <!-- Modal für Fail-Cache -->
+    <div id="modalFail"><div class="card">
+        <header>
+            <b>Fail-Cache</b>
+            <div style="display:flex;gap:6px">
+                <label><input id="failActive" type="checkbox" checked> nur aktiv</label>
+                <select id="failReason"><option value="">alle Gründe</option><option>temp_error</option><option>no_result</option></select>
+                <input id="failQ" placeholder="Suche…" />
+                <button id="failReload">Neu laden</button>
+                <button id="failClearSel">Auswahl freigeben</button>
+                <button id="failClose">×</button>
+            </div>
+        </header>
+        <div class="body">
+            <table><thead><tr><th>Adresse</th><th>Grund</th><th>TTL (min)</th><th>bis</th><th>Aktion</th></tr></thead>
+                <tbody id="failBody"></tbody>
+            </table>
+        </div>
+        <footer><span id="failMeta" class="muted"></span></footer>
+    </div></div>
+    
+    <!-- Modal für manuelle Koordinaten-Eingabe -->
+    <div id="modalManualGeo"><div class="card">
+        <header>
+            <b>Koordinaten manuell eingeben</b>
+            <button id="manualGeoClose">×</button>
+        </header>
+        <div class="body">
+            <div class="address-display">
+                <strong>Adresse:</strong> <span id="manualGeoAddress"></span>
+            </div>
+            <div class="form-group">
+                <label for="manualGeoLat">Breitengrad (Latitude):</label>
+                <input id="manualGeoLat" type="number" step="0.000001" placeholder="z.B. 51.0504" />
+            </div>
+            <div class="form-group">
+                <label for="manualGeoLon">Längengrad (Longitude):</label>
+                <input id="manualGeoLon" type="number" step="0.000001" placeholder="z.B. 13.7373" />
+            </div>
+            <div class="form-group">
+                <label for="manualGeoUser">Eingetragen von:</label>
+                <input id="manualGeoUser" type="text" placeholder="Ihr Name" />
+            </div>
+        </div>
+        <footer>
+            <button id="manualGeoSave">Speichern</button>
+            <button id="manualGeoCancel">Abbrechen</button>
+        </footer>
+    </div></div>
 </body>
 </html>

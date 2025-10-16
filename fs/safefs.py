@@ -1,6 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
 import pandas as pd
+import os
 
 def safe_to_csv(df, path: str|Path, *, excel: bool=False, sep: str=';', index: bool=False):
     """Schreibt CSV sicher (kein Schreiben in ORIG). Standard UTF‑8; mit excel=True -> UTF‑8 mit BOM."""

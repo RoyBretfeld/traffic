@@ -12,6 +12,9 @@ from pathlib import Path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
+# Startup-Skript importieren (stellt DB-Schema sicher)
+import app_startup  # noqa: F401
+
 import uvicorn
 
 if __name__ == "__main__":

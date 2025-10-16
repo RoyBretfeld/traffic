@@ -13,7 +13,7 @@ project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
 from backend.utils.encoding_guards import trace_text, assert_no_mojibake, smoke_test_encoding
-from backend.app import read_tourplan_csv, analyze_customer_recognition
+from backend.app import read_tourplan_csv
 
 def test_5_plans():
     """Testet 5 Tourpläne auf Encoding-Probleme"""

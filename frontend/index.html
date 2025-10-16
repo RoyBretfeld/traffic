@@ -25,8 +25,18 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">FAMO TrafficApp</a>
-            <div class="navbar-nav ms-auto">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            
+            <!-- Navigation Links -->
+            <div class="navbar-nav me-auto">
+                <a class="nav-link active" href="/">Hauptseite</a>
+                <a class="nav-link" href="/ui/tourplan-management">Tourplan Management</a>
+                <a class="nav-link" href="/ui/tourplan-visual-test">Visual Test</a>
+                <a class="nav-link" href="/docs">API Docs</a>
+            </div>
+            
+            <!-- Status Indicators -->
+            <div class="navbar-nav">
                 <span class="navbar-text me-3">
                     <i class="fas fa-circle text-success"></i> Server online
                     </span>
@@ -292,21 +302,21 @@
         // Status-Daten laden (LLM + DB)
         async function loadStatusData() {
             try {
-                // LLM-Status laden
-                const llmResponse = await fetch('/api/llm-status');
-                if (llmResponse.ok) {
-                    const llmData = await llmResponse.json();
-                    updateLLMStatus(llmData);
-                }
+                // LLM-Status laden (noch nicht implementiert)
+                updateLLMStatus({available: false, provider: 'offline'});
                 
-                // DB-Status laden
-                const dbResponse = await fetch('/api/db-status');
+                // DB-Status laden (neuer Endpoint)
+                const dbResponse = await fetch('/health/db');
                 if (dbResponse.ok) {
                     const dbData = await dbResponse.json();
                     updateDBStatus(dbData);
+                } else {
+                    updateDBStatus({status: 'offline'});
                 }
             } catch (error) {
                 console.error('Fehler beim Laden der Status-Daten:', error);
+                updateLLMStatus({available: false, provider: 'offline'});
+                updateDBStatus({status: 'offline'});
             }
         }
 
@@ -323,8 +333,8 @@
         // DB-Status aktualisieren
         function updateDBStatus(data) {
             const dbStatus = document.getElementById('dbStatus');
-            if (data.status === 'online') {
-                dbStatus.innerHTML = `<i class="fas fa-database text-success"></i> DB ${data.total_customers} Kunden`;
+            if (data.ok) {
+                dbStatus.innerHTML = `<i class="fas fa-database text-success"></i> DB online (${data.tables} Tabellen)`;
             } else {
                 dbStatus.innerHTML = `<i class="fas fa-database text-danger"></i> DB offline`;
             }

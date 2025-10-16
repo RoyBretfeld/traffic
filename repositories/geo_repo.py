@@ -37,20 +37,20 @@ def get(address: str) -> Optional[dict]:
         ).mappings().first()
         return dict(row) if row else None
 
-def upsert(address: str, lat: float, lon: float) -> dict:
+def upsert(address: str, lat: float, lon: float, source: str = "geocoded", by_user: str = None) -> dict:
     addr = normalize_addr(address)
     with ENGINE.begin() as c:
         # Portable UPSERT: erst versuchen UPDATE, sonst INSERT
         n = c.execute(text(
-            "UPDATE geo_cache SET lat=:lat, lon=:lon, updated_at=CURRENT_TIMESTAMP WHERE address_norm=:a"),
-            {"a": addr, "lat": lat, "lon": lon}
+            "UPDATE geo_cache SET lat=:lat, lon=:lon, source=:source, by_user=:by_user, updated_at=CURRENT_TIMESTAMP WHERE address_norm=:a"),
+            {"a": addr, "lat": lat, "lon": lon, "source": source, "by_user": by_user}
         ).rowcount
         if n == 0:
             c.execute(text(
-                "INSERT INTO geo_cache (address_norm, lat, lon) VALUES (:a, :lat, :lon)"),
-                {"a": addr, "lat": lat, "lon": lon}
+                "INSERT INTO geo_cache (address_norm, lat, lon, source, by_user) VALUES (:a, :lat, :lon, :source, :by_user)"),
+                {"a": addr, "lat": lat, "lon": lon, "source": source, "by_user": by_user}
             )
-    return {"address_norm": addr, "lat": lat, "lon": lon}
+    return {"address_norm": addr, "lat": lat, "lon": lon, "source": source, "by_user": by_user}
 
 def bulk_get(addresses: Iterable[str]) -> Dict[str, dict]:
     addrs = [normalize_addr(a) for a in addresses]

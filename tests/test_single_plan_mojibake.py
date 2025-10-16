@@ -4,7 +4,7 @@ Test der Mojibake-Reparatur mit einem einzelnen Tourplan.
 """
 
 from pathlib import Path
-from canonicalize_csv_pipeline import canonicalize_csv, repair_all_mojibake
+from tools.utilities.canonicalize_csv_pipeline import canonicalize_csv, repair_all_mojibake
 import pandas as pd
 
 def test_single_plan():

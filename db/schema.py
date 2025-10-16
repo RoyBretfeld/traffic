@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS geo_cache (
   address_norm TEXT PRIMARY KEY,
   lat DOUBLE PRECISION NOT NULL,
   lon DOUBLE PRECISION NOT NULL,
+  source TEXT DEFAULT 'geocoded',
+  by_user TEXT,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- Optional für Postgres: schneller Lookup auf address_norm (LOWER)

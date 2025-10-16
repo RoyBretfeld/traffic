@@ -16,6 +16,10 @@ from routes.tourplaene_list import router as tourplaene_list_router
 from routes.tourplan_status import router as tourplan_status_router
 from routes.tourplan_suggest import router as tourplan_suggest_router
 from routes.tourplan_accept import router as tourplan_accept_router
+from routes.audit_geo import router as audit_geo_router
+from routes.failcache_api import router as failcache_api_router
+from routes.failcache_clear import router as failcache_clear_router
+from routes.tourplan_manual_geo import router as tourplan_manual_geo_router
 
 def create_app():
     app = FastAPI(title="TrafficApp API", version="1.0.0")
@@ -39,6 +43,10 @@ def create_app():
     app.include_router(tourplan_status_router)
     app.include_router(tourplan_suggest_router)
     app.include_router(tourplan_accept_router)
+    app.include_router(audit_geo_router)
+    app.include_router(failcache_api_router)
+    app.include_router(failcache_clear_router)
+    app.include_router(tourplan_manual_geo_router)
     
     # Encoding Setup (optional)
     try:
@@ -52,10 +60,34 @@ def create_app():
 app = create_app()
 
 def read_tourplan_csv(csv_file):
-    """Liest Tourplan-CSV mit zentralem, gehärtetem CSV-Ingest."""
-    from ingest.reader import read_tourplan
+    """Liest Tourplan-CSV direkt (für temporäre Dateien)."""
+    import pandas as pd
+    from pathlib import Path
     
-    return read_tourplan(csv_file)
+    # Für temporäre Dateien direkt lesen (ohne Staging)
+    csv_path = Path(csv_file)
+    
+    # Versuche verschiedene Encodings
+    encodings = ['cp850', 'utf-8', 'latin-1', 'iso-8859-1']
+    
+    for encoding in encodings:
+        try:
+            df = pd.read_csv(csv_path, sep=';', header=None, dtype=str, encoding=encoding)
+            print(f"[CSV READ] {csv_path.name} mit {encoding} ({len(df)} Zeilen)")
+            return df
+        except UnicodeDecodeError:
+            continue
+        except Exception as e:
+            print(f"[CSV READ] Fehler mit {encoding}: {e}")
+            continue
+    
+    # Fallback: mit Fehlerbehandlung
+    try:
+        df = pd.read_csv(csv_path, sep=';', header=None, dtype=str, encoding='cp850', errors='replace')
+        print(f"[CSV READ] {csv_path.name} mit cp850+replace ({len(df)} Zeilen)")
+        return df
+    except Exception as e:
+        raise Exception(f"CSV konnte nicht gelesen werden: {e}")
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
@@ -86,7 +118,6 @@ async def tourplan_analysis(file: UploadFile = File(...)) -> JSONResponse:
     """Analysiert eine CSV-Datei und gibt die Adressen zurück."""
     from ingest.guards import trace_text, assert_no_mojibake
     import tempfile
-    import os
     import pandas as pd
     from pathlib import Path
     from fastapi import HTTPException
@@ -105,6 +136,8 @@ async def tourplan_analysis(file: UploadFile = File(...)) -> JSONResponse:
             
             addresses = []
             total_rows = len(df)
+            recognized_count = 0
+            coordinates_count = 0
             
             # Adressen extrahieren und validieren
             for idx, row in df.iterrows():
@@ -122,8 +155,25 @@ async def tourplan_analysis(file: UploadFile = File(...)) -> JSONResponse:
                         # Adresse zusammenstellen
                         full_address = f"{street}, {postal_code} {city}".strip()
                         
-                        # Mojibake-Guards entfernt - blockieren die Verarbeitung
-                        # Die Mojibake-Erkennung funktioniert bereits in read_tourplan_csv()
+                        # Echte Datenbankabfrage
+                        try:
+                            customer_id_found = get_kunde_id_by_name_adresse(customer_name, street, city)
+                            if customer_id_found:
+                                customer_data = get_kunde_by_id(customer_id_found)
+                                if customer_data and customer_data.get('latitude') and customer_data.get('longitude'):
+                                    recognized_count += 1
+                                    coordinates_count += 1
+                                    coordinates = {
+                                        "lat": float(customer_data['latitude']),
+                                        "lon": float(customer_data['longitude'])
+                                    }
+                                else:
+                                    coordinates = None
+                            else:
+                                coordinates = None
+                        except Exception as e:
+                            print(f"[DB ERROR] {e}")
+                            coordinates = None
                         
                         addresses.append({
                             "customer_id": customer_id,
@@ -132,8 +182,8 @@ async def tourplan_analysis(file: UploadFile = File(...)) -> JSONResponse:
                             "city": city,
                             "customer_name": customer_name,
                             "full_address": full_address,
-                            "recognized": False,  # Dummy-DB gibt immer False zurück
-                            "coordinates": None,  # Dummy-DB gibt immer None zurück
+                            "recognized": coordinates is not None,
+                            "coordinates": coordinates,
                             "row": idx + 1
                         })
             
@@ -147,9 +197,9 @@ async def tourplan_analysis(file: UploadFile = File(...)) -> JSONResponse:
                 "addresses": addresses,
                 "summary": {
                     "total_addresses": len(addresses),
-                    "recognized": 0,  # Dummy-DB erkennt keine Adressen
-                    "unrecognized": len(addresses),
-                    "with_coordinates": 0  # Dummy-DB hat keine Koordinaten
+                    "recognized": recognized_count,
+                    "unrecognized": len(addresses) - recognized_count,
+                    "with_coordinates": coordinates_count
                 }
             })
             
@@ -162,7 +212,7 @@ async def tourplan_analysis(file: UploadFile = File(...)) -> JSONResponse:
                 
     except Exception as e:
         # Unicode-sichere Fehlerbehandlung
-        error_msg = str(e).encode('ascii', errors='replace').decode('ascii')
+        error_msg = str(e).encode('utf-8', errors='replace').decode('utf-8')
         print(f"[ERROR] Upload failed: {error_msg}")
         raise HTTPException(status_code=500, detail=f"Fehler beim Verarbeiten der CSV-Datei: {error_msg}")
 
@@ -255,7 +305,7 @@ async def tourplan_visual_test(file: UploadFile = File(...)) -> JSONResponse:
                 
     except Exception as e:
         # Unicode-sichere Fehlerbehandlung
-        error_msg = str(e).encode('ascii', errors='replace').decode('ascii')
+        error_msg = str(e).encode('utf-8', errors='replace').decode('utf-8')
         print(f"[ERROR] Upload failed: {error_msg}")
         raise HTTPException(status_code=500, detail=f"Fehler beim Verarbeiten der CSV-Datei: {error_msg}")
 

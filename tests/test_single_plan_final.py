@@ -9,7 +9,7 @@ sys.path.append('backend')
 
 from pathlib import Path
 import pandas as pd
-from canonicalize_csv_pipeline import canonicalize_csv, repair_all_mojibake
+from tools.utilities.canonicalize_csv_pipeline import canonicalize_csv, repair_all_mojibake
 
 def assert_utf8(s: str):
     """Wächter-Funktion: Fängt Doppel-Decode sofort ab."""
