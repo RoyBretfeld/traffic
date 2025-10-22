@@ -124,19 +124,40 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         first_cell = str(row[0]).strip() if len(row) > 0 and row[0] is not None and str(row[0]) != 'nan' else ""
         header_cell = str(row[1]).strip() if len(row) > 1 and row[1] is not None and str(row[1]) != 'nan' else ""
         
-        if not first_cell and header_cell: # This is a header line
-            header = header_cell
-            headers_in_order.append(header)
-            current_header = header  # Merke den aktuellen Header
-            if TourInfo.get_base_name(header) not in ["BAR", "ANLIEF"]: # Nutze get_base_name zum Filtern
-                last_normal_header = header
-            continue
+        # --- KORRIGIERTE HEADER-ERKENNUNGSLOGIK ---
+        # Logik: Ein Header ist entweder in Spalte B (BAR/ANLIEF) ODER in Spalte A (normale Touren)
         
-        if not first_cell.isdigit(): # Not a customer line
+        is_header = False
+        header_text = None
+
+        if not first_cell and header_cell:
+            # Typ 1: BAR/ANLIEF-Header (in Spalte B)
+            header_text = header_cell
+            is_header = True
+            
+        elif first_cell and not first_cell.isdigit():
+            # Typ 2: Normaler Tour-Header (in Spalte A, z.B. "W-07.00 Uhr Tour")
+            # Wir nehmen an, dass normale Header *nicht* mit einer Zahl (KdNr) beginnen
+            header_text = first_cell
+            is_header = True
+
+        if is_header:
+            headers_in_order.append(header_text)
+            current_header = header_text  # WICHTIG: current_header immer aktualisieren
+            
+            # last_normal_header nur bei normalen Touren aktualisieren
+            if TourInfo.get_base_name(header_text) not in ["BAR", "ANLIEF"]:
+                last_normal_header = header_text
+            
+            continue # Nächste Zeile lesen
+            
+        # Wenn wir hier sind, ist es KEIN Header.
+        # Prüfen, ob es eine Kundennummer ist.
+        if not first_cell.isdigit(): # Weder Header noch Kunde -> Überspringen
             continue
 
         # Skip customers before first normal tour header is seen
-        if not last_normal_header and TourInfo.get_base_name(header_cell) not in ["BAR", "ANLIEF"]:
+        if not last_normal_header and TourInfo.get_base_name(header_text or header_cell) not in ["BAR", "ANLIEF"]:
             continue
         
         name = str(row[1]).strip() if len(row) > 1 and row[1] is not None else ""
