@@ -155,10 +155,9 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         )
         
         # Fügen Sie alle Kunden zur Rohextraktion hinzu, gruppierung erfolgt später
-        if last_normal_header:
-             raw_tour_data.append((last_normal_header, customer))
-        elif is_bar_customer: # Fallback für BAR-Kunden ohne vorherige Haupttour
-             raw_tour_data.append((current_header or header_cell, customer))
+        if current_header:
+             # Nutze den aktuellen Header (auch BAR-Header)
+             raw_tour_data.append((current_header, customer))
         else:
              logging.warning(f"[PARSER WARN] Kunde {customer.customer_number} konnte keiner Tour zugeordnet werden (kein Header gefunden).")
 
