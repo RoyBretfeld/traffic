@@ -341,7 +341,7 @@
         function updateDBStatus(data) {
             const dbStatus = document.getElementById('dbStatus');
             if (data.status === 'online') {
-                dbStatus.innerHTML = `<i class="fas fa-database text-success"></i> DB online (${data.tables || ''} Tabellen)`;
+                dbStatus.innerHTML = `<i class="fas fa-database text-success"></i> DB online`;
             } else {
                 dbStatus.innerHTML = `<i class="fas fa-database text-danger"></i> DB offline`;
             }
