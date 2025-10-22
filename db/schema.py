@@ -38,3 +38,16 @@ def ensure_schema():
             stmt = stmt.strip()
             if stmt:
                 conn.exec_driver_sql(stmt)
+        
+        # Migration: Füge fehlende Spalten hinzu (idempotent für SQLite)
+        try:
+            # Prüfe und füge precision Spalte hinzu
+            conn.exec_driver_sql("ALTER TABLE geo_cache ADD COLUMN precision TEXT DEFAULT 'full'")
+        except Exception:
+            pass  # Spalte existiert bereits
+        
+        try:
+            # Prüfe und füge region_ok Spalte hinzu
+            conn.exec_driver_sql("ALTER TABLE geo_cache ADD COLUMN region_ok INTEGER DEFAULT 1")
+        except Exception:
+            pass  # Spalte existiert bereits
