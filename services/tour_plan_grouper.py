@@ -58,6 +58,8 @@ def group_and_consolidate_tours(raw_tour_data: List[Tuple[str, TourStop]]) -> Li
 
     # Phase 3: BAR-Konsolidierung
     # Durchlaufe die gesammelten BAR-Kunden
+    consolidated_bars = set()  # Merke welche BAR-Touren konsolidiert wurden
+    
     for base, customers in pending_bar.items():
         if not customers:
             continue
@@ -68,6 +70,7 @@ def group_and_consolidate_tours(raw_tour_data: List[Tuple[str, TourStop]]) -> Li
         if target_header and target_header in tours:
             # Füge BAR-Kunden am ANFANG der Haupttour ein
             tours[target_header] = customers + tours[target_header]
+            consolidated_bars.add(base)  # Markiere als konsolidiert
             
         else:
             # Wenn keine passende Haupttour gefunden, füge sie als separate
@@ -84,6 +87,11 @@ def group_and_consolidate_tours(raw_tour_data: List[Tuple[str, TourStop]]) -> Li
     # Phase 4: TourInfo-Objekte erstellen
     final_tours = []
     for header in header_order:
+        # Überspringe BAR-Tours die bereits konsolidiert wurden
+        base = TourInfo.get_base_name(header)
+        if base in consolidated_bars and "BAR" in header.upper():
+            continue  # Diese BAR-Tour wurde bereits in eine Haupttour konsolidiert
+        
         stops = tours.get(header, [])
         if not stops:
             continue
