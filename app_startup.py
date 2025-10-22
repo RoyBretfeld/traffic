@@ -28,12 +28,20 @@ ensure_manual_schema()
 # Google Drive Sync konfigurieren
 drive_path = os.getenv("GOOGLE_DRIVE_PATH", "")
 if drive_path:
-    from services.temp_cleanup import set_drive_mount_point
+    from services.temp_cleanup import set_drive_mount_point, sync_zip_to_drive
     try:
         path = Path(drive_path)
         if path.exists():
             set_drive_mount_point(drive_path)
             print(f"[STARTUP] Google Drive konfiguriert: {drive_path}")
+            
+            # Auto-Sync beim Start
+            print(f"[STARTUP] Synchronisiere ZIP zu Google Drive...")
+            result = sync_zip_to_drive()
+            if result.get('success'):
+                print(f"[STARTUP] ✅ Drive-Sync erfolgreich: {result.get('file_count')} Dateien, {result.get('total_size_mb')} MB")
+            else:
+                print(f"[STARTUP] ⚠️  Drive-Sync fehlgeschlagen: {result.get('error')}")
         else:
             print(f"[STARTUP] ⚠️  Google Drive Pfad existiert nicht: {drive_path}")
     except Exception as e:
