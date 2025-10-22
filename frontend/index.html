@@ -316,7 +316,8 @@
                     
                     // Rendern
                     if (data.tours && data.tours.length > 0) {
-                        renderTours(data.tours);
+                        workflowResult = data;  // Speichere für renderToursFromWorkflow
+                        renderToursFromWorkflow();
                     }
                 } else {
                     updateWorkflowStatus(`<span class="text-danger">❌ Workflow fehlgeschlagen: ${data.error || data.detail || 'Unbekannter Fehler'}</span>`);

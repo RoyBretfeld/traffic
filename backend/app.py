@@ -639,7 +639,7 @@ async def process_csv_modular(file: UploadFile = File(...)):
             result = {
                 "success": True,
                 "file_name": file.filename,
-                "workflow_results": workflow_results,
+                "final_results": workflow_results["final_results"],
                 "tours": tours_with_coords,
                 "customers": tour_data["customers"],
                 "stats": tour_data["stats"],
