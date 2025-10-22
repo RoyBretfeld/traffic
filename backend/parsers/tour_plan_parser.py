@@ -140,7 +140,9 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         postal_code = str(row[3]).strip() if len(row) > 3 and row[3] is not None else ""
         city = str(row[4]).strip() if len(row) > 4 and row[4] is not None else ""
         
-        is_bar_customer = "BAR" in header_cell.upper()
+        # Prüfe ob der AKTUELLE TOUR-HEADER "BAR" enthält (nicht header_cell!)
+        current_header = last_normal_header if last_normal_header else header_cell
+        is_bar_customer = "BAR" in current_header.upper()
 
         customer = TourStop(
             customer_number=first_cell,
