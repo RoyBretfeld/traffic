@@ -468,6 +468,24 @@ async def db_status():
         "version": "3.0"
     })
 
+@app.get("/api/temp-status", tags=["status"], summary="Temp Files Status")
+async def temp_status():
+    """Temp-Verzeichnis Status und Bereinigungsinfo"""
+    from services.temp_cleanup import get_temp_file_size
+    from ingest.http_responses import create_utf8_json_response
+    return create_utf8_json_response(get_temp_file_size())
+
+@app.post("/api/temp-cleanup", tags=["status"], summary="Temp Files sofort bereinigen")
+async def temp_cleanup_now():
+    """Führt Temp-Bereinigung sofort aus"""
+    from services.temp_cleanup import cleanup_old_temp_files, get_temp_file_size
+    from ingest.http_responses import create_utf8_json_response
+    cleanup_old_temp_files()
+    return create_utf8_json_response({
+        "message": "Temp-Bereinigung durchgeführt",
+        "status": get_temp_file_size()
+    })
+
 @app.post("/api/process-csv-modular", tags=["csv"], summary="CSV modular verarbeiten")
 async def process_csv_modular(file: UploadFile = File(...)):
     """CSV modular verarbeiten mit vollständigem Workflow"""

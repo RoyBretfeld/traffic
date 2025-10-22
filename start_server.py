@@ -15,6 +15,11 @@ sys.path.insert(0, str(project_root))
 # Startup-Skript importieren (stellt DB-Schema sicher)
 import app_startup  # noqa: F401
 
+# Temp-Cleanup importieren und ausführen
+from services.temp_cleanup import cleanup_old_temp_files, ensure_temp_dir
+ensure_temp_dir()
+cleanup_old_temp_files()
+
 import uvicorn
 
 if __name__ == "__main__":
