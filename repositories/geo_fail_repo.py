@@ -6,7 +6,7 @@ import unicodedata
 import re
 
 _DEF_TTL_MIN = 60  # 1h für temporäre Fehler
-_DEF_TTL_NOHIT_MIN = 24 * 60  # 24h für "keine Treffer"
+_DEF_TTL_NOHIT_MIN = 60  # 1h für "keine Treffer" (war 24h - zu aggressiv!)
 
 def _def_norm(s: str) -> str:
     """Normalisiert Adressen: Unicode NFC + Whitespace-Bereinigung."""
@@ -47,7 +47,7 @@ def mark_temp(address: str, minutes: int = _DEF_TTL_MIN, reason: str = "temp_err
 def mark_nohit(address: str, minutes: int = _DEF_TTL_NOHIT_MIN, reason: str = "no_result"):
     """
     Markiert eine Adresse als "keine Treffer".
-    TTL: Standard 24 Stunden für No-Hit-Adressen.
+    TTL: Standard 1 Stunde für No-Hit-Adressen (war 24h - zu aggressiv!).
     """
     addr = _def_norm(address)
     try:
@@ -88,3 +88,47 @@ def get_fail_stats():
     except Exception as e:
         print(f"[FAIL-CACHE-ERROR] Fehler beim Abrufen der Fail-Cache-Statistiken: {e}")
         return {"total": 0, "active": 0}
+
+def get_fail_status(address: str):
+    """
+    Prüft ob eine Adresse im Fail-Cache steht und gibt Details zurück.
+    """
+    addr = _def_norm(address)
+    try:
+        with ENGINE.begin() as c:
+            row = c.execute(text(
+                "SELECT address_norm, reason, until FROM geo_fail WHERE address_norm=:a AND until > CURRENT_TIMESTAMP"
+            ), {"a": addr}).mappings().first()
+            return dict(row) if row else None
+    except Exception as e:
+        print(f"[FAIL-CACHE-ERROR] Fehler beim Prüfen des Fail-Status: {e}")
+        return None
+
+def get_fail_reasons():
+    """
+    Gibt eine Gruppierung der Fail-Cache-Einträge nach Grund zurück.
+    """
+    try:
+        with ENGINE.begin() as c:
+            rows = c.execute(text(
+                "SELECT reason, COUNT(*) as count FROM geo_fail WHERE until > CURRENT_TIMESTAMP GROUP BY reason"
+            )).mappings().all()
+            return {row["reason"]: row["count"] for row in rows}
+    except Exception as e:
+        print(f"[FAIL-CACHE-ERROR] Fehler beim Abrufen der Fail-Gründe: {e}")
+        return {}
+
+def cleanup_expired():
+    """
+    Bereinigt abgelaufene Einträge aus dem Fail-Cache.
+    """
+    try:
+        with ENGINE.begin() as c:
+            result = c.execute(text("DELETE FROM geo_fail WHERE until IS NOT NULL AND until <= CURRENT_TIMESTAMP"))
+            count = result.rowcount
+            if count > 0:
+                print(f"[FAIL-CACHE] {count} abgelaufene Einträge bereinigt")
+            return count
+    except Exception as e:
+        print(f"[FAIL-CACHE-ERROR] Fehler beim Bereinigen des Fail-Cache: {e}")
+        return 0

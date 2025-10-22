@@ -4,11 +4,15 @@ from pathlib import Path
 import pandas as pd
 import re
 import unicodedata
+import logging
 from ingest.reader import read_tourplan
 from repositories.geo_repo import bulk_get
 from ingest.guards import BAD_MARKERS
 
 router = APIRouter()
+
+# Logger für Observability
+logger = logging.getLogger(__name__)
 
 # Adressspalte heuristisch bestimmen (wie in match)
 def _addr_col(df: pd.DataFrame) -> tuple[int, int]:
@@ -55,6 +59,10 @@ def api_tourplan_status(file: str = Query(..., description="Pfad zur Original-CS
     for a in addrs:
         if any(m in a for m in BAD_MARKERS):
             marks += 1
+
+    # Mini-Observability: Status-Log nach Berechnung der Zähler
+    success_rate = (total - len(missing)) / max(1, total)
+    logger.info(f"Tourplan Status: {p.name} - Total: {total}, Cached: {total - len(missing)}, Missing: {len(missing)}, Success Rate: {success_rate:.2%}, Mojibake: {marks}")
 
     body = {
         "file": str(p),

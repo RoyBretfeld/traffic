@@ -98,3 +98,19 @@ jobs:
             print(f'❌ Database schema creation failed: {e}')
             exit(1)
         "
+        
+    - name: Start server for SLO check
+      run: |
+        python start_server.py &
+        sleep 10
+        echo "✅ Server started for SLO check"
+        
+    - name: Run SLO check
+      run: |
+        python tools/ci_slo_check.py
+        echo "✅ SLO check completed"
+        
+    - name: Stop server
+      run: |
+        pkill -f "python start_server.py" || true
+        echo "✅ Server stopped"

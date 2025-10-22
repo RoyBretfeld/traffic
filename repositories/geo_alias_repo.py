@@ -5,7 +5,7 @@ Verwaltet Alias-Zuordnungen zwischen problematischen und kanonischen Adressen
 from sqlalchemy import text
 from typing import Iterable, Dict
 from db.core import ENGINE
-from repositories.geo_repo import normalize_addr, canon_addr
+from common.normalize import normalize_address
 
 def set_alias(query: str, canonical: str, created_by: str | None = None):
     """
@@ -19,8 +19,8 @@ def set_alias(query: str, canonical: str, created_by: str | None = None):
     Raises:
         ValueError: Wenn canonical nicht im geo_cache existiert oder Alias ungültig ist
     """
-    q = canon_addr(query)  # Verwende canon_addr für bessere Normalisierung
-    c = normalize_addr(canonical)  # canonical bleibt mit normalize_addr
+    q = normalize_address(query)
+    c = normalize_address(canonical)
     
     if not q or not c or q == c:
         raise ValueError("alias invalid: empty or identical")
@@ -56,7 +56,7 @@ def resolve_aliases(addresses: Iterable[str]) -> Dict[str, str]:
     Returns:
         Dict mapping: query_norm -> canonical_norm
     """
-    keys = [canon_addr(a) for a in addresses if a]
+    keys = [normalize_address(a) for a in addresses if a]
     
     if not keys:
         return {}
@@ -79,7 +79,7 @@ def remove_alias(query: str):
     Args:
         query: Die Adresse deren Alias entfernt werden soll
     """
-    q = canon_addr(query)
+    q = normalize_address(query)
     
     with ENGINE.begin() as conn:
         conn.execute(text("DELETE FROM geo_alias WHERE address_norm=:q"), {"q": q})

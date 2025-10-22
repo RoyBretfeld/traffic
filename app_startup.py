@@ -3,6 +3,7 @@ from fs.safefs import init_policy
 from db.schema import ensure_schema
 from db.schema_fail import ensure_fail_schema
 from db.schema_alias import ensure_alias_schema
+from db.schema_manual import ensure_manual_schema
 from db.migrate_schema import migrate_geo_cache_schema
 
 # Logging initialisieren
@@ -21,3 +22,4 @@ ensure_schema()
 # migrate_geo_cache_schema()  # ENTFERNT: redundant - ensure_schema() erstellt bereits alle Spalten
 ensure_fail_schema()
 ensure_alias_schema()
+ensure_manual_schema()

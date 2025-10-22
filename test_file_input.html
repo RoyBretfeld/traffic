@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Input Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>File Input Test</h1>
+        
+        <div class="mb-3">
+            <label for="testFile" class="form-label">Test CSV-Datei:</label>
+            <input type="file" id="testFile" class="form-control" accept=".csv,.txt" onchange="handleFileChange()">
+        </div>
+        
+        <div id="status" class="alert alert-info">Keine Datei ausgewählt</div>
+        
+        <button class="btn btn-primary" onclick="testUpload()">Test Upload</button>
+    </div>
+
+    <script>
+        function handleFileChange() {
+            const input = document.getElementById('testFile');
+            const status = document.getElementById('status');
+            
+            if (input.files && input.files.length > 0) {
+                const file = input.files[0];
+                status.innerHTML = `Datei ausgewählt: ${file.name} (${file.size} bytes)`;
+                status.className = 'alert alert-success';
+            } else {
+                status.innerHTML = 'Keine Datei ausgewählt';
+                status.className = 'alert alert-info';
+            }
+        }
+        
+        function testUpload() {
+            const input = document.getElementById('testFile');
+            if (!input.files || !input.files.length) {
+                alert('Bitte wählen Sie eine Datei aus!');
+                return;
+            }
+            
+            const file = input.files[0];
+            alert(`Upload würde starten mit: ${file.name}`);
+        }
+    </script>
+</body>
+</html>

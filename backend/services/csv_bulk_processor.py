@@ -109,8 +109,24 @@ class CSVBulkProcessor:
             postal_code = customer.get('postal_code', '')
             city = customer.get('city', '')
             
-            # Vollständige Adresse erstellen
-            full_address = f"{street}, {postal_code} {city}, Deutschland"
+            # NaN-Werte abfangen und zu leeren Strings machen + Excel-Apostrophe entfernen
+            def clean_excel_value(val):
+                if not val or str(val).lower() == 'nan':
+                    return ''
+                s = str(val).strip()
+                # Excel-Apostrophe entfernen (führende/abschließende Quotes)
+                s = s.strip("'").strip('"')
+                # Mehrfach-Spaces normalisieren
+                s = ' '.join(s.split())
+                return s
+            
+            street = clean_excel_value(street)
+            postal_code = clean_excel_value(postal_code)
+            city = clean_excel_value(city)
+            
+            # Vollständige Adresse erstellen - nur vorhandene Teile verwenden
+            address_parts = [part for part in [street, postal_code, city] if part.strip()]
+            full_address = ', '.join(address_parts) + ', Deutschland' if address_parts else ''
             print(f"      [GEOCODING] {full_address}")
             
             # Geocoding-Service aufrufen

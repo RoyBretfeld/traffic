@@ -1,0 +1,58 @@
+================================================================================
+TOURPLAN-ANALYSE-REPORT
+================================================================================
+Erstellt: 21.10.2025 08:19:45
+Analysierte Dateien: 5
+
+GESAMTSTATISTIKEN:
+  📊 Gesamtzeilen: 912
+  ✅ OK: 863 (94.63%)
+  ⚠️  Warn: 49
+  ❌ Bad: 0
+
+EINZELNE DATEIEN:
+  📄 probe.csv
+     Zeilen: 0
+     OK: 0 (0%)
+     Warn: 0
+     Bad: 0
+
+  📄 Tourenplan 01.09.2025.csv
+     Zeilen: 218
+     OK: 207 (94.95%)
+     Warn: 11
+     Bad: 0
+
+  📄 Tourenplan 01.10.2025.csv
+     Zeilen: 238
+     OK: 228 (95.8%)
+     Warn: 10
+     Bad: 0
+
+  📄 Tourenplan 02.09.2025.csv
+     Zeilen: 237
+     OK: 222 (93.67%)
+     Warn: 15
+     Bad: 0
+
+  📄 Tourenplan 02.10.2025.csv
+     Zeilen: 219
+     OK: 206 (94.06%)
+     Warn: 13
+     Bad: 0
+
+PROBLEM-KATEGORIEN:
+  🔍 INCOMPLETE: 49 Adressen
+     - 
+     - 
+     - 
+     ... und 46 weitere
+
+  🔍 SPECIAL_CASES: 863 Adressen
+     - 
+     - 
+     - 
+     ... und 860 weitere
+
+EMPFEHLUNGEN:
+  📝 Adress-Vervollständigung verbessern

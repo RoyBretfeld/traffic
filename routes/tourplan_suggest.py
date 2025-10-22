@@ -6,7 +6,8 @@ from fastapi.responses import JSONResponse
 from pathlib import Path
 import pandas as pd
 from ingest.reader import read_tourplan
-from repositories.geo_repo import bulk_get, normalize_addr
+from repositories.geo_repo import bulk_get
+from common.normalize import normalize_address # Importiere normalize_address
 from services.fuzzy_suggest import suggest_for
 
 router = APIRouter()
@@ -46,15 +47,15 @@ def api_tourplan_suggest(
         data = df.iloc[offset:].reset_index(drop=True)
 
         # 3) Adressen normalisieren
-        def _norm(s: str) -> str:
-            """Normalisiert Adressen: Unicode NFC + Whitespace-Bereinigung."""
-            import unicodedata
-            import re
-            s = unicodedata.normalize("NFC", (s or ""))
-            s = re.sub(r"\s+", " ", s).strip()
-            return s
+        # def _norm(s: str) -> str: # Entfernt: Stattdessen normalize_address verwenden
+        #     """Normalisiert Adressen: Unicode NFC + Whitespace-Bereinigung."""
+        #     import unicodedata
+        #     import re
+        #     s = unicodedata.normalize("NFC", (s or ""))
+        #     s = re.sub(r"\s+", " ", s).strip()
+        #     return s
         
-        addrs = data.iloc[:, col].fillna("").astype(str).map(_norm).tolist()
+        addrs = data.iloc[:, col].fillna("").astype(str).map(normalize_address).tolist() # Verwende normalize_address
         
         # Leere Adressen herausfiltern
         addrs = [a for a in addrs if a and a.strip()]

@@ -1,4 +1,3 @@
-Kdnr;Name;Straße;PLZ;Ort
-1001;Müller GmbH;Löbtauer Straße 1;01809;Heidenau
-1002;Schmidt & Co;Hauptstraße 42;01067;Dresden
-1003;Weiß AG;Dresdner Platz 5;01069;Dresden
+Kdnr;Name;Straße;PLZ;Ort;Gedruckt
+1;Test Kunde;Test Straße 1;01069;Dresden;1
+2;Test Kunde 2;Test Straße 2;01067;Dresden;1

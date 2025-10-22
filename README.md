@@ -90,6 +90,46 @@ TrafficApp/
 └── docs/              # Dokumentation
 ```
 
+## 📋 PF/BAR-Synonyme
+
+PF-Kunden („Jochen – PF", „Sven – PF") werden **nicht** geocodiert, sondern aus Synonym-Stammdaten bedient.
+
+### Funktionsweise
+
+- **Synonym-Resolver**: `common/synonyms.py` enthält feste Koordinaten für PF-Kunden
+- **Short-Circuit**: Geocoder wird für PF-Kunden **nicht** aufgerufen
+- **Frontend**: Zeigt `resolved_address`, routet via `lat/lon`
+- **Audit**: Zählt Synonyme als geokodiert
+
+### Synonym-Koordinaten pflegen
+
+```python
+# In common/synonyms.py
+_SYNONYMS: Dict[str, SynonymHit] = {
+    "PF:JOCHEN": SynonymHit("PF:JOCHEN", "Pf-Depot Jochen, Dresden", 51.0500, 13.7373),
+    "PF:SVEN":   SynonymHit("PF:SVEN",   "Pf-Depot Sven, Dresden",   51.0600, 13.7300),
+}
+```
+
+### Akzeptanzkriterien
+
+- ✅ „Jochen – PF" und „Sven – PF" erscheinen **mit Koordinaten** und **ohne** „nan, nan nan"
+- ✅ Geocoder wird für diese Einträge **nicht** angerufen (Short-Circuit)
+- ✅ API liefert DTO mit `resolved_address`, `geo_source='synonym'`, `valid=true`
+- ✅ Audit: `missing_count == 0` bei CSV mit nur PF-Einträgen
+
+### Kundennummern-Resolver (neu)
+
+- In `common/synonyms.py` ist ein schlanker Resolver hinterlegt: `resolve_customer_number(name) -> Optional[int]`.
+- Zweck: Für Synonyme die echte ERP-Kundennummer verfügbar machen, ohne bestehende CSV-Felder zu überschreiben.
+- API/DTO-Nutzung: wird als separates Feld `customer_number_resolved` ausgegeben (nicht verpflichtend im UI).
+
+### CSV/Import-Härtung (NaN/Excel-Apostroph)
+
+- Parser und Bulk-Prozessor entfernen führende/abschließende Apostroph‑Marker aus Excel und wandeln `NaN` in leere Strings um.
+- Adressen werden nur aus vorhandenen Teilen gebaut; es erscheint kein „nan, nan nan“ oder ", ," mehr.
+- Frontend rendert priorisiert `resolved_address`, danach `address`, sonst aus Teilen `street, postal_code, city` (bereinigt).
+
 ## 🛡️ Schutzmaßnahmen
 
 ### Pre-commit-Hooks

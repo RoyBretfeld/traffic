@@ -59,42 +59,21 @@
                 <div id="workflowStatus" class="small text-muted mb-3">Noch kein Upload.</div>
 
                 <h5><i class="fas fa-upload"></i> CSV / Workflow</h5>
-                <input type="file" id="csvFile" class="form-control mb-2" accept=".csv,.txt" onchange="handleFileChange()">
-                <button class="btn btn-primary w-100 mb-2" onclick="uploadCSV()">
-                    <i class="fas fa-upload"></i> Nur parsen (Schritt 1)
-                </button>
+        <div class="mb-2">
+            <label for="csvFile" class="form-label">CSV-Datei auswählen:</label>
+            <input type="file" id="csvFile" class="form-control" accept=".csv,text/csv" onchange="handleFileChange()">
+            
+            <!-- Upload Status -->
+            <div id="uploadInfo" class="small text-muted mt-2"></div>
+        </div>
                 <button class="btn btn-success w-100" onclick="runWorkflow()">
-                    <i class="fas fa-cogs"></i> Kompletten Workflow starten
+                    <i class="fas fa-cogs"></i> Kompletter Workflow (Parse + Geocode + Optimize)
                 </button>
 
-                <h5 class="mt-3"><i class="fas fa-tools"></i> Tools</h5>
-                <a href="tourplan-test.html" class="btn btn-outline-primary w-100 mb-2">
-                    <i class="fas fa-vial"></i> Tourplan Test
-                </a>
+                <h5 class="mt-3"><i class="fas fa-route"></i> Touren generieren</h5>
                 <a href="multi-tour-generator.html" class="btn btn-outline-secondary w-100 mb-3">
                     <i class="fas fa-route"></i> Multi-Tour Generator
                 </a>
-
-                <h5 class="mt-3"><i class="fas fa-filter"></i> Filter</h5>
-                <div class="mb-2">
-                    <label class="form-label small">Tourtyp</label>
-                    <select id="tourTypeFilter" class="form-select form-select-sm" onchange="applyFilters()">
-                        <option value="all">Alle Touren</option>
-                        <option value="W">Nur W-Touren</option>
-                        <option value="PIR">Nur PIR</option>
-                        <option value="Anlief">Anlieferungen</option>
-                    </select>
-                </div>
-                <div class="mb-2">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="barOnly" onchange="applyFilters()">
-                        <label class="form-check-label" for="barOnly">Nur BAR-Kunden hervorheben</label>
-                    </div>
-                </div>
-                <div>
-                    <label class="form-label small">Datum</label>
-                    <input type="date" id="tourDateFilter" class="form-control form-control-sm" onchange="applyFilters()">
-                </div>
             </div>
             </div>
 
@@ -190,78 +169,102 @@
 
         function handleFileChange() {
             const input = document.getElementById('csvFile');
+            const status = document.getElementById('workflowStatus');
+            const uploadInfo = document.getElementById('uploadInfo');
+            
             if (!input.files || !input.files.length) {
                 currentFilename = null;
+                status.innerHTML = 'Noch kein Upload.';
+                status.className = 'small text-muted mb-3';
+                uploadInfo.innerHTML = '';
                 return;
             }
+            
             const file = input.files[0];
             currentFilename = file.name;
-            updateWorkflowStatus(`<span class="text-muted">Datei ausgewählt: ${currentFilename}</span>`);
+            
+            // Upload über neue API
+            uploadCsvFile(file);
         }
 
-        // CSV hochladen
-        async function uploadCSV() {
-            const fileInput = document.getElementById('csvFile');
-            const file = fileInput.files[0];
+        // Neue Upload-API Funktionen
+        async function apiUploadCsv(file) {
+            const formData = new FormData();
+            formData.append('file', file);
             
-            if (!file) {
-                alert('Bitte wählen Sie eine Datei aus!');
-                return;
+            const response = await fetch('/api/upload/csv', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Upload fehlgeschlagen: ${errorText}`);
             }
+            
+            return response.json();
+        }
+
+        async function uploadCsvFile(file) {
+            const uploadInfo = document.getElementById('uploadInfo');
+            const status = document.getElementById('workflowStatus');
+            
+            // Upload-Status anzeigen
+            uploadInfo.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Lade hoch: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+            uploadInfo.className = 'small text-info mt-2';
             
             try {
-                console.log('Lade CSV hoch:', file.name);
-                updateWorkflowStatus('<span class="text-info"><i class="fas fa-spinner fa-spin"></i> CSV wird hochgeladen und Adressen werden geokodiert...</span>');
+                // Upload über API
+                const result = await apiUploadCsv(file);
                 
-                const formData = new FormData();
-                formData.append('file', file);
+                // Erfolg anzeigen
+                uploadInfo.innerHTML = `<i class="fas fa-check text-success"></i> Upload erfolgreich: ${result.staging_file}`;
+                uploadInfo.className = 'small text-success mt-2';
                 
-                const response = await fetch('/api/parse-csv-tourplan', {
-                    method: 'POST',
-                    body: formData
-                });
+                // Workflow-Status aktualisieren
+                status.innerHTML = `<span class="text-success">✓ Datei hochgeladen: ${file.name}</span>`;
+                status.className = 'small text-success mb-3';
                 
-                if (response.ok) {
-                    const result = await response.json();
-                    parsedData = result;
-                    workflowResult = null;
-                    renderToursFromParsedData();
-                    
-                    // Geocoding-Statistik anzeigen
-                    const geo = result.geocoding || {};
-                    const totalSuccess = (geo.from_db || 0) + (geo.from_geocoding || 0);
-                    const successRate = geo.total > 0 ? Math.round((totalSuccess / geo.total) * 100) : 0;
-                    const geoClass = successRate >= 90 ? 'text-success' : successRate >= 70 ? 'text-warning' : 'text-danger';
-                    
-                    let statusMsg = `<span class="text-success">[OK] CSV geparst - ${geo.total} Kunden</span><br><small class="${geoClass}">`;
-                    
-                    if (geo.from_db > 0) {
-                        statusMsg += `💾 ${geo.from_db} aus Datenbank geladen<br>`;
-                    }
-                    if (geo.from_geocoding > 0) {
-                        statusMsg += `🌍 ${geo.from_geocoding} neu geocodiert<br>`;
-                    }
-                    if (geo.new_customers_saved > 0) {
-                        statusMsg += `[OK] ${geo.new_customers_saved} neue Kunden gespeichert<br>`;
-                    }
-                    if (geo.failed > 0) {
-                        statusMsg += `[FEHLER] ${geo.failed} fehlgeschlagen`;
-                    }
-                    statusMsg += `<br><strong>Erfolgsquote: ${successRate}%</strong></small>`;
-                    
-                    updateWorkflowStatus(statusMsg);
-                } else {
-                    const error = await response.text();
-                    console.error('Fehler beim Hochladen:', error);
-                    updateWorkflowStatus('<span class="text-danger">[FEHLER] Fehler beim Hochladen</span>');
-                    alert(`[FEHLER] Fehler beim Hochladen:\n${error}`);
-                }
+                // Automatisch Match starten
+                await loadMatchForFile(result.staging_file);
+                
             } catch (error) {
-                console.error('Fehler beim Hochladen:', error);
-                updateWorkflowStatus('<span class="text-danger">[FEHLER] Fehler beim Hochladen</span>');
-                alert(`[FEHLER] Fehler beim Hochladen:\n${error.message}`);
+                console.error('Upload-Fehler:', error);
+                uploadInfo.innerHTML = `<i class="fas fa-exclamation-triangle text-danger"></i> Fehler: ${error.message}`;
+                uploadInfo.className = 'small text-danger mt-2';
+                
+                status.innerHTML = `<span class="text-danger">✗ Upload fehlgeschlagen: ${error.message}</span>`;
+                status.className = 'small text-danger mb-3';
             }
         }
+
+        async function loadMatchForFile(filePath) {
+            try {
+                const url = '/api/tourplan/match?file=' + encodeURIComponent(filePath);
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Match-API Fehler: ${response.status} - ${errorText}`);
+                }
+                
+                const matchData = await response.json();
+                
+                // Match-Daten verarbeiten (bestehende Logik)
+                if (matchData.items && matchData.items.length > 0) {
+                    updateWorkflowStatus(`✓ Match erfolgreich: ${matchData.items.length} Adressen verarbeitet`);
+                    // Hier könnte die Karte/Tabelle aktualisiert werden
+                    console.log('Match-Daten:', matchData);
+                } else {
+                    updateWorkflowStatus('⚠ Match: Keine Adressen gefunden');
+                }
+                
+            } catch (error) {
+                console.error('Match-Fehler:', error);
+                updateWorkflowStatus(`✗ Match fehlgeschlagen: ${error.message}`);
+            }
+        }
+
 
         // Daten aktualisieren
         async function runWorkflow() {
@@ -279,19 +282,27 @@
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const response = await fetch('/api/process-csv-modular', {
-                    method: 'POST',
-                    body: formData
+                const response = await fetch(`/api/tourplan/match?file=./tourplaene/${encodeURIComponent(file.name)}`, {
+                    method: 'GET'
                 });
 
-                const data = await response.json();
-                if (data.success) {
-                    workflowResult = data.workflow_results;
+                let data;
+                try {
+                    data = await response.json();
+                } catch (e) {
+                    const errorText = await response.text();
+                    console.error("JSON Parsing Fehler:", e, "Rohe Antwort:", errorText);
+                    updateWorkflowStatus(`<span class="text-danger">Workflow fehlgeschlagen: Ungültige Server-Antwort (${response.status}). Details: ${errorText.substring(0, 100)}...</span>`);
+                    return; 
+                }
+
+                if (response.ok && data.items && data.items.length > 0) {
+                    workflowResult = data;
                     parsedData = null;
-                    renderToursFromWorkflow();
-                    updateWorkflowStatus(`<span class="text-success">Workflow erfolgreich. ${workflowResult.final_results.routes.total_routes} Touren verarbeitet.</span>`);
+                    renderToursFromMatch(data);
+                    updateWorkflowStatus(`<span class="text-success">Workflow erfolgreich. ${data.ok} OK, ${data.warn} Warn, ${data.bad} Bad</span>`);
                 } else {
-                    updateWorkflowStatus(`<span class="text-danger">Workflow fehlgeschlagen: ${data.error || data.message}</span>`);
+                    updateWorkflowStatus(`<span class="text-danger">Workflow fehlgeschlagen: ${data.error || data.detail || 'Keine Touren gefunden'}</span>`);
                 }
             } catch (error) {
                 console.error('Workflow Fehler:', error);
@@ -302,21 +313,17 @@
         // Status-Daten laden (LLM + DB)
         async function loadStatusData() {
             try {
-                // LLM-Status laden (noch nicht implementiert)
+                // LLM-Status: Offline (nicht implementiert)
                 updateLLMStatus({available: false, provider: 'offline'});
                 
-                // DB-Status laden (neuer Endpoint)
+                // DB-Status abfragen
                 const dbResponse = await fetch('/health/db');
-                if (dbResponse.ok) {
-                    const dbData = await dbResponse.json();
-                    updateDBStatus(dbData);
-                } else {
-                    updateDBStatus({status: 'offline'});
-                }
+                const dbData = await dbResponse.json();
+                updateDBStatus(dbData);
             } catch (error) {
                 console.error('Fehler beim Laden der Status-Daten:', error);
                 updateLLMStatus({available: false, provider: 'offline'});
-                updateDBStatus({status: 'offline'});
+                updateDBStatus({status: 'offline', error: error.message});
             }
         }
 
@@ -333,8 +340,8 @@
         // DB-Status aktualisieren
         function updateDBStatus(data) {
             const dbStatus = document.getElementById('dbStatus');
-            if (data.ok) {
-                dbStatus.innerHTML = `<i class="fas fa-database text-success"></i> DB online (${data.tables} Tabellen)`;
+            if (data.status === 'online') {
+                dbStatus.innerHTML = `<i class="fas fa-database text-success"></i> DB online (${data.tables || ''} Tabellen)`;
             } else {
                 dbStatus.innerHTML = `<i class="fas fa-database text-danger"></i> DB offline`;
             }
@@ -345,7 +352,7 @@
             try {
                 console.log('Starte CSV Tour Processing...');
                 
-                const response = await fetch('/api/csv-tour-process', {
+                const response = await fetch('/api/tourplan/bulk-process-all', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -381,19 +388,27 @@
 
         // Touren-Details laden
         function renderToursFromParsedData() {
-            if (!parsedData || !parsedData.parsed_data) {
+            if (!parsedData || !parsedData.tours) {
                 renderEmptyTours();
                 return;
             }
 
-            const data = parsedData.parsed_data;
-            const tours = (data.tours || []).filter(passFilter);
+            // Touren nach Zeit sortieren
+            const tours = (parsedData.tours || []).filter(passFilter);
+            
+            // Sortierung nach Zeit hinzufügen
+            tours.sort((a, b) => {
+                const timeA = extractTime(a.time || a.name || '');
+                const timeB = extractTime(b.time || b.name || '');
+                return timeA - timeB; // Aufsteigende Sortierung
+            });
+
             if (!tours.length) {
                 renderEmptyTours();
                 return;
             }
 
-            document.getElementById('tourSummary').textContent = `${tours.length} Touren · ${data.stats.total_customers} Kunden`;
+            document.getElementById('tourSummary').textContent = `${tours.length} Touren · ${parsedData.stats?.total_customers || 0} Kunden`;
 
             const tourList = document.getElementById('tourList');
             tourList.innerHTML = tours.map((tour, index) => {
@@ -409,7 +424,11 @@
                     bar_flag: customer.bar_flag,
                     latitude: customer.latitude,
                     longitude: customer.longitude,
-                    address: `${customer.street}, ${customer.postal_code} ${customer.city}`
+                    address: customer.resolved_address || customer.address || (() => {
+                    const clean = (v) => String(v ?? '').trim().replace(/^'+|'+$/g, '').replace(/^"+|"+$/g, '');
+                    const parts = [customer.street, customer.postal_code, customer.city].map(clean).filter(Boolean);
+                    return parts.join(', ') || '';
+                })()
                 }));
 
                 allTourCustomers[key] = {
@@ -438,49 +457,88 @@
             }
         }
 
-        function renderToursFromWorkflow() {
-            const finalResults = workflowResult?.final_results;
-            const routes = finalResults?.routes;
-            const headers = (routes?.route_headers || []).filter(header => passWorkflowFilter(header, finalResults?.subtours?.[header] || {}));
+        // Hilfsfunktion zum Extrahieren der Zeit aus Tour-Namen
+        function extractTime(timeString) {
+            if (!timeString) return 9999; // Fallback für Touren ohne Zeit
+            
+            // Suche nach Zeit-Pattern: HH.MM oder HH:MM
+            const timeMatch = timeString.match(/(\d{1,2})[.:](\d{2})/);
+            if (timeMatch) {
+                const hours = parseInt(timeMatch[1]);
+                const minutes = parseInt(timeMatch[2]);
+                return hours * 60 + minutes; // Minuten seit Mitternacht
+            }
+            
+            return 9999; // Fallback für unbekannte Formate
+        }
 
-            if (!headers.length) {
+        // Rendert Touren basierend auf der ursprünglichen CSV-Struktur
+        function renderToursFromCSVStructure(matchData, fileName) {
+            console.log('renderToursFromCSVStructure aufgerufen, matchData:', matchData);
+            
+            const items = matchData.items || [];
+            if (!items.length) {
+                console.log('Keine Items gefunden in matchData');
                 renderEmptyTours();
                 return;
             }
 
-            document.getElementById('tourSummary').textContent = `${routes.total_routes} Touren (Workflow)`;
+            console.log(`Rendering ${items.length} Items aus CSV-Struktur`);
+            document.getElementById('tourSummary').textContent = `${matchData.ok} OK, ${matchData.warn} Warn, ${matchData.bad} Bad`;
+
+            // Gruppiere Items nach Tour-Zeit basierend auf der ursprünglichen CSV-Struktur
+            const tours = {};
+            let currentTour = null;
+            
+            items.forEach((item, index) => {
+                // Erkenne Tour-Zeilen basierend auf dem display_name
+                const displayName = item.display_name || '';
+                
+                if (displayName.includes('Tour') || displayName.includes('BAR') || displayName.includes('Anlief')) {
+                    // Das ist eine Tour-Zeile
+                    currentTour = displayName;
+                    if (!tours[currentTour]) {
+                        tours[currentTour] = {
+                            name: currentTour,
+                            customers: [],
+                            isBarTour: displayName.includes('BAR'),
+                            time: extractTimeFromTourName(displayName)
+                        };
+                    }
+                } else if (currentTour && displayName.trim()) {
+                    // Das ist ein Kunde für die aktuelle Tour
+                    tours[currentTour].customers.push({
+                        customer_number: item.customer_number || item.id || '',
+                        name: displayName,
+                        street: item.resolved_address || '',
+                        postal_code: '',
+                        city: '',
+                        bar_flag: tours[currentTour].isBarTour,
+                        latitude: item.lat,
+                        longitude: item.lon,
+                        address: item.resolved_address || '',
+                        status: item.status
+                    });
+                }
+            });
 
             const tourList = document.getElementById('tourList');
-            tourList.innerHTML = headers.map((header, index) => {
-                const info = finalResults?.subtours?.[header] || {};
-                const key = `workflow-${index}`;
-                const customerCount = info?.ai_result?.customers?.length || 0;
-                const barCount = info.has_bar ? `<span class="badge bg-warning text-dark ms-2">BAR</span>` : '';
-                const customers = (info.customers || info.ai_result?.customers || []).map(c => ({
-                    customer_number: c.customer_number || c.kdnr || '',
-                    name: c.name || c.customer_name || 'Unbekannt',
-                    street: c.street || c.address || '',
-                    postal_code: c.postal_code || c.zip || '',
-                    city: c.city || '',
-                    bar_flag: !!(c.bar_flag || c.bar),
-                    latitude: c.latitude,
-                    longitude: c.longitude,
-                    address: `${c.street || c.address || ''}, ${c.postal_code || c.zip || ''} ${c.city || ''}`
-                }));
-
-                allTourCustomers[key] = {
-                    name: header,
-                    type: info.tour_type || 'Workflow',
-                    time: info.tour_time || '',
-                    customers
-                };
+            tourList.innerHTML = Object.values(tours).map((tour, index) => {
+                const key = `csv-${index}`;
+                const customerCount = tour.customers.length;
+                const okCount = tour.customers.filter(c => c.status === 'ok').length;
+                const warnCount = tour.customers.filter(c => c.status === 'warn').length;
+                const badCount = tour.customers.filter(c => c.status === 'bad').length;
+                const barBadge = tour.isBarTour ? `<span class="badge bg-warning text-dark ms-2">BAR</span>` : '';
+                
+                allTourCustomers[key] = tour;
 
                 return `
                     <button class="list-group-item list-group-item-action" id="tour-${key}" data-tour-key="${key}">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <strong>${header}</strong>${barCount}
-                                <div class="small text-muted">${customerCount} Kunden · ${info.status || 'Workflow'}</div>
+                                <strong>${tour.name}</strong>${barBadge}
+                                <div class="small text-muted">${okCount} OK, ${warnCount} Warn, ${badCount} Bad</div>
                             </div>
                             <span class="badge bg-primary rounded-pill">${customerCount}</span>
                         </div>
@@ -489,7 +547,164 @@
 
             bindTourListEvents();
 
-            const firstKey = headers.length ? `workflow-0` : null;
+            const firstKey = Object.keys(tours).length ? `csv-0` : null;
+            if (firstKey) {
+                selectTour(firstKey);
+            }
+        }
+
+        // Hilfsfunktion zum Extrahieren der Zeit aus Tour-Namen
+        function extractTimeFromTourName(tourName) {
+            const timeMatch = tourName.match(/(\d{1,2})[.:](\d{2})/);
+            if (timeMatch) {
+                return `${timeMatch[1]}:${timeMatch[2]}`;
+            }
+            return tourName;
+        }
+
+        // Rendert Touren aus dem Match-Endpunkt - EINFACH
+        function renderToursFromMatch(matchData) {
+            console.log('renderToursFromMatch aufgerufen, matchData:', matchData);
+            
+            const items = matchData.items || [];
+            if (!items.length) {
+                console.log('Keine Items gefunden in matchData');
+                renderEmptyTours();
+                return;
+            }
+
+            console.log(`Rendering ${items.length} Items aus Match`);
+            document.getElementById('tourSummary').textContent = `${matchData.ok} OK, ${matchData.warn} Warn, ${matchData.bad} Bad`;
+
+            // Gruppiere Items nach Tour-Zeit basierend auf der ursprünglichen CSV-Struktur
+            const tours = {};
+            let currentTour = null;
+            
+            items.forEach((item, index) => {
+                // Erkenne Tour-Zeilen basierend auf dem display_name
+                const displayName = item.display_name || '';
+                
+                if (displayName.includes('Tour') || displayName.includes('BAR') || displayName.includes('Anlief')) {
+                    // Das ist eine Tour-Zeile
+                    currentTour = displayName;
+                    if (!tours[currentTour]) {
+                        tours[currentTour] = {
+                            name: currentTour,
+                            customers: [],
+                            isBarTour: displayName.includes('BAR'),
+                            time: extractTimeFromTourName(displayName)
+                        };
+                    }
+                } else if (currentTour && displayName.trim()) {
+                    // Das ist ein Kunde für die aktuelle Tour
+                    tours[currentTour].customers.push({
+                        customer_number: item.customer_number || item.id || '',
+                        name: displayName,
+                        street: item.resolved_address || '',
+                        postal_code: '',
+                        city: '',
+                        bar_flag: tours[currentTour].isBarTour,
+                        latitude: item.lat,
+                        longitude: item.lon,
+                        address: item.resolved_address || '',
+                        status: item.status
+                    });
+                }
+            });
+
+            const tourList = document.getElementById('tourList');
+            tourList.innerHTML = Object.values(tours).map((tour, index) => {
+                const key = `match-${index}`;
+                const customerCount = tour.customers.length;
+                const okCount = tour.customers.filter(c => c.status === 'ok').length;
+                const warnCount = tour.customers.filter(c => c.status === 'warn').length;
+                const badCount = tour.customers.filter(c => c.status === 'bad').length;
+                const barBadge = tour.isBarTour ? `<span class="badge bg-warning text-dark ms-2">BAR</span>` : '';
+                
+                allTourCustomers[key] = tour;
+
+                return `
+                    <button class="list-group-item list-group-item-action" id="tour-${key}" data-tour-key="${key}">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>${tour.name}</strong>${barBadge}
+                                <div class="small text-muted">${okCount} OK, ${warnCount} Warn, ${badCount} Bad</div>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">${customerCount}</span>
+                        </div>
+                    </button>`;
+            }).join('');
+
+            bindTourListEvents();
+
+            const firstKey = Object.keys(tours).length ? `match-0` : null;
+            if (firstKey) {
+                selectTour(firstKey);
+            }
+        }
+
+        function renderToursFromWorkflow() {
+            console.log('renderToursFromWorkflow aufgerufen, workflowResult:', workflowResult);
+            
+            // Neue Datenstruktur: workflow_results.final_results.routes.routes
+            const routes = workflowResult?.final_results?.routes;
+            const tourRoutes = routes?.routes || [];
+            
+            if (!tourRoutes.length) {
+                console.log('Keine Touren gefunden in workflowResult');
+                renderEmptyTours();
+                return;
+            }
+
+            console.log(`Rendering ${tourRoutes.length} Touren aus Workflow`);
+            document.getElementById('tourSummary').textContent = `${routes.total_routes} Touren (Workflow)`;
+
+            const tourList = document.getElementById('tourList');
+            tourList.innerHTML = tourRoutes.map((tour, index) => {
+                const key = `workflow-${index}`;
+                const customerCount = tour.customers?.length || 0;
+                const barCount = tour.is_bar_tour ? `<span class="badge bg-warning text-dark ms-2">BAR</span>` : '';
+                
+                // Kunden mit Koordinaten für die Karte vorbereiten
+                const customers = (tour.customers || []).map(c => ({
+                    customer_number: c.customer_number || c.kdnr || '',
+                    name: c.name || c.customer_name || 'Unbekannt',
+                    street: c.street || c.address || '',
+                    postal_code: c.postal_code || c.zip || '',
+                    city: c.city || '',
+                    bar_flag: !!(c.bar_flag || c.bar),
+                    latitude: c.coordinates?.lat || c.latitude,
+                    longitude: c.coordinates?.lon || c.longitude,
+                    address: c.resolved_address || c.address || (() => {
+                    const clean = (v) => String(v ?? '').trim().replace(/^'+|'+$/g, '').replace(/^"+|"+$/g, '');
+                    const parts = [c.street || c.address || '', c.postal_code || c.zip || '', c.city || ''].map(clean).filter(Boolean);
+                    return parts.join(', ') || '';
+                })()
+                }));
+
+                // Kunden für diese Tour speichern
+                allTourCustomers[key] = {
+                    name: tour.name || `Tour ${index + 1}`,
+                    type: tour.tour_type || 'Workflow',
+                    time: tour.time || '',
+                    customers
+                };
+
+                return `
+                    <button class="list-group-item list-group-item-action" id="tour-${key}" data-tour-key="${key}">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>${tour.name || `Tour ${index + 1}`}</strong>${barCount}
+                                <div class="small text-muted">${customerCount} Kunden · ${tour.tour_type || 'Workflow'}</div>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">${customerCount}</span>
+                        </div>
+                    </button>`;
+            }).join('');
+
+            bindTourListEvents();
+
+            const firstKey = tourRoutes.length ? `workflow-0` : null;
             if (firstKey) {
                 selectTour(firstKey);
             }
@@ -515,7 +730,11 @@
                                 <tr${rowClass}>
                                     <td>${idx + 1}</td>
                                     <td>${c.name}${c.bar_flag ? ' <span class="badge bg-warning text-dark ms-1">BAR</span>' : ''}</td>
-                                    <td>${c.street}, ${c.postal_code} ${c.city}</td>
+                                    <td>${c.resolved_address || c.address || (() => {
+                    const clean = (v) => String(v ?? '').trim().replace(/^'+|'+$/g, '').replace(/^"+|"+$/g, '');
+                    const parts = [c.street, c.postal_code, c.city].map(clean).filter(Boolean);
+                    return parts.join(', ') || '—';
+                })()}</td>
                                     <td>${c.customer_number}</td>
                                     <td class="text-center">
                                         <span class="geo-status" data-geokey="${key}">${getGeoStatusIcon(c)}</span>
@@ -628,53 +847,13 @@
         }
 
         function passFilter(tour) {
-            const typeFilter = document.getElementById('tourTypeFilter').value;
-            const barOnly = document.getElementById('barOnly').checked;
-            const dateFilter = document.getElementById('tourDateFilter').value;
-
-            if (typeFilter !== 'all') {
-                const tourType = (tour.tour_type || '').toUpperCase();
-                if (!tourType.startsWith(typeFilter.toUpperCase())) {
-                    return false;
-                }
-            }
-
-            if (barOnly) {
-                const hasBar = tour.customers.some(c => c.bar_flag);
-                if (!hasBar) return false;
-            }
-
-            if (dateFilter) {
-                const metaDate = parsedData?.parsed_data?.metadata?.delivery_date;
-                if (metaDate !== dateFilter) return false;
-            }
-
+            // Alle Touren werden angezeigt (Filter entfernt)
             return true;
         }
 
         function passWorkflowFilter(header, info) {
-            const typeFilter = document.getElementById('tourTypeFilter').value;
-            const barOnly = document.getElementById('barOnly').checked;
-
-            if (typeFilter !== 'all') {
-                if (!header.toUpperCase().includes(typeFilter.toUpperCase())) {
-                    return false;
-                }
-            }
-
-            if (barOnly) {
-                return info && info.has_bar;
-            }
-
+            // Alle Touren werden angezeigt (Filter entfernt)
             return true;
-        }
-
-        function applyFilters() {
-            if (workflowResult) {
-                renderToursFromWorkflow();
-            } else if (parsedData) {
-                renderToursFromParsedData();
-            }
         }
 
         function clearTourMarkers() {
@@ -721,7 +900,11 @@
                         shadowSize: [41, 41]
                     })
                 }).addTo(map);
-                marker.bindPopup(`<strong>${customer.name}</strong><br>${customer.street}<br>${customer.postal_code} ${customer.city}`);
+                marker.bindPopup(`<strong>${customer.name}</strong><br>${customer.resolved_address || customer.address || (() => {
+                    const clean = (v) => String(v ?? '').trim().replace(/^'+|'+$/g, '').replace(/^"+|"+$/g, '');
+                    const parts = [customer.street, customer.postal_code, customer.city].map(clean).filter(Boolean);
+                    return parts.join(', ') || '—';
+                })()}</strong>`);
                 tourMarkers.push(marker);
                 bounds.push([lat, lon]);
             }

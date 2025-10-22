@@ -13,93 +13,27 @@ import csv
 import io
 import re
 from collections import OrderedDict
-from dataclasses import dataclass
 from pathlib import Path
 from common.normalize import normalize_address
-
-def _heuristic_decode(raw: bytes) -> tuple[str, str]:
-    """Heuristische Dekodierung mit Encoding-Erkennung."""
-    for enc in ("cp850", "utf-8-sig", "latin-1"):
-        try:
-            return raw.decode(enc), enc
-        except UnicodeDecodeError:
-            continue
-    return raw.decode("utf-8", errors="replace"), "utf-8*replace"
+import logging # Added for error logging
 from typing import Dict, Iterable, List, Optional, Tuple, Union
-
+from routes.upload_csv import _heuristic_decode # Importiere _heuristic_decode
+from services.tour_plan_grouper import group_and_consolidate_tours # Importiere neue Gruppierungsfunktion
+from common.tour_data_models import TourInfo, TourStop, TourPlan, _parse_delivery_date, _parse_tour_header, _fix_broken_chars # Importiere Datenstrukturen und Hilfsfunktionen
 
 # ---------------------------------------------------------------------------
 # Datenstrukturen
 # ---------------------------------------------------------------------------
 
 
-@dataclass
-class TourStop:
-    customer_number: str
-    name: str
-    street: str
-    postal_code: str
-    city: str
-    is_bar_stop: bool
-
-
-@dataclass
-class TourInfo:
-    name: str
-    base_name: str
-    category: str
-    time_label: Optional[str]
-    tour_code: Optional[str]
-    is_bar_tour: bool
-    customers: List[TourStop]
-
-
-@dataclass
-class TourPlan:
-    source_file: str
-    delivery_date: Optional[str]
-    tours: List[TourInfo]
-
-    @property
-    def total_tours(self) -> int:
-        return len(self.tours)
-
-    @property
-    def total_customers(self) -> int:
-        return sum(len(tour.customers) for tour in self.tours)
-
-    @property
-    def total_bar_customers(self) -> int:
-        return sum(1 for tour in self.tours for stop in tour.customers if stop.is_bar_stop)
-
+# Alle Datenstrukturen wurden nach common/tour_data_models.py verschoben
 
 # ---------------------------------------------------------------------------
 # Hilfsfunktionen
 # ---------------------------------------------------------------------------
 
 
-TIME_PATTERN = re.compile(r"(\d{1,2})[.:](\d{2})")
-TOUR_CODE_PATTERN = re.compile(r"T(\d+)")
-
-# Einige Tourenplan-Dateien enthalten Windows-1250/437-Bytes, die beim Lesen
-# als latin1 zu falschen Zeichen führen (z. B. "Fr\x94belstra\xe1e").
-# Diese Zuordnung ersetzt die problematischen Zeichen systemweit.
-BROKEN_CHAR_TRANSLATION = str.maketrans(
-    {
-        "\x81": "ü",
-        "\x84": "ä",
-        "\x94": "ö",
-        "\x99": "Ö",
-        "\xe1": "ß",
-    }
-)
-
-
-def _fix_broken_chars(text: str) -> str:
-    if not text:
-        return ""
-    return text.translate(BROKEN_CHAR_TRANSLATION)
-
+# Alle Hilfsfunktionen wurden nach common/tour_data_models.py verschoben oder sind über normalize_address zugänglich
 
 def _read_csv_lines(file_path: Union[str, Path]) -> Iterable[List[str]]:
     """DEPRECATED: Verwende ingest.csv_reader.read_csv_unified() stattdessen"""
@@ -116,57 +50,57 @@ def _read_csv_lines(file_path: Union[str, Path]) -> Iterable[List[str]]:
 def _normalize(text: str) -> str:
     if not text:
         return ""
-    text = _fix_broken_chars(text)
+    text = _fix_broken_chars(text) # Verwende die importierte Funktion
     text = text.strip()
     return re.sub(r"\s+", " ", text)
 
 
-def _unify_route_name(name: str) -> str:
-    name = _fix_broken_chars(name)
-    cleaned = re.sub(r"\b(BAR|Tour|Uhr)\b", "", name, flags=re.IGNORECASE)
-    return " ".join(cleaned.split()).strip()
+# def _unify_route_name(name: str) -> str: # Entfernt
+#     name = _fix_broken_chars(name) # Entfernt
+#     cleaned = re.sub(r"\b(BAR|Tour|Uhr)\b", "", name, flags=re.IGNORECASE) # Entfernt
+#     return " ".join(cleaned.split()).strip() # Entfernt
 
 
-def _parse_delivery_date(raw_text: str) -> Optional[str]:
-    match = re.search(r"Lieferdatum:\s*(\d{2})\.(\d{2})\.(\d{2})", raw_text)
-    if not match:
-        return None
-    day, month, year = match.groups()
-    # Jahr zweistellig → 20xx
-    return f"20{year}-{month}-{day}"
+# def _parse_delivery_date(raw_text: str) -> Optional[str]: # Entfernt
+#     match = re.search(r"Lieferdatum:\s*(\d{2})\.(\d{2})\.(\d{2})", raw_text) # Entfernt
+#     if not match: # Entfernt
+#         return None # Entfernt
+#     day, month, year = match.groups() # Entfernt
+#     # Jahr zweistellig → 20xx # Entfernt
+#     return f"20{year}-{month}-{day}" # Entfernt
 
 
-def _parse_time_label(header: str) -> Optional[str]:
-    match = TIME_PATTERN.search(header)
-    if not match:
-        return None
-    hour, minute = match.groups()
-    return f"{int(hour):02d}:{minute}"
+# def _parse_time_label(header: str) -> Optional[str]: # Entfernt
+#     match = TIME_PATTERN.search(header) # Entfernt
+#     if not match: # Entfernt
+#         return None # Entfernt
+#     hour, minute = match.groups() # Entfernt
+#     return f"{int(hour):02d}:{minute}" # Entfernt
 
 
-def _parse_category(header: str) -> str:
-    upper = header.upper()
-    if upper.startswith("W-"):
-        return "W"
-    if upper.startswith("PIR"):
-        return "PIR"
-    if upper.startswith("CB"):
-        return "CB"
-    if upper.startswith("TA"):
-        return "TA"
-    if "ANLIEF" in upper:
-        return "ANLIEF"
-    return "OTHER"
+# def _parse_category(header: str) -> str: # Entfernt
+#     upper = header.upper() # Entfernt
+#     if upper.startswith("W-"): # Entfernt
+#         return "W" # Entfernt
+#     if upper.startswith("PIR"): # Entfernt
+#         return "PIR" # Entfernt
+#     if upper.startswith("CB"): # Entfernt
+#         return "CB" # Entfernt
+#     if upper.startswith("TA"): # Entfernt
+#         return "TA" # Entfernt
+#     if "ANLIEF" in upper: # Entfernt
+#         return "ANLIEF" # Entfernt
+#     return "OTHER" # Entfernt
 
 
-def _parse_tour_header(header: str) -> Tuple[str, str, Optional[str], Optional[str], bool]:
-    base_name = _unify_route_name(header)
-    category = _parse_category(header)
-    time_label = _parse_time_label(header)
-    tour_code_match = TOUR_CODE_PATTERN.search(header)
-    tour_code = tour_code_match.group(1) if tour_code_match else None
-    is_bar = "BAR" in header.upper()
-    return base_name, category, time_label, tour_code, is_bar
+# def _parse_tour_header(header: str) -> Tuple[str, str, Optional[str], Optional[str], bool]: # Entfernt
+#     base_name = TourInfo.get_base_name(header) # Entfernt
+#     category = _parse_category(header) # Entfernt
+#     time_label = _parse_time_label(header) # Entfernt
+#     tour_code_match = TOUR_CODE_PATTERN.search(header) # Entfernt
+#     tour_code = tour_code_match.group(1) if tour_code_match else None # Entfernt
+#     is_bar = "BAR" in header.upper() # Entfernt
+#     return base_name, category, time_label, tour_code, is_bar # Entfernt
 
 
 # ---------------------------------------------------------------------------
@@ -175,53 +109,38 @@ def _parse_tour_header(header: str) -> Tuple[str, str, Optional[str], Optional[s
 
 
 def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, List[TourStop]]]:
-    tours: "OrderedDict[str, List[TourStop]]" = OrderedDict()
-    pending_bar: Dict[str, List[TourStop]] = {}
-    full_name_map: Dict[str, str] = {}
-    order: List[str] = []
-
-    current_base: Optional[str] = None
-    current_header: Optional[str] = None
-    bar_mode = False
-
+    # Phase 1: Rohextraktion der Kunden und Header
+    raw_tour_data: List[Tuple[str, TourStop]] = [] # (header_string, TourStop)
+    headers_in_order: List[str] = []
+    last_normal_header: Optional[str] = None
+    
     for row in _read_csv_lines(file_path):
         if not any(row):
             continue
-
+        
         first_cell = str(row[0]).strip() if len(row) > 0 and row[0] is not None and str(row[0]) != 'nan' else ""
         header_cell = str(row[1]).strip() if len(row) > 1 and row[1] is not None and str(row[1]) != 'nan' else ""
-
-        # Tour-Header-Zeilen beginnen mit leerem ersten Feld
-        if not first_cell and header_cell:
+        
+        if not first_cell and header_cell: # This is a header line
             header = header_cell
-            base = _unify_route_name(header)
-            if "BAR" in header.upper():
-                bar_mode = True
-                current_base = base
-                current_header = header
-                pending_bar.setdefault(base, [])
-            else:
-                bar_mode = False
-                current_base = base
-                current_header = header
-                full_name_map[base] = header
-                if header not in tours:
-                    tours[header] = []
-                    order.append(header)
-                if base in pending_bar and pending_bar[base]:
-                    tours[header].extend(pending_bar.pop(base))
+            headers_in_order.append(header)
+            if TourInfo.get_base_name(header) not in ["BAR", "ANLIEF"]: # Nutze get_base_name zum Filtern
+                last_normal_header = header
+            continue
+        
+        if not first_cell.isdigit(): # Not a customer line
             continue
 
-        if not current_base:
-            continue  # außerhalb eines Tour-Blocks
-
-        if not first_cell.isdigit():
-            continue  # keine Kundenzeile
-
+        # Skip customers before first normal tour header is seen
+        if not last_normal_header and TourInfo.get_base_name(header_cell) not in ["BAR", "ANLIEF"]: # Auch hier get_base_name
+            continue
+        
         name = str(row[1]).strip() if len(row) > 1 and row[1] is not None else ""
         street = str(row[2]).strip() if len(row) > 2 and row[2] is not None else ""
         postal_code = str(row[3]).strip() if len(row) > 3 and row[3] is not None else ""
         city = str(row[4]).strip() if len(row) > 4 and row[4] is not None else ""
+        
+        is_bar_customer = "BAR" in header_cell.upper()
 
         customer = TourStop(
             customer_number=first_cell,
@@ -229,29 +148,29 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
             street=_normalize(street),
             postal_code=postal_code,
             city=_normalize(city),
-            is_bar_stop=bar_mode,
+            is_bar_stop=is_bar_customer
         )
-
-        if bar_mode:
-            pending_bar.setdefault(current_base, []).append(customer)
+        
+        # Fügen Sie alle Kunden zur Rohextraktion hinzu, gruppierung erfolgt später
+        if last_normal_header:
+             raw_tour_data.append((last_normal_header, customer))
+        elif is_bar_customer: # Fallback für BAR-Kunden ohne vorherige Haupttour
+             raw_tour_data.append((header_cell, customer))
         else:
-            header = full_name_map.get(current_base, current_header or current_base)
-            if header not in tours:
-                tours[header] = []
-                order.append(header)
-            tours[header].append(customer)
+             logging.warning(f"[PARSER WARN] Kunde {customer.customer_number} konnte keiner Tour zugeordnet werden (kein Header gefunden).")
 
-    # Restliche BAR-Einträge anhängen, wenn keine passende Haupttour gefunden wurde
-    for base, customers in pending_bar.items():
-        if not customers:
-            continue
-        header = full_name_map.get(base, base)
-        if header not in tours:
-            tours[header] = []
-            order.append(header)
-        tours[header].extend(customers)
+    # Phase 2 & 3: Gruppierung und Konsolidierung durch den Grouper-Service
+    grouped_tours_as_maps = group_and_consolidate_tours(raw_tour_data)
 
-    return order, tours
+    # Konvertiere die Maps zurück in das erwartete Format (order, tour_map)
+    order = []
+    tour_map = OrderedDict()
+    for tour_map_entry in grouped_tours_as_maps:
+        header = tour_map_entry["header"]
+        order.append(header)
+        tour_map[header] = tour_map_entry["customers"]
+
+    return order, tour_map
 
 
 # ---------------------------------------------------------------------------
@@ -302,15 +221,34 @@ def tour_plan_to_dict(plan: TourPlan) -> Dict[str, object]:
             if key in seen_local:
                 continue
             seen_local.add(key)
+            # NaN-Werte abfangen und zu leeren Strings machen + Excel-Apostrophe entfernen
+            def clean_excel_value(val):
+                if not val or str(val).lower() == 'nan':
+                    return ''
+                s = str(val).strip()
+                # Excel-Apostrophe entfernen (führende/abschließende Quotes)
+                s = s.strip("'").strip('"')
+                # Mehrfach-Spaces normalisieren
+                s = ' '.join(s.split())
+                return s
+            
+            street = clean_excel_value(stop.street)
+            postal_code = clean_excel_value(stop.postal_code)
+            city = clean_excel_value(stop.city)
+            
+            # Adresse nur zusammenbauen wenn mindestens ein Teil vorhanden ist
+            address_parts = [part for part in [street, postal_code, city] if part.strip()]
+            raw_address = ', '.join(address_parts) if address_parts else ''
+            
             customer_dict = {
                 "customer_number": stop.customer_number,
                 "kdnr": stop.customer_number,
                 "name": stop.name,
-                "street": stop.street,
-                "postal_code": stop.postal_code,
-                "city": stop.city,
+                "street": street,
+                "postal_code": postal_code,
+                "city": city,
                 "bar_flag": stop.is_bar_stop,
-                "address": normalize_address(f"{stop.street}, {stop.postal_code} {stop.city}", stop.name, stop.postal_code),
+                "address": normalize_address(raw_address, stop.name, postal_code),
             }
             customers_payload.append(customer_dict)
 

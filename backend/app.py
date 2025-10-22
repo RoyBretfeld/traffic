@@ -19,7 +19,17 @@ from routes.tourplan_accept import router as tourplan_accept_router
 from routes.audit_geo import router as audit_geo_router
 from routes.failcache_api import router as failcache_api_router
 from routes.failcache_clear import router as failcache_clear_router
+from routes.failcache_improved import router as failcache_improved_router
 from routes.tourplan_manual_geo import router as tourplan_manual_geo_router
+from routes.debug_geo import router as debug_geo_router
+from routes.manual_api import router as manual_api_router
+from routes.tourplan_bulk_analysis import router as tourplan_bulk_analysis_router
+from routes.tourplan_bulk_process import router as tourplan_bulk_process_router
+from routes.tourplan_triage import router as tourplan_triage_router
+from routes.upload_csv import router as upload_csv_router
+from routes.audit_geocoding import router as audit_geocoding_router
+from routes.audit_status import router as audit_status_router
+from routes.health_check import router as health_check_router # Importiere neuen Health Check Router
 
 def create_app():
     app = FastAPI(title="TrafficApp API", version="1.0.0")
@@ -36,6 +46,12 @@ def create_app():
     # Static Files
     app.mount("/static", StaticFiles(directory="frontend"), name="static")
     
+    # Root route - serve frontend
+    @app.get("/", response_class=HTMLResponse)
+    async def root():
+        with open("frontend/index.html", "r", encoding="utf-8") as f:
+            return HTMLResponse(f.read())
+    
     # Registriere neue Routen
     app.include_router(tourplan_match_router)
     app.include_router(tourplan_geofill_router)
@@ -46,7 +62,17 @@ def create_app():
     app.include_router(audit_geo_router)
     app.include_router(failcache_api_router)
     app.include_router(failcache_clear_router)
+    app.include_router(failcache_improved_router)
     app.include_router(tourplan_manual_geo_router)
+    app.include_router(debug_geo_router)
+    app.include_router(manual_api_router)
+    app.include_router(tourplan_bulk_analysis_router)
+    app.include_router(tourplan_triage_router)
+    app.include_router(tourplan_bulk_process_router)
+    app.include_router(upload_csv_router)
+    app.include_router(audit_geocoding_router)
+    app.include_router(audit_status_router)
+    app.include_router(health_check_router) # Registriere neuen Health Check Router
     
     # Encoding Setup (optional)
     try:
@@ -322,8 +348,72 @@ async def tourplan_visual_test_page():
 # Fehlende API-Endpunkte für Frontend-Kompatibilität
 @app.post("/api/parse-csv-tourplan", tags=["csv"], summary="CSV Tourplan parsen")
 async def parse_csv_tourplan(file: UploadFile = File(...)):
-    """Alias für tourplan-analysis für Frontend-Kompatibilität"""
-    return await tourplan_analysis(file)
+    """CSV Tourplan parsen mit Geocoding-Integration für Frontend"""
+    try:
+        # Temporäre Datei speichern
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as tmp_file:
+            content = await file.read()
+            tmp_file.write(content)
+            tmp_file_path = tmp_file.name
+        
+        try:
+            # Tourplan mit modernem Parser verarbeiten
+            from backend.parsers.tour_plan_parser import parse_tour_plan_to_dict
+            tour_data = parse_tour_plan_to_dict(tmp_file_path)
+            
+            # Geocoding-Statistiken sammeln
+            from repositories.geo_repo import bulk_get
+            geocoding_stats = {
+                "total": 0,
+                "from_db": 0,
+                "from_geocoding": 0,
+                "failed": 0,
+                "new_customers_saved": 0
+            }
+            
+            # Alle Adressen sammeln
+            all_addresses = []
+            for customer in tour_data["customers"]:
+                address = f"{customer['street']}, {customer['postal_code']} {customer['city']}"
+                all_addresses.append(address)
+            
+            geocoding_stats["total"] = len(all_addresses)
+            
+            # Bestehende Geocodes aus DB laden
+            existing_geo = bulk_get(all_addresses)
+            geocoding_stats["from_db"] = len(existing_geo)
+            
+            # Fehlende Adressen identifizieren
+            missing_addresses = [addr for addr in all_addresses if addr not in existing_geo]
+            
+            # Geocoding für fehlende Adressen (simuliert - später echte API)
+            geocoding_stats["from_geocoding"] = 0  # TODO: Echte Geocoding-API
+            geocoding_stats["failed"] = len(missing_addresses)
+            
+            # Tour-Daten mit Geocoding-Statistiken erweitern
+            result = {
+                "success": True,
+                "file_name": file.filename,
+                "tours": tour_data["tours"],
+                "customers": tour_data["customers"],
+                "stats": tour_data["stats"],
+                "geocoding": geocoding_stats
+            }
+            
+            from ingest.http_responses import create_utf8_json_response
+            return create_utf8_json_response(result)
+            
+        finally:
+            # Temporäre Datei löschen
+            try:
+                os.unlink(tmp_file_path)
+            except:
+                pass
+                
+    except Exception as e:
+        error_msg = str(e).encode('utf-8', errors='replace').decode('utf-8')
+        print(f"[ERROR] CSV parsing failed: {error_msg}")
+        raise HTTPException(status_code=500, detail=f"Fehler beim Verarbeiten der CSV-Datei: {error_msg}")
 
 @app.get("/api/tourplan/status", tags=["status"], summary="Tourplan-Status abfragen")
 async def tourplan_status():
@@ -380,8 +470,112 @@ async def db_status():
 
 @app.post("/api/process-csv-modular", tags=["csv"], summary="CSV modular verarbeiten")
 async def process_csv_modular(file: UploadFile = File(...)):
-    """Modulare CSV-Verarbeitung für Frontend"""
-    return await tourplan_analysis(file)
+    """CSV modular verarbeiten mit vollständigem Workflow"""
+    try:
+        # Temporäre Datei speichern
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as tmp_file:
+            content = await file.read()
+            tmp_file.write(content)
+            tmp_file_path = tmp_file.name
+        
+        try:
+            # Tourplan mit modernem Parser verarbeiten
+            from backend.parsers.tour_plan_parser import parse_tour_plan_to_dict
+            tour_data = parse_tour_plan_to_dict(tmp_file_path)
+            
+            # Geocoding-Integration
+            from repositories.geo_repo import bulk_get, upsert
+            from services.geocode_fill import fill_missing
+            
+            # Alle Adressen sammeln
+            all_addresses = []
+            for customer in tour_data["customers"]:
+                address = f"{customer['street']}, {customer['postal_code']} {customer['city']}"
+                all_addresses.append(address)
+            
+            # Bestehende Geocodes aus DB laden
+            existing_geo = bulk_get(all_addresses)
+            
+            # Fehlende Adressen geocodieren (mit Rate-Limiting)
+            missing_addresses = [addr for addr in all_addresses if addr not in existing_geo]
+            
+            # Geocoding für fehlende Adressen (max 50 pro Request)
+            geocoded_results = []
+            if missing_addresses:
+                geocoded_results = await fill_missing(missing_addresses[:50], limit=50, dry_run=False)
+            
+            # Geocoding-Statistiken
+            geocoding_stats = {
+                "total": len(all_addresses),
+                "from_db": len(existing_geo),
+                "from_geocoding": len(geocoded_results),
+                "failed": len(missing_addresses) - len(geocoded_results),
+                "new_customers_saved": len(geocoded_results)
+            }
+            
+            # Tour-Daten mit Koordinaten erweitern
+            tours_with_coords = []
+            for tour in tour_data["tours"]:
+                customers_with_coords = []
+                for customer in tour["customers"]:
+                    address = f"{customer['street']}, {customer['postal_code']} {customer['city']}"
+                    
+                    # Koordinaten aus DB oder Geocoding-Ergebnis
+                    coords = existing_geo.get(address)
+                    if not coords and geocoded_results:
+                        for result in geocoded_results:
+                            if result.get("address") == address:
+                                coords = {"lat": result.get("lat"), "lon": result.get("lon")}
+                                break
+                    
+                    customer_with_coords = {
+                        **customer,
+                        "coordinates": coords,
+                        "address": address
+                    }
+                    customers_with_coords.append(customer_with_coords)
+                
+                tour_with_coords = {
+                    **tour,
+                    "customers": customers_with_coords
+                }
+                tours_with_coords.append(tour_with_coords)
+            
+            # Workflow-Ergebnis
+            workflow_results = {
+                "final_results": {
+                    "routes": {
+                        "total_routes": len(tours_with_coords),
+                        "routes": tours_with_coords
+                    },
+                    "geocoding": geocoding_stats
+                }
+            }
+            
+            result = {
+                "success": True,
+                "file_name": file.filename,
+                "workflow_results": workflow_results,
+                "tours": tours_with_coords,
+                "customers": tour_data["customers"],
+                "stats": tour_data["stats"],
+                "geocoding": geocoding_stats
+            }
+            
+            from ingest.http_responses import create_utf8_json_response
+            return create_utf8_json_response(result)
+            
+        finally:
+            # Temporäre Datei löschen
+            try:
+                os.unlink(tmp_file_path)
+            except:
+                pass
+                
+    except Exception as e:
+        error_msg = str(e).encode('utf-8', errors='replace').decode('utf-8')
+        print(f"[ERROR] CSV processing failed: {error_msg}")
+        raise HTTPException(status_code=500, detail=f"Fehler beim Verarbeiten der CSV-Datei: {error_msg}")
 
 @app.post("/api/csv-tour-process", tags=["csv"], summary="CSV Tour verarbeiten")
 async def csv_tour_process(file: UploadFile = File(...)):

@@ -322,6 +322,14 @@
                             <button id="btnFail" class="btn btn-warning ml-2">Fail-Cache</button>
                         </div>
                         
+                        <!-- Bulk Processing -->
+                        <div class="form-group">
+                            <button id="btnProcessAll" class="btn btn-danger w-100 mb-2">
+                                <i class="fas fa-database"></i> Alle CSV-Pläne verarbeiten & Datenbank füllen
+                            </button>
+                            <small class="text-muted">Lädt alle CSV-Dateien aus dem tourplaene Ordner und geocodiert alle fehlenden Adressen</small>
+                        </div>
+                        
                         <!-- Geocoding Controls -->
                         <div class="form-group">
                             <label for="limitInput">Limit:</label>
@@ -340,6 +348,7 @@
                                 <thead>
                                     <tr>
                                         <th>Zeile</th>
+                                        <th>Firma</th>
                                         <th>Adresse</th>
                                         <th>Geo-Daten</th>
                                         <th>Status</th>
@@ -347,7 +356,7 @@
                                 </thead>
                                 <tbody id="tableBody">
                                     <tr>
-                                        <td colspan="4" class="text-center text-muted">Keine Daten geladen</td>
+                                        <td colspan="5" class="text-center text-muted">Keine Daten geladen</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -456,31 +465,54 @@
         }
         
         async function loadMatch() {
-            if (!CURRENT_FILE) return;
+            if (!CURRENT_FILE) {
+                HUD.err('Keine Datei ausgewählt');
+                return;
+            }
             HUD.note('match: start');
-            const j = await apiMatch(CURRENT_FILE);
-            const tb = document.querySelector('#tableBody');
-            tb.innerHTML = '';
-            
-            j.items.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.className = row.status;
+            try {
+                const j = await apiMatch(CURRENT_FILE);
+                console.log('Match API Response:', j);
                 
-                // Button für manuelle Koordinaten-Eingabe (nur wenn keine Geo-Daten vorhanden)
-                const manualBtn = (!row.has_geo) ? 
-                    `<button class="manualGeoBtn" data-addr="${encodeURIComponent(row.address)}">Koordinaten eingeben</button>` : '';
+                const tb = document.querySelector('#tableBody');
+                if (!tb) {
+                    HUD.err('Tabelle nicht gefunden');
+                    return;
+                }
                 
-                tr.innerHTML = `<td>${row.row}</td><td>${row.address}</td>` +
-                    `<td>${row.has_geo ? `✅ (${row.geo.lat.toFixed(5)}, ${row.geo.lon.toFixed(5)})` : '❌'}</td>` +
-                    `<td>${row.status}${row.markers?.length ? ` · ${row.markers.join(', ')}` : ''} ${manualBtn}</td>`;
-                tb.appendChild(tr);
-            });
-            
-            document.querySelector('#statusBar').textContent = `OK ${j.ok} • WARN ${j.warn} • BAD ${j.bad}`;
-            HUD.ok('match');
-            
-            // Karte aktualisieren
-            updateMap(j.items);
+                tb.innerHTML = '';
+                
+                if (!j.items || !Array.isArray(j.items)) {
+                    HUD.err('Keine Items in API Response');
+                    return;
+                }
+                
+                // Nur rote Einträge anzeigen (warn/bad Status)
+                const redItems = j.items.filter(row => row.status === 'warn' || row.status === 'bad');
+                
+                redItems.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = row.status;
+                    
+                    // Button für manuelle Koordinaten-Eingabe (nur wenn keine Geo-Daten vorhanden)
+                    const manualBtn = (!row.has_geo) ? 
+                        `<button class="manualGeoBtn" data-addr="${encodeURIComponent(row.address)}">Koordinaten eingeben</button>` : '';
+                    
+                    tr.innerHTML = `<td>${row.row}</td><td>${row.customer_name || 'Unbekannt'}</td><td>${row.address}</td>` +
+                        `<td>${row.has_geo ? `✅ (${row.geo.lat.toFixed(5)}, ${row.geo.lon.toFixed(5)})` : '❌'}</td>` +
+                        `<td>${row.status}${row.markers?.length ? ` · ${row.markers.join(', ')}` : ''} ${manualBtn}</td>`;
+                    tb.appendChild(tr);
+                });
+                
+                document.querySelector('#statusBar').textContent = `OK ${j.ok} • WARN ${j.warn} • BAD ${j.bad} | Angezeigt: ${redItems.length} rote Einträge`;
+                HUD.ok(`match: ${redItems.length} rote Einträge angezeigt (von ${j.items.length} total)`);
+                
+                // Karte aktualisieren (nur rote Einträge)
+                updateMap(redItems);
+            } catch (error) {
+                console.error('loadMatch error:', error);
+                HUD.err(`loadMatch failed: ${error.message}`);
+            }
         }
         
         async function runGeoFill() {
@@ -522,7 +554,7 @@
                         iconSize: [16, 16],
                         iconAnchor: [8, 16]
                     })
-                }).bindPopup(`<b>Zeile ${item.row}</b><br>${item.address}<br>Status: ${item.status}`);
+                }).bindPopup(`<b>${item.customer_name || 'Unbekannt'}</b><br>Zeile ${item.row}<br>${item.address}<br>Status: ${item.status}`);
                 markers.addLayer(marker);
             });
             
@@ -583,6 +615,48 @@
                 runGeoFill().then(() => {
                     startPolling(); // Polling nach Geocoding starten
                 }).catch(HUD.err);
+            });
+            
+            // Bulk Processing Button
+            document.querySelector('#btnProcessAll')?.addEventListener('click', async () => {
+                if (!confirm('Alle CSV-Dateien aus dem tourplaene Ordner verarbeiten? Dies kann einige Minuten dauern.')) {
+                    return;
+                }
+                
+                try {
+                    HUD.note('Starte Bulk-Processing aller CSV-Dateien...');
+                    
+                    const response = await fetch('/api/tourplan/bulk-process-all', {
+                        method: 'POST'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    // Erfolgsmeldung anzeigen
+                    const successRate = result.success_rate || 0;
+                    const geoClass = successRate >= 90 ? 'text-success' : successRate >= 70 ? 'text-warning' : 'text-danger';
+                    
+                    let statusMsg = `<span class="text-success">[OK] Bulk-Processing abgeschlossen</span><br><small class="${geoClass}">`;
+                    statusMsg += `📁 ${result.files_processed} Dateien verarbeitet<br>`;
+                    statusMsg += `👥 ${result.total_customers} Kunden total<br>`;
+                    statusMsg += `📍 ${result.unique_addresses} eindeutige Adressen<br>`;
+                    statusMsg += `💾 ${result.initially_cached} bereits im Cache<br>`;
+                    statusMsg += `🌍 ${result.newly_geocoded} neu geocodiert<br>`;
+                    statusMsg += `<strong>Erfolgsquote: ${successRate}%</strong></small>`;
+                    
+                    HUD.ok(statusMsg);
+                    
+                    // Status aktualisieren
+                    await refreshStatus?.();
+                    
+                } catch (error) {
+                    console.error('Bulk-Processing Fehler:', error);
+                    HUD.err(`Bulk-Processing fehlgeschlagen: ${error.message}`);
+                }
             });
             
             // Initialisierung
@@ -739,6 +813,7 @@
             
             function openManualGeo(address) {
                 document.getElementById('manualGeoAddress').textContent = address;
+                document.getElementById('manualGeoCoords').value = '';
                 document.getElementById('manualGeoLat').value = '';
                 document.getElementById('manualGeoLon').value = '';
                 document.getElementById('manualGeoUser').value = '';
@@ -755,12 +830,30 @@
             
             document.getElementById('manualGeoSave').onclick = async () => {
                 const address = document.getElementById('manualGeoAddress').textContent;
-                const lat = parseFloat(document.getElementById('manualGeoLat').value);
-                const lon = parseFloat(document.getElementById('manualGeoLon').value);
+                const coordsInput = document.getElementById('manualGeoCoords').value.trim();
+                const latInput = document.getElementById('manualGeoLat').value;
+                const lonInput = document.getElementById('manualGeoLon').value;
                 const byUser = document.getElementById('manualGeoUser').value.trim() || 'ui';
                 
+                let lat, lon;
+                
+                // Zuerst versuchen, aus dem Koordinaten-Eingabefeld zu parsen
+                if (coordsInput) {
+                    const coords = coordsInput.split(',').map(c => c.trim());
+                    if (coords.length === 2) {
+                        lat = parseFloat(coords[0]);
+                        lon = parseFloat(coords[1]);
+                    }
+                }
+                
+                // Falls das nicht funktioniert, die einzelnen Felder verwenden
                 if (isNaN(lat) || isNaN(lon)) {
-                    alert('Bitte geben Sie gültige Koordinaten ein');
+                    lat = parseFloat(latInput);
+                    lon = parseFloat(lonInput);
+                }
+                
+                if (isNaN(lat) || isNaN(lon)) {
+                    alert('Bitte geben Sie gültige Koordinaten ein (Format: 51.03713369765603, 13.898478907933526)');
                     return;
                 }
                 
@@ -775,6 +868,31 @@
                     HUD.err(err);
                 }
             };
+            
+            // Event Listener für automatisches Füllen der einzelnen Felder
+            document.getElementById('manualGeoCoords').addEventListener('input', function() {
+                const coords = this.value.split(',').map(c => c.trim());
+                if (coords.length === 2) {
+                    const lat = parseFloat(coords[0]);
+                    const lon = parseFloat(coords[1]);
+                    if (!isNaN(lat) && !isNaN(lon)) {
+                        document.getElementById('manualGeoLat').value = lat;
+                        document.getElementById('manualGeoLon').value = lon;
+                    }
+                }
+            });
+            
+            // Event Listener für automatisches Füllen des Koordinaten-Feldes
+            document.getElementById('manualGeoLat').addEventListener('input', updateCoordsField);
+            document.getElementById('manualGeoLon').addEventListener('input', updateCoordsField);
+            
+            function updateCoordsField() {
+                const lat = document.getElementById('manualGeoLat').value;
+                const lon = document.getElementById('manualGeoLon').value;
+                if (lat && lon) {
+                    document.getElementById('manualGeoCoords').value = `${lat}, ${lon}`;
+                }
+            }
             
             // Event Delegation für "Koordinaten eingeben" Buttons
             document.querySelector('#tableBody').addEventListener('click', (e) => {
@@ -855,6 +973,12 @@
         <div class="body">
             <div class="address-display">
                 <strong>Adresse:</strong> <span id="manualGeoAddress"></span>
+            </div>
+            <div class="form-group">
+                <label for="manualGeoCoords">Koordinaten (Lat, Lon):</label>
+                <input id="manualGeoCoords" type="text" placeholder="z.B. 51.03713369765603, 13.898478907933526" 
+                       style="width: 100%; font-family: monospace;" />
+                <small class="text-muted">Format: Latitude, Longitude (kommagetrennt)</small>
             </div>
             <div class="form-group">
                 <label for="manualGeoLat">Breitengrad (Latitude):</label>
