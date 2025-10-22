@@ -524,6 +524,34 @@ async def archive_status():
         "files": sorted(files, key=lambda x: x["modified"], reverse=True)
     })
 
+@app.post("/api/sync-to-drive", tags=["drive"], summary="ZIP zu Google Drive synchronisieren")
+async def sync_to_drive():
+    """Synchronisiert ZIP-Archiv zu Google Drive"""
+    from services.temp_cleanup import sync_zip_to_drive
+    from ingest.http_responses import create_utf8_json_response
+    result = sync_zip_to_drive()
+    return create_utf8_json_response(result)
+
+@app.post("/api/configure-drive", tags=["drive"], summary="Google Drive Mount-Point konfigurieren")
+async def configure_drive(mount_point: str):
+    """Konfiguriert den Google Drive Mount-Point"""
+    from services.temp_cleanup import set_drive_mount_point
+    from ingest.http_responses import create_utf8_json_response
+    from pathlib import Path
+    
+    path = Path(mount_point)
+    if not path.exists():
+        return create_utf8_json_response({
+            "success": False,
+            "error": f"Pfad existiert nicht: {mount_point}"
+        })
+    
+    set_drive_mount_point(mount_point)
+    return create_utf8_json_response({
+        "success": True,
+        "message": f"Drive Mount-Point konfiguriert: {mount_point}"
+    })
+
 @app.post("/api/process-csv-modular", tags=["csv"], summary="CSV modular verarbeiten")
 async def process_csv_modular(file: UploadFile = File(...)):
     """CSV modular verarbeiten mit vollständigem Workflow"""

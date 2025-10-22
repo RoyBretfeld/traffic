@@ -1,6 +1,7 @@
 """
 Temporary File Cleanup Service für FAMO TrafficApp
 Verwaltet temporäre Tourpläne und löscht sie nach 40 Tagen
++ Drive-Synchronisierung für ZIP-Archiv
 """
 
 import os
@@ -9,12 +10,119 @@ import json
 from pathlib import Path
 from datetime import datetime, timedelta
 import logging
+import subprocess
 
 logger = logging.getLogger(__name__)
 
 TEMP_DIR = Path("temp")
 ZIP_DIR = Path("ZIP")
 RETENTION_DAYS = 40
+DRIVE_MOUNT_POINT = None  # Wird später konfiguriert
+
+def set_drive_mount_point(mount_point: str):
+    """
+    Setzt den Pfad zum Google Drive Mount-Point.
+    
+    Args:
+        mount_point: Pfad zum Google Drive (z.B. "G:/" oder "/mnt/google_drive")
+    """
+    global DRIVE_MOUNT_POINT
+    DRIVE_MOUNT_POINT = Path(mount_point)
+    logger.info(f"[DRIVE] Mount-Point gesetzt: {DRIVE_MOUNT_POINT}")
+
+def sync_zip_to_drive():
+    """
+    Synchronisiert ZIP-Ordner mit Google Drive.
+    Nutzt robocopy (Windows) oder rsync (Linux).
+    """
+    if not DRIVE_MOUNT_POINT:
+        logger.warning("[DRIVE] Mount-Point nicht konfiguriert")
+        return {
+            "success": False,
+            "error": "Drive Mount-Point nicht konfiguriert"
+        }
+    
+    if not ZIP_DIR.exists():
+        logger.warning(f"[DRIVE] ZIP-Verzeichnis existiert nicht: {ZIP_DIR}")
+        return {
+            "success": False,
+            "error": f"ZIP-Verzeichnis nicht vorhanden: {ZIP_DIR}"
+        }
+    
+    try:
+        drive_zip_dir = DRIVE_MOUNT_POINT / "FAMO_TrafficApp_Archives" / "ZIP"
+        drive_zip_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Windows: robocopy
+        if os.name == 'nt':
+            cmd = [
+                "robocopy",
+                str(ZIP_DIR.resolve()),
+                str(drive_zip_dir.resolve()),
+                "/MIR",  # Mirror (copy & delete)
+                "/MT:8",  # 8 threads
+                "/NFL",  # No file list
+                "/NDL",  # No directory list
+                "/NJS"   # No job summary
+            ]
+            logger.info(f"[DRIVE] robocopy: {' '.join(cmd[:3])}")
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+            
+            # robocopy gibt 0 oder 1 bei Erfolg zurück
+            if result.returncode in [0, 1]:
+                file_count = len(list(ZIP_DIR.glob("*")))
+                total_size = sum(f.stat().st_size for f in ZIP_DIR.glob("*") if f.is_file())
+                logger.info(f"[DRIVE] Sync erfolgreich: {file_count} Dateien, {total_size / 1024 / 1024:.2f} MB")
+                return {
+                    "success": True,
+                    "method": "robocopy",
+                    "file_count": file_count,
+                    "total_size_mb": round(total_size / 1024 / 1024, 2),
+                    "drive_path": str(drive_zip_dir.resolve())
+                }
+            else:
+                logger.error(f"[DRIVE] robocopy Fehler: {result.stderr}")
+                return {
+                    "success": False,
+                    "error": result.stderr
+                }
+        
+        # Linux/Mac: rsync
+        else:
+            cmd = [
+                "rsync",
+                "-avz",
+                "--delete",
+                f"{str(ZIP_DIR.resolve())}/",
+                f"{str(drive_zip_dir.resolve())}/"
+            ]
+            logger.info(f"[DRIVE] rsync: {' '.join(cmd[:3])}")
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+            
+            if result.returncode == 0:
+                file_count = len(list(ZIP_DIR.glob("*")))
+                total_size = sum(f.stat().st_size for f in ZIP_DIR.glob("*") if f.is_file())
+                logger.info(f"[DRIVE] Sync erfolgreich: {file_count} Dateien, {total_size / 1024 / 1024:.2f} MB")
+                return {
+                    "success": True,
+                    "method": "rsync",
+                    "file_count": file_count,
+                    "total_size_mb": round(total_size / 1024 / 1024, 2),
+                    "drive_path": str(drive_zip_dir.resolve())
+                }
+            else:
+                logger.error(f"[DRIVE] rsync Fehler: {result.stderr}")
+                return {
+                    "success": False,
+                    "error": result.stderr
+                }
+    
+    except Exception as e:
+        logger.error(f"[DRIVE] Sync-Fehler: {e}")
+        return {
+            "success": False,
+            "error": str(e)
+        }
 
 def ensure_temp_dir():
     """Erstellt das temp-Verzeichnis falls nicht vorhanden."""
