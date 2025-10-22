@@ -167,6 +167,10 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
     tour_map = OrderedDict()
     for tour_map_entry in grouped_tours_as_maps:
         header = tour_map_entry["header"]
+        # Filtere BAR-Tours die konsolidiert wurden (sollten nicht separat angezeigt werden)
+        if "BAR" in header.upper() and not any(c.is_bar_stop for c in tour_map_entry["customers"]):
+            continue  # BAR-Tour ohne BAR-Kunden = war nur Konsolidierungs-Platzhalter
+        
         order.append(header)
         tour_map[header] = tour_map_entry["customers"]
 
