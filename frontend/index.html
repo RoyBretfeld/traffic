@@ -277,13 +277,15 @@
             }
 
             try {
-                updateWorkflowStatus('<span class="text-info">Workflow wird ausgeführt...</span>');
+                updateWorkflowStatus('<span class="text-info">📤 Datei wird hochgeladen...</span>');
 
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const response = await fetch(`/api/tourplan/match?file=./tourplaene/${encodeURIComponent(file.name)}`, {
-                    method: 'GET'
+                // POST Request mit File Upload
+                const response = await fetch('/api/process-csv-modular', {
+                    method: 'POST',
+                    body: formData
                 });
 
                 let data;
@@ -292,21 +294,36 @@
                 } catch (e) {
                     const errorText = await response.text();
                     console.error("JSON Parsing Fehler:", e, "Rohe Antwort:", errorText);
-                    updateWorkflowStatus(`<span class="text-danger">Workflow fehlgeschlagen: Ungültige Server-Antwort (${response.status}). Details: ${errorText.substring(0, 100)}...</span>`);
+                    updateWorkflowStatus(`<span class="text-danger">❌ Workflow fehlgeschlagen: Ungültige Server-Antwort (${response.status}). Details: ${errorText.substring(0, 100)}...</span>`);
                     return; 
                 }
 
-                if (response.ok && data.items && data.items.length > 0) {
+                if (response.ok && data.success) {
                     workflowResult = data;
                     parsedData = null;
-                    renderToursFromMatch(data);
-                    updateWorkflowStatus(`<span class="text-success">Workflow erfolgreich. ${data.ok} OK, ${data.warn} Warn, ${data.bad} Bad</span>`);
+                    
+                    // Statistiken anzeigen
+                    const stats = data.stats || {};
+                    const geocoding = data.geocoding || {};
+                    
+                    updateWorkflowStatus(`
+                        <span class="text-success">✅ Workflow erfolgreich!<br/>
+                        📋 Touren: ${data.tours?.length || 0}<br/>
+                        👥 Kunden: ${stats.total_customers || data.customers?.length || 0}<br/>
+                        🗺️ Geocoding: ${geocoding.success || 0} OK, ${geocoding.failed || 0} Fehler
+                        </span>
+                    `);
+                    
+                    // Rendern
+                    if (data.tours && data.tours.length > 0) {
+                        renderTours(data.tours);
+                    }
                 } else {
-                    updateWorkflowStatus(`<span class="text-danger">Workflow fehlgeschlagen: ${data.error || data.detail || 'Keine Touren gefunden'}</span>`);
+                    updateWorkflowStatus(`<span class="text-danger">❌ Workflow fehlgeschlagen: ${data.error || data.detail || 'Unbekannter Fehler'}</span>`);
                 }
             } catch (error) {
                 console.error('Workflow Fehler:', error);
-                updateWorkflowStatus('<span class="text-danger">Workflow Fehler. Details in der Konsole.</span>');
+                updateWorkflowStatus('<span class="text-danger">❌ Workflow Fehler. Details in der Konsole.</span>');
             }
         }
 
