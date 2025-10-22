@@ -218,7 +218,7 @@
                 const result = await apiUploadCsv(file);
                 
                 // Erfolg anzeigen
-                uploadInfo.innerHTML = `<i class="fas fa-check text-success"></i> Upload erfolgreich: ${result.staging_file}`;
+                uploadInfo.innerHTML = `<i class="fas fa-check text-success"></i> Upload erfolgreich: <strong>${file.name}</strong>`;
                 uploadInfo.className = 'small text-success mt-2';
                 
                 // Workflow-Status aktualisieren
