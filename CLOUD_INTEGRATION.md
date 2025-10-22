@@ -1,106 +1,159 @@
-# ☁️ Cloud-Integration & Synchronisierung
+# ☁️ Cloud-Integration & Google Drive Synchronisierung
 
 ## 📋 Übersicht
 
-Dieses Projekt unterstützt automatische Synchronisierung zwischen dem lokalen Entwicklungsumfeld und einer Cloud-Kopie:
+Die FAMO TrafficApp unterstützt automatische Synchronisierung zwischen dem lokalen ZIP-Archiv und Google Drive:
 
-- **Quelle (Lokal):** `C:\Workflow\TrafficApp`
-- **Ziel (Cloud):** `C:\Users\Bretfeld\Meine Ablage\______Famo TrafficApp 3.0`
+- **Quelle (Lokal):** `C:\Workflow\TrafficApp\ZIP`
+- **Ziel (Google Drive):** `Meine Ablage\FAMO_TrafficApp_Archives\ZIP`
 
-## 🔄 Synchronisierung durchführen
+## 🚀 Schnellstart
 
-### Option 1: PowerShell-Skript (Empfohlen)
+### 1. Google Drive Mount-Point konfigurieren
 
+**Option A: Umgebungsvariable (empfohlen)**
 ```powershell
-# Nur Dokumentationsdateien
-powershell -ExecutionPolicy Bypass -File "C:\Workflow\TrafficApp\sync_documentation.ps1"
+# In PowerShell vor dem Server-Start:
+$env:GOOGLE_DRIVE_PATH = "C:\Users\Bretfeld\Meine Ablage"
 
-# Mit vollständiger Sync (auch docs/ Verzeichnis)
-powershell -ExecutionPolicy Bypass -File "C:\Workflow\TrafficApp\sync_documentation.ps1" -FullSync
+# Server starten
+python start_server.py --port 8111
 ```
 
-### Option 2: Batch-Skript (Einfach)
-
-```cmd
-# Einfach doppelklick auf:
-C:\Workflow\TrafficApp\sync_documentation.bat
+**Option B: API nach Server-Start**
+```bash
+POST http://127.0.0.1:8111/api/configure-drive?mount_point=C:/Users/Bretfeld/Meine%20Ablage
 ```
 
-### Option 3: Manuell mit xcopy
+### 2. ZIP-Archiv synchronisieren
 
-```cmd
-# Komplette Projektstruktur
-xcopy "C:\Workflow\TrafficApp" "C:\Users\Bretfeld\Meine Ablage\______Famo TrafficApp 3.0" /E /I /Y
-
-# Nur Dokumentation
-xcopy "C:\Workflow\TrafficApp\*.md" "C:\Users\Bretfeld\Meine Ablage\______Famo TrafficApp 3.0\" /Y
-xcopy "C:\Workflow\TrafficApp\docs" "C:\Users\Bretfeld\Meine Ablage\______Famo TrafficApp 3.0\docs" /E /I /Y
+```bash
+POST http://127.0.0.1:8111/api/sync-to-drive
 ```
 
-## 📁 Synchronisierte Dateien
-
-Die folgenden Dateien werden automatisch synchronisiert:
-
-- `README.md` - Hauptdokumentation
-- `CHANGELOG.md` - Änderungsprotokoll
-- `CURSOR_RULES.md` - Cursor-Richtlinien
-- `ADRESS_ERKENNUNG_DOKUMENTATION.md` - Adresserkennung
-- `SYSTEMABSCHLUSS_DOKUMENTATION.md` - Systemabschluss
-- `MIGRATION_TO_OPENAI.md` - OpenAI-Migration
-- `README_CSV_PARSING.md` - CSV-Parsing
-- `FILE_INPUT_FIX_REPORT.md` - Datei-Input-Bericht
-- `STATUS_REPORT.md` - Statusbericht
-- `docs/` - Gesamtes Dokumentationsverzeichnis (mit `-FullSync`)
-
-## ⚙️ Automatische Synchronisierung (Optional)
-
-Für automatische Synchronisierung in regelmäßigen Intervallen können Sie einen **Windows Task Scheduler** verwenden:
-
-### Schritt 1: Task Scheduler öffnen
-```
-Win + R → taskschd.msc
+**Response:**
+```json
+{
+  "success": true,
+  "method": "robocopy",
+  "file_count": 36,
+  "total_size_mb": 0.5,
+  "drive_path": "C:\\Users\\Bretfeld\\Meine Ablage\\FAMO_TrafficApp_Archives\\ZIP"
+}
 ```
 
-### Schritt 2: Neue Aufgabe erstellen
-- **Name:** TrafficApp Cloud Sync
-- **Trigger:** Täglich / Wöchentlich (nach Bedarf)
-- **Aktion:** 
-  ```
-  powershell -ExecutionPolicy Bypass -File "C:\Workflow\TrafficApp\sync_documentation.ps1"
-  ```
+### 3. Status anzeigen
 
-## 🎯 Workflow-Empfehlung
-
-1. **Entwicklung** → lokal in `C:\Workflow\TrafficApp`
-2. **Nach Dokumentations-Update** → Sync-Skript ausführen
-3. **Zu Hause studieren** → Datei von `______Famo TrafficApp 3.0` öffnen
-
-## 🔍 Überprüfung
-
-```powershell
-# Prüfen, ob Synchronisierung erfolgreich war
-Compare-Object -ReferenceObject (Get-ChildItem "C:\Workflow\TrafficApp\*.md") `
-               -DifferenceObject (Get-ChildItem "C:\Users\Bretfeld\Meine Ablage\______Famo TrafficApp 3.0\*.md")
+```bash
+GET http://127.0.0.1:8111/api/archive-status
 ```
 
-## 💡 Tipps
+## 📁 Archivierter Inhalt
 
-- Beide Skripte **überschreiben** die Zieldateien
-- Keine Konflikte - immer die neueste Version gewinnt
-- Für **Code-Synchronisierung** komplett xcopy verwenden (siehe Option 3)
-- Die **venv/** und **node_modules/** sind sehr groß - diese separat handhaben
+### Was wird ins ZIP gepacked?
 
-## 🆘 Troubleshooting
+Alle relevanten Parsing-Dateien mit **Timestamp-Präfix** (YYYYMMDD_HHMMSS):
 
-### Fehler: "Zugriff verweigert"
-- Sicherstellen, dass Windows-Benutzer Schreibrechte hat
-- Evtl. als Administrator ausführen
+| Dateitype | Format | Inhalt |
+|---|---|---|
+| **CSV-Dateien** | `YYYYMMDD_HHMMSS_tourplan.csv` | Originale Tour-Pläne |
+| **Geparste Touren** | `YYYYMMDD_HHMMSS_parsed_tours.json` | Strukturierte Tour-Daten |
+| **Geocoding** | `YYYYMMDD_HHMMSS_geocoding_results.json` | Koordinaten & Resultate |
+| **Processing-Log** | `YYYYMMDD_HHMMSS_processing_log.txt` | Statistiken & Verarbeitungsinfo |
 
-### Fehler: "Pfad nicht gefunden"
-- Pfade prüfen (mit Leerzeichen kann es Probleme geben)
-- In PowerShell mit Anführungszeichen umgeben
+### Beispiel-Struktur
 
----
+```
+FAMO_TrafficApp_Archives/
+└── ZIP/
+    ├── 20251022_081032_Tourenplan 01.10.2025.csv
+    ├── 20251022_081032_Tourenplan 02.10.2025.csv
+    ├── 20251022_081032_parsed_tours.json
+    ├── 20251022_081032_geocoding_results.json
+    └── 20251022_081032_processing_log.txt
+```
 
-**Erstellt:** October 2025  
-**Letzte Aktualisierung:** October 22, 2025
+## ⚙️ Automatisches Syncing
+
+Beim Server-Start mit gesetzter `GOOGLE_DRIVE_PATH`:
+
+```
+[STARTUP] Google Drive konfiguriert: C:\Users\Bretfeld\Meine Ablage
+[STARTUP] Synchronisiere ZIP zu Google Drive...
+[STARTUP] ✅ Drive-Sync erfolgreich: 36 Dateien, 0.50 MB
+```
+
+## 🔄 Workflow
+
+```
+CSV-Upload (data/staging/)
+    ↓
+CSV Parsing → ZIP/YYYYMMDD_*.csv
+    ↓
+Tour-Parsing → ZIP/YYYYMMDD_parsed_tours.json
+    ↓
+Geocoding → ZIP/YYYYMMDD_geocoding_results.json
+    ↓
+Auto-Sync → Google Drive
+```
+
+## 📊 API-Referenz
+
+### Archive Status
+```
+GET /api/archive-status
+```
+Zeigt ZIP-Verzeichnis Status mit Dateiliste.
+
+### Synchronisieren
+```
+POST /api/sync-to-drive
+```
+Synchronisiert ZIP zu Google Drive.
+
+### Drive konfigurieren
+```
+POST /api/configure-drive?mount_point=<PFAD>
+```
+Setzt den Google Drive Mount-Point.
+
+### Temp-Status
+```
+GET /api/temp-status
+```
+Zeigt temporäre Dateien Status.
+
+## 🛡️ Fehlerbehandlung
+
+| Fehler | Lösung |
+|---|---|
+| `Mount-Point nicht konfiguriert` | GOOGLE_DRIVE_PATH setzen |
+| `Pfad existiert nicht` | Drive-Pfad prüfen |
+| `Permission denied` | Drive-Zugriff prüfen |
+| `Encoding error` | Ignorierbar (robocopy-Warnung) |
+
+## 📝 Wartung
+
+### Alte Archive löschen
+
+Temporary Dateien werden automatisch nach **40 Tagen** gelöscht:
+
+```
+GET /api/temp-status  # Status anzeigen
+POST /api/temp-cleanup  # Manuell löschen
+```
+
+### Drive bereinigen
+
+Sync mit `/MIR` Flag (Mirror) - löscht alte Dateien auf Drive:
+
+```bash
+POST /api/sync-to-drive  # Sync mit Cleanup
+```
+
+## 🔐 Sicherheit
+
+- ✅ UTF-8 Only (keine Encoding-Probleme)
+- ✅ Pfad-Validierung (kein Directory-Traversal)
+- ✅ Automatic Backups (ZIP = Archiv)
+- ✅ Multi-threaded (robocopy mit 8 Threads)
