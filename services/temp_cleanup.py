@@ -5,6 +5,7 @@ Verwaltet temporäre Tourpläne und löscht sie nach 40 Tagen
 
 import os
 import shutil
+import json
 from pathlib import Path
 from datetime import datetime, timedelta
 import logging
@@ -12,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 TEMP_DIR = Path("temp")
+ZIP_DIR = Path("ZIP")
 RETENTION_DAYS = 40
 
 def ensure_temp_dir():
@@ -19,6 +21,76 @@ def ensure_temp_dir():
     TEMP_DIR.mkdir(parents=True, exist_ok=True)
     logger.info(f"[TEMP] Verzeichnis sichergestellt: {TEMP_DIR.resolve()}")
     return TEMP_DIR
+
+def ensure_zip_dir():
+    """Erstellt das ZIP-Verzeichnis falls nicht vorhanden."""
+    ZIP_DIR.mkdir(parents=True, exist_ok=True)
+    logger.info(f"[ZIP] Verzeichnis sichergestellt: {ZIP_DIR.resolve()}")
+    return ZIP_DIR
+
+def archive_parsing_files(source_dir: str = "tourplaene", tour_data: dict = None, geocoding_results: dict = None):
+    """
+    Archiviert alle relevanten Parsing-Dateien ins ZIP-Verzeichnis.
+    
+    Args:
+        source_dir: Quellverzeichnis mit CSV-Dateien
+        tour_data: Geparste Touren-Daten (Optional)
+        geocoding_results: Geocoding-Resultate (Optional)
+    """
+    ensure_zip_dir()
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    try:
+        # 1. CSV-Dateien archivieren
+        source_path = Path(source_dir)
+        if source_path.exists():
+            for csv_file in source_path.glob("*.csv"):
+                dest = ZIP_DIR / f"{timestamp}_{csv_file.name}"
+                shutil.copy2(csv_file, dest)
+                logger.info(f"[ZIP] CSV archiviert: {csv_file.name} -> {dest.name}")
+        
+        # 2. Geparste Touren speichern
+        if tour_data:
+            tour_file = ZIP_DIR / f"{timestamp}_parsed_tours.json"
+            with open(tour_file, 'w', encoding='utf-8') as f:
+                json.dump(tour_data, f, indent=2, ensure_ascii=False)
+            logger.info(f"[ZIP] Touren archiviert: {tour_file.name}")
+        
+        # 3. Geocoding-Resultate speichern
+        if geocoding_results:
+            geo_file = ZIP_DIR / f"{timestamp}_geocoding_results.json"
+            with open(geo_file, 'w', encoding='utf-8') as f:
+                json.dump(geocoding_results, f, indent=2, ensure_ascii=False)
+            logger.info(f"[ZIP] Geocoding archiviert: {geo_file.name}")
+        
+        # 4. Processing-Log erstellen
+        log_file = ZIP_DIR / f"{timestamp}_processing_log.txt"
+        with open(log_file, 'w', encoding='utf-8') as f:
+            f.write(f"Processing Archive\n")
+            f.write(f"==================\n")
+            f.write(f"Timestamp: {timestamp}\n")
+            f.write(f"Source Directory: {source_dir}\n")
+            f.write(f"Archive Time: {datetime.now().isoformat()}\n")
+            if tour_data:
+                f.write(f"Tours: {len(tour_data.get('tours', []))} Stück\n")
+                f.write(f"Customers: {tour_data.get('total_customers', 0)} Kunden\n")
+            if geocoding_results:
+                f.write(f"Geocoding Success Rate: {geocoding_results.get('success_rate', 'N/A')}\n")
+        logger.info(f"[ZIP] Log erstellt: {log_file.name}")
+        
+        return {
+            "success": True,
+            "timestamp": timestamp,
+            "archive_path": str(ZIP_DIR.resolve())
+        }
+    
+    except Exception as e:
+        logger.error(f"[ZIP] Archivierungsfehler: {e}")
+        return {
+            "success": False,
+            "error": str(e)
+        }
 
 def cleanup_old_temp_files():
     """

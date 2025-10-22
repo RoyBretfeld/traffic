@@ -8,6 +8,7 @@ import tempfile
 import os
 import unicodedata
 from backend.utils.encoding_guards import trace_text, assert_no_mojibake, setup_utf8_logging, smoke_test_encoding
+from datetime import datetime
 
 # Importiere neue Routen
 from routes.tourplan_match import router as tourplan_match_router
@@ -484,6 +485,43 @@ async def temp_cleanup_now():
     return create_utf8_json_response({
         "message": "Temp-Bereinigung durchgeführt",
         "status": get_temp_file_size()
+    })
+
+@app.post("/api/archive-parsing-files", tags=["archive"], summary="Parsing-Dateien archivieren")
+async def archive_parsing_files(source_dir: str = "tourplaene"):
+    """Archiviert alle Parsing-Dateien ins ZIP-Verzeichnis"""
+    from services.temp_cleanup import archive_parsing_files as archive_func
+    from ingest.http_responses import create_utf8_json_response
+    result = archive_func(source_dir=source_dir)
+    return create_utf8_json_response(result)
+
+@app.get("/api/archive-status", tags=["archive"], summary="Archive Status")
+async def archive_status():
+    """Zeigt den Inhalt des ZIP-Archivs"""
+    from pathlib import Path
+    from ingest.http_responses import create_utf8_json_response
+    
+    zip_dir = Path("ZIP")
+    files = []
+    total_size = 0
+    
+    if zip_dir.exists():
+        for item in zip_dir.glob("*"):
+            if item.is_file():
+                size = item.stat().st_size
+                files.append({
+                    "name": item.name,
+                    "size": size,
+                    "size_mb": round(size / 1024 / 1024, 2),
+                    "modified": datetime.fromtimestamp(item.stat().st_mtime).isoformat()
+                })
+                total_size += size
+    
+    return create_utf8_json_response({
+        "archive_dir": str(zip_dir.resolve()),
+        "file_count": len(files),
+        "total_size_mb": round(total_size / 1024 / 1024, 2),
+        "files": sorted(files, key=lambda x: x["modified"], reverse=True)
     })
 
 @app.post("/api/process-csv-modular", tags=["csv"], summary="CSV modular verarbeiten")
