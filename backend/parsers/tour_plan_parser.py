@@ -113,6 +113,7 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
     raw_tour_data: List[Tuple[str, TourStop]] = [] # (header_string, TourStop)
     headers_in_order: List[str] = []
     last_normal_header: Optional[str] = None
+    current_header: Optional[str] = None  # Merke den aktuellen Header (inkl. BAR)
     
     for row in _read_csv_lines(file_path):
         if not any(row):
@@ -124,6 +125,7 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         if not first_cell and header_cell: # This is a header line
             header = header_cell
             headers_in_order.append(header)
+            current_header = header  # Merke den aktuellen Header
             if TourInfo.get_base_name(header) not in ["BAR", "ANLIEF"]: # Nutze get_base_name zum Filtern
                 last_normal_header = header
             continue
@@ -140,9 +142,8 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         postal_code = str(row[3]).strip() if len(row) > 3 and row[3] is not None else ""
         city = str(row[4]).strip() if len(row) > 4 and row[4] is not None else ""
         
-        # Prüfe ob der AKTUELLE TOUR-HEADER "BAR" enthält (nicht header_cell!)
-        current_header = last_normal_header if last_normal_header else header_cell
-        is_bar_customer = "BAR" in current_header.upper()
+        # Prüfe ob der AKTUELLEN HEADER "BAR" enthält (der Header unter dem der Kunde stand)
+        is_bar_customer = "BAR" in (current_header or "").upper()
 
         customer = TourStop(
             customer_number=first_cell,
@@ -157,7 +158,7 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         if last_normal_header:
              raw_tour_data.append((last_normal_header, customer))
         elif is_bar_customer: # Fallback für BAR-Kunden ohne vorherige Haupttour
-             raw_tour_data.append((header_cell, customer))
+             raw_tour_data.append((current_header or header_cell, customer))
         else:
              logging.warning(f"[PARSER WARN] Kunde {customer.customer_number} konnte keiner Tour zugeordnet werden (kein Header gefunden).")
 
