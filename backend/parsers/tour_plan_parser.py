@@ -117,6 +117,8 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
     
     for row in _read_csv_lines(file_path):
         if not any(row):
+            # Leere Zeile - reset des Kontexts
+            # Der nächste Header wird gesetzt, wenn einer kommt
             continue
         
         first_cell = str(row[0]).strip() if len(row) > 0 and row[0] is not None and str(row[0]) != 'nan' else ""
@@ -134,7 +136,7 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
             continue
 
         # Skip customers before first normal tour header is seen
-        if not last_normal_header and TourInfo.get_base_name(header_cell) not in ["BAR", "ANLIEF"]: # Auch hier get_base_name
+        if not last_normal_header and TourInfo.get_base_name(header_cell) not in ["BAR", "ANLIEF"]:
             continue
         
         name = str(row[1]).strip() if len(row) > 1 and row[1] is not None else ""
@@ -142,8 +144,9 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         postal_code = str(row[3]).strip() if len(row) > 3 and row[3] is not None else ""
         city = str(row[4]).strip() if len(row) > 4 and row[4] is not None else ""
         
-        # Prüfe ob der AKTUELLEN HEADER "BAR" enthält (der Header unter dem der Kunde stand)
-        is_bar_customer = "BAR" in (current_header or "").upper()
+        # Nur setze is_bar_stop wenn wir einen aktuellen Header haben UND er BAR enthält
+        # Wichtig: Nur die Kunden UNTER dem BAR-Header sollen BAR sein, nicht alle!
+        is_bar_customer = current_header and "BAR" in current_header.upper()
 
         customer = TourStop(
             customer_number=first_cell,
