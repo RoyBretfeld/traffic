@@ -52,6 +52,7 @@ from backend.routes.live_traffic_api import router as live_traffic_api_router
 from backend.routes.ki_improvements_api import router as ki_improvements_api_router
 from backend.routes.code_checker_api import router as code_checker_api_router
 from backend.routes.code_improvement_job_api import router as code_improvement_job_api_router
+from backend.routes.cost_tracker_api import router as cost_tracker_api_router
 from backend.routes.osrm_metrics_api import router as osrm_metrics_api_router
 from backend.routes.health import router as health_routes # Korrekter Import für Health Routes
 from backend.routes.debug_health import router as debug_health_router  # Korrekter Import für Debug Health Router
@@ -243,6 +244,24 @@ def create_app() -> FastAPI:
             return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
         except FileNotFoundError:
             raise HTTPException(status_code=404, detail="KI-Improvements Dashboard nicht gefunden")
+    
+    @app.get("/admin/ki-kosten", response_class=HTMLResponse)
+    async def ki_kosten_dashboard(request: Request):
+        """KI-Kosten & Modelle Dashboard (geschützt)."""
+        # Auth-Check
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            # Redirect zu Login
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/ki-kosten", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/ki-kosten.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="KI-Kosten Dashboard nicht gefunden")
     
     @app.get("/admin.html", response_class=HTMLResponse)
     async def admin_page(request: Request):

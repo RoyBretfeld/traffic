@@ -74,6 +74,131 @@ async def analyze_code(
             "improvement_score": 0
         })
 
+@router.get("/api/code-checker/learned-patterns")
+async def get_learned_patterns():
+    """
+    Gibt die gelernten Fehlermuster zurück (aus ERROR_CATALOG + LESSONS_LOG).
+    """
+    ai_checker = get_ai_code_checker()
+    
+    if not ai_checker:
+        return JSONResponse({
+            "error": "KI-Checker nicht verfügbar (OPENAI_API_KEY fehlt)",
+            "patterns": {}
+        })
+    
+    patterns = ai_checker.learned_patterns
+    
+    return JSONResponse({
+        "loaded": patterns.get("loaded", False),
+        "last_reload": ai_checker.last_reload.isoformat() if hasattr(ai_checker, 'last_reload') else None,
+        "error_catalog_length": len(patterns.get("error_catalog", "")),
+        "lessons_log_length": len(patterns.get("lessons_log", "")),
+        "lessons_preview": patterns.get("lessons_log", "")[:500] + "..." if len(patterns.get("lessons_log", "")) > 500 else patterns.get("lessons_log", ""),
+        "patterns_summary": {
+            "schema_drift": "DB-Spalten prüfen, Migration-Scripts",
+            "syntax_errors": "String-Quotes, Klammern",
+            "defensive_programming": "Null-Checks, Type-Checks, Array-Checks",
+            "memory_leaks": "Event Listener entfernen",
+            "api_contract_breaks": "Backend ↔ Frontend Kontrakt",
+            "osrm_timeout": "Fallback auf Haversine",
+            "browser_compat": "Feature Detection"
+        }
+    })
+
+@router.post("/api/code-checker/reload-patterns")
+async def reload_patterns():
+    """
+    Lädt Fehlerhistorie manuell neu (ohne auf 6h-Timer zu warten).
+    """
+    ai_checker = get_ai_code_checker()
+    
+    if not ai_checker:
+        raise HTTPException(status_code=503, detail="KI-Checker nicht verfügbar (OPENAI_API_KEY fehlt)")
+    
+    result = await ai_checker.reload_patterns()
+    
+    if result.get("success"):
+        return JSONResponse(result)
+    else:
+        raise HTTPException(status_code=500, detail=result.get("error", "Reload fehlgeschlagen"))
+
+@router.post("/api/code-checker/add-lesson")
+async def add_lesson(
+    title: str = Query(..., description="Kurzbeschreibung des Fehlers"),
+    category: str = Query(..., description="Backend/Frontend/DB/Infrastruktur"),
+    severity: str = Query(..., description="🔴 KRITISCH / 🟡 MEDIUM / 🟢 LOW / 🟣 ENHANCEMENT"),
+    symptom: str = Query(..., description="Was wurde beobachtet?"),
+    cause: str = Query(..., description="Root Cause"),
+    fix: str = Query(..., description="Wie wurde es behoben?"),
+    lessons: str = Query(..., description="Lektionen (komma-separiert)"),
+    files: Optional[str] = Query(None, description="Betroffene Dateien (komma-separiert)")
+):
+    """
+    Trägt einen neuen Fehler automatisch in LESSONS_LOG.md ein (Self-Learning).
+    """
+    ai_checker = get_ai_code_checker()
+    
+    if not ai_checker:
+        raise HTTPException(status_code=503, detail="KI-Checker nicht verfügbar (OPENAI_API_KEY fehlt)")
+    
+    # Parse lessons und files
+    lessons_list = [l.strip() for l in lessons.split(',') if l.strip()]
+    files_list = [f.strip() for f in files.split(',') if f.strip()] if files else None
+    
+    if not lessons_list:
+        raise HTTPException(status_code=400, detail="Mindestens eine Lektion erforderlich")
+    
+    result = ai_checker.add_lesson_to_log(
+        title=title,
+        category=category,
+        severity=severity,
+        symptom=symptom,
+        cause=cause,
+        fix=fix,
+        lessons=lessons_list,
+        files=files_list
+    )
+    
+    if result.get("success"):
+        return JSONResponse({
+            **result,
+            "message": f"Lektion '{title}' erfolgreich in LESSONS_LOG.md eingetragen und Fehlerhistorie neu geladen"
+        })
+    else:
+        raise HTTPException(status_code=500, detail=result.get("error", "Eintrag fehlgeschlagen"))
+
+@router.get("/api/code-checker/status")
+async def get_checker_status():
+    """
+    Gibt Status-Informationen zurück (letztes Reload, nächstes Reload, etc.).
+    """
+    ai_checker = get_ai_code_checker()
+    
+    if not ai_checker:
+        return JSONResponse({
+            "available": False,
+            "error": "KI-Checker nicht verfügbar (OPENAI_API_KEY fehlt)"
+        })
+    
+    from datetime import datetime, timedelta
+    
+    last_reload = ai_checker.last_reload if hasattr(ai_checker, 'last_reload') else None
+    next_reload = last_reload + timedelta(hours=6) if last_reload else None
+    
+    return JSONResponse({
+        "available": True,
+        "last_reload": last_reload.isoformat() if last_reload else None,
+        "next_reload": next_reload.isoformat() if next_reload else None,
+        "patterns_loaded": ai_checker.learned_patterns.get("loaded", False),
+        "auto_reload_enabled": True,
+        "reload_interval_hours": 6,
+        "patterns_count": {
+            "error_catalog_chars": len(ai_checker.learned_patterns.get("error_catalog", "")),
+            "lessons_log_chars": len(ai_checker.learned_patterns.get("lessons_log", ""))
+        }
+    })
+
 @router.post("/api/code-checker/improve")
 async def improve_code(
     file_path: str = Query(..., description="Pfad zur Python-Datei"),

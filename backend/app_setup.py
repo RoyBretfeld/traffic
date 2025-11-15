@@ -137,12 +137,14 @@ def setup_routers(app: FastAPI) -> None:
     from backend.routes.ki_improvements_api import router as ki_improvements_api_router
     from backend.routes.code_checker_api import router as code_checker_api_router
     from backend.routes.code_improvement_job_api import router as code_improvement_job_api_router
+    from backend.routes.cost_tracker_api import router as cost_tracker_api_router
     from backend.routes.osrm_metrics_api import router as osrm_metrics_api_router
     from backend.routes.health import router as health_routes
     from backend.routes.debug_health import router as debug_health_router
     from backend.routes.auth_api import router as auth_router
     from backend.routes.system_rules_api import router as system_rules_api_router
     from backend.routes.db_management_api import router as db_management_api_router
+    from backend.routes.error_logger_api import router as error_logger_api_router
     
     # Registriere alle Router
     routers = [
@@ -181,11 +183,13 @@ def setup_routers(app: FastAPI) -> None:
         ki_improvements_api_router,
         code_checker_api_router,
         code_improvement_job_api_router,
+        cost_tracker_api_router,
         osrm_metrics_api_router,
         health_routes,
         debug_health_router,
         system_rules_api_router,
-        db_management_api_router
+        db_management_api_router,
+        error_logger_api_router
     ]
     
     for router in routers:

@@ -2131,46 +2131,6 @@
             return 9999; // Fallback für unbekannte Formate
         }
 
-        // ==========================================
-        // HELPER: Einheitliche Base-ID-Extraktion
-        // ==========================================
-        function extractBaseTourId(tour) {
-            // Priorität: _base_tour_id > Extraktion aus tour_id > Extraktion aus name
-            if (tour._base_tour_id) {
-                return tour._base_tour_id;
-            }
-            
-            const tourId = tour.tour_id || tour.name || '';
-            if (!tourId) {
-                return '';
-            }
-            
-            // Entferne Sub-Route-Buchstaben (A, B, C, ...)
-            // Entferne "Uhr Tour" / "Uhr BAR"
-            return tourId
-                .replace(/\s+[A-Z]$/, '')                    // " A", " B", etc.
-                .replace(/\s*(Uhr\s*)?(Tour|BAR)$/i, '')    // "Uhr Tour", "Uhr BAR"
-                .trim();
-        }
-
-        // ==========================================
-        // HELPER: Eindeutiger Key für Tour
-        // ==========================================
-        function generateTourKey(tour) {
-            const baseId = extractBaseTourId(tour);
-            const subRoute = tour._sub_route || '';
-            
-            // Normalisiere für Key (nur alphanumerisch + Bindestrich)
-            const normalizedBaseId = baseId.replace(/[^a-zA-Z0-9-]/g, '_');
-            
-            // Mit Sub-Route: workflow-W_07_00-A
-            // Ohne Sub-Route: workflow-W_07_00
-            return subRoute 
-                ? `workflow-${normalizedBaseId}-${subRoute}`
-                : `workflow-${normalizedBaseId}`;
-        }
-
-
         // Rendert Touren basierend auf der ursprünglichen CSV-Struktur
         function renderToursFromCSVStructure(matchData, fileName) {
             console.log('renderToursFromCSVStructure aufgerufen, matchData:', matchData);
@@ -2273,79 +2233,64 @@
             }
         }
 
-        // Hilfsfunktion zum Extrahieren der Zeit aus Tour-Namen (für Sortierung)
+        // Hilfsfunktion zum Extrahieren der Zeit aus Tour-Namen
         function extractTimeFromTourName(tourName) {
-            if (!tourName) return 9999;
-            
-            // Suche nach Zeit-Pattern: HH.MM oder HH:MM
             const timeMatch = tourName.match(/(\d{1,2})[.:](\d{2})/);
             if (timeMatch) {
-                const hours = parseInt(timeMatch[1]);
-                const minutes = parseInt(timeMatch[2]);
-                return hours * 60 + minutes; // Minuten seit Mitternacht
+                return `${timeMatch[1]}:${timeMatch[2]}`;
             }
-            
-            return 9999; // Fallback für Touren ohne Zeit
+            return tourName;
         }
 
         // Rendert Touren aus dem Match-Endpunkt oder Workflow-Ergebnis
         function renderToursFromMatch(matchData) {
             console.log('renderToursFromMatch aufgerufen, matchData:', matchData);
             
-            // WICHTIG: Prüfe ob matchData Sub-Routen enthält
+            // WICHTIG: Lösche ALLE relevanten Einträge in allTourCustomers, nicht nur 'workflow-'!
+            // Problem: Sub-Routen können verschiedene Key-Formate haben. Wir müssen alle Einträge
+            // löschen, die zu den Touren in matchData gehören (basierend auf _base_tour_id).
             const toursToRender = matchData.tours || [];
-            const hasSubRoutesInData = toursToRender.some(t => t._sub_route || (t.tour_id && t.tour_id.match(/\s[A-Z]$/)));
-            
-            // WICHTIG: Prüfe ob bereits Sub-Routen in allTourCustomers existieren
-            const existingSubRoutes = Object.values(allTourCustomers).filter(t => t._sub_route || (t.name && t.name.match(/\s[A-Z]$/)));
-            const hasExistingSubRoutes = existingSubRoutes.length > 0;
-            
-            console.log(`[RENDER] Sub-Routen-Check: Incoming=${hasSubRoutesInData}, Existing=${hasExistingSubRoutes}`);
-            
-            // KRITISCH: Wenn Sub-Routen existieren, NICHTS löschen!
-            // Grund: Sub-Routen wurden von updateToursWithSubRoutes() erstellt und dürfen nicht überschrieben werden!
-            if (hasExistingSubRoutes && !hasSubRoutesInData) {
-                console.log(`[RENDER] ⚠️ Sub-Routen existieren bereits - überspringe Löschen, um Sub-Routen zu schützen!`);
-                // KEIN Löschen - Sub-Routen bleiben erhalten
-            } else {
-                // Normale Logik: Lösche alte Einträge nur wenn KEINE Sub-Routen existieren
-                const baseTourIds = new Set();
-                
-                // Sammle alle Base-IDs mit Helper-Funktion
-                toursToRender.forEach(tour => {
-                    const baseId = extractBaseTourId(tour);  // ✅ Helper verwenden
-                    if (baseId) {
-                        baseTourIds.add(baseId);
-                    }
-                });
-                
-                console.log(`[RENDER] Base-Tour-IDs gefunden:`, Array.from(baseTourIds));
-                
-                // Lösche ALLE Einträge, die zu diesen Touren gehören
-                // ABER: Nur wenn es KEINE Sub-Routen sind!
-                let deletedCount = 0;
-                Object.keys(allTourCustomers).forEach(key => {
-                    const tour = allTourCustomers[key];
-                    const tourBaseId = extractBaseTourId(tour);  // ✅ Helper verwenden
-                    
-                    // Prüfe ob dieser Eintrag eine Sub-Route ist
-                    const isSubRoute = tour._sub_route || (tour.name && tour.name.match(/\s[A-Z]$/));
-                    
-                    // Lösche NUR wenn:
-                    // 1. Base-ID passt
-                    // 2. KEINE Sub-Route ist
-                    if (tourBaseId && baseTourIds.has(tourBaseId) && !isSubRoute) {
-                        console.log(`[RENDER] Lösche alten Eintrag: ${key} (Tour: ${tourBaseId})`);
-                        delete allTourCustomers[key];
-                        deletedCount++;
-                    } else if (isSubRoute) {
-                        console.log(`[RENDER] Überspringe Sub-Route: ${key} (Tour: ${tour.name})`);
-                    }
-                });
-                
-                if (deletedCount > 0) {
-                    console.log(`[RENDER] ${deletedCount} alte Einträge gelöscht`);
+            const baseTourIds = new Set();
+            toursToRender.forEach(tour => {
+                // WICHTIG: _base_tour_id extrahieren - Sub-Routen haben Format "W-07.00 A", Basis ist "W-07.00"
+                let baseId = tour._base_tour_id;
+                if (!baseId && tour.tour_id) {
+                    // Entferne Sub-Route Buchstaben (A, B, C, ...) und "Uhr Tour" / "Uhr BAR"
+                    baseId = tour.tour_id.replace(/\s+[A-Z]$/, '').replace(/\s*(Uhr\s*)?(Tour|BAR)$/i, '').trim();
                 }
+                if (baseId) {
+                    baseTourIds.add(baseId);
+                }
+            });
+            
+            console.log(`[RENDER] Base-Tour-IDs gefunden:`, Array.from(baseTourIds));
+            
+            let deletedCount = 0;
+            Object.keys(allTourCustomers).forEach(key => {
+                const tour = allTourCustomers[key];
+                // WICHTIG: Base-ID extrahieren - unterstütze verschiedene Formate
+                let tourBaseId = tour._base_tour_id;
+                if (!tourBaseId && tour.name) {
+                    // Entferne Sub-Route Buchstaben (A, B, C, ...) und "Uhr Tour" / "Uhr BAR"
+                    tourBaseId = tour.name.replace(/\s+[A-Z]$/, '').replace(/\s*(Uhr\s*)?(Tour|BAR)$/i, '').trim();
+                }
+                if (!tourBaseId) {
+                    // Fallback: Erste Zeile vor Leerzeichen
+                    tourBaseId = (tour.name || '').split(' ')[0];
+                }
+                
+                // Prüfe ob diese Tour zu einer der Base-IDs gehört
+                if (tourBaseId && baseTourIds.has(tourBaseId)) {
+                    console.log(`[RENDER] Lösche alten Eintrag: ${key} (Tour: ${tourBaseId})`);
+                    delete allTourCustomers[key];
+                    deletedCount++;
+                }
+            });
+            
+            if (deletedCount > 0) {
+                console.log(`[RENDER] ${deletedCount} alte Einträge gelöscht, aktualisiere mit neuen Daten...`);
+            } else {
+                console.log('[RENDER] Keine alten Einträge zu löschen, aktualisiere mit neuen Daten...');
             }
             
             // Unterstütze sowohl 'tours' (vom Workflow) als auch 'items' (vom Match-Endpoint)
@@ -2546,8 +2491,7 @@
                 tourList.innerHTML = '';
                 
                 tourList.innerHTML = toursWithMeta.map((tourMeta) => {
-                    // WICHTIG: Verwende generateTourKey() für konsistente Keys mit allTourCustomers
-                    const key = generateTourKey(tourMeta);
+                    const key = `workflow-${tourMeta.index}`;
                     // WICHTIG: Unterstütze sowohl 'stops' als auch 'customers' (Workflow kann beide Formate liefern)
                     const stops = tourMeta.stops || tourMeta.customers || [];
                     const customerCount = stops.length;
@@ -2583,38 +2527,24 @@
                         };
                     });
                     
-                    // WICHTIG: Erstelle Einträge in allTourCustomers, ABER nur wenn sie noch nicht existieren!
-                    // Grund: Beim initialen Rendering müssen Einträge erstellt werden.
-                    // ABER: Wenn updateToursWithSubRoutes() bereits Einträge erstellt hat, werden diese NICHT überschrieben!
-                    // key wurde bereits oben deklariert (Zeile 2527) - verwende diese Variable!
+                    // Kunden für diese Tour speichern
+                    // WICHTIG: Speichere auch Optimization-Info für spätere Anzeige
+                    // WICHTIG: Speichere auch Sub-Route-Metadaten (_base_tour_id, _sub_route) für korrektes Löschen beim Reload!
+                    const baseTourId = tourMeta._base_tour_id || tourMeta.tour_id?.replace(/\s+[A-Z]$/, '').replace(/\s*(Uhr\s*)?(Tour|BAR)$/i, '').trim() || '';
+                    const subRoute = tourMeta._sub_route || (tourMeta.tour_id?.match(/\s([A-Z])$/) ? tourMeta.tour_id.match(/\s([A-Z])$/)[1] : null);
                     
-                    // KRITISCH: Prüfe ob dieser Tour eine Sub-Route entspricht
-                    const isSubRouteInData = tourMeta._sub_route || (tourMeta.tour_id && tourMeta.tour_id.match(/\s[A-Z]$/));
-                    
-                    // Wenn Sub-Routen existieren, erstelle KEINE neuen Einträge für Haupttouren!
-                    if (hasExistingSubRoutes && !isSubRouteInData) {
-                        console.log(`[RENDER] ⚠️ Überspringe Erstellung von Haupttour ${tourMeta.tour_id} - Sub-Routen existieren bereits!`);
-                        // KEIN Erstellen - Sub-Routen haben Priorität!
-                    } else if (!allTourCustomers[key]) {
-                        // Eintrag existiert noch nicht → erstelle ihn
-                        allTourCustomers[key] = {
-                            name: tourMeta.tour_id || `Tour ${tourMeta.index + 1}`,
-                            type: isBar ? 'BAR' : 'Workflow',
-                            time: tourMeta.time,
-                            customers: customers,
-                            stops: stops,
-                            optimization_method: tourMeta.optimization_method,
-                            optimized: tourMeta.optimized,
-                            reasoning: tourMeta.reasoning,
-                            _base_tour_id: extractBaseTourId(tourMeta),
-                            _sub_route: tourMeta._sub_route || (tourMeta.tour_id?.match(/\s([A-Z])$/) ? tourMeta.tour_id.match(/\s([A-Z])$/)[1] : null),
-                            _tour_color: tourMeta._tour_color,
-                            isBarTour: isBar
-                        };
-                        console.log(`[RENDER] Erstelle neuen Eintrag: ${key} (Tour: ${tourMeta.tour_id})`);
-                    } else {
-                        console.log(`[RENDER] Eintrag existiert bereits: ${key} (Tour: ${tourMeta.tour_id}) - überspringe Erstellung`);
-                    }
+                    allTourCustomers[key] = {
+                        name: tourMeta.tour_id || `Tour ${tourMeta.index + 1}`,
+                        type: isBar ? 'BAR' : 'Workflow',
+                        time: tourMeta.time,
+                        customers: customers,
+                        optimization_method: tourMeta.optimization_method,  // Für AI-Badge
+                        optimized: tourMeta.optimized,
+                        reasoning: tourMeta.reasoning,
+                        _base_tour_id: baseTourId,  // WICHTIG: Für korrektes Löschen beim Reload
+                        _sub_route: subRoute,  // WICHTIG: Für Sub-Route-Erkennung
+                        _tour_color: tourMeta._tour_color  // WICHTIG: Für Farbzuweisung
+                    };
                     
                     // CSS-Klassen: W-Touren bekommen andere Farbe, BAR-Touren orange
                     const isWTour = /^W-\d+\.\d+/.test(tourMeta.tour_id || '');
@@ -2643,8 +2573,7 @@
                         ? (tourMeta.tour_id || '').replace(/\s[A-Z]$/, '').trim() 
                         : (tourMeta.tour_id || `Tour ${tourMeta.index + 1}`);
                     
-                    // WICHTIG: baseTourId mit Helper-Funktion extrahieren
-                    const baseTourId = extractBaseTourId(tourMeta);
+                    // WICHTIG: baseTourId wurde bereits oben deklariert (Zeile 2441), verwende diese Variable!
                     const tourColor = getTourColor(baseTourId);
                     const borderColor = isSubRoute ? `border-left: 4px solid ${tourColor};` : '';
                     
@@ -2678,8 +2607,7 @@
                 if (tours.length > 0) {
                     // Warte kurz, damit DOM aktualisiert ist, dann erste Tour auswählen
                     setTimeout(() => {
-                        const firstKey = generateTourKey(toursWithMeta[0]);
-                        selectTour(firstKey);
+                        selectTour(`workflow-${toursWithMeta[0].index}`);
                     }, 100);
                 }
                 return;
@@ -2790,139 +2718,6 @@
                 syncToursToPanel();
                 syncMapToPanel();
             }, 100);
-        }
-
-        // ============================================
-        // NEUE FUNKTION: renderTourListOnly()
-        // Rendert NUR die Tour-Liste, OHNE allTourCustomers zu ändern
-        // Wird von updateToursWithSubRoutes() aufgerufen statt renderToursFromMatch()
-        // ============================================
-        /**
-         * Rendert NUR die Tour-Liste, OHNE allTourCustomers zu ändern
-         * Wird von updateToursWithSubRoutes() aufgerufen statt renderToursFromMatch()
-         */
-        function renderTourListOnly() {
-            console.log('[RENDER-LIST] Rendere nur Tour-Liste, OHNE State zu ändern');
-            
-            const tourList = document.getElementById('tourList');
-            if (!tourList) {
-                console.error('[RENDER-LIST] tourList Element nicht gefunden');
-                return;
-            }
-            
-            // Hole Touren aus allTourCustomers (NICHT aus workflowResult!)
-            const tourEntries = Object.entries(allTourCustomers);
-            
-            if (tourEntries.length === 0) {
-                tourList.innerHTML = '<div class="text-muted p-3">Keine Touren</div>';
-                document.getElementById('tourSummary').textContent = 'Keine Touren';
-                return;
-            }
-            
-            // Berechne Statistiken
-            let totalStops = 0;
-            tourEntries.forEach(([key, tour]) => {
-                totalStops += (tour.customers || []).length;
-            });
-            
-            document.getElementById('tourSummary').textContent = 
-                `${tourEntries.length} Touren · ${totalStops} Stops`;
-            
-            // Sortiere Touren (W-Touren zuerst, dann nach Zeit)
-            tourEntries.sort((a, b) => {
-                const [keyA, tourA] = a;
-                const [keyB, tourB] = b;
-                
-                const nameA = tourA.name || '';
-                const nameB = tourB.name || '';
-                
-                // W-Touren zuerst (höchste Priorität)
-                const isWA = /^W-\d+\.\d+/.test(nameA);
-                const isWB = /^W-\d+\.\d+/.test(nameB);
-                if (isWA && !isWB) return -1;
-                if (!isWA && isWB) return 1;
-                
-                // Bei W-Touren: Nach Zeit sortieren
-                if (isWA && isWB) {
-                    const timeA = extractTimeFromTourName(nameA);
-                    const timeB = extractTimeFromTourName(nameB);
-                    if (timeA !== timeB) return timeA - timeB;
-                }
-                
-                // Fallback: Alphabetisch
-                return nameA.localeCompare(nameB);
-            });
-            
-            // Rendere Tour-Liste
-            tourList.innerHTML = tourEntries.map(([key, tour]) => {
-                const customerCount = (tour.customers || []).length;
-                const isBar = tour.isBarTour || false;
-                
-                // BAR-Badge
-                const barCustomerCount = (tour.customers || []).filter(c => c.bar_flag === true).length;
-                const barBadge = isBar && barCustomerCount > 0
-                    ? `<span class="badge ms-2" style="background-color: #ff9800; color: #000;">${barCustomerCount} BAR</span>`
-                    : '';
-                
-                // CSS-Klassen
-                const isWTour = /^W-\d+\.\d+/.test(tour.name || '');
-                const wTourClass = isWTour ? 'w-tour-highlight' : '';
-                const barClass = isBar ? 'bar-tour-highlight' : '';
-                const combinedClass = `${wTourClass} ${barClass}`.trim();
-                
-                // Sub-Route-Detection
-                const routeLetterMatch = (tour.name || '').match(/\s([A-Z])$/);
-                const routeLetter = routeLetterMatch ? routeLetterMatch[1] : '';
-                const isSubRoute = !!routeLetter;
-                const routeNumber = routeLetter ? letterToNumber(routeLetter) : '';
-                
-                // Farbe für Sub-Routen
-                const tourColor = tour._tour_color || '#2196F3';
-                const borderColor = isSubRoute ? `border-left: 4px solid ${tourColor};` : '';
-                
-                // Stops-Text
-                const stopsText = routeNumber 
-                    ? `${customerCount} Stops ${routeNumber}`
-                    : `${customerCount} Stops`;
-                
-                // Zeit-Info (falls vorhanden)
-                let timeInfo = '';
-                if (tour.total_time_minutes) {
-                    const totalTime = tour.total_time_minutes;
-                    const returnTime = tour.return_time_minutes || 0;
-                    const totalWithReturn = totalTime + returnTime;
-                    timeInfo = `<div class="small text-muted">${totalWithReturn.toFixed(0)} Min (inkl. Rückfahrt)</div>`;
-                }
-                
-                return `
-                    <button class="list-group-item list-group-item-action ${combinedClass}" 
-                            id="tour-${key}" 
-                            data-tour-key="${key}" 
-                            style="${borderColor}">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="flex-grow-1">
-                                <strong>${tour.name || 'Unbekannt'}</strong>${barBadge}
-                                <div class="small text-muted">${stopsText}</div>
-                                ${timeInfo}
-                            </div>
-                            <span class="badge rounded-pill" style="background-color: ${isSubRoute ? tourColor : '#0d6efd'}; color: #fff;">
-                                ${customerCount}
-                            </span>
-                        </div>
-                    </button>
-                `;
-            }).join('');
-            
-            // Binde Events neu
-            bindTourListEvents();
-            
-            console.log(`[RENDER-LIST] ${tourEntries.length} Touren gerendert`);
-            
-            // Clear-Button aktualisieren
-            updateClearButtonVisibility();
-            
-            // Sub-Routen Button aktualisieren
-            updateSubRouteButtonVisibility();
         }
 
         function renderToursFromWorkflow() {
@@ -5737,11 +5532,9 @@
                     }
                 });
                 
-                // WICHTIG: Erstelle neue Einträge für Sub-Routen in allTourCustomers
-                // Verwende eindeutige Keys (nicht Index-basiert!)
-                workflowResult.tours.forEach((tour) => {
-                    const key = generateTourKey(tour);  // ✅ Eindeutiger Key
-                    
+                // Erstelle neue Einträge für Sub-Routen in allTourCustomers
+                workflowResult.tours.forEach((tour, index) => {
+                    const key = `workflow-${index}`;
                     allTourCustomers[key] = {
                         name: tour.tour_id,
                         customers: tour.customers || [],
@@ -5756,7 +5549,7 @@
                         total_time_minutes: tour.total_time_minutes,
                         bar_customer_count: tour.bar_customer_count
                     };
-                    console.log(`[UPDATE-TOURS] Erstelle Eintrag: ${key} (Tour: ${tour.tour_id})`);
+                    console.log(`[UPDATE-TOURS] Erstelle neuen Eintrag: ${key} (Tour: ${tour.tour_id})`);
                 });
                 
                 console.log(`[UPDATE-TOURS] allTourCustomers aktualisiert: ${Object.keys(allTourCustomers).length} Einträge`);
@@ -5765,9 +5558,8 @@
                 const hasSubRoutes = workflowResult.tours.some(t => t._sub_route || t.tour_id.match(/\s[A-Z]$/));
                 console.log(`[UPDATE-TOURS] workflowResult.tours hat Sub-Routen: ${hasSubRoutes}, Anzahl: ${workflowResult.tours.length}`);
                 
-                // ✅ RICHTIG: Rendere NUR die Tour-Liste, OHNE allTourCustomers zu löschen
-                // renderToursFromMatch() würde die gerade erstellten Einträge löschen!
-                renderTourListOnly();
+                // Rendere neu - DIESES Rendering sollte die Sub-Routen anzeigen
+                renderToursFromMatch(workflowResult);
                 
                 // WICHTIG: Prüfe nach Rendering ob Sub-Routen noch in allTourCustomers sind
                 const subRoutesAfterRender = Object.keys(allTourCustomers).filter(key => {

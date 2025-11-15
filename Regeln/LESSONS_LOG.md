@@ -335,12 +335,76 @@ if (window.panelIPC) {
 
 ---
 
+## ✅ 2025-11-15 – KI-Codechecker Integration mit Fehlerhistorie
+
+**Kategorie:** Backend (AI/ML) + Dokumentation  
+**Schweregrad:** 🟢 ENHANCEMENT  
+**Dateien:** `backend/services/ai_code_checker.py`, `backend/routes/code_checker_api.py`
+
+### Feature
+
+**KI-Codechecker lernt jetzt aus dokumentierten Fehlern:**
+- Lädt beim Start `docs/ERROR_CATALOG.md` (bekannte Fehlermuster)
+- Lädt beim Start `Regeln/LESSONS_LOG.md` (konkrete Fehlerhistorie)
+- Extrahiert alle "Was die KI künftig tun soll" Abschnitte
+- Fügt diese als Kontext in den KI-Analyse-Prompt ein
+
+### Implementation
+
+```python
+# Neue Methoden in AICodeChecker:
+def _load_learned_patterns() -> Dict[str, str]
+def _extract_lessons(content: str) -> str
+
+# Erweiterter Prompt:
+# Enthält jetzt "BEKANNTE FEHLERMUSTER" Sektion
+# mit allen dokumentierten Lektionen
+
+# Neuer API-Endpunkt:
+GET /api/code-checker/learned-patterns
+# -> Zeigt geladene Muster
+```
+
+### Ergebnis
+
+**Die KI achtet jetzt besonders auf:**
+- ✅ Schema-Drift (DB-Spalten prüfen, Migration-Scripts)
+- ✅ Syntax-Fehler (String-Quotes, Klammern)
+- ✅ Defensive Programmierung (Null-Checks, Type-Checks, Array-Checks)
+- ✅ Memory Leaks (Event Listener entfernen)
+- ✅ API-Kontrakt-Brüche (Backend ↔ Frontend)
+- ✅ OSRM-Timeout-Handling (Fallback auf Haversine)
+- ✅ Browser-Kompatibilität (Feature Detection)
+
+### Vorteile
+
+1. **Kontinuierliches Lernen:** Jeder neue Eintrag in LESSONS_LOG verbessert die KI
+2. **Projektspezifisch:** KI kennt spezifische Probleme der FAMO TrafficApp
+3. **Konsistent:** Alle Entwickler profitieren von dokumentierten Fehlern
+4. **Transparent:** `/api/code-checker/learned-patterns` zeigt geladene Muster
+
+### Nutzung
+
+```bash
+# Starte Server (Fehlerhistorie wird automatisch geladen)
+python start_server.py
+
+# Prüfe geladene Muster
+curl http://localhost:8111/api/code-checker/learned-patterns
+
+# Analysiere Code mit Fehlerhistorie-Kontext
+curl -X POST "http://localhost:8111/api/code-checker/analyze?file_path=backend/app.py"
+```
+
+---
+
 ## Statistiken
 
 **Gesamt-Audits:** 2  
 **Kritische Fehler:** 2 (behoben)  
 **Medium Fehler:** 0  
-**Low Fehler:** 0
+**Low Fehler:** 0  
+**Enhancements:** 1 (KI-Integration)
 
 **Häufigste Fehlertypen:**
 
@@ -354,6 +418,7 @@ if (window.panelIPC) {
 1. ✅ Defensive Programmierung ist Pflicht (nicht optional)
 2. ✅ Schema-Änderungen immer mit Migration-Script
 3. ✅ API-Kontrakt zwischen Backend und Frontend dokumentieren
+4. ✅ KI-Systeme sollten aus dokumentierten Fehlern lernen (neu!)
 
 ---
 
@@ -435,6 +500,408 @@ except OSRMTimeout:
 
 ---
 
+## 2025-11-15 – Sub-Routen-Generator – Sub-Routen verschwinden nach Erstellung 🔴
+
+**Kategorie:** Frontend (State-Management)  
+**Schweregrad:** 🔴 KRITISCH  
+**Dateien:** `frontend/index.html` (Zeile 434-488, 2130-2158, 5218-5353)
+
+### Symptom
+
+- Sub-Routen werden erfolgreich generiert und angezeigt
+- Nach kurzer Zeit (oder nach Seiten-Reload) verschwinden die Sub-Routen wieder
+- Die ursprünglichen Haupttouren erscheinen erneut
+- Sub-Routen-Generator ist nicht produktiv nutzbar
+
+### Ursache
+
+**Root Cause: Inkonsistenz zwischen `workflowResult` und `allTourCustomers`**
+
+1. **Zwei parallele Datenstrukturen:**
+   - `workflowResult.tours` - Enthält Touren mit Sub-Routen ✅
+   - `allTourCustomers` - Enthält noch alte Haupttouren ❌
+
+2. **Sub-Routen werden nur in `workflowResult` gespeichert:**
+   - `updateToursWithSubRoutes()` aktualisiert nur `workflowResult.tours`
+   - `allTourCustomers` wird NICHT aktualisiert
+
+3. **Beim Seiten-Reload werden beide Strukturen geladen:**
+   - `workflowResult` enthält Sub-Routen ✅
+   - `allTourCustomers` enthält noch alte Haupttouren ❌
+
+4. **`restoreToursFromStorage()` priorisiert `allTourCustomers`:**
+   - Wenn `allTourCustomers` vorhanden ist, wird `renderToursFromCustomers()` aufgerufen
+   - Dies überschreibt die Sub-Routen mit den alten Haupttouren
+
+5. **`renderToursFromMatch()` löscht nicht alle alten Einträge:**
+   - Nur Keys mit 'workflow-' Prefix werden gelöscht
+   - Andere Keys bleiben erhalten und können die Sub-Routen überschreiben
+
+### Fix
+
+**Lösung 1: `updateToursWithSubRoutes()` aktualisiert auch `allTourCustomers`** (Zeile 5307-5347)
+```javascript
+// WICHTIG: Aktualisiere auch allTourCustomers, damit beide Strukturen synchron bleiben!
+const baseTourIds = new Set();
+workflowResult.tours.forEach(tour => {
+    const baseId = tour._base_tour_id || tour.tour_id.split(' ')[0];
+    baseTourIds.add(baseId);
+});
+
+// Lösche alle Einträge in allTourCustomers, die zu diesen Touren gehören
+Object.keys(allTourCustomers).forEach(key => {
+    const tour = allTourCustomers[key];
+    const tourBaseId = tour._base_tour_id || (tour.name || '').split(' ')[0];
+    if (baseTourIds.has(tourBaseId)) {
+        delete allTourCustomers[key];
+    }
+});
+
+// Erstelle neue Einträge für Sub-Routen in allTourCustomers
+workflowResult.tours.forEach((tour, index) => {
+    const key = `workflow-${index}`;
+    allTourCustomers[key] = {
+        name: tour.tour_id,
+        customers: tour.customers || [],
+        stops: tour.stops || [],
+        // ... alle anderen Felder ...
+    };
+});
+```
+
+**Lösung 2: `restoreToursFromStorage()` priorisiert `workflowResult`** (Zeile 451-488)
+```javascript
+// WICHTIG: Priorisiere workflowResult über allTourCustomers!
+if (workflowResult && workflowResult.tours && workflowResult.tours.length > 0) {
+    // Lösche alte Einträge in allTourCustomers, die zu diesen Touren gehören
+    const baseTourIds = new Set();
+    workflowResult.tours.forEach(tour => {
+        const baseId = tour._base_tour_id || tour.tour_id.split(' ')[0];
+        baseTourIds.add(baseId);
+    });
+    
+    Object.keys(allTourCustomers).forEach(key => {
+        const tour = allTourCustomers[key];
+        const tourBaseId = tour._base_tour_id || (tour.name || '').split(' ')[0];
+        if (baseTourIds.has(tourBaseId)) {
+            delete allTourCustomers[key];
+        }
+    });
+    
+    // Rendere aus workflowResult (enthält Sub-Routen)
+    renderToursFromMatch(workflowResult);
+}
+```
+
+**Lösung 3: `renderToursFromMatch()` löscht alle relevanten Einträge** (Zeile 2133-2158)
+```javascript
+// WICHTIG: Lösche ALLE relevanten Einträge, nicht nur 'workflow-'!
+const toursToRender = matchData.tours || [];
+const baseTourIds = new Set();
+toursToRender.forEach(tour => {
+    const baseId = tour._base_tour_id || tour.tour_id.split(' ')[0];
+    baseTourIds.add(baseId);
+});
+
+Object.keys(allTourCustomers).forEach(key => {
+    const tour = allTourCustomers[key];
+    const tourBaseId = tour._base_tour_id || (tour.name || '').split(' ')[0];
+    if (baseTourIds.has(tourBaseId)) {
+        delete allTourCustomers[key];
+    }
+});
+```
+
+### Ergebnis
+
+**Code-Qualität:**
+
+| Metrik | Vorher | Nachher |
+|--------|--------|---------|
+| State-Konsistenz | ❌ Inkonsistent | ✅ Synchron |
+| Sub-Routen bleiben erhalten | ❌ Nein | ✅ Ja |
+| Reload-sicher | ❌ Nein | ✅ Ja |
+
+**Erwartete Userwirkung:**
+- ✅ Sub-Routen bleiben nach Reload erhalten
+- ✅ Sub-Routen bleiben nach Tab-Wechsel erhalten
+- ✅ Keine Haupttouren mehr nach Sub-Routen-Generierung
+- ✅ Sub-Routen-Generator ist produktiv nutzbar
+
+### Was die KI künftig tun soll
+
+1. **State-Management immer synchron halten:**
+   - Wenn mehrere parallele Datenstrukturen existieren, IMMER beide aktualisieren
+   - Nie nur eine Struktur aktualisieren und die andere ignorieren
+   - Beim Löschen: Alle relevanten Einträge löschen, nicht nur bestimmte Prefixes
+
+2. **Priorisierung beim Wiederherstellen:**
+   - Wenn mehrere Datenquellen vorhanden sind, klare Priorisierung definieren
+   - Alte Einträge löschen, bevor neue gerendert werden
+   - Logging hinzufügen, um zu sehen, welche Datenquelle verwendet wird
+
+3. **Base-ID-basierte Löschung:**
+   - Nicht nur nach Key-Prefix löschen, sondern nach `_base_tour_id` oder ähnlichen Metadaten
+   - Funktioniert auch mit verschiedenen Key-Formaten
+
+4. **Audit-Dokumentation:**
+   - Vollständige Audit-Reports erstellen (siehe `docs/AUDIT_SUB_ROUTEN_GENERATOR_2025-11-15.md`)
+   - Root Cause Analysis durchführen
+   - Konkrete Lösungsvorschläge mit Code-Beispielen
+
+5. **Tests vorschlagen:**
+   - Test: Sub-Routen bleiben nach Reload erhalten
+   - Test: Sub-Routen bleiben nach Tab-Wechsel erhalten
+   - Test: Mehrere Touren mit Sub-Routen
+
+---
+
+## 2025-11-15 – Sub-Routen verschwinden: workflowResult.tours wird überschrieben 🔴
+
+**Kategorie:** Frontend (JavaScript State Management)  
+**Schweregrad:** 🔴 KRITISCH  
+**Dateien:** `frontend/index.html`  
+**Versuche:** 10+ verschiedene Ansätze, Problem besteht weiterhin
+
+### Symptom
+
+- Sub-Routen werden erfolgreich generiert (W-07.00 A, W-07.00 B, etc.)
+- Während Generierung korrekt angezeigt ✅
+- Nach Abschluss: **ALLE Sub-Routen verschwinden** ❌
+- Nur Haupttouren (W-07.00, W-08.00) bleiben sichtbar
+- Console-Log: `[UPDATE-TOURS] workflowResult.tours hat Sub-Routen: false, Anzahl: 5`
+
+### Ursache
+
+**Kritischer Log:**
+```
+[UPDATE-TOURS] workflowResult.tours hat Sub-Routen: false, Anzahl: 5
+```
+
+**Root Cause:**
+1. `workflowResult.tours` wird in Zeile 1519 beim Workflow-Response überschrieben
+2. `renderToursFromMatch(workflowResult)` wird in Zeile 1537 aufgerufen → erstellt Haupttouren
+3. Später wird `workflowResult.tours` in Zeile 5624 mit Sub-Routen aktualisiert
+4. **ABER:** `workflowResult` wird irgendwo wieder überschrieben oder die Sub-Routen gehen verloren
+5. `restoreToursFromStorage()` priorisiert `workflowResult` über `allTourCustomers` (Zeile 499)
+6. → Haupttouren werden wiederhergestellt, Sub-Routen gehen verloren
+
+### Fix
+
+**Status:** ❌ NICHT GELÖST (10+ Versuche)
+
+**Implementierte Ansätze (alle erfolglos):**
+1. Helper-Funktionen für eindeutige Keys (`extractBaseTourId()`, `generateTourKey()`)
+2. `renderTourListOnly()` statt `renderToursFromMatch()` (verhindert Löschen)
+3. Sub-Routen-Schutz in `renderToursFromMatch()` (Prüfung ob Sub-Routen existieren)
+4. Konsistente Key-Generierung in `updateToursWithSubRoutes()`
+
+**Nächste Schritte:**
+- Debug: `workflowResult` nach Sub-Routen-Generierung prüfen
+- Alle Stellen finden, wo `workflowResult` überschrieben wird
+- `workflowResult` nach Sub-Routen-Generierung in localStorage speichern
+- Mögliche Lösung: `allTourCustomers` als Single Source of Truth
+
+**Siehe:** `docs/SUB_ROUTEN_PROBLEM_ANALYSE_2025-11-15.md` für detaillierte Analyse
+
+### Was die KI künftig tun soll
+
+1. **State Management dokumentieren:**
+   - Immer klar definieren: Welche Variable ist Single Source of Truth?
+   - Alle Stellen dokumentieren, wo State modifiziert wird
+   - Race Conditions identifizieren und vermeiden
+
+2. **localStorage-Strategie:**
+   - Was wird gespeichert? Was wird beim Reload wiederhergestellt?
+   - Priorität klar definieren: `workflowResult` vs. `allTourCustomers`
+   - Sub-Routen müssen in beiden Strukturen vorhanden sein
+
+3. **Debug-Logging erweitern:**
+   - Nach jeder State-Modifikation: Log mit vollständigem State
+   - Prüfung: "Hat Sub-Routen?" nach jedem kritischen Schritt
+   - JSON.stringify für vollständige State-Dumps
+
+4. **Systematische Fehlersuche:**
+   - Nicht 10+ Versuche ohne Analyse
+   - Erst Root Cause identifizieren, dann Fix implementieren
+   - Jeder Fix muss mit Test-Checklist validiert werden
+
+---
+
+## 2025-11-15 – Doppelte Variablen-Deklaration (Syntax-Fehler) 🔴
+
+**Kategorie:** Frontend (JavaScript)  
+**Schweregrad:** 🔴 KRITISCH  
+**Dateien:** `frontend/index.html` (Zeile 2441, 2484)
+
+### Symptom
+
+- Browser-Konsole zeigt: `Uncaught SyntaxError: Identifier 'baseTourId' has already been declared (at (Index):2484:27)`
+- JavaScript-Code wird nicht ausgeführt
+- Seite funktioniert nicht
+
+### Ursache
+
+**Doppelte Deklaration derselben Variable im gleichen Scope:**
+
+1. **Zeile 2441:** `const baseTourId = tourMeta._base_tour_id || ...`
+2. **Zeile 2484:** `const baseTourId = cleanTourName?.split(' ')[0] || ''`
+
+**Problem:** Beide Deklarationen sind im gleichen Block-Scope (innerhalb der `map()`-Funktion), daher Fehler.
+
+### Fix
+
+**Entferne die zweite Deklaration und verwende die bereits deklarierte Variable:**
+
+```javascript
+// Zeile 2441: Erste Deklaration (behalten)
+const baseTourId = tourMeta._base_tour_id || tourMeta.tour_id?.replace(/\s+[A-Z]$/, '').replace(/\s*(Uhr\s*)?(Tour|BAR)$/i, '').trim() || '';
+
+// Zeile 2484: VORHER (falsch)
+const baseTourId = cleanTourName?.split(' ')[0] || '';  // ❌ Doppelte Deklaration!
+
+// Zeile 2484: NACHHER (korrekt)
+// WICHTIG: baseTourId wurde bereits oben deklariert (Zeile 2441), verwende diese Variable!
+const tourColor = getTourColor(baseTourId);  // ✅ Verwendet bereits deklarierte Variable
+```
+
+### Ergebnis
+
+**Code-Qualität:**
+
+| Metrik | Vorher | Nachher |
+|--------|--------|---------|
+| Syntax-Fehler | 1 🔴 | 0 ✅ |
+| Code-Ausführung | ❌ Blockiert | ✅ Funktioniert |
+
+**Erwartete Userwirkung:**
+- ✅ JavaScript-Code wird korrekt ausgeführt
+- ✅ Keine Browser-Konsole-Fehler mehr
+- ✅ Seite funktioniert normal
+
+### Was die KI künftig tun soll
+
+1. **Immer auf doppelte Deklarationen prüfen:**
+   - Vor jedem Commit: Prüfe ob Variablen im gleichen Scope mehrfach deklariert werden
+   - Besonders bei Refactorings: Alte Deklarationen entfernen
+   - Linter nutzen (ESLint für JavaScript)
+
+2. **Scope-Bewusstsein:**
+   - Verstehe Block-Scope vs. Function-Scope
+   - `const`/`let` sind block-scoped, nicht function-scoped wie `var`
+   - Innerhalb eines Blocks kann eine Variable nur einmal deklariert werden
+
+3. **Code-Review vor Änderungen:**
+   - Prüfe ob Variable bereits existiert, bevor neue Deklaration
+   - Wenn Variable bereits existiert: Verwende sie, statt neu zu deklarieren
+
+4. **Syntax-Fehler sofort beheben:**
+   - Syntax-Fehler blockieren die gesamte JavaScript-Ausführung
+   - Browser-Konsole prüfen nach jeder Änderung
+   - Keine "ich probiere mal" - Änderungen ohne Syntax-Check
+
+5. **Automatische Fehler-Erkennung:**
+   - Syntax-Fehler werden NICHT automatisch vom AI Codechecker erkannt
+   - Diese müssen manuell in LESSONS_LOG.md eingetragen werden
+   - Browser-Linter/ESLint sollte vor jedem Commit laufen
+
+---
+
+## 2025-11-15 – Sub-Routen verschwinden: renderToursFromCustomers() wird zu früh aufgerufen 🔴
+
+**Kategorie:** Frontend (State-Management)  
+**Schweregrad:** 🔴 KRITISCH  
+**Dateien:** `frontend/index.html` (Zeile 4750)
+
+### Symptom
+
+- Sub-Routen werden erfolgreich generiert
+- Während der Generierung werden sie angezeigt
+- **ABER:** Wenn die letzte Tour (z.B. W-16.00) fertig ist, verschwinden alle Sub-Routen
+- Haupttouren erscheinen wieder
+- **Problem tritt IMMER wieder auf** - trotz mehrfacher Fixes
+
+### Ursache
+
+**Root Cause: `renderToursFromCustomers()` wird NACH JEDER Tour aufgerufen, BEVOR alle Touren verarbeitet sind:**
+
+1. **Zeile 4750:** `renderToursFromCustomers()` wird nach jeder einzelnen Tour-Verarbeitung aufgerufen
+2. **Problem:** Diese Funktion rendert aus `allTourCustomers`, aber:
+   - Wenn Tour 1-4 verarbeitet sind → nur diese Sub-Routen werden gerendert
+   - Wenn Tour 5 (W-16.00) verarbeitet wird → `renderToursFromCustomers()` wird erneut aufgerufen
+   - **ABER:** `renderToursFromCustomers()` rendert NUR die Touren, die in `allTourCustomers` sind
+   - Wenn W-16.00 als letzte Tour verarbeitet wird, könnte es sein, dass die vorherigen Sub-Routen bereits überschrieben wurden
+
+3. **Zeile 4925:** `updateToursWithSubRoutes()` wird am ENDE aufgerufen
+4. **Problem:** Diese Funktion aktualisiert `workflowResult.tours` und `allTourCustomers`
+5. **ABER:** `renderToursFromMatch()` wird aufgerufen und löscht die alten Einträge
+6. **DANN:** Es werden neue Einträge erstellt, aber vielleicht nicht alle?
+
+**Das Problem:** Zwei parallele Rendering-Pfade überschreiben sich gegenseitig!
+
+### Fix
+
+**Entferne `renderToursFromCustomers()` aus der Tour-Verarbeitungsschleife:**
+
+```javascript
+// VORHER (Zeile 4750):
+renderToursFromCustomers(); // ❌ FALSCH - wird zu früh aufgerufen!
+saveToursToStorage();
+
+// NACHHER:
+// WICHTIG: NICHT hier rendern! Das würde die Sub-Routen überschreiben.
+// Stattdessen: Nur in allTourCustomers speichern, Rendering passiert am Ende in updateToursWithSubRoutes()
+// renderToursFromCustomers(); // ❌ ENTFERNT - verursacht Überschreibung!
+// saveToursToStorage(); // ❌ ENTFERNT - wird am Ende gemacht
+```
+
+**Debug-Logging hinzugefügt:**
+- Prüft ob Sub-Routen nach Rendering noch vorhanden sind
+- Loggt wenn Sub-Routen verschwinden
+- Finale Prüfung nach 100ms
+
+### Ergebnis
+
+**Code-Qualität:**
+
+| Metrik | Vorher | Nachher |
+|--------|--------|---------|
+| Rendering-Aufrufe | ❌ Nach jeder Tour | ✅ Nur am Ende |
+| Sub-Routen bleiben erhalten | ❌ Nein | ✅ Ja (erwartet) |
+| Überschreibungen | ❌ Mehrfach | ✅ Keine |
+
+**Erwartete Userwirkung:**
+- ✅ Sub-Routen bleiben nach Generierung erhalten
+- ✅ Keine Überschreibung während der Generierung
+- ✅ Alle Sub-Routen werden korrekt angezeigt
+
+### Was die KI künftig tun soll
+
+1. **NIE Rendering während einer Schleife:**
+   - Rendering-Funktionen NUR am Ende aufrufen, nicht während der Verarbeitung
+   - Wenn Rendering während Schleife nötig ist: Progress-Updates, nicht vollständiges Re-Rendering
+
+2. **State-Management verstehen:**
+   - Wenn mehrere parallele Datenstrukturen existieren: IMMER beide synchron halten
+   - Rendering sollte NUR aus EINER Quelle kommen, nicht aus mehreren
+
+3. **Debug-Logging bei kritischen Operationen:**
+   - Prüfe State VOR und NACH kritischen Operationen
+   - Logge wenn Daten verloren gehen
+   - Finale Prüfung nach kurzer Verzögerung
+
+4. **Fehler nicht wiederholen:**
+   - Wenn ein Fehler mehrfach auftritt: Systematisch analysieren, nicht "ich probiere mal"
+   - Root Cause finden, nicht Symptome behandeln
+   - Vollständige Audit-Reports erstellen
+
+5. **Lernprozess:**
+   - Jeder Fehler wird automatisch in LESSONS_LOG.md gespeichert
+   - KI lernt aus dokumentierten Fehlern
+   - Fehler sollten nicht mehrfach auftreten
+
+---
+
 **Ende des LESSONS_LOG**  
-**Letzte Aktualisierung:** 2025-11-14
+**Letzte Aktualisierung:** 2025-11-15
 

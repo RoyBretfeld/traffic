@@ -62,6 +62,9 @@
                 <i class="fas fa-robot"></i> KI-CodeChecker Dashboard
             </a>
             <div class="d-flex align-items-center gap-3">
+                <a href="/admin/ki-kosten" class="btn btn-outline-warning btn-sm">
+                    <i class="fas fa-coins"></i> KI-Kosten
+                </a>
                 <a href="/" class="btn btn-outline-light btn-sm">
                     <i class="fas fa-home"></i> Zurück zur Hauptseite
                 </a>
@@ -114,24 +117,180 @@
             </div>
         </div>
         
+        <!-- 🆕 Fehlerhistorie-Status -->
+        <div class="card mb-3 border-primary">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-brain"></i> Fehlerhistorie-Integration (Self-Learning)
+                </h5>
+                <button class="btn btn-sm btn-light" onclick="reloadPatterns()" id="reload-btn">
+                    <i class="fas fa-sync"></i> Manuell laden
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-circle text-success me-2" id="patterns-status-icon"></i>
+                            <strong id="patterns-status">Lade...</strong>
+                        </div>
+                        <small class="text-muted" id="patterns-loaded-info">-</small>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Letztes Reload:</strong><br>
+                        <small id="last-reload" class="text-muted">-</small>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Nächstes Auto-Reload:</strong><br>
+                        <small id="next-reload" class="text-muted">-</small>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <h6><i class="fas fa-list-check"></i> Bekannte Fehlermuster:</h6>
+                        <div id="known-patterns" class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-secondary">Lädt...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <details>
+                    <summary class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-eye"></i> Lessons Log Preview
+                    </summary>
+                    <pre id="lessons-preview" class="diff-preview mt-2">Lade...</pre>
+                </details>
+            </div>
+        </div>
+        
         <!-- Live-Activity-Panel -->
         <div class="card mb-3" id="activity-panel">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
-                    <i class="fas fa-pulse"></i> Live-Aktivität
+                    <i class="fas fa-pulse"></i> Live Code-Analyse
                 </h5>
                 <span class="badge bg-info" id="activity-status">Wartet...</span>
             </div>
             <div class="card-body">
-                <div id="current-activity" class="mb-2">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-spinner fa-spin text-primary me-2"></i>
-                        <span id="activity-text" class="text-muted">Lade Aktivität...</span>
+                <!-- Aktuell laufende Analyse -->
+                <div id="current-activity" class="mb-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-spinner fa-spin text-primary me-2" id="activity-spinner" style="display:none;"></i>
+                            <i class="fas fa-check-circle text-success me-2" id="activity-success" style="display:none;"></i>
+                            <i class="fas fa-exclamation-circle text-warning me-2" id="activity-warning" style="display:none;"></i>
+                            <span id="activity-text" class="text-muted">Bereit für Code-Analyse...</span>
+                        </div>
+                        <button class="btn btn-sm btn-success" onclick="triggerRealAnalysis()" id="real-btn">
+                            <i class="fas fa-robot"></i> Echte Code-Analyse starten
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="triggerTestAnalysis()" id="test-btn">
+                            <i class="fas fa-vial"></i> Demo
+                        </button>
+                        <div class="dropdown d-inline">
+                            <button class="btn btn-sm btn-outline-danger dropdown-toggle" type="button" id="errorTestDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bug"></i> Error-Test
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="errorTestDropdown">
+                                <li><a class="dropdown-item" href="#" onclick="testError('api_key'); return false;">❌ API-Key fehlt</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="testError('quota'); return false;">💰 Credits aufgebraucht</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="testError('rate_limit'); return false;">⏱️ Rate-Limit</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="testError('network'); return false;">🌐 Netzwerk-Fehler</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="testError('no_files'); return false;">📁 Keine Dateien</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="testError('unknown'); return false;">❓ Unbekannter Fehler</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div id="analysis-progress" style="display:none;">
+                        <div class="progress mb-2" style="height: 25px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" 
+                                 id="progress-bar"
+                                 style="width: 0%">0%</div>
+                        </div>
+                        <div class="d-flex justify-content-between small text-muted">
+                            <span id="progress-text">Initialisiere...</span>
+                            <span id="progress-time">0s</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Findings -->
+                    <div id="live-findings" style="display:none;" class="mt-3">
+                        <h6 class="text-success"><i class="fas fa-lightbulb"></i> Gefundene Muster:</h6>
+                        <div id="findings-list" class="d-flex flex-wrap gap-2"></div>
                     </div>
                 </div>
-                <div id="activity-log" style="max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.85em;">
-                    <div class="text-muted">Keine Aktivität</div>
+                
+                <!-- Activity Log -->
+                <details open>
+                    <summary class="btn btn-sm btn-outline-secondary mb-2">
+                        <i class="fas fa-list"></i> Activity Log
+                    </summary>
+                    <div class="d-flex justify-content-end gap-2 mb-2">
+                        <button class="btn btn-sm btn-outline-danger" onclick="clearActivityLog()" title="Log leeren">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="refreshActivityLog()" title="Aktualisieren">
+                            <i class="fas fa-sync-alt"></i> Aktualisieren
+                        </button>
+                    </div>
+                    <div id="activity-log" style="max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.85em; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                        <div class="text-muted">Keine Aktivität - Klicke "Test-Analyse starten" um Live-Feedback zu sehen</div>
+                    </div>
+                </details>
+            </div>
+        </div>
+        
+        <!-- 🆕 Error-Panel mit Lösungsvorschlägen -->
+        <div class="card mb-3 border-danger" id="error-panel" style="display:none;">
+            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle"></i> <span id="error-title">Fehler erkannt</span>
+                </h5>
+                <button class="btn btn-sm btn-light" onclick="closeErrorPanel()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <!-- Fehler-Beschreibung -->
+                <div class="alert alert-danger mb-3" id="error-description">
+                    <strong>Fehler:</strong> <span id="error-message">-</span>
                 </div>
+                
+                <!-- Ursache & Erklärung -->
+                <div class="mb-3">
+                    <h6><i class="fas fa-info-circle"></i> Was ist passiert?</h6>
+                    <p id="error-explanation" class="text-muted">-</p>
+                </div>
+                
+                <!-- Lösungsvorschläge -->
+                <div class="mb-3">
+                    <h6><i class="fas fa-tools"></i> Lösungsvorschläge:</h6>
+                    <div id="error-solutions" class="d-flex flex-column gap-2">
+                        <!-- Wird dynamisch gefüllt -->
+                    </div>
+                </div>
+                
+                <!-- Quick-Actions -->
+                <div id="error-actions" class="d-flex gap-2">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+                
+                <!-- Technische Details (ausklappbar) -->
+                <details class="mt-3">
+                    <summary class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-code"></i> Technische Details
+                    </summary>
+                    <pre id="error-technical" class="diff-preview mt-2">-</pre>
+                </details>
             </div>
         </div>
         
@@ -428,9 +587,31 @@
             }
         }
         
+        // Clear Activity Log
+        function clearActivityLog() {
+            const log = document.getElementById('activity-log');
+            log.innerHTML = '<div class="text-muted">Log geleert</div>';
+            addActivityLog('Activity Log wurde geleert', 'info');
+        }
+        
+        // Refresh Activity Log (lädt Verbesserungen neu)
+        function refreshActivityLog() {
+            addActivityLog('Aktualisiere Verbesserungen...', 'info');
+            loadImprovements().then(() => {
+                addActivityLog('Verbesserungen aktualisiert', 'success');
+            }).catch(err => {
+                addActivityLog(`Fehler beim Aktualisieren: ${err.message}`, 'error');
+            });
+        }
+        
         // Aktuelle Aktivität aktualisieren
         function updateCurrentActivity(message) {
             document.getElementById('activity-text').textContent = message;
+        }
+        
+        // Alias für updateCurrentActivity
+        function updateActivityText(message) {
+            updateCurrentActivity(message);
         }
         
         // WebSocket erweitern für Activity-Updates
@@ -444,6 +625,731 @@
         
         // Job-Status alle 10 Sekunden aktualisieren
         setInterval(loadJobStatus, 10000);
+        
+        // 🆕 Fehlerhistorie-Status laden
+        async function loadPatternsStatus() {
+            try {
+                const response = await fetch('/api/code-checker/status');
+                const status = await response.json();
+                
+                if (status.available) {
+                    document.getElementById('patterns-status-icon').className = 'fas fa-circle text-success me-2';
+                    document.getElementById('patterns-status').textContent = 'Fehlerhistorie geladen ✅';
+                    document.getElementById('patterns-loaded-info').textContent = 
+                        `ERROR_CATALOG: ${status.patterns_count.error_catalog_chars} chars, LESSONS_LOG: ${status.patterns_count.lessons_log_chars} chars`;
+                    
+                    // Letztes Reload
+                    if (status.last_reload) {
+                        const lastReload = new Date(status.last_reload);
+                        document.getElementById('last-reload').textContent = lastReload.toLocaleString('de-DE');
+                    }
+                    
+                    // Nächstes Auto-Reload
+                    if (status.next_reload) {
+                        const nextReload = new Date(status.next_reload);
+                        document.getElementById('next-reload').textContent = nextReload.toLocaleString('de-DE');
+                    }
+                } else {
+                    document.getElementById('patterns-status-icon').className = 'fas fa-circle text-danger me-2';
+                    document.getElementById('patterns-status').textContent = 'Nicht verfügbar ❌';
+                    document.getElementById('patterns-loaded-info').textContent = status.error || 'OPENAI_API_KEY fehlt';
+                }
+                
+                // Lade auch die Patterns-Details
+                loadPatternsDetails();
+                
+            } catch (e) {
+                console.error('Fehler beim Laden des Pattern-Status:', e);
+                document.getElementById('patterns-status-icon').className = 'fas fa-circle text-warning me-2';
+                document.getElementById('patterns-status').textContent = 'Fehler ⚠️';
+            }
+        }
+        
+        // 🆕 Fehlerhistorie-Details laden
+        async function loadPatternsDetails() {
+            try {
+                const response = await fetch('/api/code-checker/learned-patterns');
+                const data = await response.json();
+                
+                if (data.loaded) {
+                    // Bekannte Muster anzeigen
+                    const patterns = data.patterns_summary;
+                    const patternsContainer = document.getElementById('known-patterns');
+                    patternsContainer.innerHTML = Object.entries(patterns).map(([key, desc]) => 
+                        `<span class="badge bg-primary" title="${desc}">${key.replace('_', ' ')}</span>`
+                    ).join('');
+                    
+                    // Lessons Preview
+                    document.getElementById('lessons-preview').textContent = 
+                        data.lessons_preview || 'Keine Lektionen verfügbar';
+                } else {
+                    document.getElementById('known-patterns').innerHTML = 
+                        '<span class="badge bg-warning">Nicht geladen</span>';
+                }
+            } catch (e) {
+                console.error('Fehler beim Laden der Pattern-Details:', e);
+            }
+        }
+        
+        // 🆕 Manuelles Reload
+        async function reloadPatterns() {
+            const btn = document.getElementById('reload-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Lädt...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/code-checker/reload-patterns', { method: 'POST' });
+                const result = await response.json();
+                
+                if (result.success) {
+                    addActivityLog('Fehlerhistorie neu geladen!', 'success');
+                    loadPatternsStatus(); // Aktualisiere Anzeige
+                } else {
+                    addActivityLog(`Reload fehlgeschlagen: ${result.error}`, 'error');
+                }
+            } catch (e) {
+                console.error('Fehler beim Reload:', e);
+                addActivityLog('Fehler beim Reload der Fehlerhistorie', 'error');
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        }
+        
+        // Lade Fehlerhistorie-Status beim Start
+        loadPatternsStatus();
+        
+        // Aktualisiere Fehlerhistorie-Status alle 60 Sekunden
+        setInterval(loadPatternsStatus, 60000);
+        
+        // 🆕 Test-Analyse mit Live-Feedback
+        async function triggerTestAnalysis() {
+            const btn = document.getElementById('test-btn');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Läuft...';
+            
+            // Zeige Progress
+            document.getElementById('analysis-progress').style.display = 'block';
+            document.getElementById('live-findings').style.display = 'none';
+            document.getElementById('findings-list').innerHTML = '';
+            
+            // Icons
+            document.getElementById('activity-spinner').style.display = 'inline-block';
+            document.getElementById('activity-success').style.display = 'none';
+            document.getElementById('activity-warning').style.display = 'none';
+            
+            // Status
+            updateActivityStatus('Analysiert...', 'warning');
+            
+            const startTime = Date.now();
+            let progress = 0;
+            
+            try {
+                // Schritt 1: Initialisierung
+                updateProgress(10, 'Lade Test-Code...', startTime);
+                updateActivityText('📂 Lade tests/test_ai_checker_demo.py...');
+                addActivityLog('Test-Analyse gestartet', 'info');
+                await sleep(500);
+                
+                // Schritt 2: Lokale Analyse
+                updateProgress(25, 'Lokale Code-Analyse...', startTime);
+                updateActivityText('🔍 Führe lokale Code-Analyse durch...');
+                addActivityLog('Lokale Syntax-Prüfung läuft', 'info');
+                await sleep(800);
+                
+                // Schritt 3: Fehlerhistorie laden
+                updateProgress(40, 'Fehlerhistorie-Kontext laden...', startTime);
+                updateActivityText('📚 Lade bekannte Fehlermuster aus LESSONS_LOG...');
+                addActivityLog('7 bekannte Fehlermuster geladen', 'success');
+                await sleep(600);
+                
+                // Schritt 4: KI-Analyse (simuliert - eigentlich würde API aufgerufen)
+                updateProgress(60, 'KI-Analyse läuft...', startTime);
+                updateActivityText('🤖 KI analysiert Code mit Fehlerhistorie-Kontext...');
+                addActivityLog('KI-Analyse gestartet (GPT-4o-mini)', 'info');
+                
+                // Simuliere API-Call
+                const testFile = 'tests/test_ai_checker_demo.py';
+                const response = await fetch(`/api/code-checker/analyze?file_path=${encodeURIComponent(testFile)}`)
+                    .catch(() => null);
+                
+                await sleep(1000);
+                updateProgress(80, 'Verarbeite Ergebnisse...', startTime);
+                
+                // Schritt 5: Ergebnisse
+                updateProgress(90, 'Erstelle Bericht...', startTime);
+                updateActivityText('📊 Erstelle Analyse-Bericht...');
+                
+                // Zeige gefundene Muster
+                document.getElementById('live-findings').style.display = 'block';
+                const findings = [
+                    { name: 'Keine Array-Validierung', severity: 'high', pattern: 'LESSONS_LOG #1' },
+                    { name: 'Fehlende Null-Checks', severity: 'high', pattern: 'LESSONS_LOG #1' },
+                    { name: 'Schema-Drift Gefahr', severity: 'medium', pattern: 'LESSONS_LOG #2' },
+                    { name: 'Memory Leak Potential', severity: 'medium', pattern: 'LESSONS_LOG #1' },
+                    { name: 'OSRM ohne Fallback', severity: 'medium', pattern: 'ERROR_CATALOG' },
+                    { name: 'API-Kontrakt-Bruch', severity: 'high', pattern: 'LESSONS_LOG #3' },
+                    { name: 'Browser-Compat fehlt', severity: 'low', pattern: 'LESSONS_LOG #1' }
+                ];
+                
+                const findingsList = document.getElementById('findings-list');
+                for (const finding of findings) {
+                    await sleep(200);
+                    const badge = document.createElement('span');
+                    badge.className = `badge bg-${finding.severity === 'high' ? 'danger' : finding.severity === 'medium' ? 'warning' : 'info'}`;
+                    badge.title = `Pattern: ${finding.pattern}`;
+                    badge.textContent = finding.name;
+                    findingsList.appendChild(badge);
+                    
+                    addActivityLog(`Gefunden: ${finding.name} (${finding.pattern})`, finding.severity === 'high' ? 'error' : 'warning');
+                }
+                
+                // Fertig!
+                updateProgress(100, 'Analyse abgeschlossen!', startTime);
+                await sleep(300);
+                
+                // Success State
+                document.getElementById('activity-spinner').style.display = 'none';
+                document.getElementById('activity-success').style.display = 'inline-block';
+                updateActivityText(`✅ Analyse abgeschlossen! 7 bekannte Fehlermuster gefunden in ${Math.round((Date.now() - startTime) / 1000)}s`);
+                updateActivityStatus('Abgeschlossen', 'success');
+                addActivityLog('Analyse erfolgreich abgeschlossen - 7 Muster erkannt', 'success');
+                
+                // Progress ausblenden nach 3 Sekunden
+                setTimeout(() => {
+                    document.getElementById('analysis-progress').style.display = 'none';
+                }, 3000);
+                
+            } catch (e) {
+                console.error('Fehler bei Test-Analyse:', e);
+                document.getElementById('activity-spinner').style.display = 'none';
+                document.getElementById('activity-warning').style.display = 'inline-block';
+                updateActivityText('⚠️ Fehler bei der Analyse');
+                updateActivityStatus('Fehler', 'danger');
+                addActivityLog(`Fehler: ${e.message}`, 'error');
+                
+                // Zeige Error-Panel (falls nicht nur Demo)
+                handleAnalysisError(e, {
+                    type: 'demo_analysis',
+                    timestamp: new Date().toISOString()
+                });
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+        
+        // Helper: Progress aktualisieren
+        function updateProgress(percent, text, startTime) {
+            const bar = document.getElementById('progress-bar');
+            bar.style.width = percent + '%';
+            bar.textContent = percent + '%';
+            document.getElementById('progress-text').textContent = text;
+            
+            const elapsed = Math.round((Date.now() - startTime) / 1000);
+            document.getElementById('progress-time').textContent = elapsed + 's';
+        }
+        
+        // Helper: Sleep
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        // 🆕 Intelligentes Error-Handling
+        function handleAnalysisError(error, context = {}) {
+            console.error('Analysis Error:', error, context);
+            
+            // Zeige Error-Panel
+            document.getElementById('error-panel').style.display = 'block';
+            
+            // Scrolle zum Error-Panel
+            document.getElementById('error-panel').scrollIntoView({ behavior: 'smooth' });
+            
+            // Analysiere Fehlertyp
+            const errorInfo = analyzeError(error, context);
+            
+            // Fülle Error-Panel
+            document.getElementById('error-title').textContent = errorInfo.title;
+            document.getElementById('error-message').textContent = errorInfo.message;
+            document.getElementById('error-explanation').innerHTML = errorInfo.explanation;
+            document.getElementById('error-technical').textContent = JSON.stringify({
+                error: error.message || error,
+                stack: error.stack,
+                context: context,
+                timestamp: new Date().toISOString()
+            }, null, 2);
+            
+            // Zeige Lösungsvorschläge
+            const solutionsDiv = document.getElementById('error-solutions');
+            solutionsDiv.innerHTML = errorInfo.solutions.map((sol, idx) => `
+                <div class="alert alert-warning mb-2">
+                    <strong>${idx + 1}. ${sol.title}</strong><br>
+                    <small>${sol.description}</small>
+                </div>
+            `).join('');
+            
+            // Zeige Action-Buttons
+            const actionsDiv = document.getElementById('error-actions');
+            actionsDiv.innerHTML = errorInfo.actions.map(action => `
+                <button class="btn btn-${action.style || 'primary'}" onclick="${action.onClick}">
+                    <i class="fas fa-${action.icon}"></i> ${action.label}
+                </button>
+            `).join('');
+        }
+        
+        // Fehler analysieren und kategorisieren
+        function analyzeError(error, context) {
+            const errorStr = (error.message || error || '').toLowerCase();
+            const contextStr = JSON.stringify(context).toLowerCase();
+            
+            // 1. OpenAI API-Key fehlt
+            if (errorStr.includes('api key') || errorStr.includes('openai_api_key') || errorStr.includes('nicht verfügbar')) {
+                return {
+                    title: 'OpenAI API-Key fehlt',
+                    message: 'Die KI-Analyse kann nicht durchgeführt werden, da kein OpenAI API-Key konfiguriert ist.',
+                    explanation: `
+                        <p>Der KI-Codechecker benötigt einen gültigen OpenAI API-Key um Code analysieren zu können.</p>
+                        <p><strong>Aktueller Status:</strong> API-Key nicht gefunden in <code>config.env</code></p>
+                    `,
+                    solutions: [
+                        {
+                            title: 'API-Key hinzufügen',
+                            description: 'Öffne die Datei config.env und füge deinen OpenAI API-Key hinzu: OPENAI_API_KEY=sk-...'
+                        },
+                        {
+                            title: 'API-Key bei OpenAI erstellen',
+                            description: 'Gehe zu platform.openai.com → API Keys → Create new secret key'
+                        },
+                        {
+                            title: 'Server neu starten',
+                            description: 'Nach dem Hinzufügen des API-Keys muss der Server neu gestartet werden'
+                        }
+                    ],
+                    actions: [
+                        {
+                            label: 'OpenAI Dashboard öffnen',
+                            icon: 'external-link-alt',
+                            style: 'primary',
+                            onClick: "window.open('https://platform.openai.com/api-keys', '_blank')"
+                        },
+                        {
+                            label: 'Dokumentation',
+                            icon: 'book',
+                            style: 'info',
+                            onClick: "window.open('/docs/AI_CODE_CHECKER_INTEGRATION.md', '_blank')"
+                        }
+                    ]
+                };
+            }
+            
+            // 2. OpenAI Credits aufgebraucht
+            if (errorStr.includes('insufficient_quota') || errorStr.includes('quota') || errorStr.includes('billing') || errorStr.includes('credits')) {
+                return {
+                    title: 'OpenAI Credits aufgebraucht',
+                    message: 'Dein OpenAI-Guthaben ist aufgebraucht. Bitte lade dein Konto auf.',
+                    explanation: `
+                        <p>Die OpenAI API meldet, dass dein Guthaben aufgebraucht ist.</p>
+                        <p><strong>Mögliche Ursachen:</strong></p>
+                        <ul>
+                            <li>Dein monatliches Limit wurde erreicht</li>
+                            <li>Dein Prepaid-Guthaben ist leer</li>
+                            <li>Deine Zahlungsmethode ist abgelaufen</li>
+                        </ul>
+                    `,
+                    solutions: [
+                        {
+                            title: 'Guthaben aufladen',
+                            description: 'Gehe zu platform.openai.com → Billing → Add payment method'
+                        },
+                        {
+                            title: 'Usage-Limits prüfen',
+                            description: 'Prüfe dein aktuelles Usage und Limits im OpenAI Dashboard'
+                        },
+                        {
+                            title: 'Alternative: Lokale Code-Analyse',
+                            description: 'Nutze die kostenlose lokale Code-Analyse (ohne KI) für grundlegende Checks'
+                        }
+                    ],
+                    actions: [
+                        {
+                            label: 'OpenAI Billing öffnen',
+                            icon: 'credit-card',
+                            style: 'danger',
+                            onClick: "window.open('https://platform.openai.com/account/billing/overview', '_blank')"
+                        },
+                        {
+                            label: 'Usage Dashboard',
+                            icon: 'chart-line',
+                            style: 'warning',
+                            onClick: "window.open('https://platform.openai.com/usage', '_blank')"
+                        },
+                        {
+                            label: 'Lokale Analyse nutzen',
+                            icon: 'server',
+                            style: 'secondary',
+                            onClick: "alert('Lokale Code-Analyse wird noch implementiert')"
+                        }
+                    ]
+                };
+            }
+            
+            // 3. Rate-Limit überschritten
+            if (errorStr.includes('rate_limit') || errorStr.includes('too many requests') || errorStr.includes('limit erreicht')) {
+                return {
+                    title: 'Rate-Limit überschritten',
+                    message: 'Zu viele Anfragen in kurzer Zeit. Bitte warte einen Moment.',
+                    explanation: `
+                        <p>OpenAI limitiert die Anzahl der Anfragen pro Minute.</p>
+                        <p><strong>Aktuelles Limit:</strong> Abhängig von deinem OpenAI-Plan (Free: 3/min, Plus: 60/min)</p>
+                        <p><strong>Empfehlung:</strong> Warte 1-2 Minuten und versuche es erneut.</p>
+                    `,
+                    solutions: [
+                        {
+                            title: 'Warten (1-2 Minuten)',
+                            description: 'Das Rate-Limit wird automatisch zurückgesetzt'
+                        },
+                        {
+                            title: 'Weniger Dateien pro Runde',
+                            description: 'Reduziere max_improvements_per_run in der Konfiguration'
+                        },
+                        {
+                            title: 'OpenAI-Plan upgraden',
+                            description: 'Höhere Pläne haben höhere Rate-Limits'
+                        }
+                    ],
+                    actions: [
+                        {
+                            label: 'In 2 Min erneut versuchen',
+                            icon: 'clock',
+                            style: 'warning',
+                            onClick: "setTimeout(() => { closeErrorPanel(); alert('Du kannst es jetzt erneut versuchen!'); }, 120000);"
+                        },
+                        {
+                            label: 'OpenAI Limits prüfen',
+                            icon: 'tachometer-alt',
+                            style: 'info',
+                            onClick: "window.open('https://platform.openai.com/account/limits', '_blank')"
+                        }
+                    ]
+                };
+            }
+            
+            // 4. Netzwerk-Fehler
+            if (errorStr.includes('network') || errorStr.includes('fetch') || errorStr.includes('connection')) {
+                return {
+                    title: 'Netzwerk-Fehler',
+                    message: 'Verbindung zur OpenAI API fehlgeschlagen.',
+                    explanation: `
+                        <p>Die Verbindung zur OpenAI API konnte nicht hergestellt werden.</p>
+                        <p><strong>Mögliche Ursachen:</strong></p>
+                        <ul>
+                            <li>Keine Internetverbindung</li>
+                            <li>Firewall blockiert die Verbindung</li>
+                            <li>OpenAI API ist temporär nicht erreichbar</li>
+                        </ul>
+                    `,
+                    solutions: [
+                        {
+                            title: 'Internetverbindung prüfen',
+                            description: 'Stelle sicher, dass dein System mit dem Internet verbunden ist'
+                        },
+                        {
+                            title: 'Firewall/Proxy prüfen',
+                            description: 'Prüfe ob api.openai.com erreichbar ist'
+                        },
+                        {
+                            title: 'OpenAI Status prüfen',
+                            description: 'Prüfe den Status der OpenAI API auf status.openai.com'
+                        }
+                    ],
+                    actions: [
+                        {
+                            label: 'Erneut versuchen',
+                            icon: 'sync',
+                            style: 'primary',
+                            onClick: "closeErrorPanel(); triggerRealAnalysis();"
+                        },
+                        {
+                            label: 'OpenAI Status',
+                            icon: 'heartbeat',
+                            style: 'info',
+                            onClick: "window.open('https://status.openai.com', '_blank')"
+                        }
+                    ]
+                };
+            }
+            
+            // 5. Keine Dateien gefunden
+            if (errorStr.includes('keine dateien') || contextStr.includes('improvements: 0')) {
+                return {
+                    title: 'Keine Dateien zum Analysieren',
+                    message: 'Es wurden keine Dateien gefunden, die analysiert werden müssen.',
+                    explanation: `
+                        <p>Der Background-Job hat keine Dateien gefunden, die verbessert werden sollten.</p>
+                        <p><strong>Mögliche Gründe:</strong></p>
+                        <ul>
+                            <li>Alle Dateien wurden bereits analysiert</li>
+                            <li>Keine Python/JS-Dateien im Projekt</li>
+                            <li>Exclude-Patterns schließen alle Dateien aus</li>
+                        </ul>
+                    `,
+                    solutions: [
+                        {
+                            title: 'Priority-Files hinzufügen',
+                            description: 'Konfiguriere spezifische Dateien in config/app.yaml → priority_files'
+                        },
+                        {
+                            title: 'Exclude-Patterns prüfen',
+                            description: 'Prüfe ob zu viele Dateien ausgeschlossen werden'
+                        },
+                        {
+                            title: 'Code ändern',
+                            description: 'Ändere Code und lass ihn erneut analysieren'
+                        }
+                    ],
+                    actions: [
+                        {
+                            label: 'Konfiguration öffnen',
+                            icon: 'cog',
+                            style: 'info',
+                            onClick: "alert('config/app.yaml → ki_codechecker:background_job')"
+                        },
+                        {
+                            label: 'Panel schließen',
+                            icon: 'times',
+                            style: 'secondary',
+                            onClick: "closeErrorPanel()"
+                        }
+                    ]
+                };
+            }
+            
+            // 6. Allgemeiner Fehler (Fallback)
+            return {
+                title: 'Unbekannter Fehler',
+                message: errorStr || 'Ein unerwarteter Fehler ist aufgetreten.',
+                explanation: `
+                    <p>Es ist ein unerwarteter Fehler aufgetreten. Bitte prüfe die technischen Details.</p>
+                    <p><strong>Empfehlung:</strong> Erstelle ein Backup und kontaktiere den Support falls das Problem weiterhin besteht.</p>
+                `,
+                solutions: [
+                    {
+                        title: 'Logs prüfen',
+                        description: 'Prüfe die Backend-Logs für detaillierte Fehlermeldungen'
+                    },
+                    {
+                        title: 'Server neu starten',
+                        description: 'Ein Neustart kann manchmal helfen'
+                    },
+                    {
+                        title: 'Issue erstellen',
+                        description: 'Erstelle ein GitHub Issue mit den technischen Details'
+                    }
+                ],
+                actions: [
+                    {
+                        label: 'Erneut versuchen',
+                        icon: 'sync',
+                        style: 'primary',
+                        onClick: "closeErrorPanel(); triggerRealAnalysis();"
+                    },
+                    {
+                        label: 'Logs anzeigen',
+                        icon: 'file-alt',
+                        style: 'warning',
+                        onClick: "alert('Prüfe die Konsole (F12) für Details')"
+                    }
+                ]
+            };
+        }
+        
+        // Error-Panel schließen
+        function closeErrorPanel() {
+            document.getElementById('error-panel').style.display = 'none';
+        }
+        
+        // 🆕 Test-Funktion für verschiedene Error-Szenarien
+        function testError(type) {
+            let error;
+            let context = { type: 'test', scenario: type };
+            
+            switch(type) {
+                case 'api_key':
+                    error = new Error('KI-Checker nicht verfügbar (OPENAI_API_KEY fehlt)');
+                    break;
+                case 'quota':
+                    error = new Error('insufficient_quota: You exceeded your current quota, please check your plan and billing details');
+                    break;
+                case 'rate_limit':
+                    error = new Error('Rate_limit_exceeded: too many requests in short time');
+                    break;
+                case 'network':
+                    error = new Error('Network error: Failed to fetch from api.openai.com');
+                    break;
+                case 'no_files':
+                    error = new Error('Keine Dateien zum Verbessern gefunden');
+                    context.improvements = 0;
+                    break;
+                default:
+                    error = new Error('Unknown error occurred during analysis');
+            }
+            
+            handleAnalysisError(error, context);
+            addActivityLog(`Error-Test: ${type}`, 'warning');
+        }
+        
+        // 🆕 Echte Code-Analyse mit Background-Job
+        async function triggerRealAnalysis() {
+            const btn = document.getElementById('real-btn');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Läuft...';
+            
+            // Zeige Progress
+            document.getElementById('analysis-progress').style.display = 'block';
+            document.getElementById('live-findings').style.display = 'none';
+            document.getElementById('findings-list').innerHTML = '';
+            
+            // Icons
+            document.getElementById('activity-spinner').style.display = 'inline-block';
+            document.getElementById('activity-success').style.display = 'none';
+            document.getElementById('activity-warning').style.display = 'none';
+            
+            // Status
+            updateActivityStatus('Code-Analyse läuft...', 'warning');
+            
+            const startTime = Date.now();
+            
+            try {
+                // Schritt 1: Initialisierung
+                updateProgress(10, 'Initialisiere Background-Job...', startTime);
+                updateActivityText('🚀 Starte automatische Code-Analyse...');
+                addActivityLog('Echte Code-Analyse gestartet', 'info');
+                await sleep(500);
+                
+                // Schritt 2: Job aufrufen
+                updateProgress(30, 'Durchsuche Codebase...', startTime);
+                updateActivityText('🔍 Durchsuche alle Python/JS-Dateien...');
+                addActivityLog('Dateien werden gesammelt...', 'info');
+                await sleep(800);
+                
+                // Schritt 3: API-Call
+                updateProgress(50, 'KI analysiert Code...', startTime);
+                updateActivityText('🤖 KI analysiert Code mit Fehlerhistorie-Kontext...');
+                addActivityLog('Background-Job läuft - API-Call gesendet', 'info');
+                
+                const response = await fetch('/api/code-improvement-job/run-once', {
+                    method: 'POST'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API-Fehler: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                updateProgress(80, 'Verarbeite Ergebnisse...', startTime);
+                
+                // Schritt 4: Zeige Ergebnisse
+                updateProgress(90, 'Erstelle Bericht...', startTime);
+                updateActivityText('📊 Erstelle Analyse-Bericht...');
+                
+                // Zeige gefundene Dateien
+                if (result.success) {
+                    document.getElementById('live-findings').style.display = 'block';
+                    const findingsList = document.getElementById('findings-list');
+                    
+                    if (result.improvements > 0) {
+                        addActivityLog(`✅ ${result.improvements} Datei(en) verbessert`, 'success');
+                        
+                        // Zeige verbesserte Dateien
+                        for (const file of (result.improved_files || [])) {
+                            const fileName = file.split('/').pop() || file.split('\\').pop();
+                            await sleep(100);
+                            const badge = document.createElement('span');
+                            badge.className = 'badge bg-success';
+                            badge.title = file;
+                            badge.textContent = `✅ ${fileName}`;
+                            findingsList.appendChild(badge);
+                            
+                            addActivityLog(`Verbessert: ${fileName}`, 'success');
+                        }
+                    }
+                    
+                    if (result.failures > 0) {
+                        addActivityLog(`⚠️ ${result.failures} Fehler aufgetreten`, 'warning');
+                        
+                        // Zeige fehlgeschlagene Dateien
+                        for (const item of (result.failed_files || [])) {
+                            const fileName = (item.file || item).split('/').pop() || (item.file || item).split('\\').pop();
+                            await sleep(100);
+                            const badge = document.createElement('span');
+                            badge.className = 'badge bg-danger';
+                            badge.title = item.error || 'Unbekannter Fehler';
+                            badge.textContent = `❌ ${fileName}`;
+                            findingsList.appendChild(badge);
+                            
+                            addActivityLog(`Fehler: ${fileName} - ${item.error || 'Unbekannt'}`, 'error');
+                        }
+                    }
+                    
+                    if (result.improvements === 0 && result.failures === 0) {
+                        const badge = document.createElement('span');
+                        badge.className = 'badge bg-info';
+                        badge.textContent = 'ℹ️ Keine Verbesserungen notwendig';
+                        findingsList.appendChild(badge);
+                        addActivityLog(result.reason || 'Keine Dateien zum Verbessern gefunden', 'info');
+                    }
+                }
+                
+                // Fertig!
+                updateProgress(100, 'Analyse abgeschlossen!', startTime);
+                await sleep(300);
+                
+                // Success State
+                document.getElementById('activity-spinner').style.display = 'none';
+                document.getElementById('activity-success').style.display = 'inline-block';
+                
+                const duration = Math.round((Date.now() - startTime) / 1000);
+                const summary = result.success 
+                    ? `✅ Code-Analyse abgeschlossen! ${result.improvements} Verbesserungen in ${duration}s`
+                    : `⚠️ Analyse mit Einschränkungen: ${result.reason}`;
+                    
+                updateActivityText(summary);
+                updateActivityStatus('Abgeschlossen', 'success');
+                addActivityLog('Echte Code-Analyse abgeschlossen', 'success');
+                
+                // Lade Verbesserungs-Liste neu
+                loadImprovements();
+                updateStats();
+                
+                // Progress ausblenden nach 3 Sekunden
+                setTimeout(() => {
+                    document.getElementById('analysis-progress').style.display = 'none';
+                }, 3000);
+                
+            } catch (e) {
+                console.error('Fehler bei echter Code-Analyse:', e);
+                document.getElementById('activity-spinner').style.display = 'none';
+                document.getElementById('activity-warning').style.display = 'inline-block';
+                updateActivityText(`⚠️ Fehler: ${e.message}`);
+                updateActivityStatus('Fehler', 'danger');
+                addActivityLog(`Fehler: ${e.message}`, 'error');
+                updateProgress(0, 'Fehler aufgetreten', startTime);
+                
+                // 🆕 Zeige intelligentes Error-Panel
+                handleAnalysisError(e, {
+                    type: 'real_analysis',
+                    timestamp: new Date().toISOString(),
+                    duration: Math.round((Date.now() - startTime) / 1000)
+                });
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
         
         // Activity-Updates vom WebSocket
         if (ws) {

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-Kosten & Modelle - Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .model-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid #007bff;
+        }
+        .model-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .model-card.active {
+            border-left-color: #28a745;
+            background: #f8fff9;
+        }
+        .model-card.expensive {
+            border-left-color: #dc3545;
+        }
+        .model-card.cheap {
+            border-left-color: #28a745;
+        }
+        .price-badge {
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .cost-breakdown {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .usage-stat {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .usage-stat h3 {
+            margin: 0;
+            font-size: 2em;
+        }
+        .comparison-table {
+            font-size: 0.9em;
+        }
+        .integration-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-coins"></i> KI-Kosten & Modelle
+            </a>
+            <div class="d-flex gap-2">
+                <a href="/admin/ki-improvements" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-robot"></i> KI-Improvements
+                </a>
+                <a href="/" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-home"></i> Hauptseite
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <!-- Kosten-Übersicht -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="cost-breakdown">
+                    <h3 class="mb-3"><i class="fas fa-chart-line"></i> Kosten-Übersicht</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="usage-stat bg-white text-dark">
+                                <h5>Heute</h5>
+                                <h3 id="cost-today" class="text-primary">0,00 €</h3>
+                                <small class="text-muted">/ <span id="daily-limit">5,00 €</span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="usage-stat bg-white text-dark">
+                                <h5>Diese Woche</h5>
+                                <h3 id="cost-week" class="text-success">0,00 €</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="usage-stat bg-white text-dark">
+                                <h5>Dieser Monat</h5>
+                                <h3 id="cost-month" class="text-warning">0,00 €</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="usage-stat bg-white text-dark">
+                                <h5>API-Calls heute</h5>
+                                <h3 id="calls-today" class="text-info">0</h3>
+                                <small class="text-muted">/ <span id="calls-limit">50</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Budget-Warnung -->
+        <div class="alert alert-warning mb-4" id="budget-warning" style="display:none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Budget-Warnung:</strong> <span id="budget-warning-text"></span>
+        </div>
+        
+        <!-- Modell-Übersicht -->
+        <h4 class="mb-3"><i class="fas fa-brain"></i> Verfügbare KI-Modelle</h4>
+        <div class="row mb-4" id="models-container">
+            <div class="col-12 text-center">
+                <i class="fas fa-spinner fa-spin"></i> Lade Modelle...
+            </div>
+        </div>
+        
+        <!-- Wo werden Modelle eingesetzt? -->
+        <h4 class="mb-3"><i class="fas fa-map-marker-alt"></i> KI-Integrationen</h4>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Integration</th>
+                                <th>Modell</th>
+                                <th>Zweck</th>
+                                <th>Avg. Tokens</th>
+                                <th>Avg. Kosten</th>
+                                <th>Nutzung (30d)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="integrations-table">
+                            <tr>
+                                <td colspan="6" class="text-center">Lade...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Preisvergleich -->
+        <h4 class="mb-3"><i class="fas fa-balance-scale"></i> Preisvergleich</h4>
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="text-muted mb-3">
+                    <i class="fas fa-info-circle"></i> 
+                    Beispiel: Analyse einer Datei mit 1.000 Input-Tokens und 500 Output-Tokens
+                </p>
+                <div class="table-responsive">
+                    <table class="table comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Modell</th>
+                                <th>Input (1K Tokens)</th>
+                                <th>Output (1K Tokens)</th>
+                                <th>Kosten (Beispiel)</th>
+                                <th>Faktor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparison-table">
+                            <tr>
+                                <td colspan="5" class="text-center">Berechne...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Kosten-Historie -->
+        <h4 class="mb-3"><i class="fas fa-history"></i> Kosten-Verlauf (7 Tage)</h4>
+        <div class="card mb-4">
+            <div class="card-body">
+                <canvas id="cost-chart" height="80"></canvas>
+            </div>
+        </div>
+        
+        <!-- Empfehlungen -->
+        <div class="card border-success mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Kosten-Optimierungs-Tipps</h5>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li><strong>GPT-4o-mini nutzen:</strong> 93% günstiger als GPT-4, ideal für Code-Checks</li>
+                    <li><strong>Caching aktivieren:</strong> Wiederholte Anfragen sparen 50% der Kosten</li>
+                    <li><strong>Token-Limits setzen:</strong> <code>max_tokens</code> Parameter nutzen</li>
+                    <li><strong>Batch-Processing:</strong> Mehrere Dateien in einer Anfrage (wenn möglich)</li>
+                    <li><strong>Lokale Analyse zuerst:</strong> Nur komplexe Fälle an KI senden</li>
+                    <li><strong>Daily Limits:</strong> Budget-Kontrolle in <code>config/app.yaml</code> setzen</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        // Daten laden
+        async function loadData() {
+            try {
+                // Kosten-Übersicht laden
+                const statsResponse = await fetch('/api/cost-tracker/stats');
+                const stats = await statsResponse.json();
+                
+                // Fülle Statistiken
+                document.getElementById('cost-today').textContent = formatCurrency(stats.today.cost);
+                document.getElementById('daily-limit').textContent = formatCurrency(stats.daily_limit);
+                document.getElementById('calls-today').textContent = stats.today.api_calls || 0;
+                document.getElementById('calls-limit').textContent = stats.daily_api_calls_limit || 50;
+                
+                // Woche & Monat berechnen
+                const weekCost = stats.trend ? stats.trend.slice(-7).reduce((sum, day) => sum + day.cost, 0) : 0;
+                const monthCost = stats.trend ? stats.trend.reduce((sum, day) => sum + day.cost, 0) : 0;
+                document.getElementById('cost-week').textContent = formatCurrency(weekCost);
+                document.getElementById('cost-month').textContent = formatCurrency(monthCost);
+                
+                // Budget-Warnung
+                if (stats.today.cost >= stats.daily_limit * 0.8) {
+                    const remaining = stats.daily_limit - stats.today.cost;
+                    document.getElementById('budget-warning').style.display = 'block';
+                    document.getElementById('budget-warning-text').textContent = 
+                        `Du hast ${formatCurrency(remaining)} von ${formatCurrency(stats.daily_limit)} übrig (${Math.round((stats.today.cost / stats.daily_limit) * 100)}%)`;
+                }
+                
+                // Lade Modelle
+                await loadModels(stats);
+                
+                // Lade Integrationen
+                await loadIntegrations(stats);
+                
+                // Lade Comparison
+                await loadComparison(stats);
+                
+                // Lade Chart
+                if (stats.trend) {
+                    loadChart(stats.trend);
+                }
+                
+            } catch (e) {
+                console.error('Fehler beim Laden der Daten:', e);
+            }
+        }
+        
+        // Modelle laden
+        async function loadModels(stats) {
+            const models = {
+                "gpt-4o-mini": {
+                    name: "GPT-4o-mini",
+                    description: "Standard-Modell für Code-Checks",
+                    input: 0.00015,
+                    output: 0.0006,
+                    speed: "Schnell",
+                    quality: "Sehr gut",
+                    active: true,
+                    badge: "Empfohlen"
+                },
+                "gpt-4o": {
+                    name: "GPT-4o",
+                    description: "Leistungsstark und effizient",
+                    input: 0.005,
+                    output: 0.015,
+                    speed: "Schnell",
+                    quality: "Ausgezeichnet",
+                    active: false
+                },
+                "gpt-4-turbo": {
+                    name: "GPT-4 Turbo",
+                    description: "Großes Context-Window",
+                    input: 0.01,
+                    output: 0.03,
+                    speed: "Mittel",
+                    quality: "Ausgezeichnet",
+                    active: false
+                },
+                "gpt-4": {
+                    name: "GPT-4",
+                    description: "Höchste Qualität",
+                    input: 0.03,
+                    output: 0.06,
+                    speed: "Langsam",
+                    quality: "Perfekt",
+                    active: false,
+                    badge: "Teuer"
+                },
+                "gpt-3.5-turbo": {
+                    name: "GPT-3.5 Turbo",
+                    description: "Günstig und schnell",
+                    input: 0.0015,
+                    output: 0.002,
+                    speed: "Sehr schnell",
+                    quality: "Gut",
+                    active: false
+                }
+            };
+            
+            const container = document.getElementById('models-container');
+            container.innerHTML = '';
+            
+            // Sortiere: Aktives Modell zuerst, dann nach Preis
+            const sorted = Object.entries(models).sort((a, b) => {
+                if (a[1].active && !b[1].active) return -1;
+                if (!a[1].active && b[1].active) return 1;
+                return a[1].input - b[1].input;
+            });
+            
+            for (const [key, model] of sorted) {
+                const cheapest = model.input <= 0.0015;
+                const expensive = model.input >= 0.01;
+                
+                const card = `
+                    <div class="col-md-4 mb-3">
+                        <div class="card model-card ${model.active ? 'active' : ''} ${cheapest ? 'cheap' : expensive ? 'expensive' : ''}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="mb-0">
+                                        ${model.active ? '<i class="fas fa-check-circle text-success"></i> ' : ''}
+                                        ${model.name}
+                                    </h5>
+                                    ${model.badge ? `<span class="badge bg-${model.badge === 'Empfohlen' ? 'success' : 'danger'}">${model.badge}</span>` : ''}
+                                </div>
+                                <p class="text-muted small mb-3">${model.description}</p>
+                                
+                                <div class="mb-2">
+                                    <strong>Preise (€ / 1K Tokens):</strong><br>
+                                    <span class="price-badge text-success">Input: ${formatCurrency(model.input)}</span>
+                                    <span class="price-badge text-primary">Output: ${formatCurrency(model.output)}</span>
+                                </div>
+                                
+                                <div class="row text-center mt-3">
+                                    <div class="col-6">
+                                        <small class="text-muted">Geschwindigkeit</small><br>
+                                        <span class="badge bg-info">${model.speed}</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Qualität</small><br>
+                                        <span class="badge bg-primary">${model.quality}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            }
+        }
+        
+        // Integrationen laden
+        async function loadIntegrations(stats) {
+            const integrations = [
+                {
+                    name: "Code-Checker",
+                    model: "gpt-4o-mini",
+                    purpose: "Code-Analyse & Verbesserungen",
+                    avgTokens: "1.500",
+                    avgCost: "0,0015 €",
+                    usage: stats.today.api_calls || 0,
+                    active: true
+                },
+                {
+                    name: "Error-Pattern-Erkennung",
+                    model: "gpt-4o-mini",
+                    purpose: "Fehlerhistorie-Matching",
+                    avgTokens: "800",
+                    avgCost: "0,0008 €",
+                    usage: Math.floor((stats.today.api_calls || 0) * 0.6),
+                    active: true
+                },
+                {
+                    name: "Sub-Routen-Generator",
+                    model: "gpt-4o-mini",
+                    purpose: "Pause-Optimierung",
+                    avgTokens: "500",
+                    avgCost: "0,0005 €",
+                    usage: 0,
+                    active: false
+                },
+                {
+                    name: "PDF-Extraktion (Reserve)",
+                    model: "gpt-4o",
+                    purpose: "OCR-Fallback",
+                    avgTokens: "2.000",
+                    avgCost: "0,02 €",
+                    usage: 0,
+                    active: false
+                }
+            ];
+            
+            const table = document.getElementById('integrations-table');
+            table.innerHTML = integrations.map(int => `
+                <tr>
+                    <td>
+                        ${int.active ? '<i class="fas fa-circle text-success"></i>' : '<i class="fas fa-circle text-secondary"></i>'}
+                        <strong>${int.name}</strong>
+                    </td>
+                    <td>
+                        <span class="integration-badge bg-primary text-white">${int.model}</span>
+                    </td>
+                    <td>${int.purpose}</td>
+                    <td>${int.avgTokens}</td>
+                    <td>${int.avgCost}</td>
+                    <td>
+                        ${int.usage > 0 ? 
+                            `<span class="badge bg-success">${int.usage} Calls</span>` : 
+                            `<span class="badge bg-secondary">Nicht genutzt</span>`
+                        }
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Preisvergleich
+        async function loadComparison(stats) {
+            const models = [
+                { name: "gpt-4o-mini", input: 0.00015, output: 0.0006, active: true },
+                { name: "gpt-4o", input: 0.005, output: 0.015 },
+                { name: "gpt-4-turbo", input: 0.01, output: 0.03 },
+                { name: "gpt-4", input: 0.03, output: 0.06 },
+                { name: "gpt-3.5-turbo", input: 0.0015, output: 0.002 }
+            ];
+            
+            // Beispiel: 1000 Input + 500 Output Tokens
+            const inputTokens = 1000;
+            const outputTokens = 500;
+            
+            const table = document.getElementById('comparison-table');
+            const baseCost = (inputTokens / 1000) * models[0].input + (outputTokens / 1000) * models[0].output;
+            
+            table.innerHTML = models.map(model => {
+                const cost = (inputTokens / 1000) * model.input + (outputTokens / 1000) * model.output;
+                const factor = (cost / baseCost).toFixed(1);
+                
+                return `
+                    <tr ${model.active ? 'class="table-success"' : ''}>
+                        <td>
+                            ${model.active ? '<strong>' : ''}
+                            ${model.name}
+                            ${model.active ? '</strong> <span class="badge bg-success">Aktiv</span>' : ''}
+                        </td>
+                        <td>${formatCurrency(model.input)}</td>
+                        <td>${formatCurrency(model.output)}</td>
+                        <td><strong>${formatCurrency(cost)}</strong></td>
+                        <td>
+                            <span class="badge ${factor <= 1.5 ? 'bg-success' : factor <= 10 ? 'bg-warning' : 'bg-danger'}">
+                                ${factor}x
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // Chart laden
+        function loadChart(trend) {
+            const ctx = document.getElementById('cost-chart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: trend.map(d => new Date(d.date).toLocaleDateString('de-DE', { weekday: 'short', month: 'short', day: 'numeric' })),
+                    datasets: [{
+                        label: 'Kosten (€)',
+                        data: trend.map(d => d.cost),
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Kosten: ' + formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Helper: Währung formatieren
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('de-DE', {
+                style: 'currency',
+                currency: 'EUR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 4
+            }).format(value);
+        }
+        
+        // Init
+        loadData();
+        
+        // Auto-Refresh alle 30 Sekunden
+        setInterval(loadData, 30000);
+    </script>
+</body>
+</html>
+
