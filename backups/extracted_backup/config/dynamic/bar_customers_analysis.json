@@ -1,0 +1,694 @@
+{
+  "analysis_timestamp": "2025-10-08T07:31:48.176739",
+  "total_customers": 7812,
+  "total_bar_customers": 34,
+  "name_groups_count": 2,
+  "bar_customers": [
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 01.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 01.10.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 01.10.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 02.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 02.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 02.10.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 02.10.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 04.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 05.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 08.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 09.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 11.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 12.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 14.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 14.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 15.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 15.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 15.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 17.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 18.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 18.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Mei�en",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Mei�en",
+      "is_bar": true,
+      "tour_file": "Tourenplan 19.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 19.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 22.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 22.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 25.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 25.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 25.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 26.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 26.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 27.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Turboservice Ingo Barthel",
+      "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+      "strasse": "Bohnitzscher Str. 4",
+      "plz": "01662",
+      "ort": "Meiáen",
+      "is_bar": true,
+      "tour_file": "Tourenplan 28.08.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 29.09.2025.csv"
+    },
+    {
+      "kdnr": "",
+      "name": "Testa Baresi",
+      "adresse": "Lausener Str. 4B, 04207 Leipzig",
+      "strasse": "Lausener Str. 4B",
+      "plz": "04207",
+      "ort": "Leipzig",
+      "is_bar": true,
+      "tour_file": "Tourenplan 29.09.2025.csv"
+    }
+  ],
+  "name_groups": {
+    "turboservice ingo barthel": [
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 01.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 01.10.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 02.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 02.10.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 11.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 14.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 15.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 17.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 18.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Mei�en",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Mei�en",
+        "is_bar": true,
+        "tour_file": "Tourenplan 19.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 22.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 22.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 25.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 25.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Turboservice Ingo Barthel",
+        "adresse": "Bohnitzscher Str. 4, 01662 Meiáen",
+        "strasse": "Bohnitzscher Str. 4",
+        "plz": "01662",
+        "ort": "Meiáen",
+        "is_bar": true,
+        "tour_file": "Tourenplan 28.08.2025.csv"
+      }
+    ],
+    "testa baresi": [
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 01.10.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 02.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 02.10.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 04.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 05.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 08.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 09.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 12.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 14.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 15.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 15.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 18.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 19.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 25.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 26.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 26.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 27.08.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 29.09.2025.csv"
+      },
+      {
+        "kdnr": "",
+        "name": "Testa Baresi",
+        "adresse": "Lausener Str. 4B, 04207 Leipzig",
+        "strasse": "Lausener Str. 4B",
+        "plz": "04207",
+        "ort": "Leipzig",
+        "is_bar": true,
+        "tour_file": "Tourenplan 29.09.2025.csv"
+      }
+    ]
+  }
+}

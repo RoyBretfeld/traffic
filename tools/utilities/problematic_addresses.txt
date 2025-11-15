@@ -1,0 +1,671 @@
+PROBLEMATISCHE ADRESSEN FÜR MANUELLE SUCHE
+==================================================
+
+
+PROBLEMATISCHE ADRESSEN AUS PLÄNEN:
+-----------------------------------
+  1. Autohaus Emmrich e.K.
+     Straße: Morgenröthe 1
+     PLZ: 01705, Ort: Freital
+     Vollständig: Morgenröthe 1, 01705 Freital
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+  2. Autohaus Emmrich e.K.
+     Straße: Morgenröthe 1
+     PLZ: 01705, Ort: Freital
+     Vollständig: Morgenröthe 1, 01705 Freital
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+  3. Autohaus Friedewald
+     Straße: Alträcknitz 6
+     PLZ: 01217, Ort: Dresden
+     Vollständig: Alträcknitz 6, 01217 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+  4. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+  5. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+  6. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+  7. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+  8. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+  9. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 10. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 11. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 12. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 13. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 14. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 15. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 16. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 17. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 18. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 19. Autoservice Hartmann
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 20. Autoservice Matthes
+     Straße: Alt-Serkowitz 1
+     PLZ: 01445, Ort: Radebeul
+     Vollständig: Alt-Serkowitz 1, 01445 Radebeul
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 21. Autoservice Matthes
+     Straße: Alt-Serkowitz 1
+     PLZ: 01445, Ort: Radebeul
+     Vollständig: Alt-Serkowitz 1, 01445 Radebeul
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 22. Autoservice Matthes
+     Straße: Alt-Serkowitz 1
+     PLZ: 01445, Ort: Radebeul
+     Vollständig: Alt-Serkowitz 1, 01445 Radebeul
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 23. Autoservice Matthes
+     Straße: Alt-Serkowitz 1
+     PLZ: 01445, Ort: Radebeul
+     Vollständig: Alt-Serkowitz 1, 01445 Radebeul
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 24. Bernd Schmiedgen
+     Straße: Lindeberg 2
+     PLZ: 01471, Ort: Radeburg
+     Vollständig: Lindeberg 2, 01471 Radeburg
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 25. Bernd Schmiedgen
+     Straße: Lindeberg 2
+     PLZ: 01471, Ort: Radeburg
+     Vollständig: Lindeberg 2, 01471 Radeburg
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 26. Bernd Schmiedgen
+     Straße: Lindeberg 2
+     PLZ: 01471, Ort: Radeburg
+     Vollständig: Lindeberg 2, 01471 Radeburg
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 27. Bernd Schmiedgen
+     Straße: Lindeberg 2
+     PLZ: 01471, Ort: Radeburg
+     Vollständig: Lindeberg 2, 01471 Radeburg
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 28. Bernd Schmiedgen
+     Straße: Lindeberg 2
+     PLZ: 01471, Ort: Radeburg
+     Vollständig: Lindeberg 2, 01471 Radeburg
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 29. Bernd Schmiedgen
+     Straße: Lindeberg 2
+     PLZ: 01471, Ort: Radeburg
+     Vollständig: Lindeberg 2, 01471 Radeburg
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 30. Boxenstop KFZ-Meisterwerkstatt
+     Straße: Zum Grund 3
+     PLZ: 01705, Ort: Freital
+     Vollständig: Zum Grund 3, 01705 Freital
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 31. Boxenstop KFZ-Meisterwerkstatt
+     Straße: Zum Grund 3
+     PLZ: 01705, Ort: Freital
+     Vollständig: Zum Grund 3, 01705 Freital
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 32. Boxenstop KFZ-Meisterwerkstatt
+     Straße: Zum Grund 3
+     PLZ: 01705, Ort: Freital
+     Vollständig: Zum Grund 3, 01705 Freital
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 33. CSM
+     Straße: Altplauen 11
+     PLZ: 01187, Ort: Dresden
+     Vollständig: Altplauen 11, 01187 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 34. Elektroinstallation Hennig
+     Straße: Cotta B 27A
+     PLZ: 01796, Ort: Dohma
+     Vollständig: Cotta B 27A, 01796 Dohma
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 35. Gustavs Autohof
+     Straße: Wittgensdorf Nr. 16
+     PLZ: 01731, Ort: Kreischa OT Wittgensdorf
+     Vollständig: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 36. Gustavs Autohof
+     Straße: Wittgensdorf Nr. 16
+     PLZ: 01731, Ort: Kreischa OT Wittgensdorf
+     Vollständig: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 37. Gustavs Autohof
+     Straße: Wittgensdorf Nr. 16
+     PLZ: 01731, Ort: Kreischa OT Wittgensdorf
+     Vollständig: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 38. Gustavs Autohof
+     Straße: Wittgensdorf Nr. 16
+     PLZ: 01731, Ort: Kreischa OT Wittgensdorf
+     Vollständig: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 39. Gustavs Autohof
+     Straße: Wittgensdorf Nr. 16
+     PLZ: 01731, Ort: Kreischa OT Wittgensdorf
+     Vollständig: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 40. Gustavs Autohof
+     Straße: Wittgensdorf Nr. 16
+     PLZ: 01731, Ort: Kreischa OT Wittgensdorf
+     Vollständig: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 41. Gustavs Autohof
+     Straße: Wittgensdorf Nr. 16
+     PLZ: 01731, Ort: Kreischa OT Wittgensdorf
+     Vollständig: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 42. Gustavs Autohof
+     Straße: Wittgensdorf Nr. 16
+     PLZ: 01731, Ort: Kreischa OT Wittgensdorf
+     Vollständig: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 43. Harry Schulze GmbH
+     Straße: Im Stauster 6
+     PLZ: 36088, Ort: Hünfeld
+     Vollständig: Im Stauster 6, 36088 Hünfeld
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 44. Harry Schulze GmbH
+     Straße: Im Stauster 6
+     PLZ: 36088, Ort: Hünfeld
+     Vollständig: Im Stauster 6, 36088 Hünfeld
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 45. Harry Schulze GmbH
+     Straße: Im Stauster 6
+     PLZ: 36088, Ort: Hünfeld
+     Vollständig: Im Stauster 6, 36088 Hünfeld
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 46. Hartmann Karosserie- und Fahrzeugbau
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 47. Hartmann Karosserie- und Fahrzeugbau
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 48. Hartmann Karosserie- und Fahrzeugbau
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 49. Hartmann Karosserie- und Fahrzeugbau
+     Straße: Altreick 26
+     PLZ: 01237, Ort: Dresden
+     Vollständig: Altreick 26, 01237 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 50. Jürgen Schiebel
+     Straße: Cotta B 16G
+     PLZ: 01796, Ort: Dohma
+     Vollständig: Cotta B 16G, 01796 Dohma
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 51. Jürgen Schiebel
+     Straße: Cotta B 16G
+     PLZ: 01796, Ort: Dohma
+     Vollständig: Cotta B 16G, 01796 Dohma
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 52. Jürgen Schiebel
+     Straße: Cotta B 16G
+     PLZ: 01796, Ort: Dohma
+     Vollständig: Cotta B 16G, 01796 Dohma
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 53. Jürgen Schiebel
+     Straße: Cotta B 16G
+     PLZ: 01796, Ort: Dohma
+     Vollständig: Cotta B 16G, 01796 Dohma
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 54. Karosserie- & KfZ-Service Derlich
+     Straße: Siedlung 17
+     PLZ: 01809, Ort: Burkhardswalde
+     Vollständig: Siedlung 17, 01809 Burkhardswalde
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 55. Karosserie- & KfZ-Service Derlich
+     Straße: Siedlung 17
+     PLZ: 01809, Ort: Burkhardswalde
+     Vollständig: Siedlung 17, 01809 Burkhardswalde
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 56. Karosseriebau Henschke
+     Straße: Rundteil 5a
+     PLZ: 01728, Ort: Possendorf
+     Vollständig: Rundteil 5a, 01728 Possendorf
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 57. Klassische Automobile Schwarz
+     Straße: Rundteil 7b
+     PLZ: 01728, Ort: Bannewitz OT Possendorf
+     Vollständig: Rundteil 7b, 01728 Bannewitz OT Possendorf
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 58. Klassische Automobile Schwarz
+     Straße: Rundteil 7b
+     PLZ: 01728, Ort: Bannewitz OT Possendorf
+     Vollständig: Rundteil 7b, 01728 Bannewitz OT Possendorf
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 59. Klassische Automobile Schwarz
+     Straße: Rundteil 7b
+     PLZ: 01728, Ort: Bannewitz OT Possendorf
+     Vollständig: Rundteil 7b, 01728 Bannewitz OT Possendorf
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 60. Kraftwagenpark Dresden
+     Straße: Zum Lindenhof 9 b
+     PLZ: 01665, Ort: Riemsdorf
+     Vollständig: Zum Lindenhof 9 b, 01665 Riemsdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 61. Kraftwagenpark Dresden
+     Straße: Zum Lindenhof 9 b
+     PLZ: 01665, Ort: Riemsdorf
+     Vollständig: Zum Lindenhof 9 b, 01665 Riemsdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 62. Kraftwagenpark Dresden
+     Straße: Zum Lindenhof 9 b
+     PLZ: 01665, Ort: Riemsdorf
+     Vollständig: Zum Lindenhof 9 b, 01665 Riemsdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 63. Kraftwagenpark Dresden
+     Straße: Zum Lindenhof 9 b
+     PLZ: 01665, Ort: Riemsdorf
+     Vollständig: Zum Lindenhof 9 b, 01665 Riemsdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 64. Kraftwagenpark Dresden
+     Straße: Zum Lindenhof 9 b
+     PLZ: 01665, Ort: Riemsdorf
+     Vollständig: Zum Lindenhof 9 b, 01665 Riemsdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 65. Kraftwagenpark Dresden
+     Straße: Zum Lindenhof 9 b
+     PLZ: 01665, Ort: Riemsdorf
+     Vollständig: Zum Lindenhof 9 b, 01665 Riemsdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 66. LB
+     Straße: Kreisel 4
+     PLZ: 09322, Ort: Penig
+     Vollständig: Kreisel 4, 09322 Penig
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 67. Marco Wagner
+     Straße: Niedermühle 117
+     PLZ: 01738, Ort: Dorfhain
+     Vollständig: Niedermühle 117, 01738 Dorfhain
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 68. Marco Wagner
+     Straße: Niedermühle 117
+     PLZ: 01738, Ort: Dorfhain
+     Vollständig: Niedermühle 117, 01738 Dorfhain
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 69. Marco Wagner
+     Straße: Niedermühle 117
+     PLZ: 01738, Ort: Dorfhain
+     Vollständig: Niedermühle 117, 01738 Dorfhain
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 70. Marco Wagner
+     Straße: Niedermühle 117
+     PLZ: 01738, Ort: Dorfhain
+     Vollständig: Niedermühle 117, 01738 Dorfhain
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 71. Marco Wagner
+     Straße: Niedermühle 117
+     PLZ: 01738, Ort: Dorfhain
+     Vollständig: Niedermühle 117, 01738 Dorfhain
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 72. Marco Wagner
+     Straße: Niedermühle 117
+     PLZ: 01738, Ort: Dorfhain
+     Vollständig: Niedermühle 117, 01738 Dorfhain
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 73. Marco Wagner
+     Straße: Niedermühle 117
+     PLZ: 01738, Ort: Dorfhain
+     Vollständig: Niedermühle 117, 01738 Dorfhain
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 74. Martin Faust
+     Straße: Alt-Rottwerndorf 60-62
+     PLZ: 01796, Ort: Pirna
+     Vollständig: Alt-Rottwerndorf 60-62, 01796 Pirna
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 75. Martin Faust
+     Straße: Alt-Rottwerndorf 60-62
+     PLZ: 01796, Ort: Pirna
+     Vollständig: Alt-Rottwerndorf 60-62, 01796 Pirna
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 76. Martin Faust
+     Straße: Alt-Rottwerndorf 60-62
+     PLZ: 01796, Ort: Pirna
+     Vollständig: Alt-Rottwerndorf 60-62, 01796 Pirna
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 77. Martin Faust
+     Straße: Alt-Rottwerndorf 60-62
+     PLZ: 01796, Ort: Pirna
+     Vollständig: Alt-Rottwerndorf 60-62, 01796 Pirna
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 78. PMS Provocatione Motor Sport
+     Straße: Lockwitzgrund 40
+     PLZ: 01257, Ort: Dresden
+     Vollständig: Lockwitzgrund 40, 01257 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 79. PMS Provocatione Motor Sport
+     Straße: Lockwitzgrund 40
+     PLZ: 01257, Ort: Dresden
+     Vollständig: Lockwitzgrund 40, 01257 Dresden
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 80. Rasche, Thomas
+     Straße: Friedrichswalde 59
+     PLZ: 01819, Ort: Friedrichswalde
+     Vollständig: Friedrichswalde 59, 01819 Friedrichswalde
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 81. Rasche, Thomas
+     Straße: Friedrichswalde 59
+     PLZ: 01819, Ort: Friedrichswalde
+     Vollständig: Friedrichswalde 59, 01819 Friedrichswalde
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 82. Schaschke Ruhland
+     Straße: Badeanstalt 10
+     PLZ: 01945, Ort: Ruhland
+     Vollständig: Badeanstalt 10, 01945 Ruhland
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 83. Schütze Gersdorf
+     Straße: Gersdorf 43
+     PLZ: 01819, Ort: Bahretal OT Gersdorf
+     Vollständig: Gersdorf 43, 01819 Bahretal OT Gersdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 84. Schütze Gersdorf
+     Straße: Gersdorf 43
+     PLZ: 01819, Ort: Bahretal OT Gersdorf
+     Vollständig: Gersdorf 43, 01819 Bahretal OT Gersdorf
+     Problem: Keine Straße
+     Plan: Tourenplan 03.09.2025.csv
+
+ 85. Stockmann KFZ-Service
+     Straße: Cowaplast 28
+     PLZ: 01640, Ort: Coswig
+     Vollständig: Cowaplast 28, 01640 Coswig
+     Problem: Keine Straße
+     Plan: Tourenplan 15.08.2025.csv
+
+ 86. Stockmann KFZ-Service
+     Straße: Cowaplast 28
+     PLZ: 01640, Ort: Coswig
+     Vollständig: Cowaplast 28, 01640 Coswig
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 87. Stockmann KFZ-Service
+     Straße: Cowaplast 28
+     PLZ: 01640, Ort: Coswig
+     Vollständig: Cowaplast 28, 01640 Coswig
+     Problem: Keine Straße
+     Plan: Tourenplan 02.09.2025.csv
+
+ 88. Stockmann KFZ-Service
+     Straße: Cowaplast 28
+     PLZ: 01640, Ort: Coswig
+     Vollständig: Cowaplast 28, 01640 Coswig
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 89. Stockmann KFZ-Service
+     Straße: Cowaplast 28
+     PLZ: 01640, Ort: Coswig
+     Vollständig: Cowaplast 28, 01640 Coswig
+     Problem: Keine Straße
+     Plan: Tourenplan 04.09.2025.csv
+
+ 90. Wunderlich, Martin
+     Straße: Hartmannsbach Nr. 25
+     PLZ: 01816, Ort: Bad Gottleuba
+     Vollständig: Hartmannsbach Nr. 25, 01816 Bad Gottleuba
+     Problem: Keine Straße
+     Plan: Tourenplan 01.09.2025.csv
+
+ 91. 1
+     Straße: 2
+     PLZ: 3, Ort: 4
+     Vollständig: 2, 3 4
+     Problem: Zu kurz, Nur Zahlen, Keine Straße, Unvollständig
+     Plan: Tourenplan 15.08.2025.csv
+
+ 92. 1
+     Straße: 2
+     PLZ: 3, Ort: 4
+     Vollständig: 2, 3 4
+     Problem: Zu kurz, Nur Zahlen, Keine Straße, Unvollständig
+     Plan: Tourenplan 01.09.2025.csv
+
+ 93. 1
+     Straße: 2
+     PLZ: 3, Ort: 4
+     Vollständig: 2, 3 4
+     Problem: Zu kurz, Nur Zahlen, Keine Straße, Unvollständig
+     Plan: Tourenplan 02.09.2025.csv
+
+ 94. 1
+     Straße: 2
+     PLZ: 3, Ort: 4
+     Vollständig: 2, 3 4
+     Problem: Zu kurz, Nur Zahlen, Keine Straße, Unvollständig
+     Plan: Tourenplan 03.09.2025.csv
+
+ 95. 1
+     Straße: 2
+     PLZ: 3, Ort: 4
+     Vollständig: 2, 3 4
+     Problem: Zu kurz, Nur Zahlen, Keine Straße, Unvollständig
+     Plan: Tourenplan 04.09.2025.csv
+

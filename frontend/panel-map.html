@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrafficApp - Karte (Panel)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow: hidden;
+        }
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+        .panel-header {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .panel-header button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .panel-header button:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel-header">
+        <i class="fas fa-map"></i>
+        <span>Karte (Panel)</span>
+        <button onclick="window.close()" title="Panel schließen">
+            <i class="fas fa-times"></i> Schließen
+        </button>
+    </div>
+    <div id="map"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script type="module" src="/static/js/polyline6.js"></script>
+    <script type="module" src="/static/js/panel-ipc.js"></script>
+    <script>
+        let map;
+        let routeLines = [];
+        let markers = [];
+
+        // Karte initialisieren
+        function initializeMap() {
+            map = L.map('map').setView([51.01127, 13.70161], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Depot-Marker
+            const depotIcon = L.divIcon({
+                className: 'depot-marker',
+                html: '<i class="fas fa-warehouse" style="font-size: 24px; color: #9c27b0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);"></i>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 30]
+            });
+            L.marker([51.01127, 13.70161], { icon: depotIcon, zIndexOffset: 1000 })
+                .addTo(map)
+                .bindPopup('<strong>FAMO Depot</strong><br>Gittersee, Dresden');
+        }
+
+        // IPC-Handler (mit Null-Check)
+        if (window.panelIPC) {
+            window.panelIPC.on('route-update', (data) => {
+                console.log('Route-Update erhalten:', data);
+                clearMap();
+                if (data.routes && Array.isArray(data.routes)) {
+                    data.routes.forEach(route => {
+                        if (route.geometry) {
+                            drawRoute(route.geometry, route.color || '#3388ff', route.geometry_type);
+                        }
+                    });
+                }
+                if (data.markers && Array.isArray(data.markers)) {
+                    data.markers.forEach(m => {
+                        addMarker(m.lat, m.lon, m.name, m.color);
+                    });
+                }
+                if (data.bounds) {
+                    map.fitBounds(data.bounds, { padding: [20, 20] });
+                }
+            });
+
+            window.panelIPC.on('map-zoom', (data) => {
+                if (data.center) {
+                    map.setView(data.center, data.zoom || 13);
+                } else if (data.zoom) {
+                    map.setZoom(data.zoom);
+                }
+            });
+
+            window.panelIPC.on('clear-map', () => {
+                clearMap();
+            });
+        } else {
+            console.error('[PANEL-MAP] panelIPC nicht verfügbar - Panel-Kommunikation deaktiviert');
+        }
+
+        // Karten-Funktionen
+        function clearMap() {
+            routeLines.forEach(line => map.removeLayer(line));
+            markers.forEach(marker => map.removeLayer(marker));
+            routeLines = [];
+            markers = [];
+        }
+
+        function drawRoute(geometry, color, geometryType) {
+            let coords = [];
+            if (geometryType === 'polyline6') {
+                const { decodePolyline6 } = window;
+                if (decodePolyline6) {
+                    coords = decodePolyline6(geometry).map(([lat, lon]) => [lat, lon]);
+                }
+            } else {
+                // Fallback: Polyline5 oder andere Formate
+                try {
+                    coords = polyline.decode(geometry);
+                } catch (e) {
+                    console.error('Fehler beim Dekodieren der Route:', e);
+                    return;
+                }
+            }
+            if (coords.length > 0) {
+                const line = L.polyline(coords, { color, weight: 4, opacity: 0.7 });
+                line.addTo(map);
+                routeLines.push(line);
+            }
+        }
+
+        function addMarker(lat, lon, name, color = '#3388ff') {
+            const marker = L.circleMarker([lat, lon], {
+                radius: 8,
+                fillColor: color,
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map);
+            marker.bindPopup(name || 'Unbekannt');
+            markers.push(marker);
+        }
+
+        // Initialisierung
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeMap();
+            // Signalisiere, dass Panel bereit ist
+            if (window.panelIPC) {
+                window.panelIPC.postMessage('panel-ready', { type: 'map' });
+            }
+        });
+
+        // Cleanup beim Schließen
+        window.addEventListener('beforeunload', () => {
+            if (window.panelIPC) {
+                window.panelIPC.postMessage('panel-closed', { type: 'map' });
+                window.panelIPC.close();
+            }
+        });
+    </script>
+</body>
+</html>
+

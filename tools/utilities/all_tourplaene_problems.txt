@@ -1,0 +1,1646 @@
+ALLE TOURENPLÄNE - GEOCODING-PROBLEME
+================================================================================
+
+
+================================================================================
+DATEI: Tourenplan 01.09.2025.csv
+================================================================================
+
+Kunde: Autoservice Leuthold (KdNr: 5329)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Am Sägewerk 36, 01328 Dresden OT Schönfeld
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: CAR - Center (KdNr: 1402)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+  Korrektur: _________________________
+
+Kunde: Klaus Brandner GbR (KdNr: 1484)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Gewerbegebiet Kaltes Feld 36, 08468 Heinsdorfergrund
+  Korrektur: _________________________
+
+Kunde: Motoren-Frech GbR (KdNr: 1077)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hohensteiner Str. 101, 09212 Limbach-O./OT Pleißa
+  Korrektur: _________________________
+
+Kunde: Autohaus Winter GmbH (KdNr: 4294)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Strasse 6, 01728 Bannewitz OT Hänichen
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Autohaus Winter GmbH (KdNr: 4294)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Strasse 6, 01728 Bannewitz OT Hänichen
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Autohaus Leuteritz GmbH (KdNr: 5388)
+  Tour: W-14.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Müglitztalstraße 10, 01773 Altenberg OT Bärenstein
+  Korrektur: _________________________
+
+Kunde: Sven - PF (KdNr: 4993)
+  Tour: W-16.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 02.09.2025.csv
+================================================================================
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Klassische Automobile Schwarz (KdNr: 5061)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Rundteil 7b, 01728 Bannewitz OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: 41 Roswitha (KdNr: 4993)
+  Tour: W-09.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Sägner's Fahrzeugtechnik (KdNr: 5530)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Burgstädter Str. 3, 01219 Dresden
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Autohaus Leuteritz GmbH (KdNr: 5388)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Müglitztalstraße 10, 01773 Altenberg OT Bärenstein
+  Korrektur: _________________________
+
+Kunde: AG (KdNr: 44993)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: CAR - Center (KdNr: 1402)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 12.45 UHR
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Sven - PF (KdNr: 4993)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Schütze Gersdorf (KdNr: 40778)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Gersdorf 43, 01819 Bahretal OT Gersdorf
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 03.09.2025.csv
+================================================================================
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Dreihundert Dresden (KdNr: 40750)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Naumannstraße 12 | Halle 14, 01809 Heidenau
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: Sven - PF (KdNr: 4993)
+  Tour: W-11.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 12.45 UHR
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-14.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Schütze Gersdorf (KdNr: 40778)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Gersdorf 43, 01819 Bahretal OT Gersdorf
+  Korrektur: _________________________
+
+Kunde: Sven - PF (KdNr: 4993)
+  Tour: W-16.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Jochen - PF (KdNr: 4993)
+  Tour: W-16.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: W-16.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 04.09.2025.csv
+================================================================================
+
+Kunde: Autohaus Winter GmbH (KdNr: 4294)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Strasse 6, 01728 Bannewitz OT Hänichen
+  Korrektur: _________________________
+
+Kunde: Klassische Automobile Schwarz (KdNr: 5061)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Rundteil 7b, 01728 Bannewitz OT Possendorf
+  Korrektur: _________________________
+
+Kunde: LiLa metallinc (KdNr: 40623)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Oberer Ladenberg 13, 01816 Bad Gottleuba OT Berggießhübel
+  Korrektur: _________________________
+
+Kunde: Büttner (KdNr: 6000)
+  Tour: W-09.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Klassische Automobile Schwarz (KdNr: 5061)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Rundteil 7b, 01728 Bannewitz OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Auto Service Meusel (KdNr: 5128)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Alte Str. 33, 01768 Glashütte OT Hirschbach
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: CAR - Center (KdNr: 1402)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+  Korrektur: _________________________
+
+Kunde: Klaus Brandner GbR (KdNr: 1484)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Gewerbegebiet Kaltes Feld 36, 08468 Heinsdorfergrund
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-11.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Jochen - PF (KdNr: 4993)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Hubraum (KdNr: 4727)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Schmiede Vogel (KdNr: 5067)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Zur Quelle 5, 01731 Kreischa OT Saida
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 05.09.2025.csv
+================================================================================
+
+Kunde: 36 Nici zu RP (KdNr: 4993)
+  Tour: W-07.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: LiLa metallinc (KdNr: 40623)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Oberer Ladenberg 13, 01816 Bad Gottleuba OT Berggießhübel
+  Korrektur: _________________________
+
+Kunde: 41 Roswitha (KdNr: 4993)
+  Tour: W-09.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Schrage/Johne - PF (KdNr: 4993)
+  Tour: W-09.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Sägner's Fahrzeugtechnik (KdNr: 5530)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Burgstädter Str. 3, 01219 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Autohaus Leuteritz GmbH (KdNr: 5388)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Müglitztalstraße 10, 01773 Altenberg OT Bärenstein
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: CAR - Center (KdNr: 1402)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+  Korrektur: _________________________
+
+Kunde: Klaus Brandner GbR (KdNr: 1484)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Gewerbegebiet Kaltes Feld 36, 08468 Heinsdorfergrund
+  Korrektur: _________________________
+
+Kunde: MSM (KdNr: 4727)
+  Tour: W-11.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Sven - PF (KdNr: 4993)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Schütze Gersdorf (KdNr: 40778)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Gersdorf 43, 01819 Bahretal OT Gersdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 08.09.2025.csv
+================================================================================
+
+Kunde: Büttner (KdNr: 6000)
+  Tour: W-07.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Büttner (KdNr: 6000)
+  Tour: W-07.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Klassische Automobile Schwarz (KdNr: 5061)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Rundteil 7b, 01728 Bannewitz OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: Sägner's Fahrzeugtechnik (KdNr: 5530)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Burgstädter Str. 3, 01219 Dresden
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 12.45 UHR
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 09.09.2025.csv
+================================================================================
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Autoservice Leuthold (KdNr: 5329)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Am Sägewerk 36, 01328 Dresden OT Schönfeld
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: CAR - Center (KdNr: 1402)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Dippser-Auto-Ecke (KdNr: 5646)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bergstraße 93, 01744 Dippoldiswalde OT Seifersdorf
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-11.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 12.45 UHR
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Astral UG (KdNr: 4916)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-14.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Autohaus Leuteritz GmbH (KdNr: 5388)
+  Tour: W-14.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Müglitztalstraße 10, 01773 Altenberg OT Bärenstein
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Schütze Gersdorf (KdNr: 40778)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Gersdorf 43, 01819 Bahretal OT Gersdorf
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 10.09.2025.csv
+================================================================================
+
+Kunde: Peter Söllner (KdNr: 4993)
+  Tour: W-07.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Jens Spahn - PF (KdNr: 4993)
+  Tour: W-07.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Sägner's Fahrzeugtechnik (KdNr: 5530)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Burgstädter Str. 3, 01219 Dresden
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Autoservice Mehlig (KdNr: 4976)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Schulstraße 25, 01468 Moritzburg (OT Boxdorf)
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Autohaus Leuteritz GmbH (KdNr: 5388)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Müglitztalstraße 10, 01773 Altenberg OT Bärenstein
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: Motoren-Frech GbR (KdNr: 1077)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hohensteiner Str. 101, 09212 Limbach-O./OT Pleißa
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 12.45 UHR
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Dreihundert Dresden (KdNr: 40750)
+  Tour: PIR Anlief. 12.45 UHR
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Naumannstraße 12 | Halle 14, 01809 Heidenau
+  Korrektur: _________________________
+
+Kunde: 41 Roswitha (KdNr: 4993)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Sägner's Fahrzeugtechnik (KdNr: 5530)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Burgstädter Str. 3, 01219 Dresden
+  Korrektur: _________________________
+
+Kunde: Auto Service Meusel (KdNr: 5128)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Alte Str. 33, 01768 Glashütte OT Hirschbach
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-14.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Schütze Gersdorf (KdNr: 40778)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Gersdorf 43, 01819 Bahretal OT Gersdorf
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 11.09.2025.csv
+================================================================================
+
+Kunde: Autoservice Leuthold (KdNr: 5329)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Am Sägewerk 36, 01328 Dresden OT Schönfeld
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Jochen - PF (KdNr: 4993)
+  Tour: W-09.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: CAR - Center (KdNr: 1402)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+  Korrektur: _________________________
+
+Kunde: Klaus Brandner GbR (KdNr: 1484)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Gewerbegebiet Kaltes Feld 36, 08468 Heinsdorfergrund
+  Korrektur: _________________________
+
+Kunde: Schrage/Johne - PF (KdNr: 4993)
+  Tour: W-11.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Motor Mafia (KdNr: 40721)
+  Tour: W-11.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Klassische Automobile Schwarz (KdNr: 5061)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Rundteil 7b, 01728 Bannewitz OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-11.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Dreihundert Dresden (KdNr: 40750)
+  Tour: PIR Anlief. 12.45 UHR
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Naumannstraße 12 | Halle 14, 01809 Heidenau
+  Korrektur: _________________________
+
+Kunde: Jochen - PF (KdNr: 4993)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Motor Mafia (KdNr: 40721)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Dreihundert Dresden (KdNr: 40750)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Naumannstraße 12 | Halle 14, 01809 Heidenau
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Dreihundert Dresden (KdNr: 40750)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Naumannstraße 12 | Halle 14, 01809 Heidenau
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 14.08.2025.csv
+================================================================================
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-07.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Autohaus Leuteritz GmbH (KdNr: 5388)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Müglitztalstraße 10, 01773 Altenberg OT Bärenstein
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: Klaus Brandner GbR (KdNr: 1484)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Gewerbegebiet Kaltes Feld 36, 08468 Heinsdorfergrund
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Autohaus Godzik OHG (KdNr: 4271)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+  Korrektur: _________________________
+
+Kunde: Dreihundert Dresden (KdNr: 40750)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Naumannstraße 12 | Halle 14, 01809 Heidenau
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 15.08.2025.csv
+================================================================================
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: Schleich (KdNr: 44993)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: CAR - Center (KdNr: 1402)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+  Korrektur: _________________________
+
+Kunde: Motoren-Frech GbR (KdNr: 1077)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Hohensteiner Str. 101, 09212 Limbach-O./OT Pleißa
+  Korrektur: _________________________
+
+Kunde: Sägner's Fahrzeugtechnik (KdNr: 5530)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Burgstädter Str. 3, 01219 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Autohaus Leuteritz GmbH (KdNr: 5388)
+  Tour: W-11.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Müglitztalstraße 10, 01773 Altenberg OT Bärenstein
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Autoservice Leuthold (KdNr: 5329)
+  Tour: PIR Anlief. 12.45 UHR
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Am Sägewerk 36, 01328 Dresden OT Schönfeld
+  Korrektur: _________________________
+
+Kunde: Blumentritt (KdNr: 5461)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Auto Service Meusel (KdNr: 5128)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Alte Str. 33, 01768 Glashütte OT Hirschbach
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Dreihundert Dresden (KdNr: 40750)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Naumannstraße 12 | Halle 14, 01809 Heidenau
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 18.08.2025.csv
+================================================================================
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: Gustavs Autohof (KdNr: 4646)
+  Tour: PIR Anlief. 7.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+  Korrektur: _________________________
+
+Kunde: 41 Roswitha (KdNr: 4993)
+  Tour: W-09.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Fa.Wilms (KdNr: 1473)
+  Tour: W-09.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+  Korrektur: _________________________
+
+Kunde: Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+  Tour: W-09.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Dorfstraße 37, 01768 Glashütte OT Luchau
+  Korrektur: _________________________
+
+Kunde: AG (KdNr: 44993)
+  Tour: PIR Anlief. 9.45 Uhr
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Dietze & Schindler (KdNr: 1422)
+  Tour: Anlief. T10, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+  Korrektur: _________________________
+
+Kunde: CAR - Center (KdNr: 1402)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+  Korrektur: _________________________
+
+Kunde: Klaus Brandner GbR (KdNr: 1484)
+  Tour: Anlief. T8, 10.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Gewerbegebiet Kaltes Feld 36, 08468 Heinsdorfergrund
+  Korrektur: _________________________
+
+Kunde: Sägner's Fahrzeugtechnik (KdNr: 5530)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Burgstädter Str. 3, 01219 Dresden
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Autohaus Winter GmbH (KdNr: 4294)
+  Tour: W-11.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Strasse 6, 01728 Bannewitz OT Hänichen
+  Korrektur: _________________________
+
+Kunde: Autohaus Leuteritz GmbH (KdNr: 5388)
+  Tour: W-11.00 Uhr Tour
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Müglitztalstraße 10, 01773 Altenberg OT Bärenstein
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T71, 11.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+Kunde: Dreihundert Dresden (KdNr: 40750)
+  Tour: PIR Anlief. 12.45 UHR
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Naumannstraße 12 | Halle 14, 01809 Heidenau
+  Korrektur: _________________________
+
+Kunde: MSM (KdNr: 6000)
+  Tour: W-14.00 Uhr Tour
+  Grund: Keine Adressdaten
+  Adresse: 
+  Korrektur: _________________________
+
+Kunde: Rob`s Kfz-Service (KdNr: 5195)
+  Tour: W-14.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+  Korrektur: _________________________
+
+Kunde: Schütze Gersdorf (KdNr: 40778)
+  Tour: PIR Anlief. 14.45 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: Gersdorf 43, 01819 Bahretal OT Gersdorf
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-16.00 Uhr Tour
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Bismarkstr. 63, 01257 Dresden
+  Korrektur: _________________________
+
+Kunde: Sven Teichmann (KdNr: 1162)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Fehler: could not convert string to float: 'lat'
+  Adresse: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+  Korrektur: _________________________
+
+Kunde: AUTO OTTO (KdNr: 1308)
+  Tour: Anlief. T16, 18.00 Uhr
+  Grund: Geocoding fehlgeschlagen
+  Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+  Korrektur: _________________________
+
+
+================================================================================
+DATEI: Tourenplan 19.08.2025.csv
+================================================================================
+
+Kunde: MSM by HUBraum GmbH (KdNr: 5236)
+  Tour: W-07.00 Uhr Tour
+  Grund: Fehler: 'charmap' codec can't encode character '\u2510' in
+  Adresse: Fr´┐¢belstra´┐¢e 20, 01159 Dresden
+  Korrektur: _________________________
+
+Kunde: MSM by HUBraum GmbH (KdNr: 5236)
+  Tour: W-07.00 Uhr Tour
+  Grund: Fehler: 'charmap' codec can't encode character '\u2510' in
+  Adresse: Fr´┐¢belstra´┐¢e 20, 01159 Dresden
+  Korrektur: _________________________
+
+Kunde: CAR-ART GmbH (KdNr: 5116)
+  Tour: W-07.00 Uhr Tour
+  Grund: Fehler: 'charmap' codec can't encode character '\u2510' in
+  Adresse: L´┐¢btauer Str. 55, 01159 Dresden
+  Korrektur: _________________________
+
+Kunde: S´┐¢gner's Fahrzeugtechnik (KdNr: 5530)
+  Tour: W-07.00 Uhr Tour
+  Grund: Fehler: 'charmap' codec can't encode character '\u2510' in
+  Adresse: Burgst´┐¢dter Str. 3, 01219 Dresden
+  Korrektur: _________________________
+

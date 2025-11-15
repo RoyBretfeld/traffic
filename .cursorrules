@@ -1,0 +1,126 @@
+# Cursor Rules - FAMO TrafficApp 3.0
+
+**WICHTIG:** Diese Regeln werden automatisch von Cursor geladen. Lies sie in dieser Reihenfolge!
+
+---
+
+## 🔴 PFLICHT: Immer zuerst lesen (in dieser Reihenfolge!)
+
+### 1. Globale Standards (wiederverwendbar für alle Projekte)
+→ **`Global/GLOBAL_STANDARDS.md`** - 7 Arbeitsregeln, Audit-Prozess, Safety
+
+### 2. Projektprofil (FAMO TrafficApp spezifisch)
+→ **`PROJECT_PROFILE.md`** - Stack, Infrastruktur, Module, Regeln
+
+### 3. Projekt-Standards (FAMO TrafficApp spezifisch)
+→ **`Regeln/STANDARDS.md`** - Vollständige Standards
+→ **`Regeln/STANDARDS_QUICK_REFERENCE.md`** - Schnellreferenz
+
+### 4. Für Audits und Bug-Fixes
+→ **`Regeln/REGELN_AUDITS.md`** - 7 unverhandelbare Audit-Regeln
+→ **`Regeln/AUDIT_CHECKLISTE.md`** - 9-Punkte-Checkliste
+→ **`Regeln/LESSONS_LOG.md`** - Lernhistorie (bekannte Fehler)
+
+### 5. Für spezielle Aufgaben
+→ **`Global/CURSOR_USAGE_BEISPIEL.md`** - Copy & Paste Prompts (3 Szenarien)
+→ **`Regeln/CURSOR_PROMPT_TEMPLATE.md`** - 12 fertige Templates
+→ **`Regeln/AUDIT_FLOW_ROUTING.md`** - Modularer Audit-Flow (Routing/OSRM)
+
+---
+
+## 📋 Übersicht aller Dokumente
+
+**Zentrale Übersicht:**
+→ **`DOKUMENTATION.md`** - Single Source of Truth (17 Dokumente)
+
+---
+
+## 🎯 Schnellstart für häufige Aufgaben
+
+### Szenario 1: Bug fixen
+1. Lies: `PROJECT_PROFILE.md` (Projektkontext)
+2. Lies: `Global/CURSOR_USAGE_BEISPIEL.md` → Szenario 1 (Bug-Fix)
+3. Lies: `Regeln/LESSONS_LOG.md` (bekannte Fehler)
+4. Dann: Bug analysieren & fixen
+
+### Szenario 2: Code-Review / Audit
+1. Lies: `Regeln/REGELN_AUDITS.md` (7 Regeln)
+2. Lies: `Regeln/AUDIT_CHECKLISTE.md` (9 Punkte)
+3. Lies: `PROJECT_PROFILE.md` (Projektkontext)
+4. Dann: Review durchführen
+
+### Szenario 3: Routing/OSRM Problem
+1. Lies: `Regeln/AUDIT_FLOW_ROUTING.md` (kompletter Flow)
+2. Lies: `PROJECT_PROFILE.md` → Abschnitt 3.2 (Touren-Workflow)
+3. Lies: `Regeln/LESSONS_LOG.md` → Eintrag #3 (Sub-Routen-Generator)
+4. Dann: Routing analysieren
+
+### Szenario 4: Sub-Routen-Generator Problem
+1. Lies: `Regeln/CURSOR_PROMPT_TEMPLATE.md` → Template #11 (Sub-Routen)
+2. Lies: `Regeln/LESSONS_LOG.md` → Eintrag #3
+3. Lies: `PROJECT_PROFILE.md` → Abschnitt 3.2
+4. Dann: Problem analysieren
+
+---
+
+## ⚠️ KRITISCHE REGELN (niemals ignorieren!)
+
+### 1. Kein Ghost-Refactor
+❌ Keine großen Umbauten ohne explizite Freigabe
+✅ Nur gezielte Änderungen im definierten Scope
+
+### 2. Immer Backend + Frontend gemeinsam prüfen
+❌ Nicht nur Backend ODER Frontend
+✅ API-Kontrakt zwischen beiden Seiten validieren
+
+### 3. Defensive Programmierung ist Pflicht
+❌ Keine fehlenden Null-Checks, Type-Checks, Array-Checks
+✅ Alle Inputs validieren, alle Edge-Cases abfangen
+
+### 4. Schema-Änderungen immer mit Migration
+❌ Keine DB-Schema-Änderungen ohne Migration-Script
+✅ Immer `db/migrations/YYYY-MM-DD_beschreibung.sql` erstellen
+
+### 5. Tests vorschlagen (min. 2 pro Änderung)
+❌ Keine Code-Änderung ohne Test-Vorschlag
+✅ Backend-Test + Frontend-Test + (optional) Unit-Test
+
+### 6. LESSONS_LOG aktualisieren bei neuen Fehlern
+❌ Neue Fehlerpattern nicht dokumentiert lassen
+✅ Immer in `Regeln/LESSONS_LOG.md` eintragen
+
+### 7. Sprache: Deutsch
+✅ Alle Antworten auf Deutsch (außer Code-Kommentare wenn nötig)
+
+---
+
+## 🔗 Verwandte Dateien
+
+**Für neue Projekte:**
+→ `Global/PROJEKT_TEMPLATE.md` - Template zum Kopieren
+
+**Für Versionierung:**
+→ `CHANGELOG.md` - Aktuelle Versionshistorie
+
+**Für Status:**
+→ `STATUS_AKTUELL.md` - Aktueller System-Status
+
+---
+
+## 📊 Projekt-Info
+
+**Projekt:** FAMO TrafficApp 3.0  
+**Stack:** Python 3.10, FastAPI, Vanilla JS, SQLite  
+**Infrastruktur:** Proxmox-LXC, Docker (OSRM), Leaflet  
+**Hauptfeatures:** Touren-Workflow, Sub-Routen-Generator, OSRM-Routing
+
+**Dokumentation:** 17 Dokumente (~6.500 Zeilen)  
+**Stand:** 2025-11-15  
+**Version:** 2.1
+
+---
+
+**🌍 Global → Projekt → Code**
+
+Bei Unsicherheit: Lies zuerst `DOKUMENTATION.md` für vollständige Übersicht!
+

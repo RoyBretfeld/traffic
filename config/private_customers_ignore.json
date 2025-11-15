@@ -1,0 +1,15 @@
+{
+  "private_customers": [
+    {
+      "name": "Andreas Wohlwend",
+      "reason": "Privater Kunde - unvollständige Adressdaten",
+      "ignore_geocoding": true,
+      "notes": "Datenqualitätsproblem in CSV (nan-Werte)"
+    }
+  ],
+  "ignore_patterns": [
+    "nan, nan",
+    "None, None"
+  ],
+  "last_updated": "2025-01-07"
+}

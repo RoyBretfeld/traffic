@@ -1,0 +1,63 @@
+MANUELLE KORREKTUR ERFORDERLICH
+================================================================================
+
+1. 41 Roswitha (KdNr: 4993)
+   Grund: Unvollstaendige Adresse
+   Original: ,  
+   Korrektur: 
+
+2. Rob`s Kfz-Service (KdNr: 5195)
+   Grund: Keine Variante erfolgreich
+   Original: Enno-Heidebroeck-Str. 11, 01237 Dresden
+   Korrektur: 
+
+3. CAR-ART GmbH (KdNr: 5116)
+   Grund: Keine Variante erfolgreich
+   Original: Bismarkstr. 63, 01257 Dresden
+   Korrektur: 
+
+4. AG (KdNr: 44993)
+   Grund: Unvollstaendige Adresse
+   Original: ,  
+   Korrektur: 
+
+5. CAR - Center (KdNr: 1402)
+   Grund: Keine Variante erfolgreich
+   Original: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+   Korrektur: 
+
+6. Sägner's Fahrzeugtechnik (KdNr: 5530)
+   Grund: Keine Variante erfolgreich
+   Original: Burgstädter Str. 3, 01219 Dresden
+   Korrektur: 
+
+7. Rob`s Kfz-Service (KdNr: 5195)
+   Grund: Keine Variante erfolgreich
+   Original: Enno-Heidebroeck-Str. 11, 01237 Dresden
+   Korrektur: 
+
+8. AUTO OTTO (KdNr: 1308)
+   Grund: Keine Variante erfolgreich
+   Original: Dresdner Str. 5, 02977 Hoyerswerda
+   Korrektur: 
+
+9. MSM (KdNr: 6000)
+   Grund: Unvollstaendige Adresse
+   Original: ,  
+   Korrektur: 
+
+10. Rob`s Kfz-Service (KdNr: 5195)
+   Grund: Keine Variante erfolgreich
+   Original: Enno-Heidebroeck-Str. 11, 01237 Dresden
+   Korrektur: 
+
+11. CAR-ART GmbH (KdNr: 5116)
+   Grund: Keine Variante erfolgreich
+   Original: Bismarkstr. 63, 01257 Dresden
+   Korrektur: 
+
+12. AUTO OTTO (KdNr: 1308)
+   Grund: Keine Variante erfolgreich
+   Original: Dresdner Str. 5, 02977 Hoyerswerda
+   Korrektur: 
+

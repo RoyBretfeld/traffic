@@ -1,0 +1,18 @@
+### OpenAPI
+GET http://127.0.0.1:8111/openapi.json
+
+### Health
+GET http://127.0.0.1:8111/health/db
+
+### Route-Details Test
+POST http://127.0.0.1:8111/api/tour/route-details
+Content-Type: application/json
+
+{
+  "stops": [
+    { "lat": 51.01127, "lon": 13.70161, "name": "Depot" },
+    { "lat": 51.013179, "lon": 13.804567, "name": "36 Nici zu RP" }
+  ],
+  "include_depot": false
+}
+

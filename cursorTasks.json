@@ -1,0 +1,180 @@
+{
+  "version": "1.0.0",
+  "name": "FAMO TrafficApp 3.0 - LLM Integration Tasks",
+  "description": "Technische Arbeitsgrundlage für LLM-Integration und Code-Monitoring",
+  "tasks": [
+    {
+      "id": "llm-integration-setup",
+      "name": "LLM-Integration Setup",
+      "description": "OpenAI API-Integration für intelligente Routenoptimierung",
+      "priority": "high",
+      "estimatedTime": "4-6 hours",
+      "dependencies": [],
+      "steps": [
+        "OpenAI API-Key konfigurieren",
+        "LLM-Service für Routenoptimierung implementieren",
+        "Prompt-Templates für Clustering-Parameter erstellen",
+        "Token-Usage-Monitoring einrichten",
+        "Fallback-Mechanismen für API-Ausfälle implementieren"
+      ],
+      "files": [
+        "services/llm_optimizer.py",
+        "config/llm_prompts.json",
+        "services/monitoring.py"
+      ]
+    },
+    {
+      "id": "workflow-enhancement",
+      "name": "Workflow-Engine Enhancement",
+      "description": "Erweiterung der Workflow-Engine mit LLM-basierten Optimierungen",
+      "priority": "high",
+      "estimatedTime": "3-4 hours",
+      "dependencies": ["llm-integration-setup"],
+      "steps": [
+        "LLM-Integration in Workflow-Engine",
+        "Intelligente Clustering-Parameter",
+        "Dynamische Routenoptimierung",
+        "Performance-Metriken implementieren"
+      ],
+      "files": [
+        "services/workflow_engine.py",
+        "routes/workflow_api.py"
+      ]
+    },
+    {
+      "id": "monitoring-system",
+      "name": "LLM-Monitoring-System",
+      "description": "Überwachung und Qualitätssicherung der LLM-Ausgaben",
+      "priority": "medium",
+      "estimatedTime": "2-3 hours",
+      "dependencies": ["llm-integration-setup"],
+      "steps": [
+        "Tracing für LLM-Calls implementieren",
+        "Metriken für Clustering-Präzision",
+        "Latenz- und Token-Monitoring",
+        "Anomalieerkennung für LLM-Ausgaben"
+      ],
+      "files": [
+        "services/llm_monitoring.py",
+        "routes/monitoring_api.py",
+        "config/monitoring_config.json"
+      ]
+    },
+    {
+      "id": "code-quality-monitoring",
+      "name": "Code-Quality-Monitoring",
+      "description": "Überwachung von Code-Änderungen durch Cursor-KI",
+      "priority": "medium",
+      "estimatedTime": "3-4 hours",
+      "dependencies": [],
+      "steps": [
+        "Erweiterte Linter-Konfiguration",
+        "LLM-basierte Code-Review-Pipeline",
+        "Automatische Test-Generierung",
+        "Diff-Analyse für stille Änderungen"
+      ],
+      "files": [
+        ".github/workflows/code-quality.yml",
+        "scripts/code_review_llm.py",
+        "config/code_quality_rules.json"
+      ]
+    },
+    {
+      "id": "documentation-automation",
+      "name": "Dokumentations-Automatisierung",
+      "description": "Automatisierte Docs-Generierung durch LLM",
+      "priority": "low",
+      "estimatedTime": "2-3 hours",
+      "dependencies": ["llm-integration-setup"],
+      "steps": [
+        "LLM-basierte Docstring-Generierung",
+        "Automatische API-Dokumentation",
+        "Code-Kommentar-Updates",
+        "Architektur-Diagramm-Generierung"
+      ],
+      "files": [
+        "scripts/doc_generator.py",
+        "docs/LLM_INTEGRATION.md",
+        "docs/CODE_MONITORING.md"
+      ]
+    },
+    {
+      "id": "governance-framework",
+      "name": "KI-Governance-Framework",
+      "description": "Regelwerk und Guidelines für KI-Nutzung",
+      "priority": "low",
+      "estimatedTime": "1-2 hours",
+      "dependencies": [],
+      "steps": [
+        "Prompt-Template-Standards",
+        "Commit-Regeln für KI-Änderungen",
+        "Review-Guidelines",
+        "Wöchentliche Review-Prozesse"
+      ],
+      "files": [
+        "docs/GOVERNANCE.md",
+        "config/prompt_templates.json",
+        "scripts/weekly_review.py"
+      ]
+    }
+  ],
+  "prompts": {
+    "routing_optimization": {
+      "system": "Du bist ein Experte für Routenoptimierung und Logistik. Analysiere die gegebenen Stopps und optimiere die Reihenfolge für minimale Fahrzeit.",
+      "user": "Optimiere die Route für {tour_count} Stopps in {region}. Berücksichtige Verkehrszeiten und Prioritäten.",
+      "parameters": {
+        "max_tokens": 500,
+        "temperature": 0.3
+      }
+    },
+    "code_review": {
+      "system": "Du bist ein Senior-Entwickler. Prüfe den Code auf Qualität, Sicherheit und Architektur-Konformität.",
+      "user": "Review diesen Code-Abschnitt: {code_diff}. Prüfe auf potenzielle Probleme und Verbesserungen.",
+      "parameters": {
+        "max_tokens": 1000,
+        "temperature": 0.1
+      }
+    },
+    "documentation": {
+      "system": "Du bist ein technischer Dokumentationsspezialist. Erstelle klare, präzise Dokumentation.",
+      "user": "Dokumentiere diese Funktion: {function_code}. Erkläre Parameter, Rückgabewerte und Verwendung.",
+      "parameters": {
+        "max_tokens": 800,
+        "temperature": 0.2
+      }
+    }
+  },
+  "monitoring": {
+    "metrics": [
+      "llm_response_time",
+      "token_usage",
+      "clustering_accuracy",
+      "route_optimization_score",
+      "code_quality_score"
+    ],
+    "alerts": [
+      {
+        "metric": "llm_response_time",
+        "threshold": 5000,
+        "action": "warn"
+      },
+      {
+        "metric": "token_usage",
+        "threshold": 10000,
+        "action": "alert"
+      }
+    ]
+  },
+  "rules": {
+    "code_changes": [
+      "Alle LLM-generierten Änderungen müssen durch Code-Review",
+      "Automatische Tests für neue Funktionen",
+      "Dokumentation bei Architektur-Änderungen"
+    ],
+    "prompts": [
+      "Verwende konsistente Prompt-Templates",
+      "Logge alle LLM-Interaktionen",
+      "Implementiere Fallback-Mechanismen"
+    ]
+  }
+}

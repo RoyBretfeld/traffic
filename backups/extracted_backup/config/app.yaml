@@ -1,0 +1,14 @@
+app:
+  env: development
+  feature_flags:
+    stats_box_enabled: true
+    ai_ops_enabled: false
+
+osrm:
+  base_url: "https://router.project-osrm.org"  # später lokaler Knoten
+  timeout_seconds: 6
+  fallback_enabled: true  # Fallback auf router.project-osrm.org wenn lokal nicht verfügbar
+
+paths:
+  data_dir: "data"              # für DB/Dateigrößen
+

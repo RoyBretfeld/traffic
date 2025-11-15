@@ -1,0 +1,360 @@
+{
+  "timestamp": "2025-10-16T11:17:31.216984",
+  "overall_stats": {
+    "total_files": 33,
+    "total_customers": 7328,
+    "total_geocoded": 7317,
+    "overall_rate": 99.8
+  },
+  "results": [
+    {
+      "file": "probe.csv",
+      "error": "Keine Kunden-Daten gefunden",
+      "total_customers": 0,
+      "geocoded": 0,
+      "missing": 0,
+      "rate": 0.0
+    },
+    {
+      "file": "Tourenplan 01.09.2025.csv",
+      "total_customers": 218,
+      "geocoded": 218,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 29,
+      "file_size_kb": 15.2
+    },
+    {
+      "file": "Tourenplan 01.10.2025.csv",
+      "total_customers": 238,
+      "geocoded": 238,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 29,
+      "file_size_kb": 16.4
+    },
+    {
+      "file": "Tourenplan 02.09.2025.csv",
+      "total_customers": 237,
+      "geocoded": 237,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 29,
+      "file_size_kb": 16.5
+    },
+    {
+      "file": "Tourenplan 02.10.2025.csv",
+      "total_customers": 219,
+      "geocoded": 218,
+      "missing": 1,
+      "rate": 99.5,
+      "missing_addresses": [
+        "Reinberger Dorfstraße 6a, 01744 Dippoldiswalde/OT Reinberg"
+      ],
+      "tours": 29,
+      "file_size_kb": 15.1
+    },
+    {
+      "file": "Tourenplan 03.09.2025.csv",
+      "total_customers": 226,
+      "geocoded": 226,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 28,
+      "file_size_kb": 16.0
+    },
+    {
+      "file": "Tourenplan 04.09.2025.csv",
+      "total_customers": 230,
+      "geocoded": 230,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 28,
+      "file_size_kb": 16.0
+    },
+    {
+      "file": "Tourenplan 05.09.2025.csv",
+      "total_customers": 185,
+      "geocoded": 185,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 28,
+      "file_size_kb": 13.1
+    },
+    {
+      "file": "Tourenplan 06.10.2025.csv",
+      "total_customers": 201,
+      "geocoded": 201,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 28,
+      "file_size_kb": 14.0
+    },
+    {
+      "file": "Tourenplan 07.10.2025.csv",
+      "total_customers": 224,
+      "geocoded": 224,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 29,
+      "file_size_kb": 15.5
+    },
+    {
+      "file": "Tourenplan 08.09.2025.csv",
+      "total_customers": 234,
+      "geocoded": 234,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 28,
+      "file_size_kb": 16.2
+    },
+    {
+      "file": "Tourenplan 08.10.2025.csv",
+      "total_customers": 203,
+      "geocoded": 203,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 27,
+      "file_size_kb": 14.0
+    },
+    {
+      "file": "Tourenplan 09.09.2025.csv",
+      "total_customers": 242,
+      "geocoded": 241,
+      "missing": 1,
+      "rate": 99.6,
+      "missing_addresses": [
+        "01159 Dresden"
+      ],
+      "tours": 28,
+      "file_size_kb": 17.1
+    },
+    {
+      "file": "Tourenplan 10.09.2025.csv",
+      "total_customers": 233,
+      "geocoded": 233,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 27,
+      "file_size_kb": 16.2
+    },
+    {
+      "file": "Tourenplan 11.09.2025.csv",
+      "total_customers": 219,
+      "geocoded": 219,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 27,
+      "file_size_kb": 15.2
+    },
+    {
+      "file": "Tourenplan 12.09.2025.csv",
+      "total_customers": 202,
+      "geocoded": 202,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 28,
+      "file_size_kb": 14.4
+    },
+    {
+      "file": "Tourenplan 15.09.2025.csv",
+      "total_customers": 243,
+      "geocoded": 243,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 29,
+      "file_size_kb": 16.7
+    },
+    {
+      "file": "Tourenplan 16.09.2025.csv",
+      "total_customers": 255,
+      "geocoded": 255,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 28,
+      "file_size_kb": 17.7
+    },
+    {
+      "file": "Tourenplan 17.09.2025.csv",
+      "total_customers": 220,
+      "geocoded": 220,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 27,
+      "file_size_kb": 15.4
+    },
+    {
+      "file": "Tourenplan 18.09.2025.csv",
+      "total_customers": 244,
+      "geocoded": 244,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 30,
+      "file_size_kb": 16.7
+    },
+    {
+      "file": "Tourenplan 22.08.2025.csv",
+      "total_customers": 172,
+      "geocoded": 172,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 27,
+      "file_size_kb": 12.2
+    },
+    {
+      "file": "Tourenplan 22.09.2025.csv",
+      "total_customers": 248,
+      "geocoded": 247,
+      "missing": 1,
+      "rate": 99.6,
+      "missing_addresses": [
+        "Am Graben 37, 01705 Freital Sömmsdorf"
+      ],
+      "tours": 30,
+      "file_size_kb": 17.4
+    },
+    {
+      "file": "Tourenplan 23.09.2025.csv",
+      "total_customers": 239,
+      "geocoded": 239,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 28,
+      "file_size_kb": 16.4
+    },
+    {
+      "file": "Tourenplan 24.09.2025.csv",
+      "total_customers": 248,
+      "geocoded": 247,
+      "missing": 1,
+      "rate": 99.6,
+      "missing_addresses": [
+        "Kertitzer Str. 7, 04509 Delitzsch"
+      ],
+      "tours": 29,
+      "file_size_kb": 17.1
+    },
+    {
+      "file": "Tourenplan 25.08.2025.csv",
+      "total_customers": 241,
+      "geocoded": 240,
+      "missing": 1,
+      "rate": 99.6,
+      "missing_addresses": [
+        "Rhönstr. 42-44, 63667 Nidda-Oberschmitten"
+      ],
+      "tours": 28,
+      "file_size_kb": 16.6
+    },
+    {
+      "file": "Tourenplan 25.09.2025.csv",
+      "total_customers": 260,
+      "geocoded": 258,
+      "missing": 2,
+      "rate": 99.2,
+      "missing_addresses": [
+        "Fabrikstr. 27, 01445 Radebeul",
+        "nan, nan Pulsnitz"
+      ],
+      "tours": 28,
+      "file_size_kb": 18.0
+    },
+    {
+      "file": "Tourenplan 26.08.2025.csv",
+      "total_customers": 222,
+      "geocoded": 222,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 28,
+      "file_size_kb": 15.5
+    },
+    {
+      "file": "Tourenplan 26.09.2025.csv",
+      "total_customers": 228,
+      "geocoded": 227,
+      "missing": 1,
+      "rate": 99.6,
+      "missing_addresses": [
+        "Im Ursulum 16, 35396 Gießen"
+      ],
+      "tours": 27,
+      "file_size_kb": 15.6
+    },
+    {
+      "file": "Tourenplan 27.08.2025.csv",
+      "total_customers": 256,
+      "geocoded": 256,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 27,
+      "file_size_kb": 17.5
+    },
+    {
+      "file": "Tourenplan 28.08.2025.csv",
+      "total_customers": 250,
+      "geocoded": 249,
+      "missing": 1,
+      "rate": 99.6,
+      "missing_addresses": [
+        "Hauptstr. 68, 02699 Königswartha"
+      ],
+      "tours": 27,
+      "file_size_kb": 17.0
+    },
+    {
+      "file": "Tourenplan 29.08.2025.csv",
+      "total_customers": 211,
+      "geocoded": 210,
+      "missing": 1,
+      "rate": 99.5,
+      "missing_addresses": [
+        "Reinberger Dorfstraße 6a, 01744 Dippoldiswalde/OT Reinberg"
+      ],
+      "tours": 29,
+      "file_size_kb": 14.5
+    },
+    {
+      "file": "Tourenplan 29.09.2025.csv",
+      "total_customers": 239,
+      "geocoded": 238,
+      "missing": 1,
+      "rate": 99.6,
+      "missing_addresses": [
+        "Am Kirschgarten 59, 99428 Grammetal OT Mönchenholzhausen"
+      ],
+      "tours": 28,
+      "file_size_kb": 16.8
+    },
+    {
+      "file": "Tourenplan 30.09.2025.csv",
+      "total_customers": 241,
+      "geocoded": 241,
+      "missing": 0,
+      "rate": 100.0,
+      "missing_addresses": [],
+      "tours": 29,
+      "file_size_kb": 16.8
+    }
+  ]
+}

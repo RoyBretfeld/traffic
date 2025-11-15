@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  osrm-backend:
+    build: .
+    container_name: osrm-backend
+    ports:
+      - "5011:5000"  # Mappe Host-Port 5011 auf Container-Port 5000
+    volumes:
+      # Hier müssen Sie die .osm.pbf-Datei Ihres Kartenbereichs bereitstellen.
+      # Beispiel für Deutschland:
+      # - ./data/germany-latest.osm.pbf:/data/region.osm.pbf
+      - ./data:/data
+    environment:
+      - OSRM_PROFILE=driving
+    # Automatischen Neustart aktivieren
+    restart: always
+    command: >
+      bash -c "
+        if [ ! -f /data/region.osrm.osm.pbf ]; then 
+          echo \"Error: /data/region.osrm.osm.pbf not found. Please provide your OSM PBF file.\"; 
+          exit 1; 
+        fi && 
+        osrm-extract -p /opt/car.lua /data/region.osrm.osm.pbf && 
+        osrm-partition /data/region.osrm && 
+        osrm-customize /data/region.osrm && 
+        osrm-routed --algorithm mld /data/region.osrm
+      "

@@ -1,0 +1,90 @@
+
+# PDF-Parsing-Prompt für Tourenpläne
+
+Deine Aufgabe ist es, PDF-Dateien mit Tourenplänen auszulesen und die enthaltenen Daten strukturiert als JSON auszugeben.
+
+## Anforderungen
+
+1. **Eingangsdaten**:  
+   Du erhältst eine PDF-Datei mit einer oder mehreren Tabellen.  
+   Jede Tabelle enthält Informationen über Lieferungen / Abholungen in Touren.  
+   Typische Spalten:
+   - Tournummer oder -kennung (z. B. W-07:00 A)
+   - Kundenname
+   - Adresse (Straße, Hausnummer, PLZ, Ort)
+   - Besonderheiten (z. B. „Bar“ = Zahlung bei Lieferung)
+   - Zeitfenster oder Reihenfolge
+
+2. **Ausgabeformat (JSON)**:
+   ```json
+   {
+     "tour": "W-07:00 A",
+     "stops": [
+       {
+         "kunde": "Muster GmbH",
+         "adresse": "Musterstraße 5, 01189 Dresden",
+         "zahlung": "Bar",
+         "zeitfenster": "08:00-09:00"
+       },
+       {
+         "kunde": "Beispiel AG",
+         "adresse": "Beispielweg 12, 01705 Freital",
+         "zahlung": "Rechnung",
+         "zeitfenster": null
+       }
+     ],
+     "gesamt_stops": 12
+   }
+   ```
+
+3. **Spezialfälle**:
+   - „Bar“ ist **kein Kundenname**, sondern bedeutet *Zahlung bei Lieferung*.  
+   - Wenn ein Feld fehlt (z. B. Zeitfenster), setze `null`.  
+   - Straßennamen + Hausnummer + PLZ + Ort müssen **zu einer vollständigen Adresse zusammengefügt** werden.  
+   - Doppelte oder fehlerhafte Einträge bitte markieren mit `"unsicher": true`.
+
+4. **Mehrere Touren pro Dokument**:  
+   Wenn mehrere Tourenpläne in einer PDF vorkommen, gebe **eine JSON-Liste** mit allen Touren zurück.
+
+5. **Fehlerhandling**:  
+   - Wenn die Tabelle unvollständig ist → gib trotzdem so viele Felder wie möglich aus.  
+   - Niemals Felder erfinden.  
+
+---
+
+### Beispielausgabe für eine PDF mit 2 Touren:
+
+```json
+[
+  {
+    "tour": "W-07:00 A",
+    "stops": [
+      {
+        "kunde": "Bäckerei Schulz",
+        "adresse": "Hauptstraße 15, 01127 Dresden",
+        "zahlung": "Bar",
+        "zeitfenster": "07:30-08:00"
+      }
+    ],
+    "gesamt_stops": 8
+  },
+  {
+    "tour": "W-09:00 B",
+    "stops": [
+      {
+        "kunde": "Autohaus Meier",
+        "adresse": "Gartenweg 2, 01219 Dresden",
+        "zahlung": "Rechnung",
+        "zeitfenster": null
+      }
+    ],
+    "gesamt_stops": 6
+  }
+]
+```
+
+---
+
+## Ziel
+Die KI soll nach diesem Prompt **immer** ein valides JSON mit allen Touren und Stopps liefern.  
+Dieses JSON wird anschließend in der App weiterverarbeitet (Routing, Fahrzeitberechnung, Anzeige).  

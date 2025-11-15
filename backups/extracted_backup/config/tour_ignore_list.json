@@ -1,0 +1,46 @@
+{
+  "ignore_tours": [
+    "DBD",
+    "DPD",
+    "DVD",
+    "CB Anlief",
+    "TA Anlief",
+    "TA Anlieferf",
+    "Anlief T2",
+    "Anlief. T3",
+    "Anlief T3",
+    "Anlief. T5",
+    "Anlief T5",
+    "Anlief. T8",
+    "Anlief. T10",
+    "Anlief T10",
+    "BZ T2 Anlief",
+    "BZ T2/11",
+    "BZ T13 Anlief",
+    "Anlief T17",
+    "Anlief. T17",
+    "Anlief. T71",
+    "Anlief T71",
+    "FG Anlief",
+    "BZ T16 Anlief",
+    "CB Anlief. T16",
+    "Anlief. T16",
+    "BUZ T16 Anlief",
+    "BU`Z T16 Anlief"
+  ],
+  "allow_tours": [
+    "CB",
+    "T",
+    "BZ"
+  ],
+  "description": "Touren die nicht in die Routenplanung einbezogen werden sollen",
+  "allow_description": "Touren die VERARBEITET werden sollen (wenn Liste vorhanden, werden NUR diese Touren verarbeitet)",
+  "reason": "Pickup/Nachtlieferung - werden separat gehandhabt",
+  "allow_reason": "Direkte Routen (Cottbus, Taucher, Bautzen) - können schnell verarbeitet werden",
+  "last_updated": "2025-11-04",
+  "usage": {
+    "ignore_tours": "Touren mit diesen Patterns werden übersprungen",
+    "allow_tours": "Wenn diese Liste vorhanden ist und nicht leer, werden NUR Touren verarbeitet die hier stehen. Ignore-Liste hat Vorrang."
+  }
+}
+

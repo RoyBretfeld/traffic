@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: block-orig-writes
+        name: Block writes in ./Tourplaene
+        entry: python scripts/hooks/block_orig_writes.py
+        language: system
+        stages: [pre-commit]
+        description: Verhindert Commits mit Änderungen im Original-Ordner
+      - id: scan-forbidden-write-patterns
+        name: Scan for forbidden write patterns to Tourplaene
+        entry: python scripts/hooks/scan_forbidden_patterns.py
+        language: system
+        stages: [pre-commit]
+        description: Sucht nach verdächtigen Schreib-Mustern auf Tourplaene

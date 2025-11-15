@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourplan-Import & Geocoding-Monitor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { max-width: 1200px; margin-top: 20px; }
+        .card-header { background-color: #6a0dad; color: white; }
+        .progress-bar { transition: width 0.5s ease; }
+        .log-entry { font-family: monospace; font-size: 0.85em; white-space: pre-wrap; word-break: break-all; }
+        .log-entry.info { color: #28a745; }
+        .log-entry.warn { color: #ffc107; }
+        .log-entry.error { color: #dc3545; }
+        .geocoding-status-table th { position: sticky; top: 0; background-color: #f8f9fa; z-index: 1; }
+        .geocoding-status-table tbody { max-height: 400px; overflow-y: auto; display: block; }
+        .geocoding-status-table tr:hover { background-color: #e9ecef; }
+        .geocoding-status-table td:nth-child(2) { max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #6a0dad;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/ki-improvements">KI-CodeChecker Dashboard</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" title="Zurück zur Hauptseite">
+                            <i class="fas fa-home"></i> Zurück zur Hauptseite
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="mb-4">Tourplan-Import & Geocoding-Monitor</h2>
+
+        <!-- Upload Sektion -->
+        <div class="card mb-4">
+            <div class="card-header">Tourplan hochladen</div>
+            <div class="card-body">
+                <form id="uploadForm">
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control" id="tourplanFileInput" accept=".csv">
+                        <button class="btn btn-primary" type="submit" id="uploadButton">Hochladen</button>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="clearDbBeforeImport">
+                        <label class="form-check-label" for="clearDbBeforeImport">
+                            DB vor Import löschen (Achtung: Datenverlust!)
+                        </label>
+                    </div>
+                </form>
+                <div id="uploadStatus" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Fortschritt Sektion -->
+        <div class="card mb-4">
+            <div class="card-header">Import- & Geocoding-Fortschritt</div>
+            <div class="card-body">
+                <div class="progress mb-3">
+                    <div id="overallProgressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <p>Status: <span id="overallStatusText">Bereit</span></p>
+                <button id="cancelImportButton" class="btn btn-warning btn-sm" disabled>Import abbrechen</button>
+            </div>
+        </div>
+
+        <!-- Geocoding Status Tabelle -->
+        <div class="card mb-4">
+            <div class="card-header">Geocoding Details</div>
+            <div class="card-body">
+                <table class="table table-sm table-striped geocoding-status-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Adresse</th>
+                            <th>Status</th>
+                            <th>Lat</th>
+                            <th>Lon</th>
+                            <th>Quelle</th>
+                            <th>Nachricht</th>
+                        </tr>
+                    </thead>
+                    <tbody id="geocodingStatusTableBody">
+                        <!-- Geocoding-Einträge werden hier dynamisch eingefügt -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Log Sektion -->
+        <div class="card">
+            <div class="card-header">Logs</div>
+            <div class="card-body bg-light" style="max-height: 300px; overflow-y: auto;" id="logOutput">
+                <!-- Log-Nachrichten werden hier dynamisch eingefügt -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const logOutput = document.getElementById('logOutput');
+        const overallProgressBar = document.getElementById('overallProgressBar');
+        const overallStatusText = document.getElementById('overallStatusText');
+        const geocodingStatusTableBody = document.getElementById('geocodingStatusTableBody');
+        const uploadForm = document.getElementById('uploadForm');
+        const tourplanFileInput = document.getElementById('tourplanFileInput');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const uploadButton = document.getElementById('uploadButton');
+        const cancelImportButton = document.getElementById('cancelImportButton');
+        const clearDbBeforeImportCheckbox = document.getElementById('clearDbBeforeImport');
+
+        let currentProcessId = null;
+        let pollingInterval = null;
+        let logCount = 0;
+
+        function addLog(level, message) {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${level}`;
+            entry.innerHTML = `<span class="badge bg-secondary">${new Date().toLocaleTimeString()}</span> <span class="badge bg-${level === 'error' ? 'danger' : level === 'warn' ? 'warning' : 'info'}">${level.toUpperCase()}</span> ${message}`;
+            logOutput.prepend(entry);
+            logCount++;
+            if (logCount > 100) {
+                logOutput.removeChild(logOutput.lastChild);
+                logCount--;
+            }
+        }
+
+        function updateOverallProgress(progress, statusText = 'Verarbeitung läuft...') {
+            overallProgressBar.style.width = `${progress}%`;
+            overallProgressBar.setAttribute('aria-valuenow', progress);
+            overallProgressBar.textContent = `${progress}%`;
+            overallStatusText.textContent = statusText;
+        }
+
+        function updateGeocodingTable(data) {
+            geocodingStatusTableBody.innerHTML = ''; // Clear previous entries
+            data.forEach((entry, index) => {
+                const row = geocodingStatusTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${entry.address}</td>
+                    <td><span class="badge bg-${entry.status === 'geocoded' ? 'success' : entry.status === 'failed' ? 'danger' : 'info'}">${entry.status.toUpperCase()}</span></td>
+                    <td>${entry.lat ? entry.lat.toFixed(5) : '-'}</td>
+                    <td>${entry.lon ? entry.lon.toFixed(5) : '-'}</td>
+                    <td>${entry.source || '-'}</td>
+                    <td>${entry.message || '-'}</td>
+                `;
+            });
+        }
+
+        async function startImport(file, clearDb) {
+            addLog('info', 'Import gestartet...');
+            updateOverallProgress(0, 'Starte Import...');
+            uploadButton.disabled = true;
+            tourplanFileInput.disabled = true;
+            cancelImportButton.disabled = false;
+            clearDbBeforeImportCheckbox.disabled = true;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                // Initialer Upload und Start des Prozesses
+                const response = await fetchWithErrorHandling('/api/tourplan/ingest', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    currentProcessId = result.process_id;
+                    addLog('info', `Import erfolgreich gestartet. Prozess-ID: ${currentProcessId}`);
+                    addLog('info', 'Starte Geocoding-Monitor...');
+                    pollingInterval = setInterval(pollGeocodingStatus, 2000); // Alle 2 Sekunden pollen
+                } else {
+                    addLog('error', `Import fehlgeschlagen: ${result.message || 'Unbekannter Fehler'}`);
+                    resetUI();
+                }
+            } catch (error) {
+                addLog('error', `Fehler beim Import-Start: ${error.message}`);
+                resetUI();
+            }
+        }
+
+        async function pollGeocodingStatus() {
+            if (!currentProcessId) return;
+
+            try {
+                const response = await fetchWithErrorHandling(`/api/tourplan/ingest/status/${currentProcessId}`);
+                const status = await response.json();
+
+                if (status.success) {
+                    updateOverallProgress(status.progress, status.overall_status);
+                    updateGeocodingTable(status.geocoding_details);
+                    
+                    status.logs.forEach(log => addLog(log.level, log.message));
+
+                    if (status.overall_status === 'completed' || status.overall_status === 'cancelled' || status.overall_status === 'failed') {
+                        clearInterval(pollingInterval);
+                        addLog('info', `Prozess abgeschlossen: ${status.overall_status.toUpperCase()}`);
+                        resetUI();
+                    }
+                } else {
+                    addLog('error', `Status-Abfrage fehlgeschlagen: ${status.message}`);
+                    clearInterval(pollingInterval);
+                    resetUI();
+                }
+            } catch (error) {
+                addLog('error', `Fehler bei Status-Abfrage: ${error.message}`);
+                clearInterval(pollingInterval);
+                resetUI();
+            }
+        }
+
+        async function cancelImport() {
+            if (!currentProcessId) return;
+
+            addLog('warn', 'Import wird abgebrochen...');
+            cancelButton.disabled = true;
+
+            try {
+                const response = await fetchWithErrorHandling(`/api/tourplan/ingest/cancel/${currentProcessId}`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    addLog('info', 'Import erfolgreich abgebrochen.');
+                } else {
+                    addLog('error', `Abbruch fehlgeschlagen: ${result.message}`);
+                }
+            } catch (error) {
+                addLog('error', `Fehler beim Abbruch: ${error.message}`);
+            } finally {
+                clearInterval(pollingInterval);
+                resetUI();
+            }
+        }
+
+        function resetUI() {
+            currentProcessId = null;
+            uploadButton.disabled = false;
+            tourplanFileInput.disabled = false;
+            cancelImportButton.disabled = true;
+            clearDbBeforeImportCheckbox.disabled = false;
+            updateOverallProgress(0, 'Bereit');
+        }
+
+        uploadForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const file = tourplanFileInput.files[0];
+            const clearDb = clearDbBeforeImportCheckbox.checked;
+            if (file) {
+                startImport(file, clearDb);
+            } else {
+                uploadStatus.innerHTML = '<div class="alert alert-danger">Bitte wählen Sie eine CSV-Datei aus.</div>';
+            }
+        });
+
+        cancelImportButton.addEventListener('click', cancelImport);
+
+        // Helper für zentrale Fehlerbehandlung (aus index.html kopiert/angepasst)
+        async function fetchWithErrorHandling(url, options) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    let errorMessage = `HTTP-Fehler ${response.status} (${response.statusText})`;
+                    let errorDetail = '';
+                    let traceId = response.headers.get('x-request-id') || 'N/A';
+                    
+                    try {
+                        const errorJson = await response.json();
+                        if (errorJson.detail) {
+                            errorDetail = typeof errorJson.detail === 'string' ? errorJson.detail : JSON.stringify(errorJson.detail);
+                        } else if (errorJson.error) {
+                            errorDetail = errorJson.message || errorJson.error;
+                        }
+                    } catch (jsonError) {
+                        // Response ist kein JSON
+                        errorDetail = await response.text();
+                    }
+                    
+                    const fullMessage = `${errorMessage}. ${errorDetail ? 'Details: ' + errorDetail : ''} (Trace-ID: ${traceId})`;
+                    addLog('error', fullMessage);
+                    throw new Error(fullMessage);
+                }
+                return response;
+            } catch (error) {
+                addLog('error', `Netzwerkfehler oder ungültige URL: ${error.message}`);
+                throw error;
+            }
+        }
+
+    </script>
+</body>
+</html>

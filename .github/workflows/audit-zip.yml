@@ -1,0 +1,38 @@
+name: audit-zip
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Vollständige Git-Historie für Commit-Info
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create audit ZIP
+        run: python tools/make_audit_zip.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-zip
+          path: ZIP/*.zip
+          retention-days: 30
+
+      - name: Display ZIP info
+        run: |
+          echo "Audit-ZIP erstellt:"
+          ls -lh ZIP/*.zip || echo "Keine ZIP-Dateien gefunden"
+

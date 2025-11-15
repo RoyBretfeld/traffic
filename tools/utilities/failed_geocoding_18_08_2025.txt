@@ -1,0 +1,118 @@
+KUNDEN OHNE GEOCODING - Tourenplan 18.08.2025
+================================================================================
+
+1. Gustavs Autohof (KdNr: 4646)
+   Tour: PIR Anlief. 7.45 Uhr
+   Original: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+   Korrektur: 
+
+2. Gustavs Autohof (KdNr: 4646)
+   Tour: PIR Anlief. 7.45 Uhr
+   Original: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+   Korrektur: 
+
+3. 41 Roswitha (KdNr: 4993)
+   Tour: W-09.00 Uhr Tour
+   Original: ,  
+   Korrektur: 
+
+4. Rob`s Kfz-Service (KdNr: 5195)
+   Tour: W-09.00 Uhr Tour
+   Original: Enno-Heidebroeck-Str. 11, 01237 Dresden
+   Korrektur: 
+
+5. CAR-ART GmbH (KdNr: 5116)
+   Tour: W-09.00 Uhr Tour
+   Original: Bismarkstr. 63, 01257 Dresden
+   Korrektur: 
+
+6. Fa.Wilms (KdNr: 1473)
+   Tour: W-09.00 Uhr Tour
+   Original: Dresdner Str. 189, 01640 Coswig - OT Brockwitz
+   Korrektur: 
+
+7. Land-Bau-&Fahrzeugtechnik (KdNr: 5428)
+   Tour: W-09.00 Uhr Tour
+   Original: Dorfstraße 37, 01768 Glashütte OT Luchau
+   Korrektur: 
+
+8. AG (KdNr: 44993)
+   Tour: PIR Anlief. 9.45 Uhr
+   Original: ,  
+   Korrektur: 
+
+9. Dietze & Schindler (KdNr: 1422)
+   Tour: Anlief. T10, 10.00 Uhr
+   Original: Ladestraße 2b, 09465 Sehmatal-OT Sehma
+   Korrektur: 
+
+10. CAR - Center (KdNr: 1402)
+   Tour: Anlief. T8, 10.00 Uhr
+   Original: Crimmitschauer Straße 50a, 04626 Schmölln/Thür.
+   Korrektur: 
+
+11. Klaus Brandner GbR (KdNr: 1484)
+   Tour: Anlief. T8, 10.00 Uhr
+   Original: Gewerbegebiet Kaltes Feld 36, 08468 Heinsdorfergrund
+   Korrektur: 
+
+12. Sägner's Fahrzeugtechnik (KdNr: 5530)
+   Tour: W-11.00 Uhr Tour
+   Original: Burgstädter Str. 3, 01219 Dresden
+   Korrektur: 
+
+13. Rob`s Kfz-Service (KdNr: 5195)
+   Tour: W-11.00 Uhr Tour
+   Original: Enno-Heidebroeck-Str. 11, 01237 Dresden
+   Korrektur: 
+
+14. Autohaus Winter GmbH (KdNr: 4294)
+   Tour: W-11.00 Uhr Tour
+   Original: Dresdner Strasse 6, 01728 Bannewitz OT Hänichen
+   Korrektur: 
+
+15. Autohaus Leuteritz GmbH (KdNr: 5388)
+   Tour: W-11.00 Uhr Tour
+   Original: Müglitztalstraße 10, 01773 Altenberg OT Bärenstein
+   Korrektur: 
+
+16. AUTO OTTO (KdNr: 1308)
+   Tour: Anlief. T71, 11.00 Uhr
+   Original: Dresdner Str. 5, 02977 Hoyerswerda
+   Korrektur: 
+
+17. Dreihundert Dresden (KdNr: 40750)
+   Tour: PIR Anlief. 12.45 UHR
+   Original: Naumannstraße 12 | Halle 14, 01809 Heidenau
+   Korrektur: 
+
+18. MSM (KdNr: 6000)
+   Tour: W-14.00 Uhr Tour
+   Original: ,  
+   Korrektur: 
+
+19. Rob`s Kfz-Service (KdNr: 5195)
+   Tour: W-14.00 Uhr Tour
+   Original: Enno-Heidebroeck-Str. 11, 01237 Dresden
+   Korrektur: 
+
+20. Schütze Gersdorf (KdNr: 40778)
+   Tour: PIR Anlief. 14.45 Uhr
+   Original: Gersdorf 43, 01819 Bahretal OT Gersdorf
+   Korrektur: 
+
+21. CAR-ART GmbH (KdNr: 5116)
+   Tour: W-16.00 Uhr Tour
+   Original: Bismarkstr. 63, 01257 Dresden
+   Korrektur: 
+
+22. Sven Teichmann (KdNr: 1162)
+   Tour: Anlief. T16, 18.00 Uhr
+   Original: An der Triebe 25, 01468 Moritzburg / OT Boxdorf
+   Korrektur: 
+
+23. AUTO OTTO (KdNr: 1308)
+   Tour: Anlief. T16, 18.00 Uhr
+   Original: Dresdner Str. 5, 02977 Hoyerswerda
+   Korrektur: 
+

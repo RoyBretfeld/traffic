@@ -1,0 +1,18 @@
+app:
+  env: development
+  feature_flags:
+    stats_box_enabled: true
+    admin_enabled: true
+    polyline6_enabled: true
+    strict_health_checks: true
+    new_schema_enabled: true  # Phase 2: Neue Tabellen (stats_monthly, routes, route_legs, osrm_cache)
+    ai_ops_enabled: false
+
+osrm:
+  base_url: "http://127.0.0.1:5000"  # Lokaler OSRM-Server
+  timeout_seconds: 2
+  fallback_enabled: true  # Fallback auf router.project-osrm.org wenn lokal nicht verfügbar
+
+paths:
+  data_dir: "data"              # für DB/Dateigrößen
+

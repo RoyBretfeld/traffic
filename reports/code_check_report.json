@@ -1,0 +1,329 @@
+{
+  "timestamp": "2025-11-13T16:10:00.135461",
+  "files_checked": 3,
+  "total_issues": 79,
+  "average_score": 0.6833333333333335,
+  "results": [
+    {
+      "file": "backend\\app.py",
+      "local_analysis": {
+        "issues_count": 48,
+        "issues": [
+          {
+            "type": "line_too_long",
+            "severity": "suggestion",
+            "message": "Zeile 476 ist zu lang (122 Zeichen, max. 120)",
+            "line": 476,
+            "suggestion": null
+          },
+          {
+            "type": "line_too_long",
+            "severity": "suggestion",
+            "message": "Zeile 787 ist zu lang (121 Zeichen, max. 120)",
+            "line": 787,
+            "suggestion": null
+          },
+          {
+            "type": "missing_error_handling",
+            "severity": "warning",
+            "message": "Datei-Lesen ohne Error-Handling",
+            "line": 441,
+            "suggestion": "Verwende try-except für Fehlerbehandlung"
+          },
+          {
+            "type": "missing_error_handling",
+            "severity": "warning",
+            "message": "Datei-Lesen ohne Error-Handling",
+            "line": 543,
+            "suggestion": "Verwende try-except für Fehlerbehandlung"
+          },
+          {
+            "type": "missing_error_handling",
+            "severity": "warning",
+            "message": "Datei-Schreiben ohne Error-Handling",
+            "line": 442,
+            "suggestion": "Verwende try-except für Fehlerbehandlung"
+          },
+          {
+            "type": "missing_error_handling",
+            "severity": "warning",
+            "message": "Datei-Schreiben ohne Error-Handling",
+            "line": 544,
+            "suggestion": "Verwende try-except für Fehlerbehandlung"
+          },
+          {
+            "type": "missing_error_handling",
+            "severity": "warning",
+            "message": "HTTP-Request ohne Error-Handling",
+            "line": 671,
+            "suggestion": "Verwende try-except für Fehlerbehandlung"
+          },
+          {
+            "type": "hardcoded_path",
+            "severity": "warning",
+            "message": "Hardcoded-Pfad gefunden",
+            "line": 103,
+            "suggestion": "Verwende konfigurierbare Pfade oder Path-Objekte"
+          },
+          {
+            "type": "hardcoded_path",
+            "severity": "warning",
+            "message": "Hardcoded-Pfad gefunden",
+            "line": 140,
+            "suggestion": "Verwende konfigurierbare Pfade oder Path-Objekte"
+          },
+          {
+            "type": "hardcoded_path",
+            "severity": "warning",
+            "message": "Hardcoded-Pfad gefunden",
+            "line": 183,
+            "suggestion": "Verwende konfigurierbare Pfade oder Path-Objekte"
+          }
+        ]
+      },
+      "quality_monitor": {
+        "lines_of_code": 936,
+        "complexity_score": 93,
+        "quality_score": 0.6000000000000001,
+        "issues_count": 2,
+        "ai_indicators": [
+          "generic_variable_name: result",
+          "generic_variable_name: data"
+        ],
+        "issues": [
+          {
+            "type": "function_too_long",
+            "severity": "warning",
+            "line": 59,
+            "message": "Function 'create_app' is 877 lines long (max: 50)"
+          },
+          {
+            "type": "function_too_long",
+            "severity": "warning",
+            "line": 762,
+            "message": "Function 'get_kunde_id_by_name_adresse' is 62 lines long (max: 50)"
+          }
+        ]
+      },
+      "ai_analysis": {},
+      "summary": {
+        "total_issues": 50,
+        "quality_score": 0.6000000000000001,
+        "ai_score": 0,
+        "recommendation": "[ERROR] Code benoetigt umfangreiche Ueberarbeitung"
+      }
+    },
+    {
+      "file": "services\\code_quality_monitor.py",
+      "local_analysis": {
+        "issues_count": 10,
+        "issues": [
+          {
+            "type": "missing_docstring",
+            "severity": "suggestion",
+            "message": "Funktion '__init__' hat keinen Docstring",
+            "line": 44,
+            "suggestion": null
+          },
+          {
+            "type": "line_too_long",
+            "severity": "suggestion",
+            "message": "Zeile 149 ist zu lang (138 Zeichen, max. 120)",
+            "line": 149,
+            "suggestion": null
+          },
+          {
+            "type": "line_too_long",
+            "severity": "suggestion",
+            "message": "Zeile 158 ist zu lang (143 Zeichen, max. 120)",
+            "line": 158,
+            "suggestion": null
+          },
+          {
+            "type": "line_too_long",
+            "severity": "suggestion",
+            "message": "Zeile 170 ist zu lang (133 Zeichen, max. 120)",
+            "line": 170,
+            "suggestion": null
+          },
+          {
+            "type": "missing_error_handling",
+            "severity": "warning",
+            "message": "Datei-Operation ohne Error-Handling",
+            "line": 95,
+            "suggestion": "Verwende try-except für Fehlerbehandlung"
+          },
+          {
+            "type": "missing_error_handling",
+            "severity": "warning",
+            "message": "Datei-Lesen ohne Error-Handling",
+            "line": 96,
+            "suggestion": "Verwende try-except für Fehlerbehandlung"
+          },
+          {
+            "type": "magic_number",
+            "severity": "suggestion",
+            "message": "Zeile 73 enthält möglicherweise eine Magic Number",
+            "line": 73,
+            "suggestion": "Definiere eine Konstante für diesen Wert"
+          },
+          {
+            "type": "magic_number",
+            "severity": "suggestion",
+            "message": "Zeile 218 enthält möglicherweise eine Magic Number",
+            "line": 218,
+            "suggestion": "Definiere eine Konstante für diesen Wert"
+          },
+          {
+            "type": "magic_number",
+            "severity": "suggestion",
+            "message": "Zeile 240 enthält möglicherweise eine Magic Number",
+            "line": 240,
+            "suggestion": "Definiere eine Konstante für diesen Wert"
+          },
+          {
+            "type": "magic_number",
+            "severity": "suggestion",
+            "message": "Zeile 317 enthält möglicherweise eine Magic Number",
+            "line": 317,
+            "suggestion": "Definiere eine Konstante für diesen Wert"
+          }
+        ]
+      },
+      "quality_monitor": {
+        "lines_of_code": 455,
+        "complexity_score": 48,
+        "quality_score": 0.7000000000000001,
+        "issues_count": 2,
+        "ai_indicators": [
+          "ai_comment_pattern: generated by",
+          "ai_comment_pattern: ai generated",
+          "ai_comment_pattern: cursor generated",
+          "ai_comment_pattern: automatically generated",
+          "ai_comment_pattern: llm generated"
+        ],
+        "issues": [
+          {
+            "type": "function_too_long",
+            "severity": "warning",
+            "line": 136,
+            "message": "Function '_detect_issues' is 53 lines long (max: 50)"
+          },
+          {
+            "type": "class_too_long",
+            "severity": "warning",
+            "line": 41,
+            "message": "Class 'CodeQualityMonitor' is 414 lines long (max: 200)"
+          }
+        ]
+      },
+      "ai_analysis": {},
+      "summary": {
+        "total_issues": 12,
+        "quality_score": 0.7000000000000001,
+        "ai_score": 0,
+        "recommendation": "[WARN] Code benoetigt Refactoring"
+      }
+    },
+    {
+      "file": "tools\\make_audit_zip.py",
+      "local_analysis": {
+        "issues_count": 16,
+        "issues": [
+          {
+            "type": "missing_error_handling",
+            "severity": "warning",
+            "message": "Datei-Operation ohne Error-Handling",
+            "line": 180,
+            "suggestion": "Verwende try-except für Fehlerbehandlung"
+          },
+          {
+            "type": "hardcoded_path",
+            "severity": "warning",
+            "message": "Hardcoded-Pfad gefunden",
+            "line": 109,
+            "suggestion": "Verwende konfigurierbare Pfade oder Path-Objekte"
+          },
+          {
+            "type": "hardcoded_path",
+            "severity": "warning",
+            "message": "Hardcoded-Pfad gefunden",
+            "line": 110,
+            "suggestion": "Verwende konfigurierbare Pfade oder Path-Objekte"
+          },
+          {
+            "type": "hardcoded_path",
+            "severity": "warning",
+            "message": "Hardcoded-Pfad gefunden",
+            "line": 124,
+            "suggestion": "Verwende konfigurierbare Pfade oder Path-Objekte"
+          },
+          {
+            "type": "hardcoded_path",
+            "severity": "warning",
+            "message": "Hardcoded-Pfad gefunden",
+            "line": 125,
+            "suggestion": "Verwende konfigurierbare Pfade oder Path-Objekte"
+          },
+          {
+            "type": "use_logging",
+            "severity": "suggestion",
+            "message": "Zeile 224 verwendet print() statt logging",
+            "line": 224,
+            "suggestion": "Verwende logging.getLogger() statt print()"
+          },
+          {
+            "type": "use_logging",
+            "severity": "suggestion",
+            "message": "Zeile 225 verwendet print() statt logging",
+            "line": 225,
+            "suggestion": "Verwende logging.getLogger() statt print()"
+          },
+          {
+            "type": "use_logging",
+            "severity": "suggestion",
+            "message": "Zeile 232 verwendet print() statt logging",
+            "line": 232,
+            "suggestion": "Verwende logging.getLogger() statt print()"
+          },
+          {
+            "type": "use_logging",
+            "severity": "suggestion",
+            "message": "Zeile 234 verwendet print() statt logging",
+            "line": 234,
+            "suggestion": "Verwende logging.getLogger() statt print()"
+          },
+          {
+            "type": "use_logging",
+            "severity": "suggestion",
+            "message": "Zeile 246 verwendet print() statt logging",
+            "line": 246,
+            "suggestion": "Verwende logging.getLogger() statt print()"
+          }
+        ]
+      },
+      "quality_monitor": {
+        "lines_of_code": 283,
+        "complexity_score": 44,
+        "quality_score": 0.75,
+        "issues_count": 1,
+        "ai_indicators": [],
+        "issues": [
+          {
+            "type": "function_too_long",
+            "severity": "warning",
+            "line": 217,
+            "message": "Function 'main' is 61 lines long (max: 50)"
+          }
+        ]
+      },
+      "ai_analysis": {},
+      "summary": {
+        "total_issues": 17,
+        "quality_score": 0.75,
+        "ai_score": 0,
+        "recommendation": "[WARN] Code benoetigt Refactoring"
+      }
+    }
+  ]
+}

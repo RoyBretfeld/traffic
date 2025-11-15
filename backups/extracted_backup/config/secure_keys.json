@@ -1,0 +1,9 @@
+{
+  "openai": {
+    "key_name": "openai",
+    "encrypted_key": "Z0FBQUFBQm8tU3dWZ204Y1ZBQTJmU3ZoR3FRZTVaOG5ud2ZJQzhPdzdLakxOeXNpLWhKMkVVOUU3SFpnNlUwS25uYVk4LXJtY0R1VExBRXlyaDVITUpqOWhFMWQybEY4UFluVG9wRFVFeXhRWmhqY3AwNTVUNFNtQlFvcE9SNGNLaXFvN0JabTkwdHg0em1GNEhobE9za0ZmdWkzMXozU3EtNk5tcmJmakRXa2RyM3A4b2x3NUhTNm9FenJ0MTBCVnplOTJhYmZmTl9RZG9MWlIyTGhJSTdzLUJwTldnbnhSSkVLZGlyTVhvZ0RDYWNaeDNwUFZaWjZIS2hwYkF0STFuV0pHMHlYbmxncmhBR2VkME56VEE0WkdkbUF1ZnhMaFNUdXlkblBLaTRqeWx2M1hlRGJoSEU9",
+    "salt": "AUqQgm2j7FC7rIe1d8pE4A==",
+    "key_hash": "8dbe30c3e584f0822ff771f4ec666a9edb7d7478031b24ca2c4dda1ddcacfa49",
+    "created_at": 1761160204.778
+  }
+}

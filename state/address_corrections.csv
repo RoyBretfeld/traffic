@@ -1,0 +1,2 @@
+key,street_canonical,postal_code,city,country,lat,lon,source,confidence,created_at,updated_at
+test_street|01067|Dresden|DE,test_street,01067,Dresden,DE,51.05,13.74,manual,1.0,2025-10-31 14:02:18,2025-10-31 14:02:18

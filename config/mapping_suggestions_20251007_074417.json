@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-10-07T07:44:17.918075",
+  "description": "Vorgeschlagene Mappings für address_mappings.json",
+  "suggestions": [
+    {
+      "type": "bar_sondername",
+      "sondername": "Autohaus Leuteritz GmbH",
+      "echte_adresse": "Müglitztalstraße 10, 01773 Altenberg OT Bärenstein",
+      "suggested_lat": null,
+      "suggested_lon": null,
+      "kategorie": "autohaus",
+      "confidence": 0.8
+    }
+  ]
+}

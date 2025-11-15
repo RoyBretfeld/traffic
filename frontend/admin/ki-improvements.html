@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-CodeChecker Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .improvement-card {
+            border-left: 4px solid #28a745;
+            margin-bottom: 1rem;
+            transition: transform 0.2s;
+        }
+        .improvement-card:hover {
+            transform: translateX(5px);
+        }
+        .improvement-card.rollback {
+            border-left-color: #dc3545;
+        }
+        .diff-preview {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .stats-card {
+            text-align: center;
+        }
+        .stats-card h2 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .live-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+        .live-indicator.active {
+            background-color: #28a745;
+        }
+        .live-indicator.inactive {
+            background-color: #dc3545;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-robot"></i> KI-CodeChecker Dashboard
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <a href="/" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-home"></i> Zurück zur Hauptseite
+                </a>
+                <div>
+                    <span class="live-indicator" id="live-indicator"></span>
+                    <span class="text-light" id="connection-status">Verbinde...</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <!-- Status-Karten -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5>Verbesserungen heute</h5>
+                        <h2 id="improvements-today" class="text-primary">0</h2>
+                        <small>/ 5 (Limit)</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5>Erfolgreich</h5>
+                        <h2 id="successful-count" class="text-success">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5>Fehlgeschlagen</h5>
+                        <h2 id="failed-count" class="text-danger">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5>Job-Status</h5>
+                        <h2 id="job-status" class="text-info">
+                            <i class="fas fa-circle" id="job-status-icon"></i>
+                        </h2>
+                        <small id="job-status-text">Prüfe...</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Live-Activity-Panel -->
+        <div class="card mb-3" id="activity-panel">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-pulse"></i> Live-Aktivität
+                </h5>
+                <span class="badge bg-info" id="activity-status">Wartet...</span>
+            </div>
+            <div class="card-body">
+                <div id="current-activity" class="mb-2">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-spinner fa-spin text-primary me-2"></i>
+                        <span id="activity-text" class="text-muted">Lade Aktivität...</span>
+                    </div>
+                </div>
+                <div id="activity-log" style="max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.85em;">
+                    <div class="text-muted">Keine Aktivität</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filter -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Datei filtern:</label>
+                        <input type="text" class="form-control" id="filter-file" placeholder="Dateiname...">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Status:</label>
+                        <select class="form-select" id="filter-status">
+                            <option value="all">Alle</option>
+                            <option value="improved">Erfolgreich</option>
+                            <option value="rollback">Rollback</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Anzahl:</label>
+                        <select class="form-select" id="filter-limit" onchange="loadImprovements()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Verbesserungs-Liste -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Letzte Verbesserungen</h5>
+                <button class="btn btn-sm btn-outline-primary" onclick="loadImprovements()">
+                    <i class="fas fa-sync"></i> Aktualisieren
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="improvements-list">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-spinner fa-spin"></i> Lade...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let ws = null;
+        let improvements = [];
+        
+        // WebSocket-Verbindung
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws/ki-improvements`;
+            
+            ws = new WebSocket(wsUrl);
+            
+            ws.onopen = () => {
+                document.getElementById('live-indicator').classList.add('active');
+                document.getElementById('connection-status').textContent = 'Live';
+            };
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'improvement') {
+                    // Neue Verbesserung
+                    addImprovementToList(data.data, true);
+                    updateStats();
+                } else if (data.type === 'stats') {
+                    // Stats-Update
+                    updateStatsFromData(data.data);
+                }
+            };
+            
+            ws.onerror = () => {
+                document.getElementById('live-indicator').classList.remove('active');
+                document.getElementById('connection-status').textContent = 'Fehler';
+            };
+            
+            ws.onclose = () => {
+                document.getElementById('live-indicator').classList.remove('active');
+                document.getElementById('connection-status').textContent = 'Getrennt';
+                // Reconnect nach 5 Sekunden
+                setTimeout(connectWebSocket, 5000);
+            };
+        }
+        
+        // Verbesserungen laden
+        async function loadImprovements() {
+            const limit = document.getElementById('filter-limit').value;
+            const status = document.getElementById('filter-status').value;
+            const fileFilter = document.getElementById('filter-file').value.toLowerCase();
+            
+            try {
+                const response = await fetch(`/api/ki-improvements/recent?limit=${limit}`);
+                improvements = await response.json();
+                
+                // Filter anwenden
+                let filtered = improvements;
+                if (status !== 'all') {
+                    filtered = filtered.filter(imp => imp.action === status);
+                }
+                if (fileFilter) {
+                    filtered = filtered.filter(imp => 
+                        imp.file.toLowerCase().includes(fileFilter)
+                    );
+                }
+                
+                renderImprovements(filtered);
+            } catch (e) {
+                console.error('Fehler beim Laden:', e);
+                document.getElementById('improvements-list').innerHTML = 
+                    '<div class="alert alert-danger">Fehler beim Laden der Verbesserungen</div>';
+            }
+        }
+        
+        // Verbesserungen rendern
+        function renderImprovements(improvementsList) {
+            const list = document.getElementById('improvements-list');
+            
+            if (improvementsList.length === 0) {
+                list.innerHTML = '<div class="text-center text-muted">Keine Verbesserungen gefunden</div>';
+                return;
+            }
+            
+            list.innerHTML = improvementsList.map(imp => createImprovementCard(imp)).join('');
+        }
+        
+        // Verbesserung zur Liste hinzufügen (für Live-Updates)
+        function addImprovementToList(improvement, prepend = false) {
+            const list = document.getElementById('improvements-list');
+            const card = createImprovementCard(improvement);
+            
+            if (prepend) {
+                list.insertAdjacentHTML('afterbegin', card);
+            } else {
+                list.insertAdjacentHTML('beforeend', card);
+            }
+        }
+        
+        // Verbesserungs-Karte erstellen
+        function createImprovementCard(improvement) {
+            const file = improvement.file.split('/').pop() || improvement.file;
+            const statusIcon = improvement.action === 'improved' ? '✅' : '⚠️';
+            const statusText = improvement.action === 'improved' ? 'Erfolgreich' : 'Rollback';
+            const statusClass = improvement.action === 'improved' ? 'success' : 'danger';
+            const cardClass = improvement.action === 'rollback' ? 'rollback' : '';
+            
+            const timestamp = new Date(improvement.timestamp).toLocaleString('de-DE');
+            
+            return `
+                <div class="improvement-card card ${cardClass}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6>${statusIcon} ${file}</h6>
+                                <small class="text-muted">${timestamp}</small>
+                            </div>
+                            <div>
+                                <span class="badge bg-${statusClass}">${statusText}</span>
+                            </div>
+                        </div>
+                        <p class="mb-2">
+                            <strong>Issues behoben:</strong> ${improvement.issues_fixed || 0}
+                            ${improvement.tests_passed !== undefined ? 
+                                `<br><strong>Tests:</strong> ${improvement.tests_passed ? '✅ Bestanden' : '❌ Fehlgeschlagen'}` : ''}
+                        </p>
+                        ${improvement.reason ? `
+                            <div class="alert alert-warning mb-2">
+                                <strong>Grund:</strong> ${improvement.reason}
+                            </div>
+                        ` : ''}
+                        ${improvement.diff ? `
+                            <details class="mb-2">
+                                <summary class="btn btn-sm btn-outline-secondary">Diff anzeigen</summary>
+                                <pre class="diff-preview mt-2">${escapeHtml(improvement.diff)}</pre>
+                            </details>
+                        ` : ''}
+                        ${improvement.backup ? `
+                            <small class="text-muted">
+                                <i class="fas fa-database"></i> Backup: ${improvement.backup}
+                            </small>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Stats aktualisieren
+        async function updateStats() {
+            try {
+                const response = await fetch('/api/ki-improvements/stats');
+                const stats = await response.json();
+                updateStatsFromData(stats);
+            } catch (e) {
+                console.error('Fehler beim Laden der Stats:', e);
+            }
+        }
+        
+        function updateStatsFromData(stats) {
+            document.getElementById('improvements-today').textContent = stats.improvements_today || 0;
+            document.getElementById('successful-count').textContent = stats.successful_count || 0;
+            document.getElementById('failed-count').textContent = stats.failed_count || 0;
+        }
+        
+        // HTML-Escape
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Filter-Event-Listener
+        document.getElementById('filter-file').addEventListener('input', loadImprovements);
+        document.getElementById('filter-status').addEventListener('change', loadImprovements);
+        
+        // Job-Status laden
+        async function loadJobStatus() {
+            try {
+                const response = await fetch('/api/code-improvement-job/status');
+                const status = await response.json();
+                
+                const statusIcon = document.getElementById('job-status-icon');
+                const statusText = document.getElementById('job-status-text');
+                
+                if (status.is_running) {
+                    statusIcon.className = 'fas fa-circle text-success';
+                    statusIcon.style.animation = 'pulse 2s infinite';
+                    statusText.textContent = 'Läuft';
+                    updateActivityStatus('Aktiv', 'success');
+                } else if (status.enabled) {
+                    statusIcon.className = 'fas fa-circle text-warning';
+                    statusText.textContent = 'Pausiert';
+                    updateActivityStatus('Pausiert', 'warning');
+                } else {
+                    statusIcon.className = 'fas fa-circle text-danger';
+                    statusText.textContent = 'Deaktiviert';
+                    updateActivityStatus('Deaktiviert', 'danger');
+                }
+                
+                // Zeige letzte Ausführung
+                if (status.last_run) {
+                    const lastRun = new Date(status.last_run);
+                    const now = new Date();
+                    const diff = Math.floor((now - lastRun) / 1000 / 60); // Minuten
+                    
+                    if (diff < 60) {
+                        statusText.textContent += ` (vor ${diff} Min)`;
+                    } else {
+                        const hours = Math.floor(diff / 60);
+                        statusText.textContent += ` (vor ${hours} Std)`;
+                    }
+                }
+            } catch (e) {
+                console.error('Fehler beim Laden des Job-Status:', e);
+                document.getElementById('job-status-text').textContent = 'Fehler';
+            }
+        }
+        
+        // Activity-Status aktualisieren
+        function updateActivityStatus(text, type) {
+            const badge = document.getElementById('activity-status');
+            badge.textContent = text;
+            badge.className = `badge bg-${type}`;
+        }
+        
+        // Activity-Log hinzufügen
+        function addActivityLog(message, type = 'info') {
+            const log = document.getElementById('activity-log');
+            const timestamp = new Date().toLocaleTimeString('de-DE');
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            const color = type === 'success' ? 'text-success' : type === 'error' ? 'text-danger' : type === 'warning' ? 'text-warning' : 'text-info';
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `mb-1 ${color}`;
+            logEntry.innerHTML = `<small>[${timestamp}] ${icon} ${message}</small>`;
+            
+            // Entferne "Keine Aktivität" wenn vorhanden
+            if (log.children.length === 1 && log.children[0].textContent.includes('Keine Aktivität')) {
+                log.innerHTML = '';
+            }
+            
+            log.insertBefore(logEntry, log.firstChild);
+            
+            // Begrenze auf 50 Einträge
+            while (log.children.length > 50) {
+                log.removeChild(log.lastChild);
+            }
+        }
+        
+        // Aktuelle Aktivität aktualisieren
+        function updateCurrentActivity(message) {
+            document.getElementById('activity-text').textContent = message;
+        }
+        
+        // WebSocket erweitern für Activity-Updates
+        const originalOnMessage = ws ? ws.onmessage : null;
+        
+        // Initialisierung
+        connectWebSocket();
+        loadImprovements();
+        updateStats();
+        loadJobStatus();
+        
+        // Job-Status alle 10 Sekunden aktualisieren
+        setInterval(loadJobStatus, 10000);
+        
+        // Activity-Updates vom WebSocket
+        if (ws) {
+            const originalOnMessageHandler = ws.onmessage;
+            ws.onmessage = (event) => {
+                if (originalOnMessageHandler) originalOnMessageHandler(event);
+                
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'activity') {
+                    updateCurrentActivity(data.message);
+                    addActivityLog(data.message, data.level || 'info');
+                } else if (data.type === 'improvement') {
+                    addActivityLog(`Verbesserung: ${data.data.file.split('/').pop()}`, 'success');
+                } else if (data.type === 'error') {
+                    addActivityLog(`Fehler: ${data.message}`, 'error');
+                }
+            };
+        }
+        
+        // Auto-Refresh alle 30 Sekunden
+        setInterval(() => {
+            loadImprovements();
+            updateStats();
+        }, 30000);
+    </script>
+</body>
+</html>
+

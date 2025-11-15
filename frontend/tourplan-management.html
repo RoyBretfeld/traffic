@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrafficApp - Tourplan Management</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body { background-color: #f8f9fa; }
+        #map { height: calc(60vh - 60px); border-radius: 8px; width: 100%; }
+        .sidebar { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-height: calc(100vh - 120px); overflow-y: auto; }
+        
+        /* Debug-HUD Styles */
+        #hud {
+            position: fixed;
+            right: 8px;
+            top: 8px;
+            background: #111;
+            color: #eee;
+            padding: 6px 8px;
+            border-radius: 8px;
+            font: 12px/1.4 system-ui;
+            opacity: .9;
+            max-width: 40vw;
+            z-index: 9999;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        #hud b { color: #6cf; }
+        #hud .ok { color: #6f6; }
+        #hud .err { color: #f88; }
+        
+        /* Status-Bar */
+        #statusBar {
+            background: #e9ecef;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        /* Table Styles */
+        .table tr.ok { background-color: #d4edda; }
+        .table tr.warn { background-color: #fff3cd; }
+        .table tr.bad { background-color: #f8d7da; }
+        
+        /* Vorschlag-Button */
+        .suggBtn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .suggBtn:hover { background: #0056b3; }
+        
+        /* Manuelle Koordinaten-Button */
+        .manualGeoBtn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+        .manualGeoBtn:hover { background: #1e7e34; }
+        
+        /* Modal für manuelle Koordinaten */
+        #modalManualGeo {
+            position: fixed;
+            inset: 0;
+            background: #0006;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #modalManualGeo .card {
+            background: #fff;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px #0003;
+        }
+        #modalManualGeo .form-group {
+            margin-bottom: 15px;
+        }
+        #modalManualGeo label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        #modalManualGeo input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        #modalManualGeo .address-display {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+        
+        /* Modal Styles */
+        #modal {
+            position: fixed;
+            inset: 0;
+            background: #0006;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #modal .card {
+            background: #fff;
+            max-width: 800px;
+            width: 92%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px #0003;
+        }
+        #modal header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        #modal .body {
+            padding: 10px 12px;
+            max-height: 70vh;
+            overflow: auto;
+            font-size: 14px;
+        }
+        #modal .list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #modal .list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        #modal footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 8px 12px;
+            border-top: 1px solid #eee;
+        }
+        .acceptBtn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .acceptBtn:hover { background: #1e7e34; }
+        .muted { color: #6c757d; font-size: 12px; }
+        
+        /* Navigation Styles */
+        .navbar-nav .nav-link {
+            color: #007bff;
+            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            transition: all 0.15s ease-in-out;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #0056b3;
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+        .navbar-nav .nav-link.active {
+            color: #fff;
+            background-color: #007bff;
+        }
+        
+        /* Audit Modal Styles */
+        #modalAudit {
+            position: fixed;
+            inset: 0;
+            background: #0006;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #modalAudit .card {
+            background: #fff;
+            max-width: 900px;
+            width: 94%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px #0003;
+        }
+        #modalAudit header, #modalAudit footer {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        #modalAudit footer {
+            border-top: 1px solid #eee;
+        }
+        #modalAudit .body {
+            padding: 8px 12px;
+            max-height: 70vh;
+            overflow: auto;
+        }
+        #modalAudit table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #modalAudit th, #modalAudit td {
+            border: 1px solid #eee;
+            padding: 6px;
+            font-size: 12px;
+        }
+        
+        /* Fail-Cache Modal Styles */
+        #modalFail {
+            position: fixed;
+            inset: 0;
+            background: #0006;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #modalFail .card {
+            background: #fff;
+            max-width: 800px;
+            width: 92%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px #0003;
+        }
+        #modalFail header, #modalFail footer {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        #modalFail footer {
+            border-top: 1px solid #eee;
+        }
+        #modalFail .body {
+            padding: 8px 12px;
+            max-height: 70vh;
+            overflow: auto;
+        }
+        #modalFail table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #modalFail th, #modalFail td {
+            border: 1px solid #eee;
+            padding: 6px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Debug-HUD -->
+    <div id="hud">HUD</div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="mb-0">FAMO TrafficApp</h3>
+                            <nav class="navbar-nav">
+                                <ul class="navbar-nav d-flex flex-row">
+                                    <li class="nav-item mr-3">
+                                        <a class="nav-link" href="/">Hauptseite</a>
+                                    </li>
+                                    <li class="nav-item mr-3">
+                                        <a class="nav-link active" href="/ui/tourplan-management">Tourplan Management</a>
+                                    </li>
+                                    <li class="nav-item mr-3">
+                                        <a class="nav-link" href="/ui/tourplan-visual-test">Visual Test</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/docs">API Docs</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- File Selection -->
+                        <div class="form-group">
+                            <label for="fileSelect">CSV-Datei auswählen:</label>
+                            <select id="fileSelect" class="form-control">
+                                <option value="">Lade Dateien...</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Control Buttons -->
+                        <div class="form-group">
+                            <button id="loadBtn" class="btn btn-primary">Laden</button>
+                            <button id="geoBtn" class="btn btn-success ml-2">Geocode fehlende</button>
+                            <button id="btnSuggestAll" class="btn btn-info ml-2">Vorschläge für fehlende (Top 3)</button>
+                            <button id="btnAudit" class="btn btn-secondary ml-2">Audit-Log</button>
+                            <button id="btnFail" class="btn btn-warning ml-2">Fail-Cache</button>
+                        </div>
+                        
+                        <!-- Optimierte Touren (vom Workflow) -->
+                        <div class="form-group border-top pt-3 mt-3">
+                            <h5>Optimierte Touren (Workflow)</h5>
+                            <p class="text-muted small">Touren, die bereits über die Hauptseite verarbeitet wurden, können hier angezeigt und manuell bearbeitet werden.</p>
+                            <button id="btnLoadOptimizedTours" class="btn btn-info w-100 mb-2">
+                                <i class="fas fa-sync"></i> Optimierte Touren laden
+                            </button>
+                            <div id="optimizedToursContainer" class="mt-3" style="display: none;">
+                                <div id="optimizedToursList" class="list-group"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bulk Processing -->
+                        <div class="form-group border-top pt-3 mt-3">
+                            <button id="btnProcessAll" class="btn btn-danger w-100 mb-2">
+                                <i class="fas fa-database"></i> Alle CSV-Pläne verarbeiten & Datenbank füllen
+                            </button>
+                            <small class="text-muted">Lädt alle CSV-Dateien aus dem tourplaene Ordner und geocodiert alle fehlenden Adressen</small>
+                        </div>
+                        
+                        <!-- Geocoding Controls -->
+                        <div class="form-group">
+                            <label for="limitInput">Limit:</label>
+                            <input type="number" id="limitInput" class="form-control" value="20" min="1" max="100" style="width: 100px; display: inline-block;">
+                            <label for="dryRun" class="ml-3">
+                                <input type="checkbox" id="dryRun" checked> Dry Run
+                            </label>
+                        </div>
+                        
+                        <!-- Status Bar -->
+                        <div id="statusBar">Bereit</div>
+                        
+                        <!-- Results Table -->
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Zeile</th>
+                                        <th>Firma</th>
+                                        <th>Adresse</th>
+                                        <th>Geo-Daten</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Keine Daten geladen</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="sidebar">
+                    <h5>Karte</h5>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
+    <script>
+        // API-Basis (Same-Origin)
+        const API_BASE = ""; // gleiche Origin
+        
+        // Debug-HUD
+        const HUD = (() => {
+            const el = document.getElementById('hud');
+            const log = (cls, msg) => {
+                const p = document.createElement('div');
+                p.className = cls || '';
+                p.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+                el.prepend(p);
+                // Begrenze auf 10 Einträge
+                while (el.children.length > 10) {
+                    el.removeChild(el.lastChild);
+                }
+            };
+            return {
+                note: (m) => log('', m),
+                ok: (m) => log('ok', `✔ ${m}`),
+                err: (e) => log('err', `✖ ${e?.message || e}`)
+            };
+        })();
+        
+        // Globale Fehlerbehandlung
+        window.addEventListener('error', e => HUD.err(e.error || e.message));
+        
+        // API-Funktionen
+        async function apiList() {
+            const r = await fetch(`${API_BASE}/api/tourplaene/list`);
+            if (!r.ok) throw new Error(`list failed ${r.status}`);
+            return r.json();
+        }
+        
+        async function apiMatch(filePath) {
+            const u = `${API_BASE}/api/tourplan/match?file=${encodeURIComponent(filePath)}`;
+            const r = await fetch(u);
+            const text = await r.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                throw new Error(`match invalid JSON: ${text.slice(0, 200)}`);
+            }
+        }
+        
+        async function apiGeoFill(filePath, limit = 20, dryRun = true) {
+            const u = `${API_BASE}/api/tourplan/geocode-missing?file=${encodeURIComponent(filePath)}&limit=${limit}&dry_run=${dryRun}`;
+            const r = await fetch(u);
+            if (!r.ok) {
+                const errorText = await r.text();
+                if (r.status === 400) {
+                    throw new Error(`Encoding-Bug erkannt: ${errorText.slice(0, 100)}...`);
+                } else if (r.status === 503) {
+                    throw new Error('DB nicht erreichbar');
+                }
+                throw new Error(`geofill failed ${r.status}: ${errorText}`);
+            }
+            return r.json();
+        }
+        
+        // UI-Funktionen
+        let CURRENT_FILE = null;
+        let map = null;
+        let markers = null;
+        
+        async function refreshFiles() {
+            HUD.note('list: start');
+            const j = await apiList();
+            const sel = document.querySelector('#fileSelect');
+            sel.innerHTML = '';
+            
+            j.files.forEach(f => {
+                const o = document.createElement('option');
+                o.value = f.path;
+                o.textContent = `${f.name} (${f.size} B)`;
+                sel.appendChild(o);
+            });
+            
+            CURRENT_FILE = j.files?.[0]?.path || null;
+            if (CURRENT_FILE) {
+                sel.value = CURRENT_FILE;
+            }
+            HUD.ok('list');
+        }
+        
+        async function loadMatch() {
+            if (!CURRENT_FILE) {
+                HUD.err('Keine Datei ausgewählt');
+                return;
+            }
+            HUD.note('match: start');
+            try {
+                const j = await apiMatch(CURRENT_FILE);
+                console.log('Match API Response:', j);
+                
+                const tb = document.querySelector('#tableBody');
+                if (!tb) {
+                    HUD.err('Tabelle nicht gefunden');
+                    return;
+                }
+                
+                tb.innerHTML = '';
+                
+                if (!j.items || !Array.isArray(j.items)) {
+                    HUD.err('Keine Items in API Response');
+                    return;
+                }
+                
+                // Nur rote Einträge anzeigen (warn/bad Status)
+                const redItems = j.items.filter(row => row.status === 'warn' || row.status === 'bad');
+                
+                redItems.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = row.status;
+                    
+                    // Button für manuelle Koordinaten-Eingabe (nur wenn keine Geo-Daten vorhanden)
+                    const manualBtn = (!row.has_geo) ? 
+                        `<button class="manualGeoBtn" data-addr="${encodeURIComponent(row.address)}">Koordinaten eingeben</button>` : '';
+                    
+                    tr.innerHTML = `<td>${row.row}</td><td>${row.customer_name || 'Unbekannt'}</td><td>${row.address}</td>` +
+                        `<td>${row.has_geo ? `✅ (${row.geo.lat.toFixed(5)}, ${row.geo.lon.toFixed(5)})` : '❌'}</td>` +
+                        `<td>${row.status}${row.markers?.length ? ` · ${row.markers.join(', ')}` : ''} ${manualBtn}</td>`;
+                    tb.appendChild(tr);
+                });
+                
+                document.querySelector('#statusBar').textContent = `OK ${j.ok} • WARN ${j.warn} • BAD ${j.bad} | Angezeigt: ${redItems.length} rote Einträge`;
+                HUD.ok(`match: ${redItems.length} rote Einträge angezeigt (von ${j.items.length} total)`);
+                
+                // Karte aktualisieren (nur rote Einträge)
+                updateMap(redItems);
+            } catch (error) {
+                console.error('loadMatch error:', error);
+                HUD.err(`loadMatch failed: ${error.message}`);
+            }
+        }
+        
+        async function runGeoFill() {
+            if (!CURRENT_FILE) return;
+            const limit = parseInt(document.querySelector('#limitInput').value || '20', 10);
+            const dry = !!document.querySelector('#dryRun').checked;
+            HUD.note(`geofill: start limit=${limit} dry=${dry}`);
+            
+            const j = await apiGeoFill(CURRENT_FILE, limit, dry);
+            HUD.ok(`geofill: processed=${j.processed}`);
+            
+            // Nach Geocoding die Anzeige aktualisieren
+            await loadMatch();
+        }
+        
+        function initMap() {
+            if (map) {
+                map.remove();
+            }
+            map = L.map('map').setView([51.1657, 10.4515], 6); // Centered on Germany
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            markers = L.featureGroup();
+            markers.addTo(map);
+        }
+        
+        function updateMap(items) {
+            if (!map || !markers) return;
+            
+            markers.clearLayers();
+            const validItems = items.filter(item => item.has_geo && item.geo);
+            
+            validItems.forEach(item => {
+                const marker = L.marker([item.geo.lat, item.geo.lon], {
+                    icon: L.divIcon({
+                        className: `custom-div-icon ${item.status}-marker`,
+                        html: `<div style="background-color:${item.status === 'ok' ? 'green' : item.status === 'warn' ? 'orange' : 'red'}; width: 1rem; height: 1rem; display: block; left: -0.5rem; top: -0.5rem; position: relative; border-radius: 1rem; border: 1px solid #FFFFFF"></div>`,
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 16]
+                    })
+                }).bindPopup(`<b>${item.customer_name || 'Unbekannt'}</b><br>Zeile ${item.row}<br>${item.address}<br>Status: ${item.status}`);
+                markers.addLayer(marker);
+            });
+            
+            if (validItems.length > 0) {
+                map.fitBounds(markers.getBounds());
+            }
+        }
+        
+        // Polling-Funktionen
+        const POLL_MS = 5000;
+        let pollTimer = null;
+
+        async function refreshStatus() {
+            if (!CURRENT_FILE) {
+                // Wenn keine Datei ausgewählt, Status auf "Bereit" setzen
+                const el = document.querySelector('#statusBar');
+                if (el) el.textContent = 'Bereit - Wählen Sie eine CSV-Datei aus';
+                return;
+            }
+            try {
+                const r = await fetch(`/api/tourplan/status?file=${encodeURIComponent(CURRENT_FILE)}`);
+                if (!r.ok) {
+                    // Fehler nicht immer anzeigen (kann bei laufendem Bulk-Process passieren)
+                    if (r.status !== 500) {
+                        throw new Error(`status ${r.status}`);
+                    }
+                    return; // Bei 500 einfach überspringen
+                }
+                const j = await r.json();
+                const text = `Total ${j.total} • Cached ${j.cached} • Missing ${j.missing}` + (j.marker_hits ? ` • Marker ${j.marker_hits}` : '');
+                const el = document.querySelector('#statusBar');
+                if (el) el.textContent = text;
+                HUD.ok(`status: miss=${j.missing}`);
+            } catch (e) {
+                // Fehler stillschweigend behandeln (nicht jedes Mal HUD.err aufrufen)
+                console.warn('Status refresh error:', e);
+            }
+        }
+
+        function startPolling() {
+            if (pollTimer) clearInterval(pollTimer);
+            pollTimer = setInterval(refreshStatus, POLL_MS);
+        }
+
+        function stopPolling() {
+            if (pollTimer) {
+                clearInterval(pollTimer);
+                pollTimer = null;
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const sel = document.querySelector('#fileSelect');
+            const loadBtn = document.querySelector('#loadBtn');
+            const geoBtn = document.querySelector('#geoBtn');
+            
+            sel?.addEventListener('change', e => {
+                CURRENT_FILE = e.target.value;
+                startPolling(); // Polling bei Dateiwechsel starten
+            });
+            
+            loadBtn?.addEventListener('click', () => {
+                loadMatch().then(() => {
+                    startPolling(); // Polling nach Laden starten
+                }).catch(HUD.err);
+            });
+            
+            geoBtn?.addEventListener('click', () => {
+                runGeoFill().then(() => {
+                    startPolling(); // Polling nach Geocoding starten
+                }).catch(HUD.err);
+            });
+            
+            // Bulk Processing Button mit Live-Progress
+            document.querySelector('#btnProcessAll')?.addEventListener('click', async () => {
+                if (!confirm('Alle CSV-Dateien aus dem tourplaene Ordner verarbeiten? Dies kann einige Minuten dauern.\n\nDie Verarbeitung läuft im Hintergrund - Sie können den Progress live verfolgen.')) {
+                    return;
+                }
+                
+                // Progress-Div erstellen/anzeigen
+                let progressDiv = document.getElementById('bulkProgress');
+                if (!progressDiv) {
+                    progressDiv = document.createElement('div');
+                    progressDiv.id = 'bulkProgress';
+                    progressDiv.className = 'alert alert-info mt-3';
+                    progressDiv.style.display = 'block';
+                    document.querySelector('#btnProcessAll').after(progressDiv);
+                } else {
+                    progressDiv.style.display = 'block';
+                    progressDiv.className = 'alert alert-info mt-3';
+                }
+                
+                try {
+                    HUD.note('Starte Bulk-Processing aller CSV-Dateien...');
+                    progressDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span id="bulkProgressText">Starte Verarbeitung...</span>';
+                    
+                    const response = await fetch('/api/tourplan/bulk-process-all', {
+                        method: 'POST'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+                    }
+                    
+                    const result = await response.json();
+                    const sessionId = result.session_id;
+                    
+                    if (sessionId) {
+                        // Starte Live-Progress-Polling
+                        startBulkProgress(sessionId, progressDiv);
+                    }
+                    
+                } catch (error) {
+                    console.error('Bulk-Processing Fehler:', error);
+                    HUD.err(`Bulk-Processing fehlgeschlagen: ${error.message}`);
+                    if (progressDiv) {
+                        progressDiv.className = 'alert alert-danger mt-3';
+                        progressDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Fehler: ${error.message}`;
+                    }
+                }
+            });
+            
+            // Live-Progress für Bulk-Processing (ähnlich wie bei workflow_upload)
+            let bulkProgressInterval = null;
+            
+            function startBulkProgress(sessionId, progressDiv) {
+                if (bulkProgressInterval) {
+                    clearInterval(bulkProgressInterval);
+                }
+                
+                bulkProgressInterval = setInterval(async () => {
+                    try {
+                        const response = await fetch(`/api/tourplan/bulk-progress/${sessionId}`);
+                        const progress = await response.json();
+                        
+                        if (!progress || progress.status === 'completed' || progress.status === 'error') {
+                            if (bulkProgressInterval) {
+                                clearInterval(bulkProgressInterval);
+                                bulkProgressInterval = null;
+                            }
+                            
+                            if (progress.status === 'completed') {
+                                progressDiv.className = 'alert alert-success mt-3';
+                                
+                                const stats = progress;
+                                const percentage = stats.total_customers > 0 
+                                    ? Math.round((stats.processed_customers / stats.total_customers) * 100) 
+                                    : 100;
+                                
+                                let successMsg = `<i class="fas fa-check-circle"></i> <strong>Bulk-Processing abgeschlossen!</strong><br>`;
+                                successMsg += `<small>`;
+                                successMsg += `${stats.processed_files}/${stats.total_files} Dateien verarbeitet<br>`;
+                                successMsg += `${stats.processed_customers}/${stats.total_customers} Kunden (${percentage}%)<br>`;
+                                successMsg += `DB-Hits: ${stats.db_hits || 0} | Geoapify-Calls: ${stats.geoapify_calls || 0} | Fehler: ${stats.errors || 0}`;
+                                successMsg += `</small>`;
+                                
+                                progressDiv.innerHTML = successMsg;
+                                
+                                // Nach 5 Sekunden ausblenden
+                                setTimeout(() => {
+                                    if (progressDiv) progressDiv.style.display = 'none';
+                                }, 5000);
+                                
+                                // Status aktualisieren (nicht await, da in Callback)
+                                refreshStatus?.();
+                                
+                            } else if (progress.status === 'error') {
+                                progressDiv.className = 'alert alert-danger mt-3';
+                                progressDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Fehler: ${progress.current_file || 'Unbekannter Fehler'}`;
+                            }
+                            return;
+                        }
+                        
+                        // Live-Progress anzeigen
+                        const percentage = progress.total_customers > 0 
+                            ? Math.round((progress.processed_customers / progress.total_customers) * 100) 
+                            : 0;
+                        
+                        const stats = `DB: ${progress.db_hits || 0} | Geoapify: ${progress.geoapify_calls || 0} | Fehler: ${progress.errors || 0}`;
+                        
+                        const progressText = document.getElementById('bulkProgressText');
+                        if (progressText) {
+                            progressText.innerHTML = `
+                                <strong>${progress.current_file || 'Verarbeite...'}</strong><br>
+                                <small>Datei ${progress.processed_files || 0}/${progress.total_files || 0}</small><br>
+                                <strong>${progress.current_customer || 'Verarbeite Kunden...'}</strong><br>
+                                <small>${progress.processed_customers || 0}/${progress.total_customers || 0} Kunden (${percentage}%) | ${stats}</small>
+                            `;
+                        }
+                        
+                        // Progress-Bar aktualisieren
+                        let progressBar = document.getElementById('bulkProgressBar');
+                        if (!progressBar) {
+                            progressBar = document.createElement('div');
+                            progressBar.id = 'bulkProgressBar';
+                            progressBar.className = 'progress mt-2';
+                            progressBar.style.height = '25px';
+                            progressBar.innerHTML = '<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>';
+                            progressDiv.appendChild(progressBar);
+                        }
+                        const bar = progressBar.querySelector('.progress-bar');
+                        if (bar) {
+                            bar.style.width = `${percentage}%`;
+                            bar.textContent = `${percentage}%`;
+                        }
+                        
+                    } catch (error) {
+                        console.error('Progress-Fehler:', error);
+                    }
+                }, 500); // Alle 500ms aktualisieren
+            }
+            
+            function stopBulkProgress() {
+                if (bulkProgressInterval) {
+                    clearInterval(bulkProgressInterval);
+                    bulkProgressInterval = null;
+                }
+            }
+            
+            // Optimierte Touren laden (vom localStorage oder direkt vom Workflow)
+            document.querySelector('#btnLoadOptimizedTours')?.addEventListener('click', async () => {
+                try {
+                    // Versuche optimierte Touren vom localStorage zu laden (von Hauptseite gespeichert)
+                    const savedTours = localStorage.getItem('optimizedTours');
+                    if (savedTours) {
+                        const tours = JSON.parse(savedTours);
+                        displayOptimizedTours(tours);
+                        HUD.ok('Optimierte Touren geladen');
+                        return;
+                    }
+                    
+                    // Falls nicht im localStorage: Versuche von aktueller Datei
+                    if (CURRENT_FILE) {
+                        HUD.note('Lade optimierte Touren für aktuelle Datei...');
+                        // Hier könnte ein Endpoint aufgerufen werden, der die letzten optimierten Touren zurückgibt
+                        // Für jetzt: Zeige Info
+                        alert('Keine optimierten Touren gefunden.\n\nBitte gehen Sie zur Hauptseite und laden Sie eine CSV-Datei über den "Kompletter Workflow" Button.\nDie Touren werden dann hier angezeigt.');
+                    } else {
+                        alert('Bitte wählen Sie zuerst eine CSV-Datei aus.');
+                    }
+                } catch (error) {
+                    HUD.err(`Fehler beim Laden: ${error.message}`);
+                }
+            });
+            
+            function displayOptimizedTours(toursData) {
+                const container = document.getElementById('optimizedToursContainer');
+                const list = document.getElementById('optimizedToursList');
+                
+                if (!toursData || !toursData.tours || !Array.isArray(toursData.tours)) {
+                    HUD.err('Keine gültigen Touren-Daten');
+                    return;
+                }
+                
+                container.style.display = 'block';
+                list.innerHTML = '';
+                
+                toursData.tours.forEach((tour, idx) => {
+                    const tourItem = document.createElement('div');
+                    tourItem.className = 'list-group-item';
+                    tourItem.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${tour.tour_id || `Tour ${idx + 1}`}</strong>
+                                <div class="small text-muted">${tour.stop_count || tour.stops?.length || 0} Stops</div>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-primary" onclick="editTour('${tour.tour_id}')">
+                                    <i class="fas fa-edit"></i> Bearbeiten
+                                </button>
+                                <button class="btn btn-sm btn-success" onclick="splitTour('${tour.tour_id}')">
+                                    <i class="fas fa-cut"></i> Aufteilen
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    list.appendChild(tourItem);
+                });
+            }
+            
+            // Globale Funktionen für Tour-Bearbeitung
+            window.editTour = function(tourId) {
+                alert(`Tour ${tourId} bearbeiten - Funktion in Entwicklung`);
+                // TODO: Modal öffnen für manuelle Bearbeitung
+            };
+            
+            window.splitTour = function(tourId) {
+                alert(`Tour ${tourId} aufteilen - Funktion in Entwicklung\n\nZiel: Tour in mehrere Routen aufteilen (z.B. W-07.00 in 7 Routen)\nJede Route max. 60-65 Minuten`);
+                // TODO: Modal öffnen für Tour-Splitting mit KI-Unterstützung
+            };
+            
+            // Initialisierung
+            initMap();
+            refreshFiles().then(() => {
+                if (CURRENT_FILE) {
+                    loadMatch().then(() => {
+                        startPolling(); // Polling nach initialem Laden starten
+                    }).catch(HUD.err);
+                }
+            }).catch(HUD.err);
+
+            // Audit-Log Funktionen
+            async function apiAudit({limit=100, action='', q='', since=''}={}){
+                const p = new URLSearchParams(); 
+                p.set('limit', limit);
+                if(action) p.set('action', action); 
+                if(q) p.set('q', q); 
+                if(since) p.set('since', since);
+                const r = await fetch('/api/audit/geo?' + p.toString()); 
+                if(!r.ok) throw new Error('audit '+r.status);
+                return r.json();
+            }
+
+            function openAudit(){ 
+                document.getElementById('modalAudit').style.display='flex'; 
+                loadAudit().catch(HUD.err); 
+            }
+            
+            function closeAudit(){ 
+                document.getElementById('modalAudit').style.display='none'; 
+            }
+
+            async function loadAudit(){
+                const q = document.getElementById('auditQ').value.trim();
+                const action = document.getElementById('auditAction').value;
+                const since = document.getElementById('auditSince').value; // datetime-local → ISO
+                const j = await apiAudit({limit:100, action, q, since});
+                const tb = document.getElementById('auditBody'); 
+                tb.innerHTML='';
+                j.items.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${r.ts}</td><td>${r.action}</td><td>${r.query||''}</td><td>${r.canonical||''}</td><td>${r.by_user||''}</td>`;
+                    tb.appendChild(tr);
+                });
+                document.getElementById('auditMeta').textContent = `${j.count} Einträge`;
+            }
+
+            // Event Listeners für Audit-Modal
+            document.getElementById('btnAudit')?.addEventListener('click', openAudit);
+            document.getElementById('auditClose')?.addEventListener('click', closeAudit);
+            document.getElementById('auditReload')?.addEventListener('click', ()=>loadAudit().catch(HUD.err));
+
+            // Fail-Cache Funktionen
+            async function apiFailCache({active_only=true, reason='', q='', limit=100}={}){
+                const p = new URLSearchParams(); 
+                p.set('limit', limit); 
+                if(active_only) p.set('active_only','true'); 
+                if(reason) p.set('reason',reason); 
+                if(q) p.set('q',q);
+                const r = await fetch('/api/geocode/fail-cache?' + p.toString()); 
+                if(!r.ok) throw new Error('fail-cache '+r.status);
+                return r.json();
+            }
+
+            function openFail(){ 
+                document.getElementById('modalFail').style.display='flex'; 
+                loadFail().catch(HUD.err); 
+            }
+            
+            function closeFail(){ 
+                document.getElementById('modalFail').style.display='none'; 
+            }
+
+            async function loadFail(){
+                const active = document.getElementById('failActive').checked;
+                const reason = document.getElementById('failReason').value;
+                const q = document.getElementById('failQ').value.trim();
+                const j = await apiFailCache({active_only: active, reason, q});
+                const tb = document.getElementById('failBody'); 
+                tb.innerHTML='';
+                j.items.forEach(it => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td><label><input class="fsel" type="checkbox" data-addr="${it.address}"> ${it.address}</label></td>`+
+                                   `<td>${it.reason||''}</td><td>${it.ttl_min ?? ''}</td><td>${it.until||''}</td>`+
+                                   `<td><button class="fclear" data-addr="${it.address}">Clear</button></td>`; 
+                    tb.appendChild(tr);
+                });
+                document.getElementById('failMeta').textContent = `${j.count} Einträge`;
+            }
+
+            // Event Listeners für Fail-Cache-Modal
+            document.getElementById('btnFail')?.addEventListener('click', openFail);
+            document.getElementById('failClose')?.addEventListener('click', closeFail);
+            document.getElementById('failReload')?.addEventListener('click', ()=>loadFail().catch(HUD.err));
+
+            // Fail-Cache Clear Funktionen
+            async function apiFailClear(addresses){
+                const r = await fetch('/api/geocode/fail-cache/clear', {
+                    method:'POST', 
+                    headers:{'Content-Type':'application/json'}, 
+                    body: JSON.stringify({addresses})
+                });
+                if(!r.ok){ 
+                    const t = await r.text(); 
+                    throw new Error('clear '+r.status+': '+t); 
+                }
+                return r.json();
+            }
+
+            // Einzel-Clear (Button in Zeile)
+            document.getElementById('failBody')?.addEventListener('click', async (e)=>{
+                const b = e.target.closest('.fclear'); 
+                if(!b) return;
+                const addr = b.dataset.addr; 
+                if(!confirm(`Eintrag freigeben?\n${addr}`)) return;
+                try { 
+                    const j = await apiFailClear([addr]); 
+                    HUD.ok(`cleared ${j.cleared}`); 
+                    await loadFail(); 
+                }
+                catch(err){ HUD.err(err); }
+            });
+
+            // Auswahl-Clear (Header-Knopf)
+            document.getElementById('failClearSel')?.addEventListener('click', async ()=>{
+                const sel = [...document.querySelectorAll('.fsel:checked')].map(x=>x.dataset.addr);
+                if(!sel.length) { 
+                    HUD.note('keine Auswahl'); 
+                    return; 
+                }
+                if(!confirm(`Freigeben von ${sel.length} Einträgen?`)) return;
+                try { 
+                    const j = await apiFailClear(sel); 
+                    HUD.ok(`cleared ${j.cleared}`); 
+                    await loadFail(); 
+                }
+                catch(err){ HUD.err(err); }
+            });
+            
+            // Manuelle Koordinaten-Eingabe Funktionen
+            async function apiManualGeo(address, lat, lon, byUser) {
+                const r = await fetch('/api/tourplan/manual-geo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address, latitude: lat, longitude: lon, by_user: byUser })
+                });
+                if (!r.ok) {
+                    const t = await r.text();
+                    throw new Error(`manual-geo ${r.status}: ${t.slice(0, 200)}`);
+                }
+                return r.json();
+            }
+            
+            function openManualGeo(address) {
+                document.getElementById('manualGeoAddress').textContent = address;
+                document.getElementById('manualGeoCoords').value = '';
+                document.getElementById('manualGeoLat').value = '';
+                document.getElementById('manualGeoLon').value = '';
+                document.getElementById('manualGeoUser').value = '';
+                document.getElementById('modalManualGeo').style.display = 'flex';
+            }
+            
+            function closeManualGeo() {
+                document.getElementById('modalManualGeo').style.display = 'none';
+            }
+            
+            // Event Listeners für manuelle Koordinaten
+            document.getElementById('manualGeoClose').onclick = closeManualGeo;
+            document.getElementById('manualGeoCancel').onclick = closeManualGeo;
+            
+            document.getElementById('manualGeoSave').onclick = async () => {
+                const address = document.getElementById('manualGeoAddress').textContent;
+                const coordsInput = document.getElementById('manualGeoCoords').value.trim();
+                const latInput = document.getElementById('manualGeoLat').value;
+                const lonInput = document.getElementById('manualGeoLon').value;
+                const byUser = document.getElementById('manualGeoUser').value.trim() || 'ui';
+                
+                let lat, lon;
+                
+                // Zuerst versuchen, aus dem Koordinaten-Eingabefeld zu parsen
+                if (coordsInput) {
+                    const coords = coordsInput.split(',').map(c => c.trim());
+                    if (coords.length === 2) {
+                        lat = parseFloat(coords[0]);
+                        lon = parseFloat(coords[1]);
+                    }
+                }
+                
+                // Falls das nicht funktioniert, die einzelnen Felder verwenden
+                if (isNaN(lat) || isNaN(lon)) {
+                    lat = parseFloat(latInput);
+                    lon = parseFloat(lonInput);
+                }
+                
+                if (isNaN(lat) || isNaN(lon)) {
+                    alert('Bitte geben Sie gültige Koordinaten ein (Format: 51.03713369765603, 13.898478907933526)');
+                    return;
+                }
+                
+                try {
+                    HUD.note(`speichere: ${address} → ${lat}, ${lon}`);
+                    await apiManualGeo(address, lat, lon, byUser);
+                    HUD.ok('Koordinaten gespeichert');
+                    closeManualGeo();
+                    await loadMatch(); // Tabelle aktualisieren
+                    await refreshStatus?.(); // Status aktualisieren
+                } catch (err) {
+                    HUD.err(err);
+                }
+            };
+            
+            // Event Listener für automatisches Füllen der einzelnen Felder
+            document.getElementById('manualGeoCoords').addEventListener('input', function() {
+                const coords = this.value.split(',').map(c => c.trim());
+                if (coords.length === 2) {
+                    const lat = parseFloat(coords[0]);
+                    const lon = parseFloat(coords[1]);
+                    if (!isNaN(lat) && !isNaN(lon)) {
+                        document.getElementById('manualGeoLat').value = lat;
+                        document.getElementById('manualGeoLon').value = lon;
+                    }
+                }
+            });
+            
+            // Event Listener für automatisches Füllen des Koordinaten-Feldes
+            document.getElementById('manualGeoLat').addEventListener('input', updateCoordsField);
+            document.getElementById('manualGeoLon').addEventListener('input', updateCoordsField);
+            
+            function updateCoordsField() {
+                const lat = document.getElementById('manualGeoLat').value;
+                const lon = document.getElementById('manualGeoLon').value;
+                if (lat && lon) {
+                    document.getElementById('manualGeoCoords').value = `${lat}, ${lon}`;
+                }
+            }
+            
+            // Event Delegation für "Koordinaten eingeben" Buttons
+            document.querySelector('#tableBody').addEventListener('click', (e) => {
+                const btn = e.target.closest('.manualGeoBtn');
+                if (!btn) return;
+                const address = decodeURIComponent(btn.dataset.addr);
+                openManualGeo(address);
+            });
+        });
+    </script>
+    
+    <!-- Modal für Vorschläge -->
+    <div id="modal">
+        <div class="card">
+            <header>
+                <b id="mTitle">Vorschläge</b>
+                <button id="mClose">×</button>
+            </header>
+            <div class="body">
+                <div id="mInfo" class="muted"></div>
+                <ul id="mList" class="list"></ul>
+            </div>
+            <footer>
+                <button id="mCancel">Schließen</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Modal für Audit-Log -->
+    <div id="modalAudit"><div class="card">
+        <header>
+            <b>Audit-Log</b>
+            <div style="display:flex;gap:6px">
+                <input id="auditQ" placeholder="Suche…" />
+                <select id="auditAction"><option value="">alle</option><option>alias_set</option><option>alias_remove</option></select>
+                <input id="auditSince" type="datetime-local" />
+                <button id="auditReload">Neu laden</button>
+                <button id="auditClose">×</button>
+            </div>
+        </header>
+        <div class="body">
+            <table><thead><tr><th>ts</th><th>action</th><th>query</th><th>canonical</th><th>user</th></tr></thead>
+                <tbody id="auditBody"></tbody>
+            </table>
+        </div>
+        <footer>
+            <span id="auditMeta" class="muted"></span>
+        </footer>
+    </div></div>
+
+    <!-- Modal für Fail-Cache -->
+    <div id="modalFail"><div class="card">
+        <header>
+            <b>Fail-Cache</b>
+            <div style="display:flex;gap:6px">
+                <label><input id="failActive" type="checkbox" checked> nur aktiv</label>
+                <select id="failReason"><option value="">alle Gründe</option><option>temp_error</option><option>no_result</option></select>
+                <input id="failQ" placeholder="Suche…" />
+                <button id="failReload">Neu laden</button>
+                <button id="failClearSel">Auswahl freigeben</button>
+                <button id="failClose">×</button>
+            </div>
+        </header>
+        <div class="body">
+            <table><thead><tr><th>Adresse</th><th>Grund</th><th>TTL (min)</th><th>bis</th><th>Aktion</th></tr></thead>
+                <tbody id="failBody"></tbody>
+            </table>
+        </div>
+        <footer><span id="failMeta" class="muted"></span></footer>
+    </div></div>
+    
+    <!-- Modal für manuelle Koordinaten-Eingabe -->
+    <div id="modalManualGeo"><div class="card">
+        <header>
+            <b>Koordinaten manuell eingeben</b>
+            <button id="manualGeoClose">×</button>
+        </header>
+        <div class="body">
+            <div class="address-display">
+                <strong>Adresse:</strong> <span id="manualGeoAddress"></span>
+            </div>
+            <div class="form-group">
+                <label for="manualGeoCoords">Koordinaten (Lat, Lon):</label>
+                <input id="manualGeoCoords" type="text" placeholder="z.B. 51.03713369765603, 13.898478907933526" 
+                       style="width: 100%; font-family: monospace;" />
+                <small class="text-muted">Format: Latitude, Longitude (kommagetrennt)</small>
+            </div>
+            <div class="form-group">
+                <label for="manualGeoLat">Breitengrad (Latitude):</label>
+                <input id="manualGeoLat" type="number" step="0.000001" placeholder="z.B. 51.0504" />
+            </div>
+            <div class="form-group">
+                <label for="manualGeoLon">Längengrad (Longitude):</label>
+                <input id="manualGeoLon" type="number" step="0.000001" placeholder="z.B. 13.7373" />
+            </div>
+            <div class="form-group">
+                <label for="manualGeoUser">Eingetragen von:</label>
+                <input id="manualGeoUser" type="text" placeholder="Ihr Name" />
+            </div>
+        </div>
+        <footer>
+            <button id="manualGeoSave">Speichern</button>
+            <button id="manualGeoCancel">Abbrechen</button>
+        </footer>
+    </div></div>
+</body>
+</html>

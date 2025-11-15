@@ -1,0 +1,769 @@
+MANUELLE GEOCODING-KORREKTUR ERFORDERLICH
+================================================================================
+
+Anzahl: 191
+
+1. "Auto-Kavalier"- Admiral (ID: 1346)
+   Adresse: Georg-Mehrtens-Straáe 3, 01237 Dresden
+   Korrigierte Adresse: ___________________________
+
+2. 1a autoservice Oehlschlger (ID: 1493)
+   Adresse: Tharandter Straáe 26, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+3. A.T.L. Autoteileland (ID: 1357)
+   Adresse: Bismarckstraáe 57, 01257 Dresden
+   Korrigierte Adresse: ___________________________
+
+4. AIS Dresden GmbH (ID: 1463)
+   Adresse: Ktzschenbroder Strasse 193, 01139 Dresden
+   Korrigierte Adresse: ___________________________
+
+5. AKF Fahrzeugteile GmbH (ID: 1424)
+   Adresse: Dresdener Straáe 70a, 02625 Bautzen
+   Korrigierte Adresse: ___________________________
+
+6. AS Frank Zimmermann (ID: 1300)
+   Adresse: Hauptstraáe 89, 01744 Dippoldiswalde
+   Korrigierte Adresse: ___________________________
+
+7. ASH Dirk Hger (ID: 1432)
+   Adresse: Am Mhlgraben 3, 01774 Klingenberg
+   Korrigierte Adresse: ___________________________
+
+8. ATM Reparaturzentrum (ID: 1390)
+   Adresse: uáere-Hainichener-Str. 5a, 09669 Frankenberg
+   Korrigierte Adresse: ___________________________
+
+9. ATW Fahrzeugteile (ID: 1612)
+   Adresse: Frbelstr. 51a, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+10. AUTO LUST (ID: 1351)
+   Adresse: Krausestraáe 4, 01187 Dresden
+   Korrigierte Adresse: ___________________________
+
+11. AUTO OTTO (ID: 1397)
+   Adresse: Dresdner Str. 5, 02977 Hoyerswerda
+   Korrigierte Adresse: ___________________________
+
+12. AUTOMEISTEREI (ID: 1343)
+   Adresse: Lilienthalstraáe 3, 01257 Dresden
+   Korrigierte Adresse: ___________________________
+
+13. Abschleppdienst Lesche GbR (ID: 1307)
+   Adresse: Hohe Straáe 79, 01796 Struppen/Siedlung
+   Korrigierte Adresse: ___________________________
+
+14. Agroservice Pirna GmbH (ID: 1374)
+   Adresse: Liebstdter Str. 45, 01796 Pirna
+   Korrigierte Adresse: ___________________________
+
+15. Andreas Ebert (ID: 1439)
+   Adresse: Hauptstraáe 16, 01816 Bad Gottleuba-Berggieáhbel
+   Korrigierte Adresse: ___________________________
+
+16. Apparatebau Moufang KG (ID: 1510)
+   Adresse: Rhnstr. 42-44, 63667 Nidda-Oberschmitten
+   Korrigierte Adresse: ___________________________
+
+17. Astral UG (ID: 1487)
+   Adresse: Lbtauer Straáe 80, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+18. Auto - Heller (ID: 1369)
+   Adresse: Gohliser Straáe 24, 01445 Radebeul
+   Korrigierte Adresse: ___________________________
+
+19. Auto Becker (ID: 1610)
+   Adresse: Altnossener Straáe 7, 01156 Dresden / Gompitz
+   Korrigierte Adresse: ___________________________
+
+20. Auto Brckner GmbH & Co. KG (ID: 1299)
+   Adresse: Drerstr.120, 01309 Dresden
+   Korrigierte Adresse: ___________________________
+
+21. Auto Christen (ID: 1547)
+   Adresse: Schloáallee 9, 01468 Moritzburg
+   Korrigierte Adresse: ___________________________
+
+22. Auto Dienst Meissen (ID: 1422)
+   Adresse: Ossietzkystraáe 37a, 01662 Meiáen
+   Korrigierte Adresse: ___________________________
+
+23. Auto Haase (ID: 1469)
+   Adresse: Coschtzer Straáe 46, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+24. Auto Service Meusel (ID: 1395)
+   Adresse: Alte Str. 33, 01768 Glashtte OT Hirschbach
+   Korrigierte Adresse: ___________________________
+
+25. Auto-Teile-Zeitz (ID: 1467)
+   Adresse: Paul-Roland-Str.2, 06712 Zeitz
+   Korrigierte Adresse: ___________________________
+
+26. AutoHusler (ID: 1514)
+   Adresse: Am Gterbahnhof 18, 01640 Coswig
+   Korrigierte Adresse: ___________________________
+
+27. Autodienst Tilo Bretschneider (ID: 1339)
+   Adresse: Altenberger Straáe 43, 01768 Glashtte
+   Korrigierte Adresse: ___________________________
+
+28. Autofreund-Lindner (ID: 1475)
+   Adresse: An der Bahra 9, 01816 Bad Gottleuba-Berggieáhbel
+   Korrigierte Adresse: ___________________________
+
+29. Autohaus (ID: 1477)
+   Adresse: Coschtzer Str. 1, 01187 Dresden
+   Korrigierte Adresse: ___________________________
+
+30. Autohaus Borsbergstraáe GmbH (ID: 1466)
+   Adresse: Borsbergstraáe 39, 01309 Dresden
+   Korrigierte Adresse: ___________________________
+
+31. Autohaus Emmrich e.K. (ID: 1501)
+   Adresse: Morgenrthe 1, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+32. Autohaus Fischer (ID: 1569)
+   Adresse: Meuálitzer Straáe 118, 01259 Dresden
+   Korrigierte Adresse: ___________________________
+
+33. Autohaus Friedewald (ID: 1371)
+   Adresse: Altrcknitz 6, 01217 Dresden
+   Korrigierte Adresse: ___________________________
+
+34. Autohaus Godzik OHG (ID: 1440)
+   Adresse: Hauptstrasse 9a, 01728 Bannewitz/OT Possendorf
+   Korrigierte Adresse: ___________________________
+
+35. Autohaus Httel (ID: 1476)
+   Adresse: Dresdner Landstr. 14 F, 01744 Oberhslich
+   Korrigierte Adresse: ___________________________
+
+36. Autohaus Lassotta GmbH (ID: 1401)
+   Adresse: Berghausstr. 2a, 01662 Meiáen
+   Korrigierte Adresse: ___________________________
+
+37. Autohaus Leuteritz GmbH (ID: 1618)
+   Adresse: Mglitztalstraáe 10, 01773 Altenberg OT Brenstein
+   Korrigierte Adresse: ___________________________
+
+38. Autohaus Olaf Streit (ID: 1552)
+   Adresse: Ringstraáe 25, 01809 Heidenau
+   Korrigierte Adresse: ___________________________
+
+39. Autohaus Pirna GmbH (ID: 1444)
+   Adresse: Knigsteiner Straáe 5, 01796 Pirna
+   Korrigierte Adresse: ___________________________
+
+40. Autohaus Striesen (ID: 1292)
+   Adresse: Gottleubaer Straáe 1, 01277 Dresden
+   Korrigierte Adresse: ___________________________
+
+41. Autohaus Winter GmbH (ID: 1366)
+   Adresse: Dresdner Strasse 6, 01728 Bannewitz OT Hnichen
+   Korrigierte Adresse: ___________________________
+
+42. Autohaus in Berggieáhbel GmbH (ID: 1355)
+   Adresse: Talstr. 4, 01816 Bad Gottleuba - Berggieáhbel
+   Korrigierte Adresse: ___________________________
+
+43. Autohof Radeburg GmbH (ID: 1377)
+   Adresse: Knigsbrckerstraáe 30, 01471 Radeburg
+   Korrigierte Adresse: ___________________________
+
+44. Automatikgetriebeservice (ID: 1447)
+   Adresse: Mgelner Str.29, 01237 Dresden
+   Korrigierte Adresse: ___________________________
+
+45. Autopark Pirnaer Straáe (ID: 1498)
+   Adresse: Pirnaer Straáe 7, 01809 Heidenau
+   Korrigierte Adresse: ___________________________
+
+46. Autoreparaturwerk Freital KG (ID: 1609)
+   Adresse: Cunnersdorferstraáe 12, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+47. Autoservice Arnold (ID: 1551)
+   Adresse: Talstr. 19, 01816 Berggieáhbel
+   Korrigierte Adresse: ___________________________
+
+48. Autoservice Baumeister (ID: 1586)
+   Adresse: Rethelstraáe 32, 01139 Dresden
+   Korrigierte Adresse: ___________________________
+
+49. Autoservice Heinze GmbH (ID: 1535)
+   Adresse: Dohnaer Straáe 119, 01239 Dresden
+   Korrigierte Adresse: ___________________________
+
+50. Autoservice Kartunov (ID: 1522)
+   Adresse: Gterhofstraáe 6, 01445 Radebeul
+   Korrigierte Adresse: ___________________________
+
+51. Autoservice Laubegast (ID: 1568)
+   Adresse: sterreicher Str. 63, 01279 Dresden
+   Korrigierte Adresse: ___________________________
+
+52. Autoservice Leuthold (ID: 1513)
+   Adresse: Am Sgewerk 36, 01328 Dresden OT Schnfeld
+   Korrigierte Adresse: ___________________________
+
+53. Autoservice Mehlig (ID: 1482)
+   Adresse: Schulstraáe 25, 01468 Moritzburg (OT Boxdorf)
+   Korrigierte Adresse: ___________________________
+
+54. Autoservice Petters GmbH (ID: 1545)
+   Adresse: Sternstraáe 14, 01139 Dresden
+   Korrigierte Adresse: ___________________________
+
+55. Autoservice Pohlmann (ID: 1619)
+   Adresse: Hauptstraáe 70, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+56. Autoservice Schubert (ID: 1345)
+   Adresse: Fichtestraáe 8, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+57. Autoservice Winkler (ID: 1479)
+   Adresse: Angerweg 1, 01662 Meiáen
+   Korrigierte Adresse: ___________________________
+
+58. Autoservice Wolf (ID: 1412)
+   Adresse: Wiener Straáe 10, 01069 Dresden
+   Korrigierte Adresse: ___________________________
+
+59. Autoservice und Fahrzeugbau Steglich (ID: 1480)
+   Adresse: Reisstraáe  37, 01257 Dresden
+   Korrigierte Adresse: ___________________________
+
+60. Autoteile Ehrlich (ID: 1588)
+   Adresse: Ktzschenbrodaer Str. 38, 01445 Radebeul
+   Korrigierte Adresse: ___________________________
+
+61. Autovermietung Vetter (ID: 1630)
+   Adresse: Sternstraáe 47, 01139 Dresden
+   Korrigierte Adresse: ___________________________
+
+62. BISTRA Bau GmbH & Co. KG (ID: 1490)
+   Adresse: Hohe Straáe, 01796 Dohma
+   Korrigierte Adresse: ___________________________
+
+63. BOSSE Mechanik (ID: 1624)
+   Adresse: Mhlenstr. 5, 39397 Schwanebeck
+   Korrigierte Adresse: ___________________________
+
+64. Basti's KFZ-Werkstatt (ID: 1491)
+   Adresse: Tharandter Straáe 41b, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+65. Bauservice Tilo Richter (ID: 1542)
+   Adresse: Bielatalstraáe 34, 01824 Knigstein
+   Korrigierte Adresse: ___________________________
+
+66. Bauservice Tilo Richter (ID: 1641)
+   Adresse: Pfaffenberg 5, 01824 Knigstein
+   Korrigierte Adresse: ___________________________
+
+67. Bernd Forker GmbH (ID: 1338)
+   Adresse: Siegfried Rdel-Str.37, 01796 Pirna
+   Korrigierte Adresse: ___________________________
+
+68. Blumentritt Diesel-Einspritztechnik (ID: 1323)
+   Adresse: Straáe des 17.Juni 16, 01257 Dresden
+   Korrigierte Adresse: ___________________________
+
+69. CAR - Center (ID: 1334)
+   Adresse: Crimmitschauer Straáe 50a, 04626 Schmlln/Thr.
+   Korrigierte Adresse: ___________________________
+
+70. CAR-ART GmbH (ID: 1370)
+   Adresse: Lbtauer Str. 55, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+71. CAR-ART GmbH (ID: 1526)
+   Adresse: Bismarkstr. 63, 01257 Dresden
+   Korrigierte Adresse: ___________________________
+
+72. CAR-REPAIR (ID: 1348)
+   Adresse: Fritz-Reuter Straáe 43, 01097 Dresden
+   Korrigierte Adresse: ___________________________
+
+73. Carzone Pirna (ID: 1653)
+   Adresse: Lohmener Straáe 15a, 01796 Pirna
+   Korrigierte Adresse: ___________________________
+
+74. DISTREX Fahrzeugservice e.K. (ID: 1309)
+   Adresse: Wiener Straáe 10, 01069 Dresden
+   Korrigierte Adresse: ___________________________
+
+75. Dachdeckerbetrieb Heber (ID: 1301)
+   Adresse: Berreuther Straáe 15a, 01744 Dippoldiswalde
+   Korrigierte Adresse: ___________________________
+
+76. Die-Autogesellschaft-Dresden.de (ID: 1473)
+   Adresse: Hauptstraáe 1, 01809 Heidenau
+   Korrigierte Adresse: ___________________________
+
+77. Dietze & Schindler (ID: 1540)
+   Adresse: Ladestraáe 2b, 09465 Sehmatal-OT Sehma
+   Korrigierte Adresse: ___________________________
+
+78. Dippser-Auto-Ecke (ID: 1484)
+   Adresse: Bergstraáe 93, 01744 Dippoldiswalde OT Seifersdorf
+   Korrigierte Adresse: ___________________________
+
+79. Dreihundert Dresden (ID: 1302)
+   Adresse: Naumannstraáe 12 | Halle 14, 01809 Heidenau
+   Korrigierte Adresse: ___________________________
+
+80. Dresdner Klassiker Handel GmbH (ID: 1521)
+   Adresse: Knigsbrcker Straáe 96, 01099 Dresden
+   Korrigierte Adresse: ___________________________
+
+81. Dresdner Reifen Zentrale GmbH (ID: 1384)
+   Adresse: An der Prieánitzaue 6, 01328 Dresden
+   Korrigierte Adresse: ___________________________
+
+82. Dresdner Reifen Zentrale GmbH (ID: 1435)
+   Adresse: Lohrmannstraáe 22, 01237 Dresden
+   Korrigierte Adresse: ___________________________
+
+83. Dresdner Reifen Zentrale GmbH (ID: 1614)
+   Adresse: Lbtauer Strasse 34-38, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+84. ESW Autoservice GmbH (ID: 1629)
+   Adresse: Knigsteiner Str. 46, 01824 Leupoldishain
+   Korrigierte Adresse: ___________________________
+
+85. F & T Fahrzeug-Technik GmbH (ID: 1509)
+   Adresse: Dresdner Straáe 263, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+86. F.H. Wheel Center GmbH (ID: 1404)
+   Adresse: Khlerstr. 16, 01239 Dresden
+   Korrigierte Adresse: ___________________________
+
+87. FAMO Fahrzeug-und Motorenteile GmbH (ID: 1332)
+   Adresse: Kleine Baschtzer Str. 1, 02625 Bautzen
+   Korrigierte Adresse: ___________________________
+
+88. FAMO Fahrzeug-und Motorenteile GmbH (ID: 1534)
+   Adresse: Brander Straáe 65, 09599 Freiberg
+   Korrigierte Adresse: ___________________________
+
+89. FTT Fahrzeug Technik Tharandt (ID: 1589)
+   Adresse: Dresdner Straáe 36b, 01737 Tharandt
+   Korrigierte Adresse: ___________________________
+
+90. Fa. Autohaus  Langenhan (ID: 1361)
+   Adresse: Justus -Liebig Straáe 30, 99087 Erfurt
+   Korrigierte Adresse: ___________________________
+
+91. Fahrzeug Technik Maxen (ID: 1320)
+   Adresse: Maxener Straáe 12, 01809 Mglitztal / OT Maxen
+   Korrigierte Adresse: ___________________________
+
+92. Fahrzeug-Service Bachmann (ID: 1508)
+   Adresse: Meiáner Landstraáe 111, 01157 Dresden
+   Korrigierte Adresse: ___________________________
+
+93. Fahrzeughandel u. Service (ID: 1341)
+   Adresse: Zschorgulaer Str. 22, 07619 Schklen
+   Korrigierte Adresse: ___________________________
+
+94. Fahrzeugservice Kaden (ID: 1418)
+   Adresse: Meiáner Landstraáe 5, 01157 Dresden
+   Korrigierte Adresse: ___________________________
+
+95. Fahrzeugservice Reiche (ID: 1324)
+   Adresse: Gasanstaltstraáe 43d, 01237 Dresden
+   Korrigierte Adresse: ___________________________
+
+96. Feldbinder & Rolfsmeyer (ID: 1437)
+   Adresse: Straáe des 17. Juni 11, 01257 Dresden
+   Korrigierte Adresse: ___________________________
+
+97. Firma Dachboxhelden (ID: 1597)
+   Adresse: Robert-Bosch-Straáe 29, 55129 Mainz-Hechtsheim
+   Korrigierte Adresse: ___________________________
+
+98. Frank & Sohn Fahrzeugteile Leipzig GmbH (ID: 1636)
+   Adresse: Handelsstraáe 24, 04420 Markranstdt / Leipzig
+   Korrigierte Adresse: ___________________________
+
+99. Freie Kfz-Werkstatt Peter Thomas (ID: 1607)
+   Adresse: Drrwiesenstr. 5, 01809 Dohna
+   Korrigierte Adresse: ___________________________
+
+100. Freie Kfz.-Werkstatt (ID: 1621)
+   Adresse: Oberer Ladenberg 19, 01816 Berggieáhbel
+   Korrigierte Adresse: ___________________________
+
+101. Freie Kfz.-Werkstatt Czerwonka (ID: 1295)
+   Adresse: Lbtauer Strasse 65, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+102. Garagentore u. Torantriebe (ID: 1638)
+   Adresse: Weiáeritzstraáe 3a, 01744 Dippoldiswalde
+   Korrigierte Adresse: ___________________________
+
+103. Gustavs Autohof (ID: 1376)
+   Adresse: Wittgensdorf Nr. 16, 01731 Kreischa OT Wittgensdorf
+   Korrigierte Adresse: ___________________________
+
+104. Halle 13 - Teile (ID: 1550)
+   Adresse: Lohmener Str. 13, 01833 Drrrhrsdorf-Dittersbach
+   Korrigierte Adresse: ___________________________
+
+105. Harry Schulze GmbH (ID: 1559)
+   Adresse: Im Stauster 6, 36088 Hnfeld
+   Korrigierte Adresse: ___________________________
+
+106. Helmut Hammerschmidt KFZ (ID: 1570)
+   Adresse: Wilsdruffer Straáe 65, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+107. Hoffmann Automobile (ID: 1449)
+   Adresse: Pirnaer Landstraáe 289, 01259 Dresden
+   Korrigierte Adresse: ___________________________
+
+108. Joachim & Markus Reese GbR (ID: 1344)
+   Adresse: Nikolaus-Otto-Straáe 3, 55129 Mainz
+   Korrigierte Adresse: ___________________________
+
+109. Jkel Kfz-Meisterbetrieb GmbH (ID: 1554)
+   Adresse: Rudolf-Breitscheid-Straáe 29, 01809 Heidenau
+   Korrigierte Adresse: ___________________________
+
+110. KENCAR UG(haftungsbeschrnkt) (ID: 1617)
+   Adresse: Dorfstraáe 13B, 01816 Bad Gottleuba-Berggieáhbel
+   Korrigierte Adresse: ___________________________
+
+111. KFZ Meisterbetrieb Jan Opitz (ID: 1352)
+   Adresse: Frstereistr. 18, 01099 Dresden
+   Korrigierte Adresse: ___________________________
+
+112. KFZ-Meisterbetrieb (ID: 1333)
+   Adresse: Dresdner Straáe 290, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+113. KFZ-Meisterbetrieb Lscher (ID: 1393)
+   Adresse: Hauptstraáe 122, 01816 Bad Gottleuba-Berggieáhbel
+   Korrigierte Adresse: ___________________________
+
+114. KFZ-Service Brill (ID: 1561)
+   Adresse: Burgstdteler Str. 3d, 01219 Dresden
+   Korrigierte Adresse: ___________________________
+
+115. KFZ-Service Jrgen Hhle (ID: 1329)
+   Adresse: Hermann-Michel-Straáe 1, 01189 Dresden
+   Korrigierte Adresse: ___________________________
+
+116. KFZ-Werkstatt Auto-Gut (ID: 1431)
+   Adresse: Poisentalstraáe 24, 01728 Bannewitz
+   Korrigierte Adresse: ___________________________
+
+117. KLIEMT NUTZFAHRZEUGTEILE (ID: 1646)
+   Adresse: Am Flugplatz 22, 02828 Grlitz
+   Korrigierte Adresse: ___________________________
+
+118. KMH-Team (ID: 1289)
+   Adresse: An der Niedermhle 3, 01257 Dresden
+   Korrigierte Adresse: ___________________________
+
+119. Karosseriebau Trompter (ID: 1416)
+   Adresse: Spenerstraáe 35, 01309 Dresden
+   Korrigierte Adresse: ___________________________
+
+120. Karosseriefachbetrieb Kirchner (ID: 1555)
+   Adresse: Freitaler Straáe 8, 01737 Tharandt/Groáopitz
+   Korrigierte Adresse: ___________________________
+
+121. Karsten Noack (ID: 1544)
+   Adresse: Reinberger Dorfstraáe 6a, 01744 Dippoldiswalde/OT Reinberg
+   Korrigierte Adresse: ___________________________
+
+122. Kaute -Motoreninstandsetzung (ID: 1565)
+   Adresse: Groáenhainer Straáe 19, 01097 Dresden
+   Korrigierte Adresse: ___________________________
+
+123. Kfz - Kargel (ID: 1315)
+   Adresse: Raiffeisenstraáe 14, 55270 Klein-Winternheim
+   Korrigierte Adresse: ___________________________
+
+124. Kfz Service - SHW Teubner UG (ID: 1387)
+   Adresse: Enderstraáe 94, 01277 Dresden
+   Korrigierte Adresse: ___________________________
+
+125. Kfz Technik Bruer (ID: 1455)
+   Adresse: Potschappler Straáe 4, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+126. Kfz-Betrieb "Die Meister" (ID: 1603)
+   Adresse: Lbtauer Strasse 54-56, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+127. Kfz-Meister Jens Jahn (ID: 1353)
+   Adresse: Straáe des Friedens 37, 01723 Kesselsdorf
+   Korrigierte Adresse: ___________________________
+
+128. Kfz-Reparatur (ID: 1591)
+   Adresse: Pratzschwitzer Straáe 220, 01796 Pirna/Birkwitz
+   Korrigierte Adresse: ___________________________
+
+129. Kfz-Sachverstndigenbro (ID: 1631)
+   Adresse: Werner-Seelenbinder-Straáe 1B, 01809 Heidenau
+   Korrigierte Adresse: ___________________________
+
+130. Kfz-Service-Pahner (ID: 1458)
+   Adresse: Rhrsdorfer Straáe 24, 01257 Dresden
+   Korrigierte Adresse: ___________________________
+
+131. Kfz-Werkstatt Hocker (ID: 1379)
+   Adresse: Pillnitzer Straáe 1, 01796 Pirna
+   Korrigierte Adresse: ___________________________
+
+132. Klassische Automobile Schwarz (ID: 1538)
+   Adresse: Rundteil 7b, 01728 Bannewitz OT Possendorf
+   Korrigierte Adresse: ___________________________
+
+133. Klaus Brandner GbR (ID: 1305)
+   Adresse: Gewerbegebiet Kaltes Feld  36, 08468 Heinsdorfergrund
+   Korrigierte Adresse: ___________________________
+
+134. Kommunalfahrzeuge Heidrich GmbH (ID: 1598)
+   Adresse: Frsterlingstrasse 23, 01259 Dresden
+   Korrigierte Adresse: ___________________________
+
+135. Korrosionsschutz Schiebold (ID: 1496)
+   Adresse: Lohmener Str. 13, 01833 Drrrhrsdorf-Dittersbach
+   Korrigierte Adresse: ___________________________
+
+136. Kurierdienst Cornelia Grfe (ID: 1365)
+   Adresse: Geibeltstraáe 2b, 01796 Pirna
+   Korrigierte Adresse: ___________________________
+
+137. Lackwerk LW GmbH (ID: 1419)
+   Adresse: Bremer Straáe 5, 01067 Dresden
+   Korrigierte Adresse: ___________________________
+
+138. Land-Bau-&Fahrzeugtechnik (ID: 1349)
+   Adresse: Dorfstraáe 37, 01768 Glashtte OT Luchau
+   Korrigierte Adresse: ___________________________
+
+139. Leonhardt (ID: 1347)
+   Adresse: Weichselstraáe 2, 36043 Fulda
+   Korrigierte Adresse: ___________________________
+
+140. LiLa metallinc (ID: 1402)
+   Adresse: Oberer Ladenberg 13, 01816 Bad Gottleuba OT Berggieáhbel
+   Korrigierte Adresse: ___________________________
+
+141. MH-Fahrzeugservice (ID: 1425)
+   Adresse: Carl-Thieme-Straáe 28, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+142. MSM by HUBraum GmbH (ID: 1468)
+   Adresse: Frbelstraáe 20, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+143. MVS Oldtimerrestauration (ID: 1622)
+   Adresse: Lbtauer Strasse 54, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+144. Marcel Loreck (ID: 1572)
+   Adresse: Gegenber Prieánitztalstr. 14, 01768 Glashtte
+   Korrigierte Adresse: ___________________________
+
+145. Marco Wagner (ID: 1465)
+   Adresse: Niedermhle 117, 01738 Dorfhain
+   Korrigierte Adresse: ___________________________
+
+146. Maritimus (ID: 1408)
+   Adresse: Alte Dorfstraáe 5, 18356 Fuhlendorf
+   Korrigierte Adresse: ___________________________
+
+147. Meisterwerkstatt Weigel (ID: 1434)
+   Adresse: Rosa-Menzer-Straáe 23, 01309 Dresden
+   Korrigierte Adresse: ___________________________
+
+148. Motoren-Frech GbR (ID: 1546)
+   Adresse: Hohensteiner Str. 101, 09212 Limbach-O./OT Pleiáa
+   Korrigierte Adresse: ___________________________
+
+149. MotorenService BiebersteinGmbH (ID: 1428)
+   Adresse: Hauptstraáe 68, 02699 Knigswartha
+   Korrigierte Adresse: ___________________________
+
+150. Motorenservice (ID: 1652)
+   Adresse: Thomas-Mntzer-Straáe 2, 99994 Schlotheim
+   Korrigierte Adresse: ___________________________
+
+151. NPR of Europe GmbH (ID: 1541)
+   Adresse: Siemensstr.56, 70825 Korntal-Mnchingen
+   Korrigierte Adresse: ___________________________
+
+152. Paddock (ID: 1421)
+   Adresse: Dresdner Straáe 4, 01796 Pirna
+   Korrigierte Adresse: ___________________________
+
+153. Pauls Garage (ID: 1330)
+   Adresse: Reicker Straáe 53, 01219 Dresden
+   Korrigierte Adresse: ___________________________
+
+154. Peugeot Bttner (ID: 1543)
+   Adresse: Steigerstraáe 1, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+155. Point S Hentschke (ID: 1442)
+   Adresse: Dresdner Straáe 51, 01796 Pirna
+   Korrigierte Adresse: ___________________________
+
+156. Profi Parts Fahrzeugteile (ID: 1407)
+   Adresse: Sdring 39, 54634 Bitburg
+   Korrigierte Adresse: ___________________________
+
+157. QQ Moves GmbH (ID: 1640)
+   Adresse: Fabrikstraáe 54, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+158. R & A Fahrzeugservice und -han (ID: 1529)
+   Adresse: Frbelstr. 30-32, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+159. RR Auto- & Reifenservice GmbH Radebeul (ID: 1571)
+   Adresse: Schumannstraáe 18, 01445 Radebeul
+   Korrigierte Adresse: ___________________________
+
+160. Rabe & Leuthold (ID: 1599)
+   Adresse: Saarstraáe 4, 08056 Zwickau
+   Korrigierte Adresse: ___________________________
+
+161. Reifen + Auto Service Grosche GmbH (ID: 1443)
+   Adresse: Ktitzer Straáe 76, 01445 Radebeul
+   Korrigierte Adresse: ___________________________
+
+162. Reifen Roespel GmbH (ID: 1539)
+   Adresse: Wilsdruffer Straáe 7, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+163. Reifen Rhle e.K. Autotechnik (ID: 1485)
+   Adresse: Lbtauer Straáe 42, 01159 Dresden
+   Korrigierte Adresse: ___________________________
+
+164. ReifenCenter Dresden (ID: 1385)
+   Adresse: Bismarckstraáe 57, 01257 Dresden
+   Korrigierte Adresse: ___________________________
+
+165. Reifendienst Schnherr (ID: 1489)
+   Adresse: Dorfstraáe 30, 01744 Dippoldiswalde
+   Korrigierte Adresse: ___________________________
+
+166. Rob`s Kfz-Service (ID: 1290)
+   Adresse: Enno-Heidebroeck-Str. 11, 01237 Dresden
+   Korrigierte Adresse: ___________________________
+
+167. Rudis-Garage (ID: 1441)
+   Adresse: Ktzschenbrodaer Str. 58, 01445 Radebeul
+   Korrigierte Adresse: ___________________________
+
+168. SMP GmbH (ID: 1474)
+   Adresse: Alemannenstraáe 50, 01309 Dresden
+   Korrigierte Adresse: ___________________________
+
+169. SachsenNetze GmbH (ID: 1414)
+   Adresse: Hauptstraáe 110, 01809 Heidenau
+   Korrigierte Adresse: ___________________________
+
+170. Schaarschmidt-Autoteile (ID: 1595)
+   Adresse: Stollberger Straáe 18, 09419 Thum
+   Korrigierte Adresse: ___________________________
+
+171. Schmiede Vogel (ID: 1648)
+   Adresse: Zur Quelle 5, 01731 Kreischa OT Saida
+   Korrigierte Adresse: ___________________________
+
+172. Schraubwerk Schulze (ID: 1461)
+   Adresse: Straáe der MTS 1, 01737 Braunsdorf
+   Korrigierte Adresse: ___________________________
+
+173. Schtze Gersdorf (ID: 1511)
+   Adresse: Gersdorf 43, 01819 Bahretal OT Gersdorf
+   Korrigierte Adresse: ___________________________
+
+174. Stender KFZ-Autoservice (ID: 1615)
+   Adresse: Alte Meiáner Landstraáe 28c, 01157 Dresden
+   Korrigierte Adresse: ___________________________
+
+175. Sven Teichmann (ID: 1325)
+   Adresse: An der Triebe  25, 01468 Moritzburg / OT Boxdorf
+   Korrigierte Adresse: ___________________________
+
+176. Sgner's Fahrzeugtechnik (ID: 1321)
+   Adresse: Burgstdter Str. 3, 01219 Dresden
+   Korrigierte Adresse: ___________________________
+
+177. T & S Fahrzeugtechnik GmbH (ID: 1326)
+   Adresse: Brensteiner Str. 27-29, 01277 Dresden
+   Korrigierte Adresse: ___________________________
+
+178. TD Performance (ID: 1291)
+   Adresse: Radeburger Straáe 211, 01109 Dresden
+   Korrigierte Adresse: ___________________________
+
+179. Tilo Hofmann (ID: 1628)
+   Adresse: Hauptstr. 11, 01728 Bannewitz / OT Possendorf
+   Korrigierte Adresse: ___________________________
+
+180. Turboservice Ingo Barthel (ID: 1573)
+   Adresse: Bohnitzscher Str. 4, 01662 Meiáen
+   Korrigierte Adresse: ___________________________
+
+181. Vortrieb Dresden e.K. (ID: 1386)
+   Adresse: Hamburger Straáe 65 a, 01157 Dresden
+   Korrigierte Adresse: ___________________________
+
+182. Waldek Cars (ID: 1518)
+   Adresse: Sternstraáe 47, 01139 Dresden
+   Korrigierte Adresse: ___________________________
+
+183. Werk A KfZ Werkstatt (ID: 1394)
+   Adresse: Dresdner Straáe 46, 01796 Pirna
+   Korrigierte Adresse: ___________________________
+
+184. Willig Werkzeuge (ID: 1335)
+   Adresse: Kertitzer Str. 7, 04509 Delitzsch / OT Schenkenberg
+   Korrigierte Adresse: ___________________________
+
+185. Wtschner Fahrzeugteile GmbH (ID: 1445)
+   Adresse: Clausthaler Straáe 14, 09599 Freiberg
+   Korrigierte Adresse: ___________________________
+
+186. auto-technik24 GmbH (ID: 1507)
+   Adresse: Schlterstraáe 29, 01277 Dresden
+   Korrigierte Adresse: ___________________________
+
+187. autoBURGK Lohse (ID: 1625)
+   Adresse: Burgker Straáe 145, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+188. metiisto Werkstatt- und Handwerkerausr. (ID: 1398)
+   Adresse: Falkenauer Straáe 26, 09661 Hainichen
+   Korrigierte Adresse: ___________________________
+
+189. natur + stein (ID: 1649)
+   Adresse: Lutherstraáe 5a, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+190. p.r.o. Mobilien, Verwaltungs- (ID: 1492)
+   Adresse: Schachtstraáe 10 a, 01705 Freital
+   Korrigierte Adresse: ___________________________
+
+191. s-part Fahrzeug- u. Teilehandel (ID: 1500)
+   Adresse: Mglitztalstraáe  76, 01809 Mhlbach
+   Korrigierte Adresse: ___________________________
+

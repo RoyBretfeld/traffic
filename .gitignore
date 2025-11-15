@@ -1,0 +1,111 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.tox/
+.nox/
+.coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Environment & secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+config.env
+*.env
+
+# Build/Reports
+dist/
+build/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# Poetry
+poetry.lock
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# Project data (keine Versionskontrolle)
+data/
+routen/
+stats/
+logs/
+*.pdf
+
+# Temporary files
+*.tmp
+*.temp
+*.2py
+*.bak
+*.orig
+
+# Database files (außer Schema)
+*.db-shm
+*.db-wal
+
+# Audit ZIP files
+!ZIP/
+ZIP/*.zip
+.env.audit
+
+# OSRM-Dateien (zu groß für GitHub, lokal generiert)
+osrm/*.osrm*
+osrm/*.pbf
+osrm/*.geojson
+osrm/*.poly
