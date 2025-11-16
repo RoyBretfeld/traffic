@@ -12,9 +12,10 @@ router = APIRouter()
 async def get_cost_stats():
     """
     Gibt umfassende Kosten-Statistiken zurück.
+    Erweitert: Detaillierte API-Call-Statistiken pro Modell und pro Operation.
     
     Returns:
-        JSON mit Kosten-Statistiken (heute, Trend, Limits)
+        JSON mit Kosten-Statistiken (heute, Trend, Limits, detaillierte Calls)
     """
     tracker = get_cost_tracker()
     
@@ -35,6 +36,124 @@ async def get_cost_stats():
     total_cost = sum(day["cost"] for day in trend)
     total_calls = sum(day["api_calls"] for day in trend)
     
+    # Detaillierte API-Call-Statistiken (pro Modell, pro Operation)
+    import sqlite3
+    from datetime import datetime, timedelta
+    
+    detailed_stats = {
+        "by_model": {},
+        "by_operation": {},
+        "today": {
+            "by_model": {},
+            "by_operation": {}
+        },
+        "week": {
+            "by_model": {},
+            "by_operation": {}
+        },
+        "month": {
+            "by_model": {},
+            "by_operation": {}
+        }
+    }
+    
+    try:
+        with sqlite3.connect(tracker.db_path) as conn:
+            # Heute
+            today = datetime.now().strftime("%Y-%m-%d")
+            today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+            
+            cursor = conn.execute("""
+                SELECT model, operation, COUNT(*) as calls, SUM(cost_eur) as total_cost
+                FROM cost_entries
+                WHERE timestamp >= ?
+                GROUP BY model, operation
+            """, (today_start,))
+            
+            for row in cursor.fetchall():
+                model, operation, calls, cost = row
+                operation = operation or "unknown"
+                
+                if model not in detailed_stats["today"]["by_model"]:
+                    detailed_stats["today"]["by_model"][model] = {"calls": 0, "cost": 0.0}
+                detailed_stats["today"]["by_model"][model]["calls"] += calls
+                detailed_stats["today"]["by_model"][model]["cost"] += cost or 0.0
+                
+                if operation not in detailed_stats["today"]["by_operation"]:
+                    detailed_stats["today"]["by_operation"][operation] = {"calls": 0, "cost": 0.0, "model": model}
+                detailed_stats["today"]["by_operation"][operation]["calls"] += calls
+                detailed_stats["today"]["by_operation"][operation]["cost"] += cost or 0.0
+            
+            # Woche (letzte 7 Tage)
+            week_start = (datetime.now() - timedelta(days=7)).isoformat()
+            cursor = conn.execute("""
+                SELECT model, operation, COUNT(*) as calls, SUM(cost_eur) as total_cost
+                FROM cost_entries
+                WHERE timestamp >= ?
+                GROUP BY model, operation
+            """, (week_start,))
+            
+            for row in cursor.fetchall():
+                model, operation, calls, cost = row
+                operation = operation or "unknown"
+                
+                if model not in detailed_stats["week"]["by_model"]:
+                    detailed_stats["week"]["by_model"][model] = {"calls": 0, "cost": 0.0}
+                detailed_stats["week"]["by_model"][model]["calls"] += calls
+                detailed_stats["week"]["by_model"][model]["cost"] += cost or 0.0
+                
+                if operation not in detailed_stats["week"]["by_operation"]:
+                    detailed_stats["week"]["by_operation"][operation] = {"calls": 0, "cost": 0.0, "model": model}
+                detailed_stats["week"]["by_operation"][operation]["calls"] += calls
+                detailed_stats["week"]["by_operation"][operation]["cost"] += cost or 0.0
+            
+            # Monat (letzte 30 Tage)
+            month_start = (datetime.now() - timedelta(days=30)).isoformat()
+            cursor = conn.execute("""
+                SELECT model, operation, COUNT(*) as calls, SUM(cost_eur) as total_cost
+                FROM cost_entries
+                WHERE timestamp >= ?
+                GROUP BY model, operation
+            """, (month_start,))
+            
+            for row in cursor.fetchall():
+                model, operation, calls, cost = row
+                operation = operation or "unknown"
+                
+                if model not in detailed_stats["month"]["by_model"]:
+                    detailed_stats["month"]["by_model"][model] = {"calls": 0, "cost": 0.0}
+                detailed_stats["month"]["by_model"][model]["calls"] += calls
+                detailed_stats["month"]["by_model"][model]["cost"] += cost or 0.0
+                
+                if operation not in detailed_stats["month"]["by_operation"]:
+                    detailed_stats["month"]["by_operation"][operation] = {"calls": 0, "cost": 0.0, "model": model}
+                detailed_stats["month"]["by_operation"][operation]["calls"] += calls
+                detailed_stats["month"]["by_operation"][operation]["cost"] += cost or 0.0
+            
+            # Gesamt (alle Zeiten)
+            cursor = conn.execute("""
+                SELECT model, operation, COUNT(*) as calls, SUM(cost_eur) as total_cost
+                FROM cost_entries
+                GROUP BY model, operation
+            """)
+            
+            for row in cursor.fetchall():
+                model, operation, calls, cost = row
+                operation = operation or "unknown"
+                
+                if model not in detailed_stats["by_model"]:
+                    detailed_stats["by_model"][model] = {"calls": 0, "cost": 0.0}
+                detailed_stats["by_model"][model]["calls"] += calls
+                detailed_stats["by_model"][model]["cost"] += cost or 0.0
+                
+                if operation not in detailed_stats["by_operation"]:
+                    detailed_stats["by_operation"][operation] = {"calls": 0, "cost": 0.0, "model": model}
+                detailed_stats["by_operation"][operation]["calls"] += calls
+                detailed_stats["by_operation"][operation]["cost"] += cost or 0.0
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Fehler beim Abrufen detaillierter Statistiken: {e}")
+    
     return JSONResponse({
         "today": today_stats,
         "trend": trend,
@@ -47,7 +166,8 @@ async def get_cost_stats():
         "daily_api_calls_limit": tracker.daily_api_calls_limit,
         "track_costs": tracker.track_costs,
         "model_prices": tracker.model_prices,
-        "default_model": tracker.default_model
+        "default_model": tracker.default_model,
+        "detailed_stats": detailed_stats
     })
 
 @router.get("/api/cost-tracker/models")
@@ -65,6 +185,28 @@ async def get_models_info():
         "default_model": tracker.default_model,
         "currency": "EUR",
         "unit": "per 1000 tokens"
+    })
+
+@router.get("/api/cost-tracker/current-model")
+async def get_current_model():
+    """
+    Gibt das aktuell verwendete KI-Modell zurück.
+    
+    Returns:
+        JSON mit aktuellem Modell und Konfiguration
+    """
+    tracker = get_cost_tracker()
+    
+    # Prüfe ob Modell in Konfiguration überschrieben ist
+    from backend.config import cfg
+    configured_model = cfg("ki_codechecker:model", None)
+    
+    return JSONResponse({
+        "current_model": configured_model or tracker.default_model,
+        "default_model": tracker.default_model,
+        "configured_model": configured_model,
+        "is_custom": configured_model is not None and configured_model != tracker.default_model,
+        "model_prices": tracker.model_prices.get(configured_model or tracker.default_model, tracker.model_prices[tracker.default_model])
     })
 
 @router.get("/api/cost-tracker/usage")

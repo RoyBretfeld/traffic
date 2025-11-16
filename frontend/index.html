@@ -329,71 +329,192 @@
     <script type="module" src="/static/js/polyline6.js"></script>
     <script type="module" src="/static/js/panel-ipc.js"></script>
     <script>
-        // WICHTIG: Funktionen SOFORT definieren, damit sie für onclick/onchange verfügbar sind
+        // KRITISCH: Funktionen SOFORT im globalen Scope definieren, BEVOR andere Scripts geladen werden
+        // Dies verhindert "ReferenceError: function is not defined" Fehler
+        console.log('[INIT] Definiere Fallback-Funktionen...');
+        
+        // Fallback für handleFileChange - wird sofort verfügbar gemacht
         window.handleFileChange = function() {
-            console.log('[FILE-CHANGE] handleFileChange() aufgerufen');
-            
+            console.log('[FALLBACK] handleFileChange() aufgerufen');
             const input = document.getElementById('csvFile');
             if (!input) {
-                console.error('[FILE-CHANGE] csvFile Input nicht gefunden!');
-                return;
-            }
-            
-            const status = document.getElementById('workflowStatus');
-            const uploadInfo = document.getElementById('uploadInfo');
-            
-            if (!input.files || !input.files.length) {
-                console.log('[FILE-CHANGE] Keine Datei ausgewählt');
-                if (typeof currentFilename !== 'undefined') currentFilename = null;
-                if (status) {
-                    status.innerHTML = 'Noch kein Upload.';
-                    status.className = 'small text-muted mb-3';
-                }
-                if (uploadInfo) {
-                    uploadInfo.innerHTML = '';
-                }
-                return;
-            }
-            
-            const file = input.files[0];
-            if (typeof currentFilename !== 'undefined') currentFilename = file.name;
-            console.log('[FILE-CHANGE] Datei ausgewählt:', file.name, `(${(file.size/1024).toFixed(1)} KB)`);
-            
-            // Upload über neue API (wird später definiert)
-            if (typeof uploadCsvFile === 'function') {
-                uploadCsvFile(file);
-            } else {
-                console.error('[FILE-CHANGE] uploadCsvFile() noch nicht definiert!');
-            }
-        };
-        
-        window.runWorkflow = async function() {
-            console.log('[WORKFLOW] runWorkflow() aufgerufen');
-            
-            const fileInput = document.getElementById('csvFile');
-            if (!fileInput) {
-                console.error('[WORKFLOW] csvFile Input nicht gefunden!');
+                console.error('[FALLBACK] csvFile Input nicht gefunden!');
                 alert('Fehler: Datei-Input nicht gefunden. Bitte Seite neu laden.');
                 return;
             }
-            
-            const file = fileInput.files[0];
-            console.log('[WORKFLOW] Datei:', file ? file.name : 'KEINE DATEI');
-
-            if (!file) {
-                alert('Bitte wählen Sie eine CSV-Datei aus.');
+            if (!input.files || !input.files.length) {
+                console.log('[FALLBACK] Keine Datei ausgewählt');
+                const status = document.getElementById('workflowStatus');
+                if (status) {
+                    status.innerHTML = 'Bitte wählen Sie eine CSV-Datei aus.';
+                    status.className = 'small text-warning mb-3';
+                }
                 return;
             }
-            
-            console.log('[WORKFLOW] Starte Workflow für:', file.name);
-            
-            // Weiterleitung zur vollständigen runWorkflow-Funktion (wird später definiert)
-            if (window._runWorkflowFull) {
-                await window._runWorkflowFull();
-            } else {
-                console.error('[WORKFLOW] _runWorkflowFull() noch nicht definiert!');
-                alert('Fehler: Workflow-Funktion noch nicht geladen. Bitte warten Sie einen Moment und versuchen Sie es erneut.');
+            const file = input.files[0];
+            console.log('[FALLBACK] Datei ausgewählt:', file.name, `(${(file.size/1024).toFixed(1)} KB)`);
+            const status = document.getElementById('workflowStatus');
+            if (status) {
+                status.innerHTML = `<span class="text-info">Datei ausgewählt: ${file.name} (${(file.size/1024).toFixed(1)} KB)</span>`;
             }
+            // Vollständige Funktion wird später überschrieben, aber Fallback funktioniert bereits
+        };
+        
+        // Fallback für runWorkflow - wird sofort verfügbar gemacht
+        window.runWorkflow = async function() {
+            console.log('[FALLBACK] runWorkflow() aufgerufen');
+            const fileInput = document.getElementById('csvFile');
+            if (!fileInput) {
+                const errorMsg = 'Fehler: Datei-Input nicht gefunden. Bitte Seite neu laden.';
+                console.error('[FALLBACK]', errorMsg);
+                alert(errorMsg);
+                const status = document.getElementById('workflowStatus');
+                if (status) {
+                    status.innerHTML = `<span class="text-danger">${errorMsg}</span>`;
+                }
+                return;
+            }
+            const file = fileInput.files[0];
+            if (!file) {
+                const errorMsg = 'Bitte wählen Sie zuerst eine CSV-Datei aus!';
+                console.warn('[FALLBACK]', errorMsg);
+                alert(errorMsg);
+                const status = document.getElementById('workflowStatus');
+                if (status) {
+                    status.innerHTML = `<span class="text-warning">${errorMsg}</span>`;
+                }
+                return;
+            }
+            console.log('[FALLBACK] Starte Workflow für:', file.name);
+            const status = document.getElementById('workflowStatus');
+            if (status) {
+                status.innerHTML = `<span class="text-info">Workflow wird gestartet für: ${file.name}...</span>`;
+            }
+            alert('Workflow-Funktion wird geladen. Bitte warten Sie einen Moment und versuchen Sie es erneut.');
+            // Vollständige Funktion wird später überschrieben, aber Fallback funktioniert bereits
+        };
+        
+        console.log('[INIT] Fallback-Funktionen definiert:', {
+            handleFileChange: typeof window.handleFileChange,
+            runWorkflow: typeof window.runWorkflow
+        });
+    </script>
+    <script>
+        // ============================================================
+        // ROBUSTE FEHLERBEHANDLUNG: Alle Funktionen mit Fallbacks
+        // ============================================================
+        
+        // Wrapper für sichere Funktionsausführung (verhindert Abstürze)
+        function safeExecute(fn, fallback = () => {}, context = 'Unknown') {
+            try {
+                return fn();
+            } catch (error) {
+                console.warn(`[SAFE-EXEC] Fehler in ${context}:`, error);
+                try {
+                    return fallback();
+                } catch (fallbackError) {
+                    console.warn(`[SAFE-EXEC] Fallback-Fehler in ${context}:`, fallbackError);
+                    return null;
+                }
+            }
+        }
+        
+        // Wrapper für sichere async Funktionsausführung
+        async function safeExecuteAsync(fn, fallback = async () => {}, context = 'Unknown') {
+            try {
+                return await fn();
+            } catch (error) {
+                console.warn(`[SAFE-EXEC] Fehler in ${context}:`, error);
+                try {
+                    return await fallback();
+                } catch (fallbackError) {
+                    console.warn(`[SAFE-EXEC] Fallback-Fehler in ${context}:`, fallbackError);
+                    return null;
+                }
+            }
+        }
+        
+        // WICHTIG: Funktionen SOFORT definieren, damit sie für onclick/onchange verfügbar sind
+        window.handleFileChange = function() {
+            return safeExecute(() => {
+                console.log('[FILE-CHANGE] handleFileChange() aufgerufen');
+                
+                const input = document.getElementById('csvFile');
+                if (!input) {
+                    console.warn('[FILE-CHANGE] csvFile Input nicht gefunden!');
+                    return;
+                }
+                
+                const status = document.getElementById('workflowStatus');
+                const uploadInfo = document.getElementById('uploadInfo');
+                
+                if (!input.files || !input.files.length) {
+                    console.log('[FILE-CHANGE] Keine Datei ausgewählt');
+                    if (typeof currentFilename !== 'undefined') currentFilename = null;
+                    if (status) {
+                        status.innerHTML = 'Noch kein Upload.';
+                        status.className = 'small text-muted mb-3';
+                    }
+                    if (uploadInfo) {
+                        uploadInfo.innerHTML = '';
+                    }
+                    return;
+                }
+                
+                const file = input.files[0];
+                if (typeof currentFilename !== 'undefined') currentFilename = file.name;
+                console.log('[FILE-CHANGE] Datei ausgewählt:', file.name, `(${(file.size/1024).toFixed(1)} KB)`);
+                
+                // Upload über neue API (wird später definiert)
+                if (typeof uploadCsvFile === 'function') {
+                    uploadCsvFile(file);
+                } else {
+                    console.warn('[FILE-CHANGE] uploadCsvFile() noch nicht definiert - wird übersprungen');
+                }
+            }, () => {}, 'handleFileChange');
+        };
+        
+        window.runWorkflow = async function() {
+            return await safeExecuteAsync(async () => {
+                console.log('[WORKFLOW] runWorkflow() aufgerufen');
+                
+                const fileInput = document.getElementById('csvFile');
+                if (!fileInput) {
+                    const errorMsg = 'Fehler: Datei-Input nicht gefunden. Bitte Seite neu laden.';
+                    console.error('[WORKFLOW]', errorMsg);
+                    alert(errorMsg);
+                    updateWorkflowStatus(`<span class="text-danger">${errorMsg}</span>`);
+                    return;
+                }
+                
+                const file = fileInput.files[0];
+                console.log('[WORKFLOW] Datei:', file ? file.name : 'KEINE DATEI');
+
+                if (!file) {
+                    const errorMsg = 'Bitte wählen Sie zuerst eine CSV-Datei aus!';
+                    console.warn('[WORKFLOW]', errorMsg);
+                    alert(errorMsg);
+                    updateWorkflowStatus(`<span class="text-warning">${errorMsg}</span>`);
+                    return;
+                }
+                
+                console.log('[WORKFLOW] Starte Workflow für:', file.name);
+                
+                // Weiterleitung zur vollständigen runWorkflow-Funktion (wird später definiert)
+                if (window._runWorkflowFull) {
+                    await window._runWorkflowFull();
+                } else {
+                    const errorMsg = 'Workflow-Funktion noch nicht geladen. Bitte warten Sie einen Moment und versuchen Sie es erneut.';
+                    console.error('[WORKFLOW]', errorMsg);
+                    alert(errorMsg);
+                    updateWorkflowStatus(`<span class="text-danger">${errorMsg}</span>`);
+                }
+            }, async (error) => {
+                const errorMsg = `Workflow-Fehler: ${error.message || 'Unbekannter Fehler'}`;
+                console.error('[WORKFLOW] Fehler in safeExecuteAsync:', error);
+                alert(errorMsg);
+                updateWorkflowStatus(`<span class="text-danger">${errorMsg}</span>`);
+            }, 'runWorkflow');
         };
         
         let map;
@@ -444,8 +565,47 @@
                 }
                 
                 if (savedCustomers) {
-                    allTourCustomers = JSON.parse(savedCustomers);
-                    console.log('Tour-Kunden wiederhergestellt:', Object.keys(allTourCustomers).length, 'Touren');
+                    const loadedCustomers = JSON.parse(savedCustomers);
+                    console.log('[RESTORE] Tour-Kunden aus localStorage geladen:', Object.keys(loadedCustomers).length, 'Touren');
+                    console.log('[RESTORE] Geladene Keys:', Object.keys(loadedCustomers));
+                    
+                    // WICHTIG: Normalisiere Keys beim Laden (konvertiere alte Keys zu neuen Format)
+                    allTourCustomers = {};
+                    let normalizedCount = 0;
+                    Object.entries(loadedCustomers).forEach(([oldKey, tourData]) => {
+                        // Prüfe ob Key bereits normalisiert ist (enthält nur alphanumerisch, Bindestrich, Unterstrich)
+                        const isNormalized = /^workflow-[a-zA-Z0-9_-]+(-[A-Z])?$/.test(oldKey);
+                        
+                        if (isNormalized) {
+                            // Key ist bereits normalisiert - verwende direkt
+                            allTourCustomers[oldKey] = tourData;
+                        } else {
+                            // Key muss normalisiert werden
+                            // Extrahiere Tour-Metadaten für generateTourKey()
+                            const tourMeta = {
+                                tour_id: tourData.name || oldKey.replace('workflow-', '').replace(/-[A-Z]$/, ''),
+                                _base_tour_id: tourData._base_tour_id || extractBaseTourId(tourData),
+                                _sub_route: tourData._sub_route || tourData._sub_route_letter || (oldKey.match(/-([A-Z])$/)?.[1] || '')
+                            };
+                            const newKey = generateTourKey(tourMeta);
+                            
+                            if (newKey !== oldKey) {
+                                console.log(`[RESTORE] Normalisiere Key: "${oldKey}" → "${newKey}"`);
+                                normalizedCount++;
+                            }
+                            
+                            allTourCustomers[newKey] = tourData;
+                        }
+                    });
+                    
+                    if (normalizedCount > 0) {
+                        console.log(`[RESTORE] ${normalizedCount} Keys normalisiert - speichere aktualisierte Keys`);
+                        // Speichere normalisierte Keys zurück
+                        localStorage.setItem('allTourCustomers', JSON.stringify(allTourCustomers));
+                    }
+                    
+                    console.log('[RESTORE] Tour-Kunden normalisiert:', Object.keys(allTourCustomers).length, 'Touren');
+                    console.log('[RESTORE] Normalisierte Keys:', Object.keys(allTourCustomers));
                 }
                 
                 // WICHTIG: Priorisiere workflowResult über allTourCustomers!
@@ -511,10 +671,39 @@
                     updateSubRouteButtonVisibility();
                 }
                 
-                if (savedTourKey && allTourCustomers[savedTourKey]) {
-                    setTimeout(() => {
-                        selectTour(savedTourKey);
-                    }, 100);
+                // WICHTIG: Normalisiere auch activeTourKey beim Laden
+                if (savedTourKey) {
+                    let normalizedTourKey = savedTourKey;
+                    
+                    // Prüfe ob Key normalisiert ist
+                    const isNormalized = /^workflow-[a-zA-Z0-9_-]+(-[A-Z])?$/.test(savedTourKey);
+                    
+                    if (!isNormalized) {
+                        // Normalisiere Key
+                        const normalizedKey = savedTourKey.replace(/[^a-zA-Z0-9-]/g, '_');
+                        // Suche ähnlichen Key in allTourCustomers
+                        const matchingKey = Object.keys(allTourCustomers).find(k => {
+                            const normalizedK = k.replace(/[^a-zA-Z0-9-]/g, '_');
+                            return normalizedK === normalizedKey || 
+                                   normalizedK.includes(normalizedKey) || 
+                                   normalizedKey.includes(normalizedK);
+                        });
+                        
+                        if (matchingKey) {
+                            normalizedTourKey = matchingKey;
+                            console.log(`[RESTORE] Normalisiere activeTourKey: "${savedTourKey}" → "${normalizedTourKey}"`);
+                            // Speichere normalisierten Key zurück
+                            localStorage.setItem('activeTourKey', normalizedTourKey);
+                        }
+                    }
+                    
+                    if (allTourCustomers[normalizedTourKey]) {
+                        setTimeout(() => {
+                            selectTour(normalizedTourKey);
+                        }, 100);
+                    } else {
+                        console.warn(`[RESTORE] activeTourKey "${normalizedTourKey}" nicht in allTourCustomers gefunden`);
+                    }
                 }
                 
                 if (savedFilename) {
@@ -655,7 +844,7 @@
          * Sendet Fehler automatisch an Backend zum Speichern in LESSONS_LOG.md
          */
         async function autoLogError(errorType, errorMessage, filePath, lineNumber, stackTrace) {
-            try {
+            return await safeExecuteAsync(async () => {
                 const response = await fetch('/api/errors/auto-log', {
                     method: 'POST',
                     headers: {
@@ -677,11 +866,11 @@
                     const result = await response.json();
                     console.log('[AUTO-LOG] Fehler automatisch gespeichert:', result.title);
                 } else {
-                    console.error('[AUTO-LOG] Fehler beim Speichern:', response.status);
+                    console.warn('[AUTO-LOG] Fehler beim Speichern:', response.status);
                 }
-            } catch (e) {
-                console.error('[AUTO-LOG] Exception beim Auto-Logging:', e);
-            }
+            }, async () => {
+                console.warn('[AUTO-LOG] Auto-Logging fehlgeschlagen - wird übersprungen');
+            }, 'autoLogError');
         }
         
         // Globaler Error-Handler für alle JavaScript-Fehler
@@ -759,8 +948,13 @@
         
         // KI-Verbesserungen Widget
         async function loadKIImprovementsWidget() {
-            try {
+            return await safeExecuteAsync(async () => {
                 const response = await fetch('/api/ki-improvements/stats');
+                if (!response.ok) {
+                    console.warn('[KI-WIDGET] Stats-API Fehler:', response.status);
+                    return;
+                }
+                
                 const stats = await response.json();
                 
                 const badge = document.getElementById('ki-improvements-badge');
@@ -782,6 +976,11 @@
                 
                 // Lade letzte Verbesserungen
                 const recentResponse = await fetch('/api/ki-improvements/recent?limit=3');
+                if (!recentResponse.ok) {
+                    console.warn('[KI-WIDGET] Recent-API Fehler:', recentResponse.status);
+                    return;
+                }
+                
                 const improvements = await recentResponse.json();
                 
                 const list = document.getElementById('ki-improvements-list');
@@ -795,9 +994,9 @@
                 } else if (list) {
                     list.innerHTML = '<div class="text-muted">Noch keine Verbesserungen</div>';
                 }
-            } catch (e) {
-                console.error('[KI-WIDGET] Fehler beim Laden:', e);
-            }
+            }, async (error) => {
+                console.error('[KI-WIDGET] Fehler beim Laden:', error);
+            }, 'loadKIImprovementsWidget');
         }
         
         // WebSocket für Live-Updates
@@ -839,7 +1038,8 @@
                 };
                 
                 kiWebSocket.onerror = (error) => {
-                    console.error('[KI-WEBSOCKET] Fehler:', error);
+                    // WebSocket-Fehler sind nicht kritisch - nur loggen, nicht in Konsole spammen
+                    // console.error('[KI-WEBSOCKET] Fehler:', error);
                 };
                 
                 kiWebSocket.onclose = () => {
@@ -1098,8 +1298,12 @@
                         status.className = 'small text-success mb-3';
                     }
                     
-                    // Automatisch Match starten (nur wenn staged_path vorhanden)
-                    await loadMatchForFile(stagedPath);
+                    // Automatisch Match starten (optional, nicht kritisch - Workflow macht das auch)
+                    // Fehler werden still behandelt, da Match nicht kritisch ist
+                    loadMatchForFile(stagedPath).catch(err => {
+                        // Match-Fehler sind nicht kritisch - Workflow funktioniert trotzdem
+                        console.log('[MATCH] Match optional fehlgeschlagen (nicht kritisch):', err.message);
+                    });
                 } else {
                     console.error('[UPLOAD] Kein gültiger Pfad gefunden in Response:', result);
                     uploadInfo.innerHTML = `<i class="fas fa-exclamation-triangle text-warning"></i> Upload unvollständig: ${file.name} (kein Pfad in Response)`;
@@ -1124,8 +1328,9 @@
         async function loadMatchForFile(filePath) {
             // Prüfe ob filePath vorhanden ist (frühe Validierung)
             if (!filePath || filePath === 'undefined' || filePath === 'null' || filePath === undefined || typeof filePath !== 'string' || filePath.trim() === '') {
-                console.warn('[MATCH] Kein gültiger Dateipfad angegeben, überspringe Match', {filePath});
-                updateWorkflowStatus('⚠ Match übersprungen: Kein gültiger Dateipfad');
+                // Match ist optional - nur in Console loggen
+                console.log('[MATCH] Kein gültiger Dateipfad angegeben, überspringe Match (optional)', {filePath});
+                // Keine UI-Meldung - Match ist nicht kritisch
                 return;
             }
             
@@ -1149,18 +1354,22 @@
                 
                 // Match-Daten verarbeiten (bestehende Logik)
                 if (matchData.items && matchData.items.length > 0) {
-                    updateWorkflowStatus(`✓ Match erfolgreich: ${matchData.items.length} Adressen verarbeitet`);
+                    // Match erfolgreich - nur in Console loggen (optional, nicht kritisch)
+                    console.log(`[MATCH] Match erfolgreich: ${matchData.items.length} Adressen verarbeitet`);
                     console.log('Match-Daten:', matchData);
                     
                     // WICHTIG: Rendere Match-Daten in Tourübersicht
                     renderToursFromMatch(matchData);
                 } else {
-                    updateWorkflowStatus('⚠ Match: Keine Adressen gefunden');
+                    // Keine Adressen - auch nicht kritisch
+                    console.log('[MATCH] Match: Keine Adressen gefunden (optional)');
                 }
                 
             } catch (error) {
-                console.error('Match-Fehler:', error);
-                updateWorkflowStatus(`✗ Match fehlgeschlagen: ${error.message}`);
+                // Match-Fehler sind nicht kritisch - Workflow funktioniert trotzdem
+                // Nur in Console loggen, keine alarmierende UI-Meldung
+                console.log('[MATCH] Match optional fehlgeschlagen (nicht kritisch):', error.message);
+                // Keine updateWorkflowStatus() - Match ist optional
             }
         }
         
@@ -1274,41 +1483,47 @@
         
         // WICHTIG: Zentrale fetch-Wrapper-Funktion mit automatischer Fehlerbehandlung
         async function fetchWithErrorHandling(url, options = {}) {
-            try {
-                const response = await fetch(url, options);
-                
-                // Prüfe HTTP-Status-Code
-                if (!response.ok) {
-                    const statusCode = response.status;
-                    let errorData = null;
-                    let traceId = null;
+            return await safeExecuteAsync(async () => {
+                try {
+                    const response = await fetch(url, options);
                     
-                    try {
-                        const text = await response.text();
-                        if (text) {
-                            errorData = JSON.parse(text);
-                            traceId = errorData.trace_id || null;
+                    // Prüfe HTTP-Status-Code
+                    if (!response.ok) {
+                        const statusCode = response.status;
+                        let errorData = null;
+                        let traceId = null;
+                        
+                        try {
+                            const text = await response.text();
+                            if (text) {
+                                errorData = JSON.parse(text);
+                                traceId = errorData.trace_id || null;
+                            }
+                        } catch (e) {
+                            // Response ist kein JSON
                         }
-                    } catch (e) {
-                        // Response ist kein JSON
+                        
+                        // Zeige Fehler-Banner basierend auf Status-Code
+                        const errorMessage = errorData?.error_detail || errorData?.error || errorData?.detail || `HTTP ${statusCode}`;
+                        showErrorBanner(statusCode, errorMessage, traceId);
+                        
+                        // Werfe Error weiter (für .catch() in aufrufendem Code)
+                        throw new Error(`HTTP ${statusCode}: ${errorMessage}`);
                     }
                     
-                    // Zeige Fehler-Banner basierend auf Status-Code
-                    const errorMessage = errorData?.error_detail || errorData?.error || errorData?.detail || `HTTP ${statusCode}`;
-                    showErrorBanner(statusCode, errorMessage, traceId);
-                    
-                    // Werfe Error weiter (für .catch() in aufrufendem Code)
-                    throw new Error(`HTTP ${statusCode}: ${errorMessage}`);
+                    return response;
+                } catch (error) {
+                    // Network-Fehler oder andere Exceptions
+                    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                        showErrorBanner(0, 'Netzwerk-Fehler: Server nicht erreichbar', null);
+                    }
+                    throw error;
                 }
-                
-                return response;
-            } catch (error) {
-                // Network-Fehler oder andere Exceptions
-                if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                    showErrorBanner(0, 'Netzwerk-Fehler: Server nicht erreichbar', null);
-                }
-                throw error;
-            }
+            }, async () => {
+                // Fallback: Gib null zurück statt Fehler zu werfen
+                console.warn('[FETCH] Fehler beim Fetch, verwende Fallback');
+                return null;
+            }, 'fetchWithErrorHandling');
         }
 
         // Frontend-Fetch Guard: Single-read JSON-Funktion (verhindert "body used already")
@@ -1426,8 +1641,10 @@
             
             const fileInput = document.getElementById('csvFile');
             if (!fileInput) {
-                console.error('[WORKFLOW] csvFile Input nicht gefunden!');
-                alert('Fehler: Datei-Input nicht gefunden. Bitte Seite neu laden.');
+                const errorMsg = 'Fehler: Datei-Input nicht gefunden. Bitte Seite neu laden.';
+                console.error('[WORKFLOW]', errorMsg);
+                alert(errorMsg);
+                updateWorkflowStatus(`<span class="text-danger">${errorMsg}</span>`);
                 return;
             }
             
@@ -1435,7 +1652,10 @@
             console.log('[WORKFLOW] Datei:', file ? file.name : 'KEINE DATEI');
 
             if (!file) {
-                alert('Bitte wählen Sie eine CSV-Datei aus.');
+                const errorMsg = 'Bitte wählen Sie zuerst eine CSV-Datei aus!';
+                console.warn('[WORKFLOW]', errorMsg);
+                alert(errorMsg);
+                updateWorkflowStatus(`<span class="text-warning">${errorMsg}</span>`);
                 return;
             }
             
@@ -1601,7 +1821,13 @@
         };
         
         // Überschreibe window.runWorkflow mit vollständiger Funktion
-        window.runWorkflow = window._runWorkflowFull;
+        // WICHTIG: Prüfe ob _runWorkflowFull existiert, sonst behalte Fallback
+        if (typeof window._runWorkflowFull === 'function') {
+            console.log('[WORKFLOW] Überschreibe runWorkflow mit vollständiger Funktion');
+            window.runWorkflow = window._runWorkflowFull;
+        } else {
+            console.warn('[WORKFLOW] _runWorkflowFull nicht gefunden, verwende Fallback');
+        }
 
         // Stats-Box Toggle-Funktion
         function toggleStatsBox() {
@@ -2160,11 +2386,18 @@
             const baseId = extractBaseTourId(tour);
             const subRoute = tour._sub_route || '';
             
-            // Normalisiere für Key (nur alphanumerisch + Bindestrich)
-            const normalizedBaseId = baseId.replace(/[^a-zA-Z0-9-]/g, '_');
+            // WICHTIG: Behalte Punkt (.) für Zeit-Format (z.B. W-07.00)
+            // Ersetze NUR problematische Sonderzeichen, BEHALTE Punkt und Bindestrich
+            let normalizedBaseId = baseId.replace(/[^a-zA-Z0-9.\-]/g, '_');
             
-            // Mit Sub-Route: workflow-W_07_00-A
-            // Ohne Sub-Route: workflow-W_07_00
+            // Normalisiere mehrfache Unterstriche zu einem
+            normalizedBaseId = normalizedBaseId.replace(/_+/g, '_');
+            
+            // Entferne führende/abschließende Unterstriche
+            normalizedBaseId = normalizedBaseId.replace(/^_+|_+$/g, '');
+            
+            // Mit Sub-Route: workflow-W-07.00-A
+            // Ohne Sub-Route: workflow-W-07.00
             return subRoute 
                 ? `workflow-${normalizedBaseId}-${subRoute}`
                 : `workflow-${normalizedBaseId}`;
@@ -3315,38 +3548,126 @@
         }
 
         function selectTour(key) {
-            console.log('[SELECT-TOUR] Key:', key);
-            console.log('[SELECT-TOUR] allTourCustomers keys:', Object.keys(allTourCustomers));
-            
-            if (!key) {
-                console.error('[SELECT-TOUR] Kein Key angegeben');
-                return;
-            }
-            
-            if (!allTourCustomers[key]) {
-                console.error('[SELECT-TOUR] Tour nicht gefunden:', key);
-                console.log('[SELECT-TOUR] Verfügbare Keys:', Object.keys(allTourCustomers));
-                // Versuche ähnlichen Key zu finden (für Sub-Routen)
-                const similarKey = Object.keys(allTourCustomers).find(k => k.includes(key) || key.includes(k));
-                if (similarKey) {
-                    console.log('[SELECT-TOUR] Ähnlichen Key gefunden:', similarKey);
-                    key = similarKey;
-                } else {
+            return safeExecute(() => {
+                console.log('[SELECT-TOUR] Key:', key);
+                console.log('[SELECT-TOUR] allTourCustomers keys:', Object.keys(allTourCustomers));
+                
+                if (!key) {
+                    console.warn('[SELECT-TOUR] Kein Key angegeben');
                     return;
                 }
-            }
-
-            activeTourKey = key;
-            window.currentTourKey = key; // Setze für Sub-Route-Erkennung
-            updateTourListSelection(key);
-            renderTourDetails(allTourCustomers[key]);
-            
-            // Synchronisiere Tour-Auswahl mit Panels
+                
+                // Versuche 1: Exakter Match
+                if (allTourCustomers[key]) {
+                    activeTourKey = key;
+                    window.currentTourKey = key;
+                    updateTourListSelection(key);
+                    renderTourDetails(allTourCustomers[key]);
+                    syncTourSelectionToPanels(key);
+                    return;
+                }
+                
+                // Versuche 2: Ähnlicher Key (normalisiert für Vergleich - BEHALTE Punkt!)
+                // WICHTIG: Behalte Punkt (.) für Zeit-Format, normalisiere nur problematische Zeichen
+                let normalizedKey = key.replace(/[^a-zA-Z0-9.\-]/g, '_');
+                normalizedKey = normalizedKey.replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+                
+                // Prüfe ob Key eine Haupttour ist (ohne Sub-Route-Suffix)
+                const isMainTourKey = !key.match(/-[A-Z]$/);
+                
+                const similarKey = Object.keys(allTourCustomers).find(k => {
+                    let normalizedK = k.replace(/[^a-zA-Z0-9.\-]/g, '_');
+                    normalizedK = normalizedK.replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+                    
+                    // Exakte Übereinstimmung nach Normalisierung
+                    if (normalizedK === normalizedKey) return true;
+                    
+                    // Teilstring-Match (für Sub-Routen: "W-07.00" sollte "W-07.00-A" finden)
+                    if (normalizedK.includes(normalizedKey) || normalizedKey.includes(normalizedK)) return true;
+                    
+                    // Fallback: Ignoriere Punkt für Vergleich (wenn alles andere gleich)
+                    const keyWithoutDot = normalizedKey.replace(/\./g, '');
+                    const kWithoutDot = normalizedK.replace(/\./g, '');
+                    return kWithoutDot === keyWithoutDot || 
+                           kWithoutDot.includes(keyWithoutDot) || 
+                           keyWithoutDot.includes(kWithoutDot);
+                });
+                
+                if (similarKey) {
+                    // Wenn Haupttour auf Sub-Route gemappt wurde, ist das normal (keine Warnung)
+                    if (isMainTourKey && similarKey.match(/-[A-Z]$/)) {
+                        console.log(`[SELECT-TOUR] Tour aufgeteilt: "${key}" → erste Sub-Route "${similarKey}" (normal)`);
+                    } else {
+                        console.warn(`[SELECT-TOUR] ⚠️ Key-Mismatch erkannt: "${key}" → "${similarKey}"`);
+                    }
+                    activeTourKey = similarKey;
+                    window.currentTourKey = similarKey;
+                    updateTourListSelection(similarKey);
+                    renderTourDetails(allTourCustomers[similarKey]);
+                    syncTourSelectionToPanels(similarKey);
+                    return;
+                }
+                
+                // Versuche 3: Erste Tour mit ähnlichem Base-ID
+                try {
+                    const baseId = extractBaseTourId({ tour_id: key.replace('workflow-', '').replace(/-[A-Z]$/, '') });
+                    if (baseId) {
+                        const matchingKey = Object.keys(allTourCustomers).find(k => {
+                            const tour = allTourCustomers[k];
+                            const tourBaseId = extractBaseTourId(tour);
+                            // Exakte Übereinstimmung
+                            if (tourBaseId === baseId) return true;
+                            // Normalisiere für Vergleich (ignoriere Punkt-Unterschiede)
+                            const normalizedBaseId = baseId.replace(/\./g, '');
+                            const normalizedTourBaseId = tourBaseId.replace(/\./g, '');
+                            return normalizedTourBaseId === normalizedBaseId;
+                        });
+                        
+                        if (matchingKey) {
+                            // Wenn Haupttour auf Sub-Route gemappt wurde, ist das normal (keine Warnung)
+                            if (isMainTourKey && matchingKey.match(/-[A-Z]$/)) {
+                                console.log(`[SELECT-TOUR] Tour aufgeteilt: "${key}" → erste Sub-Route "${matchingKey}" (normal)`);
+                            } else {
+                                console.warn(`[SELECT-TOUR] ⚠️ Fallback: Erste Tour mit Base-ID "${baseId}": "${matchingKey}"`);
+                            }
+                            activeTourKey = matchingKey;
+                            window.currentTourKey = matchingKey;
+                            updateTourListSelection(matchingKey);
+                            renderTourDetails(allTourCustomers[matchingKey]);
+                            syncTourSelectionToPanels(matchingKey);
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('[SELECT-TOUR] Fehler bei Base-ID-Extraktion:', e);
+                }
+                
+                // Versuche 4: Erste verfügbare Tour
+                const firstKey = Object.keys(allTourCustomers)[0];
+                if (firstKey) {
+                    console.warn(`[SELECT-TOUR] ⚠️ Fallback: Erste verfügbare Tour: "${firstKey}"`);
+                    activeTourKey = firstKey;
+                    window.currentTourKey = firstKey;
+                    updateTourListSelection(firstKey);
+                    renderTourDetails(allTourCustomers[firstKey]);
+                    syncTourSelectionToPanels(firstKey);
+                    return;
+                }
+                
+                // Keine Tour gefunden - aber kein Absturz!
+                console.error('[SELECT-TOUR] ❌ Tour nicht gefunden:', key);
+                console.log('[SELECT-TOUR] Verfügbare Keys:', Object.keys(allTourCustomers));
+                // Kein Return - Funktion endet einfach (nichts passiert, wie gewünscht)
+            }, () => {
+                console.warn('[SELECT-TOUR] Fehler in selectTour() - wird übersprungen');
+            }, 'selectTour');
+        }
+        
+        // Hilfsfunktion für Panel-Synchronisation
+        function syncTourSelectionToPanels(key) {
             if (window.panelIPC) {
                 window.panelIPC.postMessage('tour-select', { tourKey: key });
-                // Aktualisiere auch Tour-Liste in Panel
                 syncToursToPanel();
-                // Aktualisiere Karte in Panel
                 syncMapToPanel();
             }
         }
@@ -4917,8 +5238,15 @@
                                 has_coordinates: !!(s.lat && s.lon)
                             }));
                             
-                            // Erstelle Sub-Tour-Eintrag mit eindeutigem Key
-                            const subRouteKey = `workflow-${tour.tour_id}-${subRouteLetter}`;
+                            // WICHTIG: Verwende generateTourKey() für konsistente Keys!
+                            const tourMeta = {
+                                tour_id: tour.tour_id,
+                                _base_tour_id: tour._base_tour_id || extractBaseTourId(tour),
+                                _sub_route: subRouteLetter
+                            };
+                            const subRouteKey = generateTourKey(tourMeta);
+                            console.log(`[SUB-ROUTES] Generiere Key für Sub-Route: "${subRouteKey}" (Tour: ${tour.tour_id}, Sub-Route: ${subRouteLetter})`);
+                            
                             allTourCustomers[subRouteKey] = {
                                 name: subTourName,
                                 type: tour.type || 'Workflow',
@@ -5697,106 +6025,12 @@
                     return tour;
                 }).flat();
                 
-                // WICHTIG: Aktualisiere auch allTourCustomers, damit beide Strukturen synchron bleiben!
-                // Problem: Sub-Routen wurden nur in workflowResult gespeichert, aber allTourCustomers
-                // enthielt noch die alten Haupttouren. Beim Reload wurden dann die alten Touren
-                // wieder angezeigt, weil restoreToursFromStorage() allTourCustomers priorisiert hat.
-                const baseTourIds = new Set();
-                workflowResult.tours.forEach(tour => {
-                    // WICHTIG: _base_tour_id extrahieren - Sub-Routen haben Format "W-07.00 A", Basis ist "W-07.00"
-                    let baseId = tour._base_tour_id;
-                    if (!baseId && tour.tour_id) {
-                        // Entferne Sub-Route Buchstaben (A, B, C, ...) und "Uhr Tour" / "Uhr BAR"
-                        baseId = tour.tour_id.replace(/\s+[A-Z]$/, '').replace(/\s*(Uhr\s*)?(Tour|BAR)$/i, '').trim();
-                    }
-                    if (baseId) {
-                        baseTourIds.add(baseId);
-                    }
-                });
-                
-                console.log(`[UPDATE-TOURS] Base-Tour-IDs gefunden:`, Array.from(baseTourIds));
-                
-                // Lösche alle Einträge in allTourCustomers, die zu diesen Touren gehören
-                Object.keys(allTourCustomers).forEach(key => {
-                    const tour = allTourCustomers[key];
-                    // WICHTIG: Base-ID extrahieren - unterstütze verschiedene Formate
-                    let tourBaseId = tour._base_tour_id;
-                    if (!tourBaseId && tour.name) {
-                        // Entferne Sub-Route Buchstaben (A, B, C, ...) und "Uhr Tour" / "Uhr BAR"
-                        tourBaseId = tour.name.replace(/\s+[A-Z]$/, '').replace(/\s*(Uhr\s*)?(Tour|BAR)$/i, '').trim();
-                    }
-                    if (!tourBaseId) {
-                        // Fallback: Erste Zeile vor Leerzeichen
-                        tourBaseId = (tour.name || '').split(' ')[0];
-                    }
-                    
-                    // Prüfe ob diese Tour zu einer der Base-IDs gehört
-                    if (tourBaseId && baseTourIds.has(tourBaseId)) {
-                        console.log(`[UPDATE-TOURS] Lösche alten Eintrag: ${key} (Tour: ${tourBaseId})`);
-                        delete allTourCustomers[key];
-                    }
-                });
-                
-                // WICHTIG: Erstelle neue Einträge für Sub-Routen in allTourCustomers
-                // Verwende eindeutige Keys (nicht Index-basiert!)
-                workflowResult.tours.forEach((tour) => {
-                    const key = generateTourKey(tour);  // ✅ Eindeutiger Key
-                    
-                    allTourCustomers[key] = {
-                        name: tour.tour_id,
-                        customers: tour.customers || [],
-                        stops: tour.stops || [],
-                        isBarTour: tour.is_bar_tour || false,
-                        _base_tour_id: tour._base_tour_id,
-                        _sub_route: tour._sub_route,
-                        _tour_color: tour._tour_color,
-                        driving_time_minutes: tour.driving_time_minutes,
-                        service_time_minutes: tour.service_time_minutes,
-                        return_time_minutes: tour.return_time_minutes,
-                        total_time_minutes: tour.total_time_minutes,
-                        bar_customer_count: tour.bar_customer_count
-                    };
-                    console.log(`[UPDATE-TOURS] Erstelle Eintrag: ${key} (Tour: ${tour.tour_id})`);
-                });
-                
-                console.log(`[UPDATE-TOURS] allTourCustomers aktualisiert: ${Object.keys(allTourCustomers).length} Einträge`);
-                
-                // WICHTIG: Prüfe ob workflowResult.tours Sub-Routen enthält
-                const hasSubRoutes = workflowResult.tours.some(t => t._sub_route || t.tour_id.match(/\s[A-Z]$/));
-                console.log(`[UPDATE-TOURS] workflowResult.tours hat Sub-Routen: ${hasSubRoutes}, Anzahl: ${workflowResult.tours.length}`);
-                
-                // ✅ RICHTIG: Rendere NUR die Tour-Liste, OHNE allTourCustomers zu löschen
-                // renderToursFromMatch() würde die gerade erstellten Einträge löschen!
-                renderTourListOnly();
-                
-                // WICHTIG: Prüfe nach Rendering ob Sub-Routen noch in allTourCustomers sind
-                const subRoutesAfterRender = Object.keys(allTourCustomers).filter(key => {
-                    const tour = allTourCustomers[key];
-                    return tour._sub_route || (tour.name && tour.name.match(/\s[A-Z]$/));
-                });
-                console.log(`[UPDATE-TOURS] Nach Rendering: ${subRoutesAfterRender.length} Sub-Routen in allTourCustomers`);
-                
-                if (subRoutesAfterRender.length === 0 && hasSubRoutes) {
-                    console.error(`[UPDATE-TOURS] ⚠️ PROBLEM: Sub-Routen wurden beim Rendering verloren!`);
-                    console.error(`[UPDATE-TOURS] workflowResult.tours:`, workflowResult.tours.map(t => t.tour_id));
-                    console.error(`[UPDATE-TOURS] allTourCustomers keys:`, Object.keys(allTourCustomers));
-                }
-                
-                // Speichere sofort nach Rendering
+                // ✅ EINFACH: Rendere direkt aus workflowResult
+                // renderToursFromMatch() erstellt automatisch allTourCustomers
+                // KEINE manuelle Synchronisation nötig - ZIP-Version funktioniert so!
+                console.log(`[UPDATE-TOURS] Rendere Sub-Routen: ${workflowResult.tours.length} Touren`);
+                renderToursFromMatch(workflowResult);
                 saveToursToStorage();
-                
-                // WICHTIG: Finale Prüfung - sind Sub-Routen noch da?
-                setTimeout(() => {
-                    const finalCheck = Object.keys(allTourCustomers).filter(key => {
-                        const tour = allTourCustomers[key];
-                        return tour._sub_route || (tour.name && tour.name.match(/\s[A-Z]$/));
-                    });
-                    if (finalCheck.length === 0 && hasSubRoutes) {
-                        console.error(`[UPDATE-TOURS] ❌ KRITISCH: Sub-Routen sind nach 100ms verschwunden!`);
-                    } else {
-                        console.log(`[UPDATE-TOURS] ✅ Finale Prüfung: ${finalCheck.length} Sub-Routen noch vorhanden`);
-                    }
-                }, 100);
             }
         }
         

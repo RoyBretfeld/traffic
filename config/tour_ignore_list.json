@@ -3,6 +3,9 @@
     "DBD",
     "DPD",
     "DVD",
+    "CB",
+    "T",
+    "BZ",
     "CB Anlief",
     "TA Anlief",
     "TA Anlieferf",
@@ -29,16 +32,14 @@
     "BU`Z T16 Anlief"
   ],
   "allow_tours": [
-    "CB",
-    "T",
-    "BZ",
-    "W-"
+    "W-",
+    "PIR Anlief."
   ],
   "description": "Touren die nicht in die Routenplanung einbezogen werden sollen",
   "allow_description": "Touren die VERARBEITET werden sollen (wenn Liste vorhanden, werden NUR diese Touren verarbeitet)",
   "reason": "Pickup/Nachtlieferung - werden separat gehandhabt",
-  "allow_reason": "Direkte Routen (Cottbus, Taucher, Bautzen) - können schnell verarbeitet werden",
-  "last_updated": "2025-11-04",
+  "allow_reason": "W-Touren und PIR Anlief. werden verarbeitet",
+  "last_updated": "2025-11-16",
   "usage": {
     "ignore_tours": "Touren mit diesen Patterns werden übersprungen",
     "allow_tours": "Wenn diese Liste vorhanden ist und nicht leer, werden NUR Touren verarbeitet die hier stehen. Ignore-Liste hat Vorrang."

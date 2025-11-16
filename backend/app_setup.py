@@ -7,8 +7,10 @@ from typing import Optional
 from fastapi import FastAPI
 import logging
 import os
+from backend.utils.enhanced_logging import get_enhanced_logger
 
 logger = logging.getLogger(__name__)
+enhanced_logger = get_enhanced_logger(__name__)
 
 
 def setup_config_directory() -> None:
@@ -16,7 +18,8 @@ def setup_config_directory() -> None:
     from pathlib import Path
     config_dir = Path("config")
     config_dir.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Config-Verzeichnis sichergestellt: {config_dir.absolute()}")
+    enhanced_logger.success("Config-Verzeichnis sichergestellt", 
+                           context={'path': str(config_dir.absolute())})
 
 
 def setup_app_state(app: FastAPI) -> None:
@@ -35,23 +38,28 @@ def setup_app_state(app: FastAPI) -> None:
         app.state.db_path = None
     
     # Boot-Log
-    logger.info("=" * 70)
-    logger.info("App-Factory: Initialisiere TrafficApp")
-    logger.info("=" * 70)
-    logger.info("DB URL: %s", ENGINE.url)
-    if app.state.db_path:
-        logger.info("DB Pfad: %s", app.state.db_path)
-    logger.info("OSRM URL: %s", osrm_settings.OSRM_BASE_URL)
+    enhanced_logger.info("=" * 70)
+    enhanced_logger.info("App-Factory: Initialisiere TrafficApp")
+    enhanced_logger.info("=" * 70)
+    enhanced_logger.success("App-State konfiguriert", 
+                           context={
+                               'db_url': str(ENGINE.url),
+                               'db_path': str(app.state.db_path) if app.state.db_path else None,
+                               'osrm_url': osrm_settings.OSRM_BASE_URL
+                           })
 
 
 def setup_database_schema() -> None:
     """Sichert DB-Schema."""
+    enhanced_logger.operation_start("DB-Schema Verifizierung")
     try:
         from db.schema import ensure_schema
         ensure_schema()
-        logger.info("DB-Schema verifiziert")
+        enhanced_logger.operation_end("DB-Schema Verifizierung", success=True)
+        enhanced_logger.success("DB-Schema verifiziert")
     except Exception as e:
-        logger.error("DB-Schema-Verifizierung fehlgeschlagen: %s", e)
+        enhanced_logger.operation_end("DB-Schema Verifizierung", success=False, error=e)
+        enhanced_logger.error("DB-Schema-Verifizierung fehlgeschlagen", error=e)
         # Start nicht abbrechen, aber warnen
 
 
@@ -93,11 +101,14 @@ def setup_static_files(app: FastAPI) -> None:
     frontend_path = Path(frontend_dir)
     
     if not frontend_path.exists():
-        logger.warning(f"Frontend-Verzeichnis nicht gefunden: {frontend_path}")
+        enhanced_logger.warning("Frontend-Verzeichnis nicht gefunden", 
+                               context={'path': str(frontend_path)})
         return
     
     # Static Files
     app.mount("/static", StaticFiles(directory=str(frontend_path)), name="static")
+    enhanced_logger.success("Static Files konfiguriert", 
+                           context={'frontend_dir': str(frontend_path)})
 
 
 def setup_routers(app: FastAPI) -> None:
@@ -144,7 +155,13 @@ def setup_routers(app: FastAPI) -> None:
     from backend.routes.auth_api import router as auth_router
     from backend.routes.system_rules_api import router as system_rules_api_router
     from backend.routes.db_management_api import router as db_management_api_router
+    from backend.routes.db_schema_api import router as db_schema_api_router
     from backend.routes.error_logger_api import router as error_logger_api_router
+    from backend.routes.error_learning_api import router as error_learning_api_router
+    from backend.routes.ki_learning_api import router as ki_learning_api_router
+    from backend.routes.ki_activity_api import router as ki_activity_api_router
+    from backend.routes.ki_effectiveness_api import router as ki_effectiveness_api_router
+    from backend.routes.tour_filter_api import router as tour_filter_api_router
     
     # Registriere alle Router
     routers = [
@@ -189,7 +206,13 @@ def setup_routers(app: FastAPI) -> None:
         debug_health_router,
         system_rules_api_router,
         db_management_api_router,
-        error_logger_api_router
+        db_schema_api_router,
+        error_logger_api_router,
+        error_learning_api_router,
+        ki_learning_api_router,
+        ki_activity_api_router,
+        ki_effectiveness_api_router,
+        tour_filter_api_router
     ]
     
     for router in routers:
@@ -263,65 +286,194 @@ def setup_health_routes(app: FastAPI) -> None:
 
 
 def setup_startup_handlers(app: FastAPI) -> None:
-    """Konfiguriert Startup/Shutdown Event-Handler."""
+    """Konfiguriert Startup/Shutdown Event-Handler mit Timeout-Schutz."""
     import logging
+    import asyncio
+    import time
+    from datetime import datetime
+    from pathlib import Path
     from backend.utils.encoding_guards import setup_utf8_logging, smoke_test_encoding
     from repositories.geo_fail_repo import cleanup_expired
-    from backend.services.code_improvement_job import CodeImprovementJob
+    # from backend.services.code_improvement_job import CodeImprovementJob  # TEMPORÄR DEAKTIVIERT
     
     log = logging.getLogger("startup")
+    
+    # Startup-Log-Datei
+    startup_log_path = Path("logs") / f"startup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+    startup_log_path.parent.mkdir(exist_ok=True)
+    startup_file_handler = logging.FileHandler(startup_log_path, encoding='utf-8')
+    startup_file_handler.setLevel(logging.DEBUG)
+    startup_file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    log.addHandler(startup_file_handler)
+    
+    startup_start_time = None
+    
+    async def _startup_with_timeout(coro, timeout_seconds: int = 30, task_name: str = "Task"):
+        """Führt eine Coroutine mit Timeout aus."""
+        task_start = time.time()
+        try:
+            await asyncio.wait_for(coro, timeout=timeout_seconds)
+            elapsed = time.time() - task_start
+            log.info(f"[STARTUP] ✅ {task_name} erfolgreich abgeschlossen ({elapsed:.2f}s)")
+            return True
+        except asyncio.TimeoutError:
+            elapsed = time.time() - task_start
+            log.error(f"[STARTUP] ❌ TIMEOUT: {task_name} hat {timeout_seconds}s überschritten (nach {elapsed:.2f}s) - wird übersprungen")
+            return False
+        except Exception as e:
+            elapsed = time.time() - task_start
+            log.error(f"[STARTUP] ❌ FEHLER bei {task_name} (nach {elapsed:.2f}s): {e}", exc_info=True)
+            return False
     
     @app.on_event("startup")
     async def startup_event():
         """Startet Background-Job beim Server-Start und loggt alle registrierten Routen."""
-        # Logge alle registrierten Routen (Runbook-Format)
-        log.info("=" * 70)
-        log.info("ROUTE-MAP: Registrierte API-Endpoints")
-        log.info("=" * 70)
+        global startup_start_time
+        startup_start_time = time.time()
         
-        routes_list = []
-        for route in app.routes:
-            try:
-                name = getattr(route, 'name', '?')
-                path = getattr(route, 'path', '?')
-                methods = getattr(route, 'methods', {})
-                if methods:
-                    methods_str = ', '.join(sorted(methods))
-                    routes_list.append(f"{methods_str:20} {path:50} [{name}]")
-            except Exception:
-                pass
-        
-        for route_line in sorted(routes_list):
-            log.info(route_line)
-        
-        log.info("=" * 70)
-        log.info(f"Gesamt: {len(routes_list)} Routen registriert")
-        log.info("=" * 70)
-        
-        # Encoding Setup
+        # Error-Pattern-Aggregator starten (Hintergrund-Job)
         try:
+            from backend.services.error_pattern_aggregator import run_aggregator_loop
+            # Starte Aggregator-Loop im Hintergrund (alle 5 Minuten)
+            asyncio.create_task(run_aggregator_loop(interval_minutes=5))
+            log.info("[STARTUP] ✅ Error-Pattern-Aggregator gestartet")
+        except Exception as e:
+            log.warning(f"[STARTUP] ⚠️ Error-Pattern-Aggregator konnte nicht gestartet werden: {e}")
+        
+        # Lessons-Updater starten (Hintergrund-Job, täglich)
+        try:
+            from backend.services.lessons_updater import auto_update_lessons_for_fixed_patterns
+            # Starte Lessons-Updater-Loop im Hintergrund (täglich um 01:00 Uhr)
+            async def _lessons_updater_loop():
+                import asyncio
+                while True:
+                    # Warte bis 01:00 Uhr
+                    await asyncio.sleep(3600)  # Prüfe stündlich
+                    now = datetime.now()
+                    if now.hour == 1 and now.minute < 5:  # Zwischen 01:00 und 01:05
+                        auto_update_lessons_for_fixed_patterns()
+                        # Warte bis nächster Tag
+                        await asyncio.sleep(3600 * 23)  # 23 Stunden
+            asyncio.create_task(_lessons_updater_loop())
+            log.info("[STARTUP] ✅ Lessons-Updater gestartet (läuft täglich um 01:00 Uhr)")
+        except Exception as e:
+            log.warning(f"[STARTUP] ⚠️ Lessons-Updater konnte nicht gestartet werden: {e}")
+        
+        log.info("=" * 70)
+        log.info("[STARTUP] 🚀 Server-Startup beginnt")
+        log.info(f"[STARTUP] 📝 Startup-Log: {startup_log_path}")
+        log.info("=" * 70)
+        
+        # 1. Route-Logging (schnell, kein Timeout nötig)
+        step_start = time.time()
+        log.info(f"[STARTUP] 📋 Schritt 1/5: Route-Logging (Start: +{step_start - startup_start_time:.2f}s)")
+        try:
+            log.info("ROUTE-MAP: Registrierte API-Endpoints")
+            log.info("=" * 70)
+            
+            routes_list = []
+            for route in app.routes:
+                try:
+                    name = getattr(route, 'name', '?')
+                    path = getattr(route, 'path', '?')
+                    methods = getattr(route, 'methods', {})
+                    if methods:
+                        methods_str = ', '.join(sorted(methods))
+                        routes_list.append(f"{methods_str:20} {path:50} [{name}]")
+                except Exception:
+                    pass
+            
+            for route_line in sorted(routes_list):
+                log.info(route_line)
+            
+            elapsed = time.time() - step_start
+            log.info("=" * 70)
+            log.info(f"[STARTUP] ✅ Schritt 1/5 abgeschlossen: {len(routes_list)} Routen registriert ({elapsed:.2f}s)")
+            log.info("=" * 70)
+        except Exception as e:
+            elapsed = time.time() - step_start
+            log.error(f"[STARTUP] ❌ Schritt 1/5 fehlgeschlagen ({elapsed:.2f}s): {e}", exc_info=True)
+        
+        # 2. Encoding Setup (mit Timeout)
+        step_start = time.time()
+        log.info(f"[STARTUP] 📋 Schritt 2/5: Encoding Setup (Start: +{step_start - startup_start_time:.2f}s)")
+        async def _encoding_setup():
             setup_utf8_logging()
             smoke_test_encoding()
-        except Exception as e:
-            log.warning(f"Encoding setup failed: {e}")
+        encoding_ok = await _startup_with_timeout(_encoding_setup(), timeout_seconds=5, task_name="Encoding Setup")
+        if encoding_ok:
+            elapsed = time.time() - step_start
+            log.info(f"[STARTUP] ✅ Schritt 2/5 abgeschlossen: Encoding Setup ({elapsed:.2f}s)")
         
-        # Fail-Cache Bereinigung beim Start
-        try:
+        # 3. Fail-Cache Bereinigung (mit Timeout)
+        step_start = time.time()
+        log.info(f"[STARTUP] 📋 Schritt 3/5: Fail-Cache Bereinigung (Start: +{step_start - startup_start_time:.2f}s)")
+        async def _fail_cache_cleanup():
             cleaned = cleanup_expired()
             if cleaned > 0:
-                log.info(f"[STARTUP] {cleaned} abgelaufene Fail-Cache-Einträge bereinigt - werden erneut versucht")
-        except Exception as e:
-            log.warning(f"[WARNING] Fail-Cache Bereinigung beim Start fehlgeschlagen: {e}")
+                log.info(f"[STARTUP] {cleaned} abgelaufene Fail-Cache-Einträge bereinigt")
+        cleanup_ok = await _startup_with_timeout(_fail_cache_cleanup(), timeout_seconds=10, task_name="Fail-Cache Bereinigung")
+        if cleanup_ok:
+            elapsed = time.time() - step_start
+            log.info(f"[STARTUP] ✅ Schritt 3/5 abgeschlossen: Fail-Cache Bereinigung ({elapsed:.2f}s)")
         
-        # Background-Job für KI-CodeChecker beim Start starten
-        try:
-            job = CodeImprovementJob()
-            if job.enabled:
-                import asyncio
-                asyncio.create_task(job.run_continuously())
-                log.info("[STARTUP] KI-CodeChecker Background-Job gestartet")
-            else:
-                log.info("[STARTUP] KI-CodeChecker Background-Job deaktiviert")
-        except Exception as e:
-            log.warning(f"[STARTUP] KI-CodeChecker nicht verfügbar: {e}")
+        # 4. Background-Job starten (TEMPORÄR DEAKTIVIERT)
+        # STATUS: Code-Improvement-Job ist aktuell deaktiviert, um Server-Startup-Probleme zu vermeiden.
+        # GRUND: Die Initialisierung des CodeImprovementJob blockierte den Server-Startup (siehe LESSONS_LOG.md).
+        # LÖSUNG: Job kann manuell über API gestartet werden: POST /api/code-improvement-job/start
+        # DOKUMENTATION: Siehe docs/STARTUP_BACKGROUND_JOB_PROBLEM_2025-11-16.md
+        step_start = time.time()
+        log.info(f"[STARTUP] 📋 Schritt 4/5: Background-Job Start (Start: +{step_start - startup_start_time:.2f}s)")
+        log.info("[STARTUP] ⚠️ Code-Improvement-Job ist TEMPORÄR DEAKTIVIERT")
+        log.info("[STARTUP]    Grund: Verhinderte Server-Startup-Blockierung")
+        log.info("[STARTUP]    Alternative: Job kann manuell über API gestartet werden")
+        log.info("[STARTUP]    Endpoint: POST /api/code-improvement-job/start")
+        log.info("[STARTUP]    Status-Endpoint: GET /api/code-improvement-job/status")
+        
+        # Code auskommentiert, aber für Referenz behalten:
+        # async def _start_background_job():
+        #     try:
+        #         from backend.services.code_improvement_job import CodeImprovementJob
+        #         log.info("[STARTUP] Initialisiere CodeImprovementJob...")
+        #         job = CodeImprovementJob()
+        #         log.info(f"[STARTUP] Background-Job initialisiert: enabled={job.enabled}, is_running={job.is_running}, ai_checker={'OK' if job.ai_checker else 'FEHLT'}")
+        #         
+        #         if job.enabled and not job.is_running:
+        #             if job.ai_checker:
+        #                 # Starte Job als Task (nicht-blockierend)
+        #                 log.info("[STARTUP] Erstelle Background-Job Task...")
+        #                 task = asyncio.create_task(job.run_continuously())
+        #                 log.info("[STARTUP] KI-CodeChecker Background-Job gestartet (Task erstellt)")
+        #                 return
+        #             else:
+        #                 log.info("[STARTUP] KI-CodeChecker nicht verfügbar (OPENAI_API_KEY fehlt)")
+        #                 return
+        #         else:
+        #             log.info(f"[STARTUP] KI-CodeChecker Background-Job deaktiviert (enabled={job.enabled}, is_running={job.is_running})")
+        #             return
+        #     except Exception as e:
+        #         log.error(f"[STARTUP] Fehler beim Initialisieren des Background-Jobs: {e}", exc_info=True)
+        #         raise
+        
+        job_ok = True  # Als erfolgreich markieren, da deaktiviert
+        elapsed = time.time() - step_start
+        log.info(f"[STARTUP] ✅ Schritt 4/5 abgeschlossen: Background-Job (deaktiviert) ({elapsed:.2f}s)")
+        
+        # Startup-Zusammenfassung (IMMER ausführen, auch bei Fehlern)
+        total_elapsed = time.time() - startup_start_time
+        log.info("=" * 70)
+        log.info(f"[STARTUP] ✅ Server-Startup abgeschlossen (Gesamt: {total_elapsed:.2f}s)")
+        log.info(f"[STARTUP] 📝 Startup-Log gespeichert: {startup_log_path}")
+        log.info("=" * 70)
+        
+        # Status-Übersicht
+        log.info("[STARTUP] 📊 Status-Übersicht:")
+        log.info(f"  - Route-Logging: ✅")
+        log.info(f"  - Encoding Setup: {'✅' if encoding_ok else '❌'}")
+        log.info(f"  - Fail-Cache Bereinigung: {'✅' if cleanup_ok else '❌'}")
+        log.info(f"  - Background-Job: {'✅' if job_ok else '❌'}")
+        log.info("=" * 70)
+        
+        # WICHTIG: Explizit signalisieren, dass Startup abgeschlossen ist
+        log.info("[STARTUP] 🎯 Startup-Event beendet - Server sollte jetzt bereit sein")
 

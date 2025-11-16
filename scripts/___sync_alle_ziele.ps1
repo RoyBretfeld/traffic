@@ -81,7 +81,9 @@ $DirectoriesToSync = @(
     "docs\archive",
     "scripts\legacy",
     "config",
-    "ZIP"
+    "ZIP",
+    "Regeln",
+    "Global"
 )
 
 # Dateien/Patterns die IGNORIERT werden sollen

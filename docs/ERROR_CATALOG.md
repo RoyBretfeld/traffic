@@ -127,6 +127,139 @@ Die Anwendung verwendet detailliertes Logging, um den Betriebsstatus und potenzi
         - Venv-Status regelmäßig prüfen
         - Bei mehr als 2-3 beschädigten Packages: venv neu erstellen (schneller als Reparatur)
 
-## 3. `correlation_id` (Trace-ID)
+## 3. Workflow-Upload-Fehler
+
+### 3.1. Workflow fehlgeschlagen: [Errno 22] Invalid argument
+
+**Symptom:**
+- Workflow-Upload schlägt fehl mit: `Workflow fehlgeschlagen: [Errno 22] Invalid argument`
+- Fehler tritt beim Speichern der temporären CSV-Datei auf
+- Upload scheint erfolgreich, aber Workflow kann nicht starten
+
+**Ursachen:**
+
+1. **Ungültiger Dateiname/Pfad** ⚠️ HÄUFIG
+   - Dateiname enthält ungültige Zeichen (trotz `re.sub` Bereinigung)
+   - Pfad zu lang (Windows MAX_PATH = 260 Zeichen)
+   - Dateiname selbst zu lang (> 255 Zeichen)
+   - Sonderzeichen im Dateinamen, die nicht von `re.sub` erfasst werden
+
+2. **os.fsync() Fehler** ⚠️ HÄUFIG
+   - `os.fsync(file_handle.fileno())` wirft `OSError: [Errno 22] Invalid argument`
+   - Passiert bei ungültigen Pfaden oder Dateinamen
+   - **FIXED:** `os.fsync()` ist jetzt optional (wird in try-except gewrappt)
+
+3. **Windows-Pfad-Limits**
+   - Staging-Verzeichnis + Timestamp + Dateiname > 260 Zeichen
+   - Long-Path-Präfix (`\\?\`) wird entfernt, aber Pfad ist trotzdem zu lang
+
+**Behebung:**
+
+1. **os.fsync() optional machen** ✅ IMPLEMENTIERT (2025-11-16)
+   ```python
+   try:
+       os.fsync(file_handle.fileno())
+   except OSError as fsync_error:
+       log_to_file(f"[WORKFLOW] WARNUNG: os.fsync() fehlgeschlagen (nicht kritisch): {fsync_error}")
+   ```
+   - Wird in beiden Stellen angewendet (Zeile 1174, 1200 in `workflow_api.py`)
+   - Fehler wird geloggt, aber Workflow bricht nicht ab
+
+2. **Dateinamen kürzen** ✅ IMPLEMENTIERT (2025-11-16)
+   - Prüfe Gesamtlänge: `staging_dir + timestamp + filename`
+   - Kürze Dateiname automatisch: max 100 Zeichen (bei Bedarf auf 50)
+   - Prüft Gesamt-Pfad-Länge (Windows MAX_PATH = 260 Zeichen)
+
+3. **Fallback auf System-Temp** ✅ BEREITS VORHANDEN
+   - Wenn Staging-Verzeichnis fehlschlägt → System-Temp verwenden
+   - System-Temp ist meist kürzer
+
+**Prävention:**
+- Dateinamen immer auf max. 100 Zeichen kürzen
+- `os.fsync()` in try-except wrappen (nicht kritisch für Funktionalität)
+- Pfad-Länge vor Schreiben prüfen
+- Fallback auf System-Temp bei Fehlern
+
+**Dokumentation:**
+- `docs/ERROR_CATALOG.md` - Dieser Eintrag
+- `Regeln/LESSONS_LOG.md` - Detaillierter Eintrag mit Root Cause
+
+---
+
+## 4. Server-Start-Probleme
+
+### 4.1. Port 8111 nicht erreichbar nach Server-Start (Background-Job blockiert)
+
+**Symptom:**
+- Server startet (Python-Prozesse laufen)
+- Port 8111 ist **nicht erreichbar**
+- Keine Fehlermeldung sichtbar
+- Server "hängt" beim Startup
+
+**Ursachen:**
+
+1. **Doppelte Startup-Events** ⚠️ KRITISCH
+   - Mehrere `@app.on_event("startup")` Handler registriert
+   - Konflikt, Race Conditions
+   - **FIXED:** Nur EIN Startup-Event in `app_setup.py`, entfernt aus `app.py`
+
+2. **Background-Job blockiert Startup** ⚠️ KRITISCH
+   - Background-Job wird beim Startup gestartet
+   - Kein Timeout → blockiert wenn Job hängt
+   - **FIXED:** Timeout-Wrapper (5 Sekunden), nicht-blockierend mit `asyncio.create_task()`
+
+3. **Keine Timeouts für Startup-Events** ⚠️ KRITISCH
+   - Startup-Events haben keine Timeouts
+   - Wenn etwas blockiert, wartet Server ewig
+   - **FIXED:** `_startup_with_timeout()` Funktion mit 30s Timeout
+
+4. **Uvicorn Reload-Mode** ⚠️ MEDIUM
+   - `reload=True` startet Reloader → Worker
+   - Timing-Probleme zwischen Prozessen
+   - **HINWEIS:** Falls Probleme auftreten: `reload=False` setzen
+
+5. **Fehlende Port-Bindungs-Verifizierung** ⚠️ MEDIUM
+   - Keine Verifizierung ob Port gebunden wurde
+   - **FIXED:** `verify_port_binding()` Funktion in `start_server.py`
+
+**Behebung:**
+
+1. **Prüfe ob Server läuft:**
+   ```bash
+   # Port prüfen
+   netstat -ano | findstr ":8111"
+   
+   # Health-Check testen
+   curl http://127.0.0.1:8111/health
+   ```
+
+2. **Server neu starten:**
+   ```bash
+   # Alle Python-Prozesse beenden
+   Get-Process python | Stop-Process -Force
+   
+   # Server starten
+   python start_server.py
+   ```
+
+3. **Logs prüfen:**
+   - Suche nach `[STARTUP]` Meldungen
+   - Prüfe auf `TIMEOUT` Warnungen
+   - Prüfe auf `PORT-CHECK` Meldungen
+
+**Prävention:**
+
+- ✅ Nur EIN Startup-Event pro App
+- ✅ Alle Startup-Tasks mit Timeout
+- ✅ Background-Jobs nicht-blockierend starten
+- ✅ Port-Bindungs-Verifizierung nach Start
+
+**Siehe auch:**
+- `docs/SERVER_START_PROBLEM_ANALYSE_2025-11-16.md` - Vollständige Analyse
+- `Regeln/LESSONS_LOG.md` - Eintrag #6
+
+---
+
+## 4. `correlation_id` (Trace-ID)
 
 Jede Anfrage, die durch die `RequestIdMiddleware` läuft, erhält eine eindeutige `x-request-id` im Response-Header. Diese ID wird auch in den Logs für die gesamte Dauer der Anfrage protokolliert. Wenn ein Fehler auftritt, kann diese `x-request-id` verwendet werden, um alle relevanten Log-Einträge für diese spezifische Anfrage zu finden und das Problem zu diagnostizieren.

@@ -2,6 +2,10 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from pathlib import Path
 import os
+from backend.utils.enhanced_logging import get_enhanced_logger
+
+# Enhanced Logger initialisieren
+enhanced_logger = get_enhanced_logger(__name__)
 
 router = APIRouter()
 
@@ -38,7 +42,7 @@ async def api_tourplaene_list():
                     "modified": stat.st_mtime
                 })
             except Exception as e:
-                print(f"[WARNING] Fehler beim Lesen von {csv_file}: {e}")
+                enhanced_logger.warning(f"Fehler beim Lesen von {csv_file}: {e}")
                 continue
         
         # Nach Name sortieren

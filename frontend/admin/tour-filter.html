@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour-Filter Verwaltung - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .filter-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .filter-list {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .filter-list h4 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .filter-list.ignore h4 {
+            color: #dc3545;
+            border-bottom-color: #dc3545;
+        }
+        .filter-list.allow h4 {
+            color: #28a745;
+            border-bottom-color: #28a745;
+        }
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+        .list-group-item.selected {
+            background-color: #e7f3ff;
+            border-color: #0d6efd;
+        }
+        .list-group-item .item-text {
+            flex: 1;
+            user-select: none;
+        }
+        .list-group-item .item-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .btn-move {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 18px;
+        }
+        .btn-move:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .add-item-form {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+        .save-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .alert {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+                <div class="navbar-nav">
+                    <a class="nav-link" href="/">Hauptseite</a>
+                    <a class="nav-link" href="/admin.html">Admin</a>
+                    <a class="nav-link active" href="/admin/tour-filter">Tour-Filter</a>
+                </div>
+            </div>
+        </nav>
+
+        <h1><i class="fas fa-filter"></i> Tour-Filter Verwaltung</h1>
+        <p class="text-muted">Verwalten Sie, welche Touren verarbeitet oder ignoriert werden sollen.</p>
+
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Hinweis:</strong> Die Ignore-Liste hat immer Vorrang. Wenn eine Tour in der Allow-Liste steht, aber auch in der Ignore-Liste, wird sie ignoriert.
+        </div>
+
+        <div class="filter-container">
+            <!-- Ignore-Liste (Links) -->
+            <div class="filter-list ignore">
+                <h4><i class="fas fa-ban"></i> Ignorierte Touren</h4>
+                <div id="ignore-list" class="list-group">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+                <div class="add-item-form">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="ignore-input" placeholder="Neues Pattern hinzufügen...">
+                        <button class="btn btn-danger" onclick="addToIgnoreList()">
+                            <i class="fas fa-plus"></i> Hinzufügen
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verschiebe-Buttons (Mitte) -->
+            <div class="d-flex flex-column justify-content-center align-items-center" style="gap: 10px;">
+                <button class="btn btn-primary btn-move" id="btn-move-to-allow" onclick="moveSelectedToAllow()" title="Nach Allow verschieben">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="btn btn-success btn-move" id="btn-move-to-ignore" onclick="moveSelectedToIgnore()" title="Nach Ignore verschieben">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+
+            <!-- Allow-Liste (Rechts) -->
+            <div class="filter-list allow">
+                <h4><i class="fas fa-check-circle"></i> Erlaubte Touren</h4>
+                <div id="allow-list" class="list-group">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+                <div class="add-item-form">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="allow-input" placeholder="Neues Pattern hinzufügen...">
+                        <button class="btn btn-success" onclick="addToAllowList()">
+                            <i class="fas fa-plus"></i> Hinzufügen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Speichern-Sektion -->
+        <div class="save-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5><i class="fas fa-save"></i> Änderungen speichern</h5>
+                    <p class="text-muted mb-0" id="last-updated">Letzte Aktualisierung: Wird geladen...</p>
+                </div>
+                <button class="btn btn-primary btn-lg" onclick="saveFilters()">
+                    <i class="fas fa-save"></i> Speichern
+                </button>
+            </div>
+            <div id="save-alert"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let ignoreTours = [];
+        let allowTours = [];
+        let selectedItem = null;
+        let selectedList = null;
+
+        // Lade Daten beim Start
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFilters();
+            
+            // Enter-Taste für Input-Felder
+            document.getElementById('ignore-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addToIgnoreList();
+                }
+            });
+            document.getElementById('allow-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addToAllowList();
+                }
+            });
+        });
+
+        async function loadFilters() {
+            try {
+                const response = await fetch('/api/tour-filter');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                
+                ignoreTours = data.ignore_tours || [];
+                allowTours = data.allow_tours || [];
+                
+                renderLists();
+                
+                if (data.last_updated) {
+                    document.getElementById('last-updated').textContent = `Letzte Aktualisierung: ${data.last_updated}`;
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Filter:', error);
+                showAlert('Fehler beim Laden der Filter: ' + error.message, 'danger');
+            }
+        }
+
+        function renderLists() {
+            renderList('ignore-list', ignoreTours, 'ignore');
+            renderList('allow-list', allowTours, 'allow');
+            updateMoveButtons();
+        }
+
+        function renderList(listId, items, type) {
+            const listElement = document.getElementById(listId);
+            
+            if (items.length === 0) {
+                listElement.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>Keine Einträge</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            listElement.innerHTML = items.map((item, index) => `
+                <div class="list-group-item" data-index="${index}" data-type="${type}" onclick="selectItem(${index}, '${type}')">
+                    <span class="item-text">${escapeHtml(item)}</span>
+                    <div class="item-actions">
+                        <button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); removeItem(${index}, '${type}')" title="Entfernen">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectItem(index, type) {
+            // Entferne vorherige Auswahl
+            document.querySelectorAll('.list-group-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Setze neue Auswahl
+            const item = document.querySelector(`[data-index="${index}"][data-type="${type}"]`);
+            if (item) {
+                item.classList.add('selected');
+                selectedItem = index;
+                selectedList = type;
+            }
+            
+            updateMoveButtons();
+        }
+
+        function updateMoveButtons() {
+            const hasSelection = selectedItem !== null && selectedList !== null;
+            document.getElementById('btn-move-to-allow').disabled = !hasSelection || selectedList === 'allow';
+            document.getElementById('btn-move-to-ignore').disabled = !hasSelection || selectedList === 'ignore';
+        }
+
+        function moveSelectedToAllow() {
+            if (selectedList !== 'ignore' || selectedItem === null) return;
+            
+            const item = ignoreTours[selectedItem];
+            ignoreTours.splice(selectedItem, 1);
+            allowTours.push(item);
+            
+            selectedItem = null;
+            selectedList = null;
+            renderLists();
+        }
+
+        function moveSelectedToIgnore() {
+            if (selectedList !== 'allow' || selectedItem === null) return;
+            
+            const item = allowTours[selectedItem];
+            allowTours.splice(selectedItem, 1);
+            ignoreTours.push(item);
+            
+            selectedItem = null;
+            selectedList = null;
+            renderLists();
+        }
+
+        function addToIgnoreList() {
+            const input = document.getElementById('ignore-input');
+            const value = input.value.trim();
+            
+            if (!value) {
+                showAlert('Bitte geben Sie ein Pattern ein.', 'warning');
+                return;
+            }
+            
+            if (ignoreTours.includes(value)) {
+                showAlert('Dieses Pattern existiert bereits in der Ignore-Liste.', 'warning');
+                return;
+            }
+            
+            ignoreTours.push(value);
+            input.value = '';
+            renderLists();
+        }
+
+        function addToAllowList() {
+            const input = document.getElementById('allow-input');
+            const value = input.value.trim();
+            
+            if (!value) {
+                showAlert('Bitte geben Sie ein Pattern ein.', 'warning');
+                return;
+            }
+            
+            if (allowTours.includes(value)) {
+                showAlert('Dieses Pattern existiert bereits in der Allow-Liste.', 'warning');
+                return;
+            }
+            
+            allowTours.push(value);
+            input.value = '';
+            renderLists();
+        }
+
+        function removeItem(index, type) {
+            if (type === 'ignore') {
+                ignoreTours.splice(index, 1);
+            } else {
+                allowTours.splice(index, 1);
+            }
+            
+            if (selectedList === type && selectedItem === index) {
+                selectedItem = null;
+                selectedList = null;
+            }
+            
+            renderLists();
+        }
+
+        async function saveFilters() {
+            try {
+                const response = await fetch('/api/tour-filter', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ignore_tours: ignoreTours,
+                        allow_tours: allowTours
+                    })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || `HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                showAlert('Tour-Filter erfolgreich gespeichert!', 'success');
+                
+                if (data.last_updated) {
+                    document.getElementById('last-updated').textContent = `Letzte Aktualisierung: ${data.last_updated}`;
+                }
+                
+                // Lade Daten neu (falls Backend Änderungen vorgenommen hat)
+                await loadFilters();
+            } catch (error) {
+                console.error('Fehler beim Speichern:', error);
+                showAlert('Fehler beim Speichern: ' + error.message, 'danger');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('save-alert');
+            alertDiv.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${escapeHtml(message)}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            // Auto-Close nach 5 Sekunden
+            setTimeout(() => {
+                const alert = alertDiv.querySelector('.alert');
+                if (alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }
+            }, 5000);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
+

@@ -2,8 +2,11 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from db.core import ENGINE
+from pathlib import Path
+import logging
 
 router = APIRouter()  # Kein prefix - Endpoints werden direkt registriert
+logger = logging.getLogger(__name__)
 
 
 @router.get("/health")
@@ -39,32 +42,94 @@ async def health_app():
 async def health_db():
     """
     Prüft den Status der Datenbankverbindung.
-    Einfach & robust: Nur SELECT 1, keine komplexe Prüflogik.
+    Erweitert: Gibt auch Liste aller verfügbaren Datenbanken mit Status und Größe zurück.
     """
+    # Bekannte Datenbanken im Projekt
+    known_databases = [
+        {"name": "traffic.db", "path": "data/traffic.db", "description": "Haupt-Datenbank (Touren, Kunden, Geo-Cache)"},
+        {"name": "code_fixes_cost.db", "path": "data/code_fixes_cost.db", "description": "KI-Kosten-Tracking"},
+        {"name": "code_fixes_performance.db", "path": "data/code_fixes_performance.db", "description": "Performance-Tracking"},
+        {"name": "llm_monitoring.db", "path": "data/llm_monitoring.db", "description": "LLM-Monitoring"},
+        {"name": "customers.db", "path": "data/customers.db", "description": "Kunden-Datenbank"},
+        {"name": "address_corrections.sqlite3", "path": "data/address_corrections.sqlite3", "description": "Adress-Korrekturen"},
+    ]
+    
+    # Prüfe Haupt-DB (traffic.db über ENGINE)
+    main_db_ok = False
+    main_db_tables = []
+    main_db_error = None
+    
     try:
         with ENGINE.connect() as conn:
             result = conn.execute(text("SELECT 1"))
             result.fetchone()
-        
-        # Zusätzlich: Tabellen-Liste für Frontend
-        try:
-            tables_result = conn.execute(text("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"))
-            tables = [row[0] for row in tables_result.fetchall()]
-        except Exception as table_err:
-            logger.debug(f"Failed to fetch table list: {table_err}")
-            tables = []
-        
-        return JSONResponse({
-            "ok": True,
-            "status": "online",
-            "tables": tables
-        }, status_code=200)
+            main_db_ok = True
+            
+            # Tabellen-Liste für Frontend
+            try:
+                tables_result = conn.execute(text("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"))
+                main_db_tables = [row[0] for row in tables_result.fetchall()]
+            except Exception as table_err:
+                logger.debug(f"Failed to fetch table list: {table_err}")
+                main_db_tables = []
     except Exception as e:
-        return JSONResponse({
-            "ok": False,
+        main_db_error = str(e)
+    
+    # Prüfe alle Datenbanken
+    databases = []
+    for db_info in known_databases:
+        db_path = Path(db_info["path"])
+        db_status = {
+            "name": db_info["name"],
+            "description": db_info["description"],
+            "path": str(db_path),
+            "exists": db_path.exists(),
             "status": "offline",
-            "error": str(e)
-        }, status_code=503)
+            "size_bytes": None,
+            "size_mb": None,
+            "error": None
+        }
+        
+        if db_path.exists():
+            # Größe
+            try:
+                size = db_path.stat().st_size
+                db_status["size_bytes"] = size
+                db_status["size_mb"] = round(size / (1024 * 1024), 2)
+            except Exception as e:
+                logger.debug(f"Fehler beim Ermitteln der DB-Größe für {db_path}: {e}")
+            
+            # Status (online/offline)
+            try:
+                import sqlite3
+                conn = sqlite3.connect(str(db_path))
+                cursor = conn.execute("SELECT 1")
+                cursor.fetchone()
+                conn.close()
+                db_status["status"] = "online"
+            except Exception as e:
+                db_status["status"] = "offline"
+                db_status["error"] = str(e)
+        else:
+            db_status["error"] = "Datenbank-Datei nicht gefunden"
+        
+        databases.append(db_status)
+    
+    # Haupt-DB Status
+    main_db_status = {
+        "ok": main_db_ok,
+        "status": "online" if main_db_ok else "offline",
+        "tables": main_db_tables,
+        "error": main_db_error
+    }
+    
+    return JSONResponse({
+        "ok": main_db_ok,
+        "status": "online" if main_db_ok else "offline",
+        "main_db": main_db_status,
+        "databases": databases,
+        "total_databases": len(databases)
+    }, status_code=200 if main_db_ok else 503)
 
 @router.get("/health/osrm")
 async def health_osrm():

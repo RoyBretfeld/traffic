@@ -6,6 +6,10 @@ import re
 import time
 from ingest.guards import assert_no_mojibake, trace_text
 from common.text_cleaner import repair_cp_mojibake
+from backend.utils.enhanced_logging import get_enhanced_logger
+
+# Enhanced Logger initialisieren
+enhanced_logger = get_enhanced_logger(__name__)
 
 router = APIRouter()
 
@@ -46,7 +50,7 @@ def cleanup_old_staging_files():
                 deleted_count += 1
                 total_size_freed += file_size
         except Exception as e:
-            print(f"[CLEANUP] Fehler beim Löschen von {file_path.name}: {e}")
+            enhanced_logger.warning(f"Fehler beim Löschen von {file_path.name}: {e}")
     
     # 2. Wenn immer noch zu viele Dateien: Lösche die ältesten
     remaining_files = list(STAGING.glob("*.csv"))
@@ -63,11 +67,11 @@ def cleanup_old_staging_files():
                 deleted_count += 1
                 total_size_freed += file_size
             except Exception as e:
-                print(f"[CLEANUP] Fehler beim Löschen von {file_path.name}: {e}")
+                enhanced_logger.warning(f"Fehler beim Löschen von {file_path.name}: {e}")
     
     if deleted_count > 0:
         size_mb = total_size_freed / (1024 * 1024)
-        print(f"[CLEANUP] {deleted_count} alte Staging-Dateien gelöscht ({size_mb:.2f} MB freigegeben)")
+        enhanced_logger.info(f"{deleted_count} alte Staging-Dateien gelöscht ({size_mb:.2f} MB freigegeben)")
     
     return deleted_count, total_size_freed
 
@@ -106,11 +110,11 @@ def _heuristic_decode(raw: bytes, skip_mojibake_check: bool = False) -> tuple[st
                 # Bei übersprungenem Check: trotzdem verwenden
                 trace_text("UPLOAD-DECODE", f"Encoding: {enc}, Length: {len(decoded)} (Mojibake-Check übersprungen)")
                 return decoded, enc
-            print(f"[UPLOAD] Mojibake-Schutz aktiviert für {enc}: {e}")
+            enhanced_logger.warning(f"Mojibake-Schutz aktiviert für {enc}: {e}")
             continue
     
     # Letzte Rettung: UTF-8 mit Ersetzung
-    print("[UPLOAD] Fallback auf UTF-8 mit Ersetzung")
+    enhanced_logger.warning("Fallback auf UTF-8 mit Ersetzung")
     return raw.decode("utf-8", errors="replace"), "utf-8*replace"
 
 @router.get("/api/tourplaene/list")
@@ -138,7 +142,7 @@ async def list_tourplaene():
                     "read_only": True  # Dateien sind read-only
                 })
             except Exception as e:
-                print(f"[WARNING] Fehler beim Lesen von {csv_file}: {e}")
+                enhanced_logger.warning(f"Fehler beim Lesen von {csv_file}: {e}")
                 continue
         
         # Nach Name sortieren
@@ -177,7 +181,7 @@ async def process_csv_direct(filename: str):
             raise HTTPException(400, detail="Nur CSV-Dateien werden unterstützt")
         
         # Datei direkt verarbeiten (ohne Upload)
-        print(f"[DIRECT PROCESS] Verarbeite {csv_path}")
+        enhanced_logger.info(f"Verarbeite CSV direkt: {csv_path}")
         
         # Verwende den modernen Tourplan-Parser
         from backend.parsers.tour_plan_parser import parse_tour_plan_to_dict
@@ -193,7 +197,7 @@ async def process_csv_direct(filename: str):
         }, media_type="application/json; charset=utf-8")
         
     except Exception as e:
-        print(f"[DIRECT PROCESS] Fehler: {e}")
+        enhanced_logger.error(f"Direkte CSV-Verarbeitung fehlgeschlagen: {e}", exc_info=e)
         raise HTTPException(500, detail=f"Fehler bei der Verarbeitung: {str(e)}")
 
 @router.post("/api/upload/csv")
@@ -211,8 +215,8 @@ async def upload_csv(file: UploadFile = File(...)):
     """
     try:
         # Warnung für externe Uploads
-        print(f"[UPLOAD WARNING] Externer Upload: {file.filename}")
-        print("[UPLOAD WARNING] Verwenden Sie /api/process-csv-direct für Tourpläne aus dem Tourplaene-Verzeichnis!")
+        enhanced_logger.warning(f"Externer Upload: {file.filename}")
+        enhanced_logger.warning("Verwenden Sie /api/process-csv-direct für Tourpläne aus dem Tourplaene-Verzeichnis!")
 
         # Validierung
         if not file.filename:
@@ -243,7 +247,7 @@ async def upload_csv(file: UploadFile = File(...)):
             decoded_content, encoding = _heuristic_decode(content)
             decoded_content = repair_cp_mojibake(decoded_content)
         except Exception as e:
-            print(f"[UPLOAD ERROR] Encoding-Erkennung fehlgeschlagen: {e}, verwende UTF-8 Fallback")
+            enhanced_logger.warning(f"Encoding-Erkennung fehlgeschlagen: {e}, verwende UTF-8 Fallback")
             # Fallback: UTF-8 mit Fehlerbehandlung
             decoded_content = content.decode('utf-8', errors='replace')
             encoding = 'utf-8-fallback'
@@ -255,14 +259,14 @@ async def upload_csv(file: UploadFile = File(...)):
         # Cleanup alter Dateien NACH dem Speichern (nur wenn nötig)
         staging_files = list(STAGING.glob("*.csv"))
         if len(staging_files) > STAGING_MAX_FILES:
-            print(f"[UPLOAD] Zu viele Staging-Dateien ({len(staging_files)} > {STAGING_MAX_FILES}), starte Cleanup...")
+            enhanced_logger.info(f"Zu viele Staging-Dateien ({len(staging_files)} > {STAGING_MAX_FILES}), starte Cleanup...")
             cleanup_old_staging_files()
         
         trace_text("UPLOAD-SUCCESS", f"Datei gespeichert: {staged_path}")
         
         # WICHTIG: Gebe absolut normalisierten Pfad zurück (Windows-Backslashes)
         staged_path_str = str(staged_path)
-        print(f"[UPLOAD DEBUG] Absoluter Pfad zurückgegeben: {staged_path_str}")
+        enhanced_logger.debug(f"Absoluter Pfad zurückgegeben: {staged_path_str}")
         
         # Zeilen zählen (für Response)
         rows = len(decoded_content.splitlines())
@@ -284,7 +288,7 @@ async def upload_csv(file: UploadFile = File(...)):
     except HTTPException:
         raise
     except Exception as e:
-        print(f"[UPLOAD ERROR] {e}")
+        enhanced_logger.error(f"Upload-Fehler: {e}", exc_info=e)
         raise HTTPException(500, detail=f"Upload-Fehler: {str(e)}")
 
 @router.get("/api/upload/status")

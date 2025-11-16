@@ -213,10 +213,12 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         resolved_customer_id = None
         
         # IMMER Synonym-Auflösung versuchen wenn KdNr vorhanden
+        # WICHTIG: Mit Timeout und Fehlerbehandlung, damit Synonym-Auflösung nicht blockiert
         if first_cell:
             try:
                 from backend.services.synonyms import SynonymStore
                 from pathlib import Path
+                import signal
                 
                 # Datenbank-Pfad finden
                 db_path = Path(__file__).resolve().parents[2] / "data" / "traffic.db"
@@ -231,7 +233,12 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
                             db_path = path
                             break
                 
-                synonym_store = SynonymStore(db_path)
+                # Synonym-Store mit Timeout-Schutz (verhindert Blockierung)
+                try:
+                    synonym_store = SynonymStore(db_path)
+                except Exception as store_error:
+                    logging.warning(f"[SYNONYM] Fehler beim Initialisieren des Synonym-Stores: {store_error}")
+                    synonym_store = None
                 
                 # 1. Suche nach KdNr: "KdNr:{customer_number}" (ALWAYS suchen wenn KdNr vorhanden)
                 synonym_lat = None
@@ -250,41 +257,53 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
                         resolved_customer_id = kdnr_synonym.customer_id
                         logging.info(f"[SYNONYM] KdNr:{first_cell} → Synonym gefunden: street='{synonym_street}', city='{synonym_city}', lat={synonym_lat}, lon={synonym_lon}")
                 
+                    except Exception as resolve_error:
+                        logging.warning(f"[SYNONYM] Fehler bei KdNr-Auflösung für '{first_cell}': {resolve_error}")
+                        kdnr_synonym = None
+                else:
+                    kdnr_synonym = None
+                
                 # 2. IMMER nach Name suchen (auch wenn Adresse vorhanden), um falsche Adressen zu korrigieren
                 # Beispiel: "Büttner" mit falscher Adresse "Fröbelstraße 20" → sollte zu "Steigerstraße 1" korrigiert werden
-                if name:
-                    name_synonym = synonym_store.resolve(name)
-                    if name_synonym:
-                        # WICHTIG: Wenn Name-Synonym eine vollständige Adresse hat, verwende diese (korrigiert falsche Adressen)
-                        if name_synonym.street and name_synonym.postal_code and name_synonym.city:
-                            # Name-Synonym hat vollständige Adresse → verwende diese (höhere Priorität als CSV)
-                            synonym_street = name_synonym.street
-                            synonym_postal_code = name_synonym.postal_code
-                            synonym_city = name_synonym.city
-                            if name_synonym.lat:
-                                synonym_lat = name_synonym.lat
-                            if name_synonym.lon:
-                                synonym_lon = name_synonym.lon
-                            resolved_customer_id = name_synonym.customer_id or resolved_customer_id
-                            logging.info(f"[SYNONYM] Name '{name}' → Synonym KORRIGIERT Adresse: street='{synonym_street}', city='{synonym_city}', real_customer_id={resolved_customer_id}")
-                        elif not (synonym_street.strip() and synonym_postal_code.strip() and synonym_city.strip()):
-                            # Fallback: Nur wenn noch keine vollständige Adresse vorhanden
-                            synonym_street = name_synonym.street or synonym_street or ""
-                            synonym_postal_code = name_synonym.postal_code or synonym_postal_code or ""
-                            synonym_city = name_synonym.city or synonym_city or ""
-                            if not synonym_lat:
-                                synonym_lat = name_synonym.lat
-                            if not synonym_lon:
-                                synonym_lon = name_synonym.lon
-                            resolved_customer_id = name_synonym.customer_id or resolved_customer_id
-                            logging.info(f"[SYNONYM] Name '{name}' → Synonym gefunden: street='{synonym_street}', city='{synonym_city}'")
+                if name and synonym_store:
+                    try:
+                        name_synonym = synonym_store.resolve(name)
+                        if name_synonym:
+                            # WICHTIG: Wenn Name-Synonym eine vollständige Adresse hat, verwende diese (korrigiert falsche Adressen)
+                            if name_synonym.street and name_synonym.postal_code and name_synonym.city:
+                                # Name-Synonym hat vollständige Adresse → verwende diese (höhere Priorität als CSV)
+                                synonym_street = name_synonym.street
+                                synonym_postal_code = name_synonym.postal_code
+                                synonym_city = name_synonym.city
+                                if name_synonym.lat:
+                                    synonym_lat = name_synonym.lat
+                                if name_synonym.lon:
+                                    synonym_lon = name_synonym.lon
+                                resolved_customer_id = name_synonym.customer_id or resolved_customer_id
+                                logging.info(f"[SYNONYM] Name '{name}' → Synonym KORRIGIERT Adresse: street='{synonym_street}', city='{synonym_city}', real_customer_id={resolved_customer_id}")
+                            elif not (synonym_street.strip() and synonym_postal_code.strip() and synonym_city.strip()):
+                                # Fallback: Nur wenn noch keine vollständige Adresse vorhanden
+                                synonym_street = name_synonym.street or synonym_street or ""
+                                synonym_postal_code = name_synonym.postal_code or synonym_postal_code or ""
+                                synonym_city = name_synonym.city or synonym_city or ""
+                                if not synonym_lat:
+                                    synonym_lat = name_synonym.lat
+                                if not synonym_lon:
+                                    synonym_lon = name_synonym.lon
+                                resolved_customer_id = name_synonym.customer_id or resolved_customer_id
+                                logging.info(f"[SYNONYM] Name '{name}' → Synonym gefunden: street='{synonym_street}', city='{synonym_city}'")
+                    except Exception as resolve_error:
+                        logging.warning(f"[SYNONYM] Fehler bei Name-Auflösung für '{name}': {resolve_error}")
+                        name_synonym = None
+                else:
+                    name_synonym = None
                 
                 # 3. Logging für Debugging
                 if first_cell and (synonym_street or synonym_postal_code or synonym_city):
                     logging.info(f"[SYNONYM] Final für KdNr:{first_cell}: street='{synonym_street}', postal='{synonym_postal_code}', city='{synonym_city}', lat={synonym_lat}, lon={synonym_lon}")
             except Exception as e:
-                logging.warning(f"[SYNONYM] Fehler bei Synonym-Auflösung: {e}")
-                # Bei Fehlern: Verwende originale Werte
+                logging.warning(f"[SYNONYM] Fehler bei Synonym-Auflösung (überspringe): {e}")
+                # Bei Fehlern: Verwende originale Werte (nicht blockieren!)
         
         customer = TourStop(
             customer_number=first_cell,

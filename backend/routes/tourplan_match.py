@@ -14,6 +14,10 @@ from repositories.geo_alias_repo import resolve_aliases
 import unicodedata
 import re
 from common.normalize import normalize_address
+from backend.utils.enhanced_logging import get_enhanced_logger
+
+# Enhanced Logger initialisieren
+enhanced_logger = get_enhanced_logger(__name__)
 
 # def _norm(s: str) -> str:
 #     """Normalisiert Adressen: Unicode NFC + Whitespace-Bereinigung (wie Bulk-Process)."""
@@ -62,11 +66,8 @@ async def api_tourplan_match(file: str = Query(..., min_length=3, description="P
     except HTTPException:
         raise
     except Exception as e:
-        import traceback
-        error_details = traceback.format_exc()
-        print(f"[MATCH ERROR] Unerwarteter Fehler für Datei '{file}': {e}")
-        print(f"[MATCH ERROR] Traceback:\n{error_details}")
-        error_msg = f"Match-Fehler für '{file}': {str(e)}"
+        enhanced_logger.error(f"Match fehlgeschlagen für Datei '{file}': {str(e)}", exc_info=e)
+        error_msg = f"match failed: {str(e)}"
         raise HTTPException(500, detail=error_msg)
 
 @router.post("/api/tourplan/match")
@@ -92,11 +93,8 @@ async def api_tourplan_match_post(body: MatchIn):
     except HTTPException:
         raise
     except Exception as e:
-        import traceback
-        error_details = traceback.format_exc()
-        print(f"[MATCH ERROR] Unerwarteter Fehler für Datei '{body.stored_path}': {e}")
-        print(f"[MATCH ERROR] Traceback:\n{error_details}")
-        error_msg = f"Match-Fehler für '{body.stored_path}': {str(e)}"
+        enhanced_logger.error(f"Match fehlgeschlagen für Datei '{body.stored_path}': {str(e)}", exc_info=e)
+        error_msg = f"match failed: {str(e)}"
         raise HTTPException(500, detail=error_msg)
 
 
@@ -164,15 +162,15 @@ async def do_match(file_path: str):
     import urllib.parse
     
     # Debug: Logge den originalen Parameter
-    print(f"[MATCH DEBUG] Original file parameter: {file_path}")
+    enhanced_logger.debug(f"Original file parameter: {file_path}")
     
     decoded_file = urllib.parse.unquote(file_path)
-    print(f"[MATCH DEBUG] Decoded file: {decoded_file}")
+    enhanced_logger.debug(f"Decoded file: {decoded_file}")
     
     # Windows-Pfad: Pathlib sollte Backslashes korrekt handhaben, aber prüfe explizit
     # Verwende direkt den dekodierten Pfad - Pathlib unter Windows unterstützt beide Formate
     p = Path(decoded_file)
-    print(f"[MATCH DEBUG] Path object: {p}")
+    enhanced_logger.debug(f"Path object: {p}")
     
     # Wenn relativer Pfad, versuche unter Tourplaene/
     if not p.is_absolute():
@@ -188,9 +186,8 @@ async def do_match(file_path: str):
     file_path_str = str(p)
     
     # Debug: Logge alle Pfad-Varianten
-    print(f"[MATCH DEBUG] Prüfe Pfad: {file_path_str}")
-    print(f"[MATCH DEBUG] os.path.exists: {os.path.exists(file_path_str)}")
-    print(f"[MATCH DEBUG] Path.exists: {p.exists()}")
+    enhanced_logger.debug(f"Prüfe Pfad: {file_path_str}")
+    enhanced_logger.debug(f"os.path.exists: {os.path.exists(file_path_str)}, Path.exists: {p.exists()}")
     
     if not os.path.exists(file_path_str) and not p.exists():
         # Fallback: Versuche verschiedene Pfad-Formate
@@ -203,11 +200,11 @@ async def do_match(file_path: str):
         for test_path in test_paths:
             test_p = Path(test_path) if not isinstance(test_path, Path) else test_path
             test_str = str(test_p.resolve())
-            print(f"[MATCH DEBUG] Teste: {test_str} -> {os.path.exists(test_str)}")
+            enhanced_logger.debug(f"Teste Pfad: {test_str} -> {os.path.exists(test_str)}")
             if os.path.exists(test_str) or test_p.exists():
                 existing_path = test_str
                 p = test_p.resolve()
-                print(f"[MATCH DEBUG] Pfad gefunden: {test_str}")
+                enhanced_logger.debug(f"Pfad gefunden: {test_str}")
                 break
         
         if not existing_path:
@@ -218,8 +215,9 @@ async def do_match(file_path: str):
             staging_file = staging_dir / filename_only
             if staging_file.exists():
                 p = staging_file.resolve()
-                print(f"[MATCH DEBUG] Datei im Staging-Verzeichnis gefunden: {p}")
+                enhanced_logger.debug(f"Datei im Staging-Verzeichnis gefunden: {p}")
             else:
+                enhanced_logger.error(f"Datei nicht gefunden: {file_path_str} (original: {file_path}, decoded: {decoded_file}, filename: {filename_only})")
                 raise HTTPException(404, detail=f"Datei nicht gefunden: {file_path_str} (original: {file_path}, decoded: {decoded_file}, filename: {filename_only})")
 
     # 1) CSV mit modernem Parser lesen (vollständige Adressen mit PLZ und Stadt)
@@ -229,7 +227,7 @@ async def do_match(file_path: str):
     except ValueError as ve:
         # Mojibake-Encoding-Fehler: Versuche Datei zu reparieren
         if "ENCODING-BUG" in str(ve) or "Mojibake" in str(ve):
-            print(f"[MATCH WARNING] Mojibake erkannt für {p}, versuche Reparatur...")
+            enhanced_logger.warning(f"Mojibake erkannt für {p}, versuche Reparatur...")
             from common.text_cleaner import repair_cp_mojibake
             # Datei neu lesen und reparieren
             try:
@@ -245,7 +243,7 @@ async def do_match(file_path: str):
                         # Versuche erneut mit reparierter Datei
                         tour_data = parse_tour_plan_to_dict(str(temp_path))
                         temp_path.unlink()  # Temporäre Datei löschen
-                        print(f"[MATCH] Datei erfolgreich repariert und geparst")
+                        enhanced_logger.success(f"Datei erfolgreich repariert und geparst: {p}")
                         break
                     except Exception:
                         continue
@@ -253,30 +251,26 @@ async def do_match(file_path: str):
                     # Alle Versuche fehlgeschlagen - Fallback
                     raise ValueError(f"Mojibake-Reparatur fehlgeschlagen: {ve}")
             except Exception as repair_error:
-                print(f"[MATCH ERROR] Reparatur fehlgeschlagen: {repair_error}")
-                import traceback
-                traceback.print_exc()
+                enhanced_logger.error(f"Reparatur fehlgeschlagen: {repair_error}", exc_info=repair_error)
                 # Fallback: Versuche einfaches CSV-Parsing
                 try:
                     tour_data = {"customers": _fallback_customers_from_csv(p)}
+                    enhanced_logger.warning(f"Fallback-Parsing erfolgreich für {p}")
                 except Exception as fallback_error:
-                    print(f"[MATCH ERROR] Fallback-Parsing fehlgeschlagen: {fallback_error}")
+                    enhanced_logger.error(f"Fallback-Parsing fehlgeschlagen: {fallback_error}", exc_info=fallback_error)
                     raise HTTPException(500, detail=f"Datei konnte nicht geparst werden: {str(repair_error)}")
         else:
             # Anderer ValueError - keine Mojibake-Reparatur möglich
-            import traceback
-            error_trace = traceback.format_exc()
-            print(f"[MATCH ERROR] ValueError (nicht Mojibake): {ve}\n{error_trace}")
+            enhanced_logger.error(f"ValueError (nicht Mojibake): {ve}", exc_info=ve)
             raise HTTPException(500, detail=f"Parser-Fehler: {str(ve)}")
     except Exception as parse_error:
-        import traceback
-        error_trace = traceback.format_exc()
-        print(f"[MATCH ERROR] Parse-Fehler: {parse_error}\n{error_trace}")
+        enhanced_logger.error(f"Parse-Fehler: {parse_error}", exc_info=parse_error)
         # Fallback: Versuche einfaches CSV-Parsing
         try:
             tour_data = {"customers": _fallback_customers_from_csv(p)}
+            enhanced_logger.warning(f"Fallback-Parsing erfolgreich für {p}")
         except Exception as fallback_error:
-            print(f"[MATCH ERROR] Fallback-Parsing fehlgeschlagen: {fallback_error}")
+            enhanced_logger.error(f"Fallback-Parsing fehlgeschlagen: {fallback_error}", exc_info=fallback_error)
             raise HTTPException(500, detail=f"Datei konnte nicht geparst werden: {str(parse_error)}")
     
     if not tour_data.get("customers"):
@@ -314,7 +308,7 @@ async def do_match(file_path: str):
     if ENFORCE:
         missing = [i for i, addr in enumerate(addrs) if not geo.get(addr) and not geo.get(aliases.get(addr, ""))]
         if missing:
-            print(f"[MATCH] Erzwinge Geocoding für {len(missing)} fehlende Adressen...")
+            enhanced_logger.info(f"Erzwinge Geocoding für {len(missing)} fehlende Adressen...")
             missing_addrs = [addrs[i] for i in missing]
             filled = await fill_missing(missing_addrs, limit=BATCH_LIMIT)
             # fill_missing() gibt eine Liste zurück, nicht ein Dict
@@ -339,7 +333,7 @@ async def do_match(file_path: str):
                             "region_ok": None,
                         }
                     except (ValueError, TypeError) as e:
-                        print(f"[MATCH] Warnung: Konnte Koordinaten nicht konvertieren für {addr}: {e}")
+                        enhanced_logger.warning(f"Konnte Koordinaten nicht konvertieren für {addr}: {e}")
                         continue
 
     # 5) Status-Bewertung und Output

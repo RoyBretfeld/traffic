@@ -61,9 +61,9 @@ CREATE TABLE IF NOT EXISTS geo_fail (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_geo_fail_next_attempt ON geo_fail(next_attempt);
+-- WICHTIG: Indizes für geo_fail werden in ensure_geo_fail_next_attempt() erstellt
+-- (nachdem sichergestellt wurde, dass die Spalten existieren)
 CREATE UNIQUE INDEX IF NOT EXISTS idx_geo_fail_address_norm ON geo_fail(address_norm);
-CREATE INDEX IF NOT EXISTS idx_geo_fail_first_seen ON geo_fail(first_seen);
 
 -- Systemregeln Audit-Tabelle für Änderungshistorie
 CREATE TABLE IF NOT EXISTS system_rules_audit (
@@ -90,11 +90,13 @@ def table_exists(conn, table: str) -> bool:
     return cur.fetchone() is not None
 
 def ensure_geo_fail_next_attempt(conn) -> None:
-    """Idempotent: Stellt sicher, dass geo_fail.next_attempt + Index existieren."""
+    """Idempotent: Stellt sicher, dass geo_fail.next_attempt + first_seen + Indizes existieren."""
     if not table_exists(conn, "geo_fail"):
         import logging
         logging.getLogger(__name__).warning("[WARN] Tabelle geo_fail existiert nicht für ensure_geo_fail_next_attempt. Wird beim restlichen SCHEMA_SQL erstellt.")
         return
+    
+    # Spalte next_attempt hinzufügen (falls nicht vorhanden)
     if not column_exists(conn, "geo_fail", "next_attempt"):
         conn.exec_driver_sql("ALTER TABLE geo_fail ADD COLUMN next_attempt INTEGER")
         import logging
@@ -102,12 +104,30 @@ def ensure_geo_fail_next_attempt(conn) -> None:
     else:
         import logging
         logging.getLogger(__name__).info("Spalte 'next_attempt' ist bereits vorhanden in geo_fail.")
+    
+    # Spalte first_seen hinzufügen (falls nicht vorhanden)
+    if not column_exists(conn, "geo_fail", "first_seen"):
+        conn.exec_driver_sql("ALTER TABLE geo_fail ADD COLUMN first_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+        import logging
+        logging.getLogger(__name__).info("Spalte 'first_seen' (TIMESTAMP) zu geo_fail hinzugefügt.")
+    else:
+        import logging
+        logging.getLogger(__name__).info("Spalte 'first_seen' ist bereits vorhanden in geo_fail.")
 
-    conn.exec_driver_sql(
-        "CREATE INDEX IF NOT EXISTS idx_geo_fail_next_attempt ON geo_fail(next_attempt)"
-    )
-    import logging
-    logging.getLogger(__name__).info("Index geprüft/angelegt: idx_geo_fail_next_attempt.")
+    # Indizes erstellen (nur wenn Spalten existieren)
+    if column_exists(conn, "geo_fail", "next_attempt"):
+        conn.exec_driver_sql(
+            "CREATE INDEX IF NOT EXISTS idx_geo_fail_next_attempt ON geo_fail(next_attempt)"
+        )
+        import logging
+        logging.getLogger(__name__).info("Index geprüft/angelegt: idx_geo_fail_next_attempt.")
+    
+    if column_exists(conn, "geo_fail", "first_seen"):
+        conn.exec_driver_sql(
+            "CREATE INDEX IF NOT EXISTS idx_geo_fail_first_seen ON geo_fail(first_seen)"
+        )
+        import logging
+        logging.getLogger(__name__).info("Index geprüft/angelegt: idx_geo_fail_first_seen.")
 
 def ensure_schema():
     with ENGINE.begin() as conn:
@@ -199,3 +219,14 @@ def ensure_schema():
     except Exception as e:
         import logging
         logging.getLogger(__name__).debug(f"Phase 2 Migration nicht verfügbar: {e}")
+    
+    # Phase 3: Error-Learning-Schema (KI-Lernpfad)
+    try:
+        from db.schema_error_learning import ensure_error_learning_schema
+        with ENGINE.begin() as conn:
+            ensure_error_learning_schema(conn)
+        import logging
+        logging.getLogger(__name__).info("[SCHEMA] Error-Learning-Tabellen erstellt/verifiziert")
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"[SCHEMA] Error-Learning-Schema fehlgeschlagen: {e}")

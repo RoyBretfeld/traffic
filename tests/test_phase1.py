@@ -4,7 +4,8 @@ Tests für Phase 1: Polyline6, Stats, Admin, Health
 import pytest
 import httpx
 from fastapi.testclient import TestClient
-from backend.app import app
+from backend.app import create_app
+app = create_app()
 import os
 
 client = TestClient(app)

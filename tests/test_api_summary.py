@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 
-from backend.app import app
+from backend.app import create_app
+app = create_app()
 
 
 def test_summary_endpoint_works():

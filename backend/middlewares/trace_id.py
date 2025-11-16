@@ -25,14 +25,30 @@ class TraceIDMiddleware(BaseHTTPMiddleware):
         # Speichere Trace-ID im Request-State
         request.state.trace_id = trace_id
         
-        # Start-Zeit für Latenz-Messung
+        # Start-Zeit für Latenz-Messung (für Error-Learning)
         start_time = time.time()
+        request.state.request_start_time = start_time
         
         # Rufe nächste Middleware/Handler auf
         response = await call_next(request)
         
         # Berechne Dauer
         duration_ms = (time.time() - start_time) * 1000
+        
+        # Error-Learning: Logge erfolgreiche Requests (nur bei 2xx)
+        if 200 <= response.status_code < 300:
+            try:
+                from backend.services.error_learning_service import log_success_event
+                log_success_event(
+                    endpoint=str(request.url.path),
+                    http_method=request.method,
+                    status_code=response.status_code,
+                    request_duration_ms=int(duration_ms),
+                    environment=_get_environment(),
+                )
+            except Exception as e:
+                # Fehler beim Success-Logging darf nicht den Request killen
+                logging.getLogger(__name__).debug(f"Fehler beim Success-Logging: {e}")
         
         # Füge Trace-ID zum Response-Header hinzu
         # ✅ Header direkt setzen - keine Scope-Manipulation
@@ -60,4 +76,15 @@ class TraceIDMiddleware(BaseHTTPMiddleware):
             logging.getLogger(__name__).debug(f"Failed to log request metrics: {log_err}")
         
         return response
+
+
+def _get_environment() -> str:
+    """Bestimmt die aktuelle Umgebung (dev, prod, test)."""
+    import os
+    env = os.getenv("ENVIRONMENT", "dev")
+    if env.lower() in ["production", "prod"]:
+        return "prod"
+    elif env.lower() in ["test", "testing"]:
+        return "test"
+    return "dev"
 

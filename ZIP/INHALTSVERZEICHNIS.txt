@@ -1,0 +1,75 @@
+CODE-AUDIT-PAKET - INHALTSVERZEICHNIS
+=====================================
+
+Dieses Paket enthaelt alle relevanten Programmdateien fuer ein Code-Audit.
+
+ENHALTENE DATEITYPEN:
+---------------------
+- Python-Source-Dateien (.py)
+- SQL-Migrations (.sql)
+- Markdown-Dokumentation (.md)
+- Konfigurationsdateien (.yml, .yaml, .json, .txt)
+- GitHub Actions Workflows
+
+AUSGESCHLOSSEN:
+---------------
+- Dependencies (node_modules, venv, etc.)
+- Kompilierte Dateien (__pycache__, *.pyc)
+- Datenbanken (*.sqlite3, *.db)
+- Logs und temporaere Dateien
+- Git-Verzeichnis (.git)
+- Build-Artefakte
+
+WICHTIGE ORDNER:
+----------------
+backend/           - Backend-Module und Services
+services/          - Service-Layer
+routes/            - API-Endpunkte
+admin/             - Admin-Interface
+tools/             - Utility-Scripts
+tests/             - Test-Suites
+db/                - Datenbank-Schema
+migrations/        - Datenbank-Migrationen
+docs/              - Dokumentation
+monitoring/        - Monitoring-Konfiguration
+.github/           - CI/CD Workflows
+
+NEUE IMPLEMENTIERUNGEN:
+-----------------------
+- Address Corrections System
+  * backend/services/address_corrections.py
+  * backend/services/geocoder_correction_aware.py
+  * tests/test_address_corrections_*.py
+
+- Monitoring & Observability
+  * backend/observability/metrics.py
+  * monitoring/ (Konfiguration)
+
+- Admin-Interface
+  * admin/address_admin_app_compat.py
+  * routes/address_admin.py
+
+- Code-Überwachung
+  * tools/llm_code_guard.py
+  * .github/workflows/ci_llm_guard.yml
+
+DOKUMENTATION:
+--------------
+- docs/ADDRESS_CORRECTIONS_README.md
+- docs/MONITORING_SETUP.md
+- docs/LLM_CODE_GUARD_ERKLAERUNG.md
+- docs/MODULARITAT_UND_TESTS.md
+- docs/ENDPOINTS_OVERVIEW.md
+
+TEST-ABDECKUNG:
+---------------
+- Jedes Modul hat eigene Tests
+- Unit-Tests: tests/test_*_unit.py
+- Integration-Tests: tests/test_*_integration.py
+- Flow-Tests: tests/test_*_flow.py
+- Modularitaets-Tests: tests/test_*_modularity.py
+
+ERSTELLT: Automatisch generiert
+ZUSTAND: Produktionsreif
+ZIEL: Code-Audit und Review
+

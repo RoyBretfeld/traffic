@@ -121,7 +121,10 @@ async def bulk_process_all_csv():
                 customers = tour_data.get("customers", [])
                 
                 if not customers:
-                    print(f"[BULK] Keine Kunden in {csv_file.name}")
+                    # Verwende Standard-Logging (enhanced_logger könnte zu viel sein für Bulk-Processing)
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.warning(f"[BULK] Keine Kunden in {csv_file.name}")
                     continue
                 
                 stats["total_customers"] += len(customers)

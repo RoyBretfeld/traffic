@@ -28,7 +28,8 @@ def setup_test_policy():
 test_temp_dir = setup_test_policy()
 
 # App nach PathPolicy-Initialisierung importieren
-from backend.app import app
+from backend.app import create_app
+app = create_app()
 client = TestClient(app)
 
 def test_csv_export_utf8_header():

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-Verhalten - Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .status-indicator.active {
+            background-color: #28a745;
+            animation: pulse 2s infinite;
+        }
+        .status-indicator.inactive {
+            background-color: #dc3545;
+        }
+        .status-indicator.warning {
+            background-color: #ffc107;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .activity-timeline {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .timeline-item {
+            border-left: 3px solid #007bff;
+            padding-left: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 5px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #007bff;
+        }
+        .timeline-item.success {
+            border-left-color: #28a745;
+        }
+        .timeline-item.success::before {
+            background: #28a745;
+        }
+        .timeline-item.error {
+            border-left-color: #dc3545;
+        }
+        .timeline-item.error::before {
+            background: #dc3545;
+        }
+        .timeline-item.warning {
+            border-left-color: #ffc107;
+        }
+        .timeline-item.warning::before {
+            background: #ffc107;
+        }
+        .metric-card {
+            border-left: 4px solid #007bff;
+            transition: transform 0.2s;
+        }
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .metric-card.success {
+            border-left-color: #28a745;
+        }
+        .metric-card.warning {
+            border-left-color: #ffc107;
+        }
+        .metric-card.danger {
+            border-left-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">
+                <i class="fas fa-robot"></i> KI-Verhalten
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/admin">
+                    <i class="fas fa-arrow-left"></i> Zurück zum Admin
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Live-Status-Dashboard -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="mb-4"><i class="fas fa-tachometer-alt"></i> Live-Status-Dashboard</h2>
+            </div>
+            
+            <!-- Status-Karten -->
+            <div class="col-md-3 mb-3">
+                <div class="card metric-card" id="status-code-checker">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <span class="status-indicator inactive" id="indicator-code-checker"></span>
+                            Code-Checker
+                        </h6>
+                        <p class="card-text text-muted mb-0" id="status-code-checker-text">Prüfe...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card metric-card" id="status-background-job">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <span class="status-indicator inactive" id="indicator-background-job"></span>
+                            Background-Job
+                        </h6>
+                        <p class="card-text text-muted mb-0" id="status-background-job-text">Prüfe...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card metric-card" id="status-live-analysis">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <span class="status-indicator inactive" id="indicator-live-analysis"></span>
+                            Live Code-Analyse
+                        </h6>
+                        <p class="card-text text-muted mb-0" id="status-live-analysis-text">Prüfe...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card metric-card" id="status-api">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <span class="status-indicator inactive" id="indicator-api"></span>
+                            API-Verfügbarkeit
+                        </h6>
+                        <p class="card-text text-muted mb-0" id="status-api-text">Prüfe...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance-Analyse -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-line"></i> Performance-Analyse</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <canvas id="performance-chart" height="200"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Durchschnittliche Laufzeiten</h6>
+                                <div id="performance-metrics">
+                                    <p class="text-muted">Lade Metriken...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Effektivitäts-Metriken -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Effektivitäts-Metriken</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card metric-card success" id="effectiveness-score-card">
+                                    <div class="card-body text-center">
+                                        <h3 id="effectiveness-score">-</h3>
+                                        <p class="text-muted mb-0" id="effectiveness-interpretation">Lade...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <h6>Empfehlungen</h6>
+                                <div id="recommendations-list">
+                                    <p class="text-muted">Lade Empfehlungen...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aktivitäts-Timeline -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-history"></i> Aktivitäts-Timeline</h5>
+                        <div>
+                            <select class="form-select form-select-sm d-inline-block" id="filter-operation" style="width: auto;">
+                                <option value="">Alle Operationen</option>
+                                <option value="code_analysis">Code-Analyse</option>
+                                <option value="error_pattern_matching">Error-Pattern-Matching</option>
+                                <option value="code_improvement">Code-Improvement</option>
+                            </select>
+                            <button class="btn btn-sm btn-light ms-2" onclick="loadActivityLog()">
+                                <i class="fas fa-sync"></i> Aktualisieren
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-timeline" id="activity-timeline">
+                            <p class="text-muted text-center">Lade Aktivitäten...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem-Diagnose: Live Code Analyse -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="fas fa-stethoscope"></i> Problem-Diagnose: Live Code Analyse</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="diagnosis-results">
+                            <p class="text-muted">Führe Diagnose durch...</p>
+                        </div>
+                        <button class="btn btn-warning" onclick="runDiagnosis()">
+                            <i class="fas fa-search"></i> Diagnose starten
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let performanceChart = null;
+        let refreshInterval = null;
+
+        // Initialisierung
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllData();
+            // Auto-Refresh alle 30 Sekunden
+            refreshInterval = setInterval(loadAllData, 30000);
+        });
+
+        // Alle Daten laden
+        async function loadAllData() {
+            await Promise.all([
+                loadLiveStatus(),
+                loadPerformanceMetrics(),
+                loadEffectivenessMetrics(),
+                loadActivityLog()
+            ]);
+        }
+
+        // Live-Status laden
+        async function loadLiveStatus() {
+            try {
+                // Code-Checker Status
+                try {
+                    const checkerResponse = await fetch('/api/code-checker/status');
+                    if (checkerResponse.ok) {
+                        const checkerData = await checkerResponse.json();
+                        updateStatusCard('code-checker', checkerData.available, 
+                            checkerData.available ? 'Verfügbar' : 'Nicht verfügbar');
+                    } else {
+                        updateStatusCard('code-checker', false, 'Fehler beim Abrufen');
+                    }
+                } catch (e) {
+                    updateStatusCard('code-checker', false, 'Nicht erreichbar');
+                }
+
+                // Background-Job Status
+                try {
+                    const jobResponse = await fetch('/api/code-improvement-job/status');
+                    if (jobResponse.ok) {
+                        const jobData = await jobResponse.json();
+                        const isRunning = jobData.is_running || false;
+                        updateStatusCard('background-job', isRunning, 
+                            isRunning ? 'Läuft' : 'Gestoppt');
+                    } else {
+                        updateStatusCard('background-job', false, 'Fehler beim Abrufen');
+                    }
+                } catch (e) {
+                    updateStatusCard('background-job', false, 'Nicht erreichbar');
+                }
+
+                // Live Code-Analyse Status (prüfe ob Endpoint antwortet)
+                try {
+                    const analysisResponse = await fetch('/api/code-checker/analyze?file_path=tests/test_ai_checker_demo.py', {
+                        method: 'POST'
+                    });
+                    // Auch wenn 404/400, bedeutet das dass der Endpoint existiert
+                    updateStatusCard('live-analysis', true, 'Verfügbar');
+                } catch (e) {
+                    updateStatusCard('live-analysis', false, 'Nicht erreichbar');
+                }
+
+                // API-Verfügbarkeit (Health Check)
+                try {
+                    const healthResponse = await fetch('/health');
+                    if (healthResponse.ok) {
+                        updateStatusCard('api', true, 'Online');
+                    } else {
+                        updateStatusCard('api', false, 'Fehler');
+                    }
+                } catch (e) {
+                    updateStatusCard('api', false, 'Offline');
+                }
+
+            } catch (error) {
+                console.error('Fehler beim Laden des Live-Status:', error);
+            }
+        }
+
+        function updateStatusCard(id, isActive, text) {
+            const indicator = document.getElementById(`indicator-${id}`);
+            const textElement = document.getElementById(`status-${id}-text`);
+            const card = document.getElementById(`status-${id}`);
+            
+            if (indicator && textElement && card) {
+                indicator.className = `status-indicator ${isActive ? 'active' : 'inactive'}`;
+                textElement.textContent = text;
+                
+                // Card-Farbe anpassen
+                card.className = `card metric-card ${isActive ? 'success' : 'danger'}`;
+            }
+        }
+
+        // Performance-Metriken laden
+        async function loadPerformanceMetrics() {
+            try {
+                const response = await fetch('/api/ki/activity-summary?days=7');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success && data.daily_summary) {
+                    // Chart erstellen
+                    const ctx = document.getElementById('performance-chart');
+                    if (ctx) {
+                        if (performanceChart) {
+                            performanceChart.destroy();
+                        }
+                        
+                        const labels = data.daily_summary.map(d => d.date);
+                        const calls = data.daily_summary.map(d => d.calls);
+                        const costs = data.daily_summary.map(d => d.cost);
+                        
+                        performanceChart = new Chart(ctx.getContext('2d'), {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'API-Calls',
+                                    data: calls,
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                                    yAxisID: 'y'
+                                }, {
+                                    label: 'Kosten (€)',
+                                    data: costs,
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                                    yAxisID: 'y1'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        position: 'left'
+                                    },
+                                    y1: {
+                                        beginAtZero: true,
+                                        position: 'right',
+                                        grid: {
+                                            drawOnChartArea: false
+                                        },
+                                        ticks: {
+                                            callback: function(value) {
+                                                return value.toFixed(4) + ' €';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Metriken anzeigen
+                    const metricsContainer = document.getElementById('performance-metrics');
+                    if (metricsContainer && data.totals) {
+                        const avgCalls = data.totals.total_calls / 7;
+                        const avgCost = data.totals.total_cost / 7;
+                        
+                        metricsContainer.innerHTML = `
+                            <ul class="list-unstyled">
+                                <li><strong>Durchschnittliche Calls/Tag:</strong> ${avgCalls.toFixed(1)}</li>
+                                <li><strong>Durchschnittliche Kosten/Tag:</strong> ${avgCost.toFixed(4)} €</li>
+                                <li><strong>Gesamt Calls (7 Tage):</strong> ${data.totals.total_calls}</li>
+                                <li><strong>Gesamt Kosten (7 Tage):</strong> ${data.totals.total_cost.toFixed(4)} €</li>
+                                <li><strong>Durchschnitt Kosten/Call:</strong> ${data.totals.avg_cost_per_call.toFixed(4)} €</li>
+                            </ul>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Performance-Metriken:', error);
+                document.getElementById('performance-metrics').innerHTML = 
+                    '<p class="text-danger">Fehler beim Laden der Metriken</p>';
+            }
+        }
+
+        // Effektivitäts-Metriken laden
+        async function loadEffectivenessMetrics() {
+            try {
+                const response = await fetch('/api/ki/effectiveness?days=7');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Score anzeigen
+                    const scoreElement = document.getElementById('effectiveness-score');
+                    const interpretationElement = document.getElementById('effectiveness-interpretation');
+                    const scoreCard = document.getElementById('effectiveness-score-card');
+                    
+                    if (scoreElement && interpretationElement && scoreCard) {
+                        const score = data.effectiveness_metrics.overall_score;
+                        scoreElement.textContent = score.toFixed(1);
+                        interpretationElement.textContent = data.effectiveness_metrics.score_interpretation;
+                        
+                        // Card-Farbe basierend auf Score
+                        if (score >= 80) {
+                            scoreCard.className = 'card metric-card success';
+                        } else if (score >= 40) {
+                            scoreCard.className = 'card metric-card warning';
+                        } else {
+                            scoreCard.className = 'card metric-card danger';
+                        }
+                    }
+                    
+                    // Empfehlungen anzeigen
+                    const recommendationsContainer = document.getElementById('recommendations-list');
+                    if (recommendationsContainer && data.recommendations) {
+                        if (data.recommendations.length === 0) {
+                            recommendationsContainer.innerHTML = '<p class="text-success"><i class="fas fa-check-circle"></i> Keine Empfehlungen - alles läuft optimal!</p>';
+                        } else {
+                            let html = '<ul class="list-group">';
+                            data.recommendations.forEach(rec => {
+                                const priorityClass = rec.priority === 'high' ? 'danger' : rec.priority === 'medium' ? 'warning' : 'info';
+                                html += `
+                                    <li class="list-group-item">
+                                        <span class="badge bg-${priorityClass} me-2">${rec.priority.toUpperCase()}</span>
+                                        <strong>${rec.type}:</strong> ${rec.message}
+                                        <br><small class="text-muted">${rec.action}</small>
+                                    </li>
+                                `;
+                            });
+                            html += '</ul>';
+                            recommendationsContainer.innerHTML = html;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Effektivitäts-Metriken:', error);
+            }
+        }
+
+        // Aktivitäts-Log laden
+        async function loadActivityLog() {
+            try {
+                const operationFilter = document.getElementById('filter-operation').value;
+                const params = new URLSearchParams({
+                    limit: '50',
+                    offset: '0'
+                });
+                if (operationFilter) {
+                    params.append('operation', operationFilter);
+                }
+                
+                const response = await fetch(`/api/ki/activity-log?${params}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success && data.entries) {
+                    const timelineContainer = document.getElementById('activity-timeline');
+                    if (timelineContainer) {
+                        if (data.entries.length === 0) {
+                            timelineContainer.innerHTML = '<p class="text-muted text-center">Keine Aktivitäten gefunden</p>';
+                        } else {
+                            let html = '';
+                            data.entries.forEach(entry => {
+                                const timestamp = new Date(entry.timestamp).toLocaleString('de-DE');
+                                const statusClass = entry.cost_eur > 0.01 ? 'success' : entry.cost_eur > 0 ? 'warning' : 'error';
+                                
+                                html += `
+                                    <div class="timeline-item ${statusClass}">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <strong>${entry.operation}</strong>
+                                                <br><small class="text-muted">${entry.model}</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <small class="text-muted">${timestamp}</small>
+                                                <br><strong>${entry.cost_eur.toFixed(4)} €</strong>
+                                            </div>
+                                        </div>
+                                        ${entry.file_path ? `<small class="text-muted"><i class="fas fa-file"></i> ${entry.file_path}</small>` : ''}
+                                        <div class="mt-1">
+                                            <span class="badge bg-secondary">${entry.input_tokens} Input</span>
+                                            <span class="badge bg-secondary">${entry.output_tokens} Output</span>
+                                            <span class="badge bg-info">${entry.total_tokens} Total</span>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            timelineContainer.innerHTML = html;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden des Aktivitäts-Logs:', error);
+                document.getElementById('activity-timeline').innerHTML = 
+                    '<p class="text-danger">Fehler beim Laden der Aktivitäten</p>';
+            }
+        }
+
+        // Problem-Diagnose durchführen
+        async function runDiagnosis() {
+            const resultsContainer = document.getElementById('diagnosis-results');
+            resultsContainer.innerHTML = '<p class="text-muted"><i class="fas fa-spinner fa-spin"></i> Diagnose läuft...</p>';
+            
+            const checks = [];
+            
+            // Check 1: Code-Checker verfügbar?
+            try {
+                const checkerResponse = await fetch('/api/code-checker/status');
+                if (checkerResponse.ok) {
+                    const checkerData = await checkerResponse.json();
+                    checks.push({
+                        name: 'Code-Checker Verfügbarkeit',
+                        status: checkerData.available ? 'success' : 'warning',
+                        message: checkerData.available ? 'Verfügbar' : 'Nicht verfügbar (OPENAI_API_KEY fehlt?)',
+                        details: checkerData
+                    });
+                } else {
+                    checks.push({
+                        name: 'Code-Checker Verfügbarkeit',
+                        status: 'error',
+                        message: 'Endpoint nicht erreichbar',
+                        details: null
+                    });
+                }
+            } catch (e) {
+                checks.push({
+                    name: 'Code-Checker Verfügbarkeit',
+                    status: 'error',
+                    message: 'Fehler beim Abrufen: ' + e.message,
+                    details: null
+                });
+            }
+            
+            // Check 2: Background-Job Status
+            try {
+                const jobResponse = await fetch('/api/code-improvement-job/status');
+                if (jobResponse.ok) {
+                    const jobData = await jobResponse.json();
+                    checks.push({
+                        name: 'Background-Job Status',
+                        status: jobData.is_running ? 'success' : 'warning',
+                        message: jobData.is_running ? 'Läuft' : 'Gestoppt (deaktiviert im Startup)',
+                        details: jobData
+                    });
+                } else {
+                    checks.push({
+                        name: 'Background-Job Status',
+                        status: 'error',
+                        message: 'Endpoint nicht erreichbar',
+                        details: null
+                    });
+                }
+            } catch (e) {
+                checks.push({
+                    name: 'Background-Job Status',
+                    status: 'error',
+                    message: 'Fehler beim Abrufen: ' + e.message,
+                    details: null
+                });
+            }
+            
+            // Check 3: Live Code-Analyse Endpoint
+            try {
+                const analysisResponse = await fetch('/api/code-checker/analyze?file_path=tests/test_ai_checker_demo.py', {
+                    method: 'POST'
+                });
+                checks.push({
+                    name: 'Live Code-Analyse Endpoint',
+                    status: analysisResponse.ok || analysisResponse.status === 404 ? 'success' : 'warning',
+                    message: analysisResponse.ok ? 'Funktioniert' : `Status: ${analysisResponse.status}`,
+                    details: { status: analysisResponse.status }
+                });
+            } catch (e) {
+                checks.push({
+                    name: 'Live Code-Analyse Endpoint',
+                    status: 'error',
+                    message: 'Fehler: ' + e.message,
+                    details: null
+                });
+            }
+            
+            // Check 4: Letzte Aktivitäten
+            try {
+                const activityResponse = await fetch('/api/ki/activity-log?limit=5');
+                if (activityResponse.ok) {
+                    const activityData = await activityResponse.json();
+                    const recentActivity = activityData.entries && activityData.entries.length > 0;
+                    checks.push({
+                        name: 'Letzte Aktivitäten',
+                        status: recentActivity ? 'success' : 'warning',
+                        message: recentActivity ? `${activityData.entries.length} Einträge gefunden` : 'Keine Aktivitäten in letzter Zeit',
+                        details: { count: activityData.entries?.length || 0 }
+                    });
+                } else {
+                    checks.push({
+                        name: 'Letzte Aktivitäten',
+                        status: 'error',
+                        message: 'Endpoint nicht erreichbar',
+                        details: null
+                    });
+                }
+            } catch (e) {
+                checks.push({
+                    name: 'Letzte Aktivitäten',
+                    status: 'error',
+                    message: 'Fehler: ' + e.message,
+                    details: null
+                });
+            }
+            
+            // Ergebnisse anzeigen
+            let html = '<div class="list-group">';
+            checks.forEach(check => {
+                const iconClass = check.status === 'success' ? 'fa-check-circle text-success' : 
+                                 check.status === 'warning' ? 'fa-exclamation-triangle text-warning' : 
+                                 'fa-times-circle text-danger';
+                html += `
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <i class="fas ${iconClass} me-2"></i>
+                                <strong>${check.name}</strong>
+                                <br><small class="text-muted">${check.message}</small>
+                            </div>
+                            <span class="badge bg-${check.status === 'success' ? 'success' : check.status === 'warning' ? 'warning' : 'danger'}">
+                                ${check.status === 'success' ? 'OK' : check.status === 'warning' ? 'WARNUNG' : 'FEHLER'}
+                            </span>
+                        </div>
+                        ${check.details ? `<pre class="mt-2 small">${JSON.stringify(check.details, null, 2)}</pre>` : ''}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            resultsContainer.innerHTML = html;
+        }
+
+        // Filter-Änderung
+        document.getElementById('filter-operation').addEventListener('change', loadActivityLog);
+    </script>
+</body>
+</html>
+

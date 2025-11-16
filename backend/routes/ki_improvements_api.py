@@ -153,7 +153,10 @@ async def websocket_improvements(websocket: WebSocket):
     except WebSocketDisconnect:
         websocket_connections.remove(websocket)
     except Exception as e:
-        print(f"[WEBSOCKET] Fehler: {e}")
+        # Verwende Standard-Logging für WebSocket-Fehler (enhanced_logger könnte zu viel sein)
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"[WEBSOCKET] Fehler: {e}", exc_info=e)
         if websocket in websocket_connections:
             websocket_connections.remove(websocket)
 
@@ -169,7 +172,9 @@ async def broadcast_improvement(improvement_result: dict):
         try:
             await ws.send_json(message)
         except Exception as e:
-            print(f"[WEBSOCKET] Fehler beim Senden: {e}")
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"[WEBSOCKET] Fehler beim Senden: {e}")
             disconnected.append(ws)
     
     # Entferne getrennte Verbindungen
@@ -196,7 +201,9 @@ async def broadcast_activity_to_websockets(message: str, level: str = "info"):
         try:
             await ws.send_json(activity_message)
         except Exception as e:
-            print(f"[WEBSOCKET] Fehler beim Senden von Activity: {e}")
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"[WEBSOCKET] Fehler beim Senden von Activity: {e}")
             disconnected.append(ws)
     
     # Entferne getrennte Verbindungen

@@ -16,7 +16,8 @@ import json
 @pytest.fixture
 def client():
     """Test-Client für FastAPI"""
-    from backend.app import app
+    from backend.app import create_app
+    app = create_app()
     return TestClient(app)
 
 

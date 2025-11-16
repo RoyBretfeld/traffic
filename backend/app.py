@@ -94,91 +94,12 @@ def create_app() -> FastAPI:
     except Exception as e:
         print(f"[WARNING] Encoding setup failed: {e}")
     
-    # Fail-Cache Bereinigung beim Start (abgelaufene Einträge entfernen)
-    # WICHTIG: Abgelaufene Einträge werden automatisch wieder versucht
-    try:
-        from repositories.geo_fail_repo import cleanup_expired
-        cleaned = cleanup_expired()
-        if cleaned > 0:
-            print(f"[STARTUP] {cleaned} abgelaufene Fail-Cache-Einträge bereinigt - werden erneut versucht")
-    except Exception as e:
-        print(f"[WARNING] Fail-Cache Bereinigung beim Start fehlgeschlagen: {e}")
-    
-    # Background-Job für KI-CodeChecker beim Start starten
-    @app.on_event("startup")
-    async def startup_event():
-        """Startet Background-Job beim Server-Start und loggt alle registrierten Routen."""
-        import logging
-        log = logging.getLogger("startup")
-        
-        # Logge alle registrierten Routen (Runbook-Format)
-        log.info("=" * 70)
-        log.info("ROUTE-MAP: Registrierte API-Endpoints")
-        log.info("=" * 70)
-        
-        routes_list = []
-        for route in app.routes:
-            try:
-                name = getattr(route, 'name', '?')
-                path = getattr(route, 'path', '?')
-                methods = getattr(route, 'methods', {})
-                methods_str = ', '.join(sorted(methods)) if methods else 'N/A'
-                routes_list.append(f"ROUTE: {name:25s}  {path}  {methods_str}")
-            except Exception as e:
-                log.warning(f"Fehler beim Loggen einer Route: {e}")
-        
-        # Sortiere nach Pfad
-        routes_list.sort()
-        for route_info in routes_list:
-            log.info(route_info)
-        
-        # Sammle Router-Namen für Übersicht
-        active_routers = set()
-        for route in app.routes:
-            try:
-                if hasattr(route, 'path') and route.path:
-                    # Extrahiere Router-Name aus Pfad
-                    parts = route.path.strip('/').split('/')
-                    if parts and parts[0]:
-                        active_routers.add(parts[0])
-            except Exception:
-                pass
-        
-        log.info("=" * 70)
-        log.info(f"Gesamt: {len([r for r in app.routes if hasattr(r, 'path')])} Endpoints")
-        log.info(f"Aktive Router: {', '.join(sorted(active_routers)) if active_routers else 'keine'}")
-        log.info("=" * 70)
-        
-        # Zusätzlich: Print für Console (falls gewünscht)
-        print("\n" + "=" * 70)
-        print("[ROUTES] Registrierte API-Endpoints:")
-        print("=" * 70)
-        for route_info in routes_list:
-            print(route_info)
-        print("=" * 70)
-        print(f"[ROUTES] Gesamt: {len([r for r in app.routes if hasattr(r, 'path')])} Endpoints")
-        print(f"[ROUTES] Aktive Router: {', '.join(sorted(active_routers)) if active_routers else 'keine'}")
-        print("=" * 70 + "\n")
-        
-        # Background-Job starten
-        try:
-            from backend.services.code_improvement_job import get_background_job
-            import asyncio
-            job = get_background_job()
-            if job.enabled and not job.is_running and job.ai_checker:
-                asyncio.create_task(job.run_continuously())
-                log.info("[STARTUP] KI-CodeChecker Background-Job gestartet")
-            elif not job.ai_checker:
-                log.info("[STARTUP] KI-CodeChecker nicht verfügbar (OPENAI_API_KEY fehlt)")
-        except Exception as e:
-            log.warning(f"[STARTUP] Fehler beim Starten des Background-Jobs: {e}")
-        
-        log.info("=" * 70)
-        log.info("App erfolgreich gestartet")
-        log.info("=" * 70)
+    # ENTFERNT: Startup-Event wurde nach app_setup.py verschoben
+    # Alle Startup-Logik ist jetzt in setup_startup_handlers() konsolidiert
+    # Dies verhindert doppelte Startup-Events und Race Conditions
 
     # --- Start der verschobenen Routen und Helferfunktionen ---
-    def read_tourplan_csv(csv_file):
+    def read_tourplan_csv_internal(csv_file):
         """Liest Tourplan-CSV direkt (für temporäre Dateien)."""
         import pandas as pd
         from pathlib import Path
@@ -207,7 +128,7 @@ def create_app() -> FastAPI:
             return df
         except Exception as e:
             raise Exception(f"CSV konnte nicht gelesen werden: {e}")
-
+    
     @app.get("/", response_class=HTMLResponse)
     async def root():
         """Hauptseite"""
@@ -262,6 +183,42 @@ def create_app() -> FastAPI:
             return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
         except FileNotFoundError:
             raise HTTPException(status_code=404, detail="KI-Kosten Dashboard nicht gefunden")
+    
+    @app.get("/admin/ki-verhalten", response_class=HTMLResponse)
+    async def ki_verhalten_dashboard(request: Request):
+        """KI-Verhalten Dashboard (geschützt)."""
+        # Auth-Check
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            # Redirect zu Login
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/ki-verhalten", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/ki-verhalten.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="KI-Verhalten Dashboard nicht gefunden")
+    
+    @app.get("/admin/tour-filter", response_class=HTMLResponse)
+    async def tour_filter_page(request: Request):
+        """Tour-Filter Verwaltung (geschützt)."""
+        # Auth-Check
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            # Redirect zu Login
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/tour-filter", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/tour-filter.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Tour-Filter Seite nicht gefunden")
     
     @app.get("/admin.html", response_class=HTMLResponse)
     async def admin_page(request: Request):
@@ -332,7 +289,7 @@ def create_app() -> FastAPI:
             try:
                 # CSV mit gehärteter Funktion lesen
                 csv_path = Path(tmp_file_path)
-                df = read_tourplan_csv(csv_path)
+                df = read_tourplan_csv_internal(csv_path)
 
                 addresses = []
                 total_rows = len(df)
@@ -438,7 +395,7 @@ def create_app() -> FastAPI:
                 # CSV mit gehärteter Funktion lesen
                 csv_path = Path(tmp_file_path)
                 print(f"[VISUAL-TEST] Starte CSV-Parsing...")
-                df = read_tourplan_csv(csv_path)
+                df = read_tourplan_csv_internal(csv_path)
                 print(f"[VISUAL-TEST] CSV geparst: {len(df)} Zeilen, {len(df.columns)} Spalten")
 
                 addresses = []
@@ -771,3 +728,37 @@ def create_app() -> FastAPI:
     # --- Ende der verschobenen Routen und Helferfunktionen ---
 
     return app
+
+# Exportiere read_tourplan_csv für Tests (nutzt gleiche Logik wie interne Funktion)
+def read_tourplan_csv(csv_file):
+    """Liest Tourplan-CSV direkt (für temporäre Dateien)."""
+    import pandas as pd
+    from pathlib import Path
+
+    # Für temporäre Dateien direkt lesen (ohne Staging)
+    csv_path = Path(csv_file)
+
+    # Versuche verschiedene Encodings
+    encodings = ['cp850', 'utf-8', 'latin-1', 'iso-8859-1']
+
+    for encoding in encodings:
+        try:
+            df = pd.read_csv(csv_path, sep=';', header=None, dtype=str, encoding=encoding)
+            print(f"[CSV READ] {csv_path.name} mit {encoding} ({len(df)} Zeilen)")
+            return df
+        except UnicodeDecodeError:
+            continue
+        except Exception as e:
+            print(f"[CSV READ] Fehler mit {encoding}: {e}")
+            continue
+
+    # Fallback: mit Fehlerbehandlung
+    try:
+        df = pd.read_csv(csv_path, sep=';', header=None, dtype=str, encoding='cp850', errors='replace')
+        print(f"[CSV READ] {csv_path.name} mit cp850+replace ({len(df)} Zeilen)")
+        return df
+    except Exception as e:
+        raise Exception(f"CSV konnte nicht gelesen werden: {e}")
+
+# Erstelle App-Instanz für direkten Import (z.B. in Tests)
+app = create_app()

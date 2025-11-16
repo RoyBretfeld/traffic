@@ -3,7 +3,8 @@ Tests für MVP Patchplan
 """
 import pytest
 from httpx import AsyncClient
-from backend.app import app
+from backend.app import create_app
+app = create_app()
 
 
 @pytest.mark.asyncio

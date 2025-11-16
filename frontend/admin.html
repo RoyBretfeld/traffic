@@ -77,30 +77,21 @@
                 </button>
             </li>
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ki-integration-tab" data-bs-toggle="tab" data-bs-target="#ki-integration" type="button" role="tab">
+                    <i class="fas fa-robot"></i> KI-Integration
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="db-tab" data-bs-toggle="tab" data-bs-target="#db" type="button" role="tab">
                     <i class="fas fa-database"></i> DB-Verwaltung
                 </button>
             </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="/admin/tour-filter" role="tab">
+                    <i class="fas fa-filter"></i> Tour-Filter
+                </a>
+            </li>
         </ul>
-        
-        <!-- KI-Integrationen Links (außerhalb der Tabs) -->
-        <div class="mt-3 mb-3">
-            <div class="card border-warning">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="mb-0"><i class="fas fa-robot"></i> KI-Integrationen</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex gap-2 flex-wrap">
-                        <a href="/admin/ki-improvements" class="btn btn-outline-primary">
-                            <i class="fas fa-code"></i> KI-CodeChecker
-                        </a>
-                        <a href="/admin/ki-kosten" class="btn btn-outline-warning">
-                            <i class="fas fa-coins"></i> KI-Kosten & Modelle
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="tab-content mt-3" id="adminTabContent">
             <!-- Health Tab -->
@@ -466,6 +457,70 @@
                 </div>
             </div>
             
+            <!-- KI-Integration Tab -->
+            <div class="tab-pane fade" id="ki-integration" role="tabpanel">
+                <h3 class="mb-4"><i class="fas fa-robot"></i> KI-Integration</h3>
+                
+                <!-- Sektion 1: Aktive KI-Integrationen -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-plug"></i> Aktive KI-Integrationen</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="ki-integrations-list">
+                            <div class="col-12 text-center">
+                                <i class="fas fa-spinner fa-spin"></i> Lade Integrationen...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sektion 2: Konfiguration -->
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-cog"></i> Konfiguration</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="ki-config">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6><i class="fas fa-brain"></i> KI-Modell</h6>
+                                    <p class="text-muted" id="ki-current-model">Lade...</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6><i class="fas fa-chart-line"></i> Limits</h6>
+                                    <p class="text-muted" id="ki-limits">Lade...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sektion 3: Quick-Links -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-external-link-alt"></i> Detaillierte Seiten</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="/admin/ki-improvements" class="btn btn-outline-primary">
+                                <i class="fas fa-code"></i> KI-CodeChecker
+                            </a>
+                            <a href="/admin/ki-kosten" class="btn btn-outline-warning">
+                                <i class="fas fa-coins"></i> KI-Kosten & Modelle
+                            </a>
+                            <a href="/admin/ki-verhalten" class="btn btn-outline-info">
+                                <i class="fas fa-chart-bar"></i> KI-Verhalten
+                            </a>
+                        </div>
+                        <p class="text-muted mt-3 mb-0">
+                            <small>Weitere Details und Analysen finden Sie auf den spezialisierten Seiten.</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Ende KI-Integration Tab -->
+
             <!-- Statistik Tab -->
             <div class="tab-pane fade" id="stats" role="tabpanel">
                 <div class="card">
@@ -634,6 +689,44 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Datenbank-Übersicht -->
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="fas fa-database"></i> Datenbank-Übersicht</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h6><i class="fas fa-filter"></i> Datenbanken auswählen</h6>
+                            <div id="db-selection" class="row">
+                                <div class="col-12 text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Lade Datenbanken...
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary btn-sm" onclick="loadDatabaseList()">
+                                <i class="fas fa-sync"></i> Liste aktualisieren
+                            </button>
+                            <button class="btn btn-success btn-sm" onclick="loadSelectedSchemas()">
+                                <i class="fas fa-table"></i> Schemas anzeigen
+                            </button>
+                        </div>
+                        <div id="db-list-container"></div>
+                    </div>
+                </div>
+
+                <!-- Schema-Ansicht -->
+                <div class="card mb-4" id="schema-view-card" style="display: none;">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-sitemap"></i> Schema-Informationen</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="schema-content">
+                            <p class="text-muted">Wählen Sie Datenbanken aus und klicken Sie auf "Schemas anzeigen".</p>
                         </div>
                     </div>
                 </div>
@@ -1635,6 +1728,342 @@
                 console.error('Fehler beim Laden der DB-Statistiken:', error);
             }
         }
+
+        // ===== DB-SCHEMA FUNKTIONEN =====
+        
+        async function loadDatabaseList() {
+            try {
+                const response = await fetch('/api/db/list');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const container = document.getElementById('db-selection');
+                const listContainer = document.getElementById('db-list-container');
+                
+                if (!data.success || !data.databases) {
+                    container.innerHTML = '<div class="alert alert-warning">Keine Datenbanken gefunden.</div>';
+                    return;
+                }
+                
+                // Checkboxen für DB-Auswahl
+                let checkboxesHtml = '<div class="row">';
+                data.databases.forEach(db => {
+                    const statusClass = db.status === 'online' ? 'success' : 'danger';
+                    const statusIcon = db.status === 'online' ? 'check-circle' : 'times-circle';
+                    const sizeText = db.size_mb ? `${db.size_mb} MB` : 'N/A';
+                    
+                    checkboxesHtml += `
+                        <div class="col-md-6 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input db-checkbox" type="checkbox" 
+                                       value="${db.name}" id="db-${db.name}" 
+                                       ${db.status === 'online' ? 'checked' : ''}>
+                                <label class="form-check-label" for="db-${db.name}">
+                                    <strong>${db.name}</strong>
+                                    <span class="badge bg-${statusClass} ms-2">
+                                        <i class="fas fa-${statusIcon}"></i> ${db.status}
+                                    </span>
+                                    <small class="text-muted d-block">${db.description || ''} (${sizeText})</small>
+                                </label>
+                            </div>
+                        </div>
+                    `;
+                });
+                checkboxesHtml += '</div>';
+                container.innerHTML = checkboxesHtml;
+                
+                // Liste der Datenbanken
+                let listHtml = '<div class="table-responsive"><table class="table table-sm table-hover">';
+                listHtml += '<thead><tr><th>Name</th><th>Status</th><th>Größe</th><th>Beschreibung</th></tr></thead><tbody>';
+                data.databases.forEach(db => {
+                    const statusClass = db.status === 'online' ? 'success' : 'danger';
+                    const sizeText = db.size_mb ? `${db.size_mb} MB` : 'N/A';
+                    listHtml += `
+                        <tr>
+                            <td><strong>${db.name}</strong></td>
+                            <td><span class="badge bg-${statusClass}">${db.status}</span></td>
+                            <td>${sizeText}</td>
+                            <td><small>${db.description || ''}</small></td>
+                        </tr>
+                    `;
+                });
+                listHtml += '</tbody></table></div>';
+                listContainer.innerHTML = listHtml;
+                
+            } catch (error) {
+                console.error('Fehler beim Laden der Datenbank-Liste:', error);
+                document.getElementById('db-selection').innerHTML = 
+                    `<div class="alert alert-danger">Fehler: ${error.message}</div>`;
+            }
+        }
+
+        async function loadSelectedSchemas() {
+            const checkboxes = document.querySelectorAll('.db-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Bitte wählen Sie mindestens eine Datenbank aus.');
+                return;
+            }
+            
+            const selectedDbs = Array.from(checkboxes).map(cb => cb.value).join(',');
+            
+            try {
+                const response = await fetch(`/api/db/schemas?dbs=${encodeURIComponent(selectedDbs)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const schemaCard = document.getElementById('schema-view-card');
+                const schemaContent = document.getElementById('schema-content');
+                
+                if (!data.success || !data.schemas) {
+                    schemaContent.innerHTML = '<div class="alert alert-warning">Keine Schema-Informationen verfügbar.</div>';
+                    schemaCard.style.display = 'block';
+                    return;
+                }
+                
+                let html = '';
+                Object.entries(data.schemas).forEach(([dbName, schema]) => {
+                    if (schema.error) {
+                        html += `
+                            <div class="alert alert-warning mb-3">
+                                <h6><i class="fas fa-exclamation-triangle"></i> ${dbName}</h6>
+                                <p class="mb-0">Fehler: ${schema.error}</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    html += `
+                        <div class="card mb-3">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-database"></i> ${dbName}
+                                    <span class="badge bg-light text-dark ms-2">${schema.table_count || 0} Tabellen</span>
+                                    <span class="badge bg-light text-dark ms-2">${schema.size_mb || 0} MB</span>
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted"><small>${schema.description || ''}</small></p>
+                                <div class="accordion" id="accordion-${dbName.replace(/[^a-zA-Z0-9]/g, '-')}">
+                    `;
+                    
+                    if (schema.tables && schema.tables.length > 0) {
+                        schema.tables.forEach((table, idx) => {
+                            const accordionId = `accordion-${dbName.replace(/[^a-zA-Z0-9]/g, '-')}-${idx}`;
+                            html += `
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading-${accordionId}">
+                                        <button class="accordion-button ${idx === 0 ? '' : 'collapsed'}" type="button" 
+                                                data-bs-toggle="collapse" data-bs-target="#collapse-${accordionId}">
+                                            <i class="fas fa-table"></i> ${table.name}
+                                            <span class="badge bg-secondary ms-2">${table.column_count || 0} Spalten</span>
+                                            ${table.row_count !== null ? `<span class="badge bg-info ms-2">${table.row_count} Zeilen</span>` : ''}
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-${accordionId}" class="accordion-collapse collapse ${idx === 0 ? 'show' : ''}" 
+                                         data-bs-parent="#accordion-${dbName.replace(/[^a-zA-Z0-9]/g, '-')}">
+                                        <div class="accordion-body">
+                            `;
+                            
+                            // Spalten
+                            if (table.columns && table.columns.length > 0) {
+                                html += '<h6>Spalten:</h6><div class="table-responsive"><table class="table table-sm table-bordered">';
+                                html += '<thead><tr><th>Name</th><th>Typ</th><th>NOT NULL</th><th>Default</th><th>PK</th></tr></thead><tbody>';
+                                table.columns.forEach(col => {
+                                    html += `
+                                        <tr>
+                                            <td><strong>${col.name}</strong></td>
+                                            <td><code>${col.type}</code></td>
+                                            <td>${col.notnull ? '<span class="badge bg-warning">Ja</span>' : '<span class="badge bg-secondary">Nein</span>'}</td>
+                                            <td>${col.default_value || '<em>kein</em>'}</td>
+                                            <td>${col.pk ? '<span class="badge bg-primary">PK</span>' : ''}</td>
+                                        </tr>
+                                    `;
+                                });
+                                html += '</tbody></table></div>';
+                            }
+                            
+                            // Indizes
+                            if (table.indexes && table.indexes.length > 0) {
+                                html += '<h6 class="mt-3">Indizes:</h6><ul class="list-group">';
+                                table.indexes.forEach(idx => {
+                                    html += `
+                                        <li class="list-group-item">
+                                            <strong>${idx.name}</strong>
+                                            ${idx.unique ? '<span class="badge bg-success ms-2">UNIQUE</span>' : ''}
+                                            <small class="text-muted d-block">Spalten: ${idx.columns.join(', ')}</small>
+                                        </li>
+                                    `;
+                                });
+                                html += '</ul>';
+                            }
+                            
+                            if (table.error) {
+                                html += `<div class="alert alert-danger">Fehler: ${table.error}</div>`;
+                            }
+                            
+                            html += `
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        html += '<p class="text-muted">Keine Tabellen gefunden.</p>';
+                    }
+                    
+                    html += `
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                schemaContent.innerHTML = html;
+                schemaCard.style.display = 'block';
+                
+                // Scroll zu Schema-Ansicht
+                schemaCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+            } catch (error) {
+                console.error('Fehler beim Laden der Schemas:', error);
+                document.getElementById('schema-content').innerHTML = 
+                    `<div class="alert alert-danger">Fehler: ${error.message}</div>`;
+                document.getElementById('schema-view-card').style.display = 'block';
+            }
+        }
+
+        // ===== KI-INTEGRATION FUNKTIONEN =====
+        
+        async function loadKIIntegrations() {
+            try {
+                // Lade Integrationen-Info
+                const [statsResponse, usageResponse] = await Promise.all([
+                    fetch('/api/cost-tracker/stats'),
+                    fetch('/api/cost-tracker/usage')
+                ]);
+                
+                const stats = statsResponse.ok ? await statsResponse.json() : null;
+                const usage = usageResponse.ok ? await usageResponse.json() : null;
+                
+                const container = document.getElementById('ki-integrations-list');
+                
+                const integrations = [
+                    {
+                        name: "Code-Checker",
+                        model: stats?.default_model || "gpt-4o-mini",
+                        purpose: "Code-Analyse & Verbesserungen",
+                        active: true,
+                        calls: usage?.operations?.code_analysis?.calls || 0,
+                        cost: usage?.operations?.code_analysis?.cost || 0
+                    },
+                    {
+                        name: "Error-Pattern-Erkennung",
+                        model: stats?.default_model || "gpt-4o-mini",
+                        purpose: "Fehlerhistorie-Matching",
+                        active: true,
+                        calls: usage?.operations?.error_pattern_matching?.calls || 0,
+                        cost: usage?.operations?.error_pattern_matching?.cost || 0
+                    },
+                    {
+                        name: "Code-Improvement",
+                        model: stats?.default_model || "gpt-4o-mini",
+                        purpose: "Automatische Code-Verbesserungen",
+                        active: true,
+                        calls: usage?.operations?.code_improvement?.calls || 0,
+                        cost: usage?.operations?.code_improvement?.cost || 0
+                    }
+                ];
+                
+                let html = '';
+                integrations.forEach(int => {
+                    html += `
+                        <div class="col-md-4 mb-3">
+                            <div class="card ${int.active ? 'border-success' : 'border-secondary'}">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        ${int.active ? '<i class="fas fa-circle text-success"></i>' : '<i class="fas fa-circle text-secondary"></i>'}
+                                        <strong>${int.name}</strong>
+                                    </h6>
+                                    <p class="card-text text-muted"><small>${int.purpose}</small></p>
+                                    <div class="d-flex justify-content-between">
+                                        <small><strong>Modell:</strong> ${int.model}</small>
+                                    </div>
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-phone"></i> ${int.calls} Calls
+                                            <span class="ms-2"><i class="fas fa-euro-sign"></i> ${int.cost.toFixed(4)} €</span>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+                
+                // Lade auch Konfiguration
+                loadKIConfig(stats);
+                
+            } catch (error) {
+                console.error('Fehler beim Laden der KI-Integrationen:', error);
+                document.getElementById('ki-integrations-list').innerHTML = 
+                    `<div class="alert alert-danger">Fehler: ${error.message}</div>`;
+            }
+        }
+        
+        async function loadKIConfig(stats) {
+            try {
+                if (!stats) {
+                    const response = await fetch('/api/cost-tracker/stats');
+                    if (response.ok) {
+                        stats = await response.json();
+                    }
+                }
+                
+                if (stats) {
+                    document.getElementById('ki-current-model').innerHTML = `
+                        <strong>${stats.default_model || 'gpt-4o-mini'}</strong>
+                        <br><small class="text-muted">Standard-Modell für Code-Verbesserungen</small>
+                    `;
+                    
+                    document.getElementById('ki-limits').innerHTML = `
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Tägliches Limit:</strong> ${stats.daily_limit || stats.limits?.daily_limit || 5.0} €</li>
+                            <li><strong>API-Calls Limit:</strong> ${stats.daily_api_calls_limit || stats.limits?.daily_api_calls_limit || 50} / Tag</li>
+                            <li><strong>Verbesserungen Limit:</strong> ${stats.daily_improvements_limit || stats.limits?.daily_improvements_limit || 10} / Tag</li>
+                        </ul>
+                    `;
+                } else {
+                    document.getElementById('ki-current-model').innerHTML = '<span class="text-muted">Nicht verfügbar</span>';
+                    document.getElementById('ki-limits').innerHTML = '<span class="text-muted">Nicht verfügbar</span>';
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der KI-Konfiguration:', error);
+            }
+        }
+
+        // Lade DB-Liste beim Öffnen des Tabs
+        document.addEventListener('DOMContentLoaded', function() {
+            const dbTab = document.getElementById('db-tab');
+            if (dbTab) {
+                dbTab.addEventListener('shown.bs.tab', function() {
+                    loadDatabaseList();
+                });
+            }
+            
+            // Lade KI-Integrationen beim Öffnen des Tabs
+            const kiTab = document.getElementById('ki-integration-tab');
+            if (kiTab) {
+                kiTab.addEventListener('shown.bs.tab', function() {
+                    loadKIIntegrations();
+                });
+            }
+        });
     </script>
     </div> <!-- Ende adminContent -->
 </body>

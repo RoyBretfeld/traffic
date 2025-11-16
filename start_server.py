@@ -31,6 +31,14 @@ if config_env_path.exists():
     os.environ.setdefault("ENABLE_DEBUG_ROUTES", "0")
 
     # Venv Health Check (PRÜFT UND REPARIERT AUTOMATISCH)
+    # WICHTIG: Logger muss VOR Health Check definiert sein!
+    import logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    logger = logging.getLogger(__name__)
+    
     try:
         from backend.utils.venv_health_check import run_venv_health_check
         logger.info("Führe Venv Health Check durch...")
@@ -78,8 +86,15 @@ if cfg("app:feature_flags:strict_health_checks", False):
 
 import uvicorn
 import logging
+import threading
+import time
+try:
+    import requests
+except ImportError:
+    requests = None  # Optional für Port-Check
 
 # Setup Logging (FRÜH, damit Health Check loggen kann)
+# WICHTIG: Wird auch in Health Check verwendet, daher hier definiert
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -116,13 +131,96 @@ if __name__ == "__main__":
     
     log.info("=" * 70)
     
+    # Startup-Log-Datei für Port-Check
+    from datetime import datetime
+    from pathlib import Path
+    startup_log_dir = Path("logs")
+    startup_log_dir.mkdir(exist_ok=True)
+    port_check_log_path = startup_log_dir / f"port_check_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+    
+    # Port-Bindungs-Verifizierung nach Start
+    def verify_port_binding():
+        """Prüft ob Port 8111 nach Start erreichbar ist."""
+        check_start = time.time()
+        
+        # Log in Datei
+        with open(port_check_log_path, 'w', encoding='utf-8') as f:
+            f.write(f"Port-Check gestartet: {datetime.now().isoformat()}\n")
+            f.write("=" * 70 + "\n")
+        
+        if requests is None:
+            log.warning("[PORT-CHECK] requests-Modul nicht verfügbar - Port-Check übersprungen")
+            with open(port_check_log_path, 'a', encoding='utf-8') as f:
+                f.write("FEHLER: requests-Modul nicht verfügbar\n")
+            return False
+        
+        max_attempts = 20  # 20 Sekunden
+        log.info(f"[PORT-CHECK] 🔍 Starte Port-Verifizierung (max. {max_attempts}s)...")
+        
+        with open(port_check_log_path, 'a', encoding='utf-8') as f:
+            f.write(f"Max. Versuche: {max_attempts}\n")
+            f.write(f"Ziel: http://127.0.0.1:8111/health\n")
+            f.write("-" * 70 + "\n")
+        
+        for i in range(max_attempts):
+            elapsed = time.time() - check_start
+            try:
+                with open(port_check_log_path, 'a', encoding='utf-8') as f:
+                    f.write(f"[{i+1}/{max_attempts}] Versuch nach {elapsed:.1f}s... ")
+                
+                response = requests.get("http://127.0.0.1:8111/health", timeout=2)
+                if response.status_code == 200:
+                    elapsed_total = time.time() - check_start
+                    log.info(f"[PORT-CHECK] ✅ Port 8111 ist nach {elapsed_total:.1f}s erreichbar (Versuch {i+1})")
+                    with open(port_check_log_path, 'a', encoding='utf-8') as f:
+                        f.write(f"✅ ERFOLG! Status: {response.status_code}\n")
+                        f.write(f"Gesamtzeit: {elapsed_total:.2f}s\n")
+                    return True
+                else:
+                    with open(port_check_log_path, 'a', encoding='utf-8') as f:
+                        f.write(f"Status: {response.status_code} (nicht 200)\n")
+            except requests.exceptions.ConnectionError as e:
+                with open(port_check_log_path, 'a', encoding='utf-8') as f:
+                    f.write(f"❌ ConnectionError: {e}\n")
+            except requests.exceptions.Timeout as e:
+                with open(port_check_log_path, 'a', encoding='utf-8') as f:
+                    f.write(f"❌ Timeout: {e}\n")
+            except Exception as e:
+                with open(port_check_log_path, 'a', encoding='utf-8') as f:
+                    f.write(f"❌ Fehler: {type(e).__name__}: {e}\n")
+            
+            time.sleep(1)
+        
+        elapsed_total = time.time() - check_start
+        log.error(f"[PORT-CHECK] ❌ Port 8111 ist nach {elapsed_total:.1f}s nicht erreichbar - möglicherweise blockiert")
+        with open(port_check_log_path, 'a', encoding='utf-8') as f:
+            f.write("=" * 70 + "\n")
+            f.write(f"❌ FEHLGESCHLAGEN nach {max_attempts} Versuchen ({elapsed_total:.1f}s)\n")
+            f.write("Mögliche Ursachen:\n")
+            f.write("  - Startup-Event blockiert noch\n")
+            f.write("  - Port-Bindung fehlgeschlagen\n")
+            f.write("  - Firewall blockiert Port\n")
+            f.write(f"Log-Datei: {port_check_log_path}\n")
+        return False
+    
+    # Starte Port-Verifizierung in separatem Thread (nach 5 Sekunden)
+    log.info(f"[PORT-CHECK] 📝 Port-Check-Log: {port_check_log_path}")
+    port_check_thread = threading.Thread(target=lambda: (time.sleep(5), verify_port_binding()), daemon=True)
+    port_check_thread.start()
+    
     # Verwende factory=True für sauberes Hot-Reload
+    # WICHTIG: reload=True kann zu Timing-Problemen führen und Server nach Reload zum Absturz bringen
+    # Deaktiviere Reload-Mode für Stabilität (Server muss manuell neu gestartet werden)
+    # Falls Hot-Reload benötigt wird: ENABLE_RELOAD=1 setzen, aber dann Server nach Änderungen manuell prüfen
+    reload_enabled = os.getenv("ENABLE_RELOAD", "0") == "1"  # Standard: deaktiviert
+    log.info(f"Reload-Mode: {'aktiviert' if reload_enabled else 'deaktiviert (Standard für Stabilität)'}")
+    
     uvicorn.run(
         "backend.app:create_app",
         factory=True,
         host="127.0.0.1",
         port=8111,
-        reload=True,
-        reload_dirs=["backend", "services", "routes", "db"],
+        reload=reload_enabled,
+        reload_dirs=["backend", "services", "routes", "db"] if reload_enabled else None,
         log_level="info",
     )

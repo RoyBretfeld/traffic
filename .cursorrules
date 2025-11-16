@@ -6,60 +6,90 @@
 
 ## 🔴 PFLICHT: Immer zuerst lesen (in dieser Reihenfolge!)
 
-### 1. Globale Standards (wiederverwendbar für alle Projekte)
-→ **`Global/GLOBAL_STANDARDS.md`** - 7 Arbeitsregeln, Audit-Prozess, Safety
+**⚠️ KRITISCH:** Vor JEDEM größeren Code-Umbau MÜSSEN diese Dateien gelesen werden:
 
-### 2. Projektprofil (FAMO TrafficApp spezifisch)
-→ **`PROJECT_PROFILE.md`** - Stack, Infrastruktur, Module, Regeln
+1. **`Global/GLOBAL_STANDARDS.md`** - 7 Arbeitsregeln, Audit-Prozess, Safety
+2. **`Regeln/STANDARDS_QUICK_REFERENCE.md`** - Schnellreferenz (kompakt)
+3. **`Regeln/REGELN_AUDITS.md`** - 7 unverhandelbare Audit-Regeln
+4. **`Regeln/CURSOR_PROMPT_TEMPLATE.md`** - 12 fertige Templates
 
-### 3. Projekt-Standards (FAMO TrafficApp spezifisch)
-→ **`Regeln/STANDARDS.md`** - Vollständige Standards
-→ **`Regeln/STANDARDS_QUICK_REFERENCE.md`** - Schnellreferenz
-
-### 4. Für Audits und Bug-Fixes
-→ **`Regeln/REGELN_AUDITS.md`** - 7 unverhandelbare Audit-Regeln
-→ **`Regeln/AUDIT_CHECKLISTE.md`** - 9-Punkte-Checkliste
-→ **`Regeln/LESSONS_LOG.md`** - Lernhistorie (bekannte Fehler)
-
-### 5. Für spezielle Aufgaben
-→ **`Global/CURSOR_USAGE_BEISPIEL.md`** - Copy & Paste Prompts (3 Szenarien)
-→ **`Regeln/CURSOR_PROMPT_TEMPLATE.md`** - 12 fertige Templates
-→ **`Regeln/AUDIT_FLOW_ROUTING.md`** - Modularer Audit-Flow (Routing/OSRM)
+**Dann erst:**
+- **`PROJECT_PROFILE.md`** - Stack, Infrastruktur, Module, Regeln
+- **`Regeln/STANDARDS.md`** - Vollständige Standards (bei Bedarf)
+- **`Regeln/AUDIT_CHECKLISTE.md`** - 9-Punkte-Checkliste
+- **`Regeln/LESSONS_LOG.md`** - Lernhistorie (bekannte Fehler)
+- **`Regeln/CURSOR_WORKFLOW.md`** - 6-Schritt-Workflow-Prozess
+- **`Regeln/AUDIT_FLOW_ROUTING.md`** - Modularer Audit-Flow (Routing/OSRM)
+- **`Global/CURSOR_USAGE_BEISPIEL.md`** - Copy & Paste Prompts (3 Szenarien)
 
 ---
 
-## 📋 Übersicht aller Dokumente
+## 📁 VERZEICHNIS-REGELN: Was darf Cursor bearbeiten?
 
-**Zentrale Übersicht:**
-→ **`DOKUMENTATION.md`** - Single Source of Truth (17 Dokumente)
+### ✅ Primär bearbeitbare Verzeichnisse
+
+Cursor darf **primär** in diesen Verzeichnissen Code ändern:
+
+- **`backend/`** - Python Backend (FastAPI)
+- **`backend/routes/`** - API-Endpoints
+- **`backend/services/`** - Business-Logik
+- **`backend/utils/`** - Hilfsfunktionen
+- **`frontend/`** - Frontend (HTML, JS, CSS)
+- **`frontend/js/`** - JavaScript-Module
+- **`tests/`** - Test-Dateien (nur hinzufügen/erweitern, nicht löschen ohne Absprache)
+
+### 🔒 NUR LESEN, NICHT SCHREIBEN
+
+Diese Verzeichnisse/Dateien sind **TABU** für Code-Änderungen:
+
+- **`docs/`** - Dokumentation (nur lesen, Updates nur auf explizite Anweisung)
+- **`Global/`** - Globale Standards (nur lesen)
+- **`Regeln/`** - Projekt-Standards (nur lesen, Updates nur auf explizite Anweisung)
+- **`db/migrations/`** - Datenbank-Migrationen (nur lesen, neue nur mit Migration-Script)
+- **`ZIP/`** - Audit-ZIPs (nur lesen)
+- **`backups/`** - Backups (nur lesen)
+- **`venv/`** - Virtual Environment (niemals ändern)
+- **`.git/`** - Git-Konfiguration (niemals ändern)
+- **`*.md`** im Root (README, CHANGELOG, etc.) - nur lesen, Updates nur auf explizite Anweisung
+
+**Ausnahme:** `Regeln/LESSONS_LOG.md` darf bei neuen Fehlern aktualisiert werden (siehe Regel #6).
+
+### ⚠️ Generierter Code / Auto-Gen-Files
+
+- **Tabu:** Automatisch generierte Dateien (falls vorhanden)
+- **Tabu:** Build-Artefakte, Cache-Dateien, Log-Dateien
 
 ---
 
 ## 🎯 Schnellstart für häufige Aufgaben
 
 ### Szenario 1: Bug fixen
-1. Lies: `PROJECT_PROFILE.md` (Projektkontext)
-2. Lies: `Global/CURSOR_USAGE_BEISPIEL.md` → Szenario 1 (Bug-Fix)
-3. Lies: `Regeln/LESSONS_LOG.md` (bekannte Fehler)
-4. Dann: Bug analysieren & fixen
+1. **Lies:** `Regeln/CURSOR_WORKFLOW.md` → 6-Schritt-Prozess
+2. **Lies:** `PROJECT_PROFILE.md` (Projektkontext)
+3. **Lies:** `Global/CURSOR_USAGE_BEISPIEL.md` → Szenario 1 (Bug-Fix)
+4. **Lies:** `Regeln/LESSONS_LOG.md` (bekannte Fehler)
+5. **Dann:** Bug analysieren & fixen
 
 ### Szenario 2: Code-Review / Audit
-1. Lies: `Regeln/REGELN_AUDITS.md` (7 Regeln)
-2. Lies: `Regeln/AUDIT_CHECKLISTE.md` (9 Punkte)
-3. Lies: `PROJECT_PROFILE.md` (Projektkontext)
-4. Dann: Review durchführen
+1. **Lies:** `Regeln/CURSOR_WORKFLOW.md` → 6-Schritt-Prozess
+2. **Lies:** `Regeln/REGELN_AUDITS.md` (7 Regeln)
+3. **Lies:** `Regeln/AUDIT_CHECKLISTE.md` (9 Punkte)
+4. **Lies:** `PROJECT_PROFILE.md` (Projektkontext)
+5. **Dann:** Review durchführen
 
 ### Szenario 3: Routing/OSRM Problem
-1. Lies: `Regeln/AUDIT_FLOW_ROUTING.md` (kompletter Flow)
-2. Lies: `PROJECT_PROFILE.md` → Abschnitt 3.2 (Touren-Workflow)
-3. Lies: `Regeln/LESSONS_LOG.md` → Eintrag #3 (Sub-Routen-Generator)
-4. Dann: Routing analysieren
+1. **Lies:** `Regeln/CURSOR_WORKFLOW.md` → 6-Schritt-Prozess
+2. **Lies:** `Regeln/AUDIT_FLOW_ROUTING.md` (kompletter Flow)
+3. **Lies:** `PROJECT_PROFILE.md` → Abschnitt 3.2 (Touren-Workflow)
+4. **Lies:** `Regeln/LESSONS_LOG.md` → Eintrag #3 (Sub-Routen-Generator)
+5. **Dann:** Routing analysieren
 
 ### Szenario 4: Sub-Routen-Generator Problem
-1. Lies: `Regeln/CURSOR_PROMPT_TEMPLATE.md` → Template #11 (Sub-Routen)
-2. Lies: `Regeln/LESSONS_LOG.md` → Eintrag #3
-3. Lies: `PROJECT_PROFILE.md` → Abschnitt 3.2
-4. Dann: Problem analysieren
+1. **Lies:** `Regeln/CURSOR_WORKFLOW.md` → 6-Schritt-Prozess
+2. **Lies:** `Regeln/CURSOR_PROMPT_TEMPLATE.md` → Template #11 (Sub-Routen)
+3. **Lies:** `Regeln/LESSONS_LOG.md` → Eintrag #3
+4. **Lies:** `PROJECT_PROFILE.md` → Abschnitt 3.2
+5. **Dann:** Problem analysieren
 
 ---
 
@@ -84,13 +114,76 @@
 ### 5. Tests vorschlagen (min. 2 pro Änderung)
 ❌ Keine Code-Änderung ohne Test-Vorschlag
 ✅ Backend-Test + Frontend-Test + (optional) Unit-Test
+✅ **Golden-Tests für kritische Pfade:** Sub-Routen-Generator, Tour-Upload, Geocoding, OSRM-Routing
+✅ Bei Änderungen an kritischen Pfaden: Golden-Tests ergänzen/aktualisieren und ausführen
 
 ### 6. LESSONS_LOG aktualisieren bei neuen Fehlern
 ❌ Neue Fehlerpattern nicht dokumentiert lassen
 ✅ Immer in `Regeln/LESSONS_LOG.md` eintragen
+✅ Wenn Fehlerklasse mehr als 1x vorkommt: `REGELN_AUDITS.md` oder `STANDARDS.md` anpassen
 
 ### 7. Sprache: Deutsch
 ✅ Alle Antworten auf Deutsch (außer Code-Kommentare wenn nötig)
+
+### 8. Scope immer explizit machen
+❌ Keine Änderungen außerhalb des definierten Scopes
+✅ Nur die minimal nötigen Files anfassen
+✅ Bei größeren Änderungen: Audit-ZIP vorbereiten (siehe `Regeln/CURSOR_WORKFLOW.md`)
+
+### 9. Cursor-Workflow befolgen
+❌ Keine Änderungen ohne vorherige Kontext-Ladung
+✅ **Immer** den 6-Schritt-Prozess aus `Regeln/CURSOR_WORKFLOW.md` befolgen:
+   1. Problem klarziehen
+   2. Audit-ZIP vorbereiten
+   3. Template wählen
+   4. Änderung einbauen
+   5. Tests & Health-Checks
+   6. Lessons aktualisieren
+
+---
+
+## 🧪 Golden-Tests für kritische Pfade
+
+**Ziel:** Wenn KI/Dev etwas an den Hot-Paths ändert, fliegen Fehler sofort auf.
+
+### Kritische Pfade (müssen getestet werden):
+
+- **Sub-Routen-Generator** (Frontend + Backend-Endpoint)
+- **Tour-Upload & Parsing**
+- **Geocoding & Matching**
+- **OSRM / `/api/tour/route-details`**
+
+### Test-Struktur:
+
+- **Ordner:** `tests/golden/` (wird bei Bedarf erstellt)
+- **Unterordner:** `tests/golden/subroutes/`, `tests/golden/routing/`, `tests/golden/geocoding/`
+- **Jeder Test:** Nutzt realistische Beispiel-Touren, erwartete Outputs sind fest gespeichert (JSON/Snapshots)
+
+**Cursor-Anweisung:**
+- Bei Änderungen an Routing/Subrouten/Geocoding **immer** die passenden Golden-Tests ergänzen/aktualisieren und ausführen.
+
+---
+
+## 🔧 Git-Hooks & CI
+
+### Pre-Commit Hook (lokal)
+
+**Ziel:** Commit blocken bei Fehlern
+
+**Prüfungen:**
+- Lint & Format (Python: `ruff` / `black`, JS: `eslint` falls konfiguriert)
+- Schnelle Tests: `pytest -q` (oder zumindest `pytest tests/golden -q`)
+
+**Status:** Wird bei Bedarf eingerichtet (aktuell optional)
+
+### CI-Pipeline (GitHub Actions)
+
+**Jobs:**
+1. **lint** – ruff/eslint
+2. **test** – alle Tests + Golden-Tests
+3. Optional: **ki-audit** – kleiner KI-Check nur lesend (kein Auto-Code-Change in CI)
+
+**Merge in `main` nur, wenn alle Jobs grün.**
 
 ---
 
@@ -105,6 +198,9 @@
 **Für Status:**
 → `STATUS_AKTUELL.md` - Aktueller System-Status
 
+**Für Übersicht:**
+→ `DOKUMENTATION.md` - Single Source of Truth (17 Dokumente)
+
 ---
 
 ## 📊 Projekt-Info
@@ -115,8 +211,8 @@
 **Hauptfeatures:** Touren-Workflow, Sub-Routen-Generator, OSRM-Routing
 
 **Dokumentation:** 17 Dokumente (~6.500 Zeilen)  
-**Stand:** 2025-11-15  
-**Version:** 2.1
+**Stand:** 2025-11-16  
+**Version:** 2.2 (konsolidiert mit Verzeichnis-Regeln, Golden-Tests, Git-Hooks/CI)
 
 ---
 

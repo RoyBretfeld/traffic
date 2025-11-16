@@ -15,6 +15,7 @@ from services.osrm_client import OSRMClient
 from backend.utils.haversine import haversine_polyline6, haversine_total_distance, haversine_estimated_duration
 from backend.utils.errors import TransientError, QuotaError
 from backend.utils.circuit_breaker import breaker_osrm
+from backend.utils.enhanced_logging import get_enhanced_logger
 
 
 @dataclass
@@ -48,6 +49,7 @@ class RealRoutingService:
 
     def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
+        self.enhanced_logger = get_enhanced_logger(__name__)
         self.osrm_base = os.environ.get("OSRM_BASE_URL")
         self.osrm_profile = os.environ.get("OSRM_PROFILE", "driving")
         self.osrm_timeout = float(os.environ.get("OSRM_TIMEOUT", "20"))
@@ -55,25 +57,59 @@ class RealRoutingService:
         self.mapbox_token = os.environ.get("MAPBOX_ACCESS_TOKEN")
         self.mapbox_base_url = "https://api.mapbox.com/directions/v5/mapbox/driving"
         if not self.osrm_base and not self.mapbox_token:
-            self.logger.warning(
-                "Weder OSRM_BASE_URL noch MAPBOX_ACCESS_TOKEN gesetzt – verwende Fallback-Routing."
+            self.enhanced_logger.warning(
+                "Weder OSRM_BASE_URL noch MAPBOX_ACCESS_TOKEN gesetzt – verwende Fallback-Routing.",
+                context={'osrm_base': self.osrm_base, 'has_mapbox': bool(self.mapbox_token)}
+            )
+        else:
+            self.enhanced_logger.success(
+                "RealRoutingService initialisiert",
+                context={
+                    'osrm_base': self.osrm_base,
+                    'osrm_profile': self.osrm_profile,
+                    'has_mapbox': bool(self.mapbox_token)
+                }
             )
 
     async def calculate_route(self, points: List[RoutePoint]) -> FullRoute:
+        import time
+        start_time = time.time()
+        
         if len(points) < 2:
+            self.enhanced_logger.error("Route-Berechnung: Zu wenige Punkte", 
+                                      context={'point_count': len(points)})
             raise ValueError("Mindestens zwei Punkte erforderlich")
+
+        self.enhanced_logger.operation_start("Route-Berechnung", 
+                                            context={'point_count': len(points)})
 
         if self.osrm_base:
             osrm_route = await self._calculate_osrm(points)
             if osrm_route:
+                duration_ms = (time.time() - start_time) * 1000
+                self.enhanced_logger.operation_end("Route-Berechnung", success=True, 
+                                                  context={'provider': 'OSRM', 'distance_km': osrm_route.total_distance_km},
+                                                  duration_ms=duration_ms)
                 return osrm_route
 
         if self.mapbox_token:
             mapbox_route = await self._calculate_mapbox(points)
             if mapbox_route:
+                duration_ms = (time.time() - start_time) * 1000
+                self.enhanced_logger.operation_end("Route-Berechnung", success=True, 
+                                                  context={'provider': 'Mapbox', 'distance_km': mapbox_route.total_distance_km},
+                                                  duration_ms=duration_ms)
                 return mapbox_route
 
-        return self._fallback(points)
+        # Fallback
+        fallback_route = self._fallback(points)
+        duration_ms = (time.time() - start_time) * 1000
+        self.enhanced_logger.operation_end("Route-Berechnung", success=True, 
+                                          context={'provider': 'Haversine-Fallback', 'distance_km': fallback_route.total_distance_km},
+                                          duration_ms=duration_ms)
+        self.enhanced_logger.warning("Route-Berechnung: Fallback verwendet (Haversine)", 
+                                    context={'point_count': len(points)})
+        return fallback_route
 
     async def _calculate_osrm(self, points: List[RoutePoint]) -> Optional[FullRoute]:
         coords = ";".join(f"{p.lon},{p.lat}" for p in points)
@@ -90,12 +126,14 @@ class RealRoutingService:
                 resp.raise_for_status()
                 data = resp.json()
         except Exception as exc:
-            self.logger.warning("OSRM Anfrage fehlgeschlagen: %s", exc)
+            self.enhanced_logger.warning("OSRM Anfrage fehlgeschlagen", 
+                                        context={'url': url}, error=exc)
             return None
 
         routes = data.get("routes") or []
         if not routes:
-            self.logger.warning("OSRM: Keine Route gefunden")
+            self.enhanced_logger.warning("OSRM: Keine Route gefunden", 
+                                        context={'url': url, 'response_code': resp.status_code})
             return None
 
         route = routes[0]
@@ -136,12 +174,14 @@ class RealRoutingService:
                 resp.raise_for_status()
                 data = resp.json()
         except Exception as exc:
-            self.logger.warning("Mapbox Anfrage fehlgeschlagen: %s", exc)
+            self.enhanced_logger.warning("Mapbox Anfrage fehlgeschlagen", 
+                                        context={'url': url}, error=exc)
             return None
 
         routes = data.get("routes") or []
         if not routes:
-            self.logger.warning("Mapbox: Keine Route gefunden")
+            self.enhanced_logger.warning("Mapbox: Keine Route gefunden", 
+                                        context={'url': url, 'response_code': resp.status_code})
             return None
 
         route = routes[0]

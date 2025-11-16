@@ -1,0 +1,275 @@
+from fastapi import APIRouter, Query, HTTPException, UploadFile, File
+from fastapi.responses import JSONResponse
+from pathlib import Path
+import os
+import re
+import time
+from ingest.guards import assert_no_mojibake, trace_text
+from common.text_cleaner import repair_cp_mojibake
+from backend.utils.enhanced_logging import get_enhanced_logger
+
+router = APIRouter()
+
+# Erweiterter Logger für positives/negatives Logging
+enhanced_logger = get_enhanced_logger(__name__)
+
+# Tourplaene-Verzeichnis (read-only) - NIEMALS hier schreiben!
+TOURPLAENE_DIR = Path(os.getenv("ORIG_DIR", "./tourplaene")).resolve()
+
+# Staging-Verzeichnis für temporäre Verarbeitung (NUR hier schreiben!)
+STAGING = Path(os.getenv("STAGING_DIR", "./data/staging")).resolve()
+STAGING.mkdir(parents=True, exist_ok=True)
+
+# Schutz-Prüfung für Uploads
+try:
+    from fs.protected_fs import is_protected_path
+    _HAS_PROTECTION = True
+except ImportError:
+    _HAS_PROTECTION = False
+
+# Sichere Dateinamen (nur alphanumerisch, Punkte, Bindestriche, Unterstriche)
+SAFE = re.compile(r"[^A-Za-z0-9_.\-]+")
+MAX_BYTES = 5 * 1024 * 1024  # 5MB Limit
+
+def _heuristic_decode(raw: bytes, skip_mojibake_check: bool = False) -> tuple[str, str]:
+    """
+    Heuristische Dekodierung von CSV-Daten mit Encoding-Erkennung.
+    Versucht verschiedene Encodings in der Reihenfolge: cp850, utf-8-sig, latin-1
+    
+    Args:
+        skip_mojibake_check: Wenn True, wird der Mojibake-Check übersprungen
+                            (für bereits reparierte Staging-Dateien)
+    """
+    for enc in ("cp850", "utf-8-sig", "latin-1"):
+        try:
+            decoded = raw.decode(enc)
+            # Mojibake-Schutz aktivieren (nur wenn nicht übersprungen)
+            if not skip_mojibake_check:
+                assert_no_mojibake(decoded)
+            trace_text("UPLOAD-DECODE", f"Encoding: {enc}, Length: {len(decoded)}")
+            return decoded, enc
+        except UnicodeDecodeError:
+            continue
+        except Exception as e:
+            if skip_mojibake_check:
+                # Bei übersprungenem Check: trotzdem verwenden
+                trace_text("UPLOAD-DECODE", f"Encoding: {enc}, Length: {len(decoded)} (Mojibake-Check übersprungen)")
+                return decoded, enc
+            enhanced_logger.warning("Mojibake-Schutz aktiviert", context={'encoding': enc, 'error': str(e)})
+            continue
+    
+    # Letzte Rettung: UTF-8 mit Ersetzung
+    enhanced_logger.warning("Fallback auf UTF-8 mit Ersetzung")
+    return raw.decode("utf-8", errors="replace"), "utf-8*replace"
+
+@router.get("/api/tourplaene/list")
+async def list_tourplaene():
+    """
+    Listet alle verfügbaren Tourplan-CSV-Dateien aus dem Tourplaene-Verzeichnis auf.
+    
+    Returns:
+        JSON mit Liste der CSV-Dateien und deren Metadaten
+    """
+    try:
+        if not TOURPLAENE_DIR.exists():
+            raise HTTPException(404, detail=f"Tourplaene-Verzeichnis nicht gefunden: {TOURPLAENE_DIR}")
+        
+        # CSV-Dateien auflisten
+        csv_files = []
+        for csv_file in TOURPLAENE_DIR.glob("*.csv"):
+            try:
+                stat = csv_file.stat()
+                csv_files.append({
+                    "name": csv_file.name,
+                    "path": str(csv_file),
+                    "size": stat.st_size,
+                    "modified": stat.st_mtime,
+                    "read_only": True  # Dateien sind read-only
+                })
+            except Exception as e:
+                enhanced_logger.warning("Fehler beim Lesen von CSV-Datei", 
+                                       context={'file': str(csv_file)}, error=e)
+                continue
+        
+        # Nach Name sortieren
+        csv_files.sort(key=lambda x: x["name"])
+        
+        enhanced_logger.success("Tourpläne-Liste erfolgreich geladen", 
+                                context={'count': len(csv_files), 'directory': str(TOURPLAENE_DIR)})
+        
+        return JSONResponse({
+            "success": True,
+            "files": csv_files,
+            "count": len(csv_files),
+            "directory": str(TOURPLAENE_DIR),
+            "note": "Dateien werden direkt aus dem Tourplaene-Verzeichnis gelesen (read-only)"
+        }, media_type="application/json; charset=utf-8")
+        
+    except Exception as e:
+        enhanced_logger.error("Fehler beim Auflisten der Tourpläne", error=e)
+        raise HTTPException(500, detail=f"Fehler beim Auflisten der Dateien: {str(e)}")
+
+@router.post("/api/process-csv-direct")
+async def process_csv_direct(filename: str):
+    """
+    Verarbeitet eine CSV-Datei direkt aus dem Tourplaene-Verzeichnis.
+    
+    Args:
+        filename: Name der CSV-Datei im Tourplaene-Verzeichnis
+        
+    Returns:
+        JSON mit Verarbeitungsergebnissen
+    """
+    try:
+        # Dateipfad validieren
+        csv_path = TOURPLAENE_DIR / filename
+        
+        if not csv_path.exists():
+            raise HTTPException(404, detail=f"Datei nicht gefunden: {filename}")
+        
+        if not csv_path.suffix.lower() == '.csv':
+            raise HTTPException(400, detail="Nur CSV-Dateien werden unterstützt")
+        
+        # Datei direkt verarbeiten (ohne Upload)
+        enhanced_logger.operation_start("CSV Direct Process", context={'file_path': str(csv_path)})
+        
+        # Verwende den modernen Tourplan-Parser
+        from backend.parsers.tour_plan_parser import parse_tour_plan_to_dict
+        
+        tour_data = parse_tour_plan_to_dict(str(csv_path))
+        tour_count = len(tour_data.get('tours', [])) if tour_data else 0
+        
+        enhanced_logger.operation_end("CSV Direct Process", success=True, 
+                                     context={'file_path': str(csv_path), 'tours_found': tour_count})
+        enhanced_logger.success("CSV Direct Process erfolgreich", 
+                               context={'filename': filename, 'tours': tour_count})
+        
+        return JSONResponse({
+            "success": True,
+            "filename": filename,
+            "path": str(csv_path),
+            "tour_data": tour_data,
+            "note": "Datei direkt aus Tourplaene-Verzeichnis verarbeitet"
+        }, media_type="application/json; charset=utf-8")
+        
+    except Exception as e:
+        enhanced_logger.operation_end("CSV Direct Process", success=False, error=e, 
+                                     context={'file_path': str(csv_path)})
+        raise HTTPException(500, detail=f"Fehler bei der Verarbeitung: {str(e)}")
+
+@router.post("/api/upload/csv")
+async def upload_csv(file: UploadFile = File(...)):
+    """
+    Upload einer CSV-Datei (FALLBACK für externe Dateien).
+    
+    WARNUNG: Diese Funktion sollte nur für externe Dateien verwendet werden!
+    Für Tourpläne verwenden Sie /api/process-csv-direct mit Dateien aus dem Tourplaene-Verzeichnis.
+    
+    - Speichert nur in STAGING_DIR (UTF-8)
+    - Originale bleiben read-only
+    - Heuristische Encoding-Erkennung (cp850, utf-8-sig, latin-1)
+    - Mojibake-Schutz aktiviert
+    """
+    try:
+        # Warnung für externe Uploads
+        enhanced_logger.warning("Externer Upload erkannt", 
+                               context={'filename': file.filename})
+        enhanced_logger.info("Hinweis: Verwenden Sie /api/process-csv-direct für Tourpläne aus dem Tourplaene-Verzeichnis")
+
+        # Validierung
+        if not file.filename:
+            raise HTTPException(400, detail="Kein Dateiname angegeben")
+
+        if not file.filename.lower().endswith('.csv'):
+            raise HTTPException(400, detail="only .csv allowed")
+        
+        # Sicheren Dateinamen generieren
+        safe_name = SAFE.sub('_', file.filename)
+        timestamp = int(time.time())
+        staged_name = f"{timestamp}_{safe_name}"
+        staged_path = STAGING / staged_name
+        
+        # WICHTIG: Stelle sicher, dass staged_path absolut ist
+        staged_path = staged_path.resolve()
+        
+        # Datei lesen und validieren
+        content = await file.read()
+        if len(content) > MAX_BYTES:
+            raise HTTPException(413, detail=f"Datei zu groß (max {MAX_BYTES} Bytes)")
+        
+        if len(content) == 0:
+            raise HTTPException(400, detail="Leere Datei")
+        
+        # Encoding-Erkennung und Dekodierung
+        decoded_content, encoding = _heuristic_decode(content)
+        decoded_content = repair_cp_mojibake(decoded_content)
+        
+        # In Staging-Verzeichnis speichern (UTF-8)
+        staged_path.write_text(decoded_content, encoding='utf-8')
+        
+        trace_text("UPLOAD-SUCCESS", f"Datei gespeichert: {staged_path}")
+        
+        # WICHTIG: Gebe absolut normalisierten Pfad zurück (Windows-Backslashes)
+        staged_path_str = str(staged_path)
+        enhanced_logger.debug("Absoluter Pfad zurückgegeben", context={'path': staged_path_str})
+        
+        # Zeilen zählen (für Response)
+        rows = len(decoded_content.splitlines())
+        
+        enhanced_logger.success("CSV-Upload erfolgreich", 
+                               context={
+                                   'filename': file.filename,
+                                   'staged_path': staged_path_str,
+                                   'rows': rows,
+                                   'encoding': encoding,
+                                   'size_bytes': len(content)
+                               })
+        
+        return JSONResponse({
+            "success": True,
+            "ok": True,
+            "filename": file.filename,
+            "stored_path": staged_path_str,  # Vereinheitlichtes Feld (Hauptfeld)
+            "staged_path": staged_path_str,    # Kompatibilität (Legacy)
+            "staging_file": staged_path_str,  # Kompatibilität (Legacy)
+            "rows": rows,
+            "encoding": encoding,
+            "encoding_used": encoding,
+            "size": len(content),
+            "warning": "Externer Upload! Verwenden Sie /api/process-csv-direct für Tourpläne."
+        }, media_type="application/json; charset=utf-8")
+        
+    except HTTPException as http_ex:
+        enhanced_logger.error("CSV-Upload fehlgeschlagen (HTTPException)", 
+                             error=http_ex, context={'status_code': http_ex.status_code})
+        raise
+    except Exception as e:
+        enhanced_logger.error("CSV-Upload fehlgeschlagen (Exception)", error=e)
+        raise HTTPException(500, detail=f"Upload-Fehler: {str(e)}")
+
+@router.get("/api/upload/status")
+async def upload_status():
+    """
+    Status des Upload-Systems.
+    """
+    staging_files = list(STAGING.glob("*.csv"))
+    
+    return JSONResponse({
+        "tourplaene_directory": str(TOURPLAENE_DIR),
+        "tourplaene_exists": TOURPLAENE_DIR.exists(),
+        "staging_directory": str(STAGING),
+        "staging_dir": str(STAGING),
+        "staging_exists": STAGING.exists(),
+        "staging_files_count": len(staging_files),
+        "staging_files": [
+            {
+                "name": f.name,
+                "path": str(f),
+                "size": f.stat().st_size,
+                "modified": f.stat().st_mtime
+            }
+            for f in staging_files
+        ],
+        "recommended_method": "Verwenden Sie /api/process-csv-direct für Tourpläne aus dem Tourplaene-Verzeichnis",
+        "upload_warning": "Upload nur für externe Dateien verwenden!"
+    }, media_type="application/json; charset=utf-8")

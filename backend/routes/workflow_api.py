@@ -1040,8 +1040,10 @@ async def complete_workflow(
                             warn_count += 1
                             warnings.append(f"Keine Koordinaten für {customer.get('name', 'Unbekannt')} - {address}")
                     else:
-                        bad_count += 1
-                        errors.append(f"Keine Adresse für {customer.get('name', 'Unbekannt')}")
+                        # Keine Adresse - aber Kunde wird trotzdem hinzugefügt (z.B. für PF-Kunden ohne Synonym)
+                        # WICHTIG: Nicht als kritischer Fehler behandeln, sondern als Warnung
+                        warn_count += 1  # Ändere von bad_count zu warn_count
+                        warnings.append(f"Keine Adresse für {customer.get('name', 'Unbekannt')}")  # Ändere von errors zu warnings
                 
                 # Optimiere Tour-Reihenfolge mit LLM
                 optimized_customers = optimize_tour_stops(customers, use_llm=True)
@@ -1159,8 +1161,30 @@ async def workflow_upload(file: UploadFile = File(...)):
                 # Eindeutiger Dateiname (ohne Sonderzeichen, die Probleme verursachen könnten)
                 timestamp = int(time.time() * 1000)
                 safe_filename = re.sub(r'[<>:"/\\|?*]', '_', file.filename)  # Ersetze gefährliche Zeichen
+                # WICHTIG: Kürze Dateiname falls zu lang (Windows MAX_PATH = 260 Zeichen)
+                # Berücksichtige: staging_dir + "workflow_temp_" + timestamp + "_" + filename
+                max_filename_length = 100  # Max. 100 Zeichen für Dateinamen
+                if len(safe_filename) > max_filename_length:
+                    name_part = safe_filename[:max_filename_length-4]  # Platz für ".csv"
+                    ext = safe_filename[-4:] if safe_filename.endswith('.csv') else '.csv'
+                    safe_filename = name_part + ext
+                    log_to_file(f"[WORKFLOW] WARNUNG: Dateiname gekürzt auf {max_filename_length} Zeichen: {safe_filename}")
                 tmp_filename = f"workflow_temp_{timestamp}_{safe_filename}"
                 tmp_path = staging_dir / tmp_filename
+                
+                # Prüfe Gesamt-Pfad-Länge (Windows MAX_PATH = 260 Zeichen)
+                tmp_path_str = str(tmp_path.resolve())
+                if len(tmp_path_str) > 260:
+                    log_to_file(f"[WORKFLOW] WARNUNG: Pfad zu lang ({len(tmp_path_str)} Zeichen): {tmp_path_str[:100]}...")
+                    # Kürze Dateinamen noch mehr falls nötig
+                    max_safe_length = 50
+                    if len(safe_filename) > max_safe_length:
+                        name_part = safe_filename[:max_safe_length-4]
+                        ext = safe_filename[-4:] if safe_filename.endswith('.csv') else '.csv'
+                        safe_filename = name_part + ext
+                        tmp_filename = f"workflow_temp_{timestamp}_{safe_filename}"
+                        tmp_path = staging_dir / tmp_filename
+                        log_to_file(f"[WORKFLOW] Dateiname weiter gekürzt auf {max_safe_length} Zeichen")
                 
                 # Schreibe Datei mit explizitem Flush und Schließen
                 try:
@@ -1169,7 +1193,13 @@ async def workflow_upload(file: UploadFile = File(...)):
                         file_handle = open(tmp_path, 'wb')
                         file_handle.write(content)
                         file_handle.flush()  # Zwinge Write zum Disk
-                        os.fsync(file_handle.fileno())  # Synchronisiere mit Filesystem
+                        # os.fsync() kann Errno 22 werfen bei ungültigen Pfaden/Dateinamen → optional
+                        try:
+                            os.fsync(file_handle.fileno())  # Synchronisiere mit Filesystem
+                        except OSError as fsync_error:
+                            # Errno 22: Invalid argument (z.B. zu langer Pfad, ungültige Zeichen)
+                            log_to_file(f"[WORKFLOW] WARNUNG: os.fsync() fehlgeschlagen (nicht kritisch): {fsync_error}")
+                            # Datei wurde trotzdem geschrieben (flush() reicht)
                     finally:
                         if file_handle:
                             file_handle.close()
@@ -1189,7 +1219,13 @@ async def workflow_upload(file: UploadFile = File(...)):
                         file_handle = open(tmp_path, 'wb')
                         file_handle.write(content)
                         file_handle.flush()
-                        os.fsync(file_handle.fileno())
+                        # os.fsync() kann Errno 22 werfen bei ungültigen Pfaden/Dateinamen → optional
+                        try:
+                            os.fsync(file_handle.fileno())
+                        except OSError as fsync_error:
+                            # Errno 22: Invalid argument (z.B. zu langer Pfad, ungültige Zeichen)
+                            log_to_file(f"[WORKFLOW] WARNUNG: os.fsync() fehlgeschlagen (nicht kritisch): {fsync_error}")
+                            # Datei wurde trotzdem geschrieben (flush() reicht)
                     finally:
                         if file_handle:
                             file_handle.close()
@@ -1350,9 +1386,12 @@ async def workflow_upload(file: UploadFile = File(...)):
                                         _geocoding_progress[session_id]["current"] = f"Fehler: {customer_name} ({processed_count}/{total_customers})"
                                         log_to_file(f"[GEOCODE] FEHLER: Fehlgeschlagen: {address}")
                             else:
-                                bad_count += 1
+                                # Keine Adresse - aber Kunde wird trotzdem hinzugefügt (z.B. für PF-Kunden ohne Synonym)
+                                # WICHTIG: Nicht als kritischer Fehler behandeln, sondern als Warnung
+                                warn_count += 1  # Ändere von bad_count zu warn_count
                                 warning_message = f"Keine Adresse für {customer.get('name', 'Unbekannt')}"
-                                errors.append(warning_message)
+                                warnings.append(warning_message)  # Ändere von errors zu warnings
+                                log_to_file(f"[WORKFLOW] WARNUNG: {warning_message} (Kunde wird trotzdem hinzugefügt)")
                         else:
                             ok_count += 1
                         
