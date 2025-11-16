@@ -1,0 +1,560 @@
+2025-11-16 13:55:49,861 INFO logging_setup: Logging initialisiert: Level=INFO, Access-Level=WARNING
+2025-11-16 13:55:49,864 INFO db.schema: Spalte 'next_attempt' ist bereits vorhanden in geo_fail.
+2025-11-16 13:55:49,864 INFO db.schema: Index gepr³ft/angelegt: idx_geo_fail_next_attempt.
+[OK] DB-Integrity-Check: OK
+2025-11-16 13:55:50,033 INFO __main__: ======================================================================
+2025-11-16 13:55:50,033 INFO __main__: FAMO TrafficApp - Server-Start
+2025-11-16 13:55:50,033 INFO __main__: ======================================================================
+2025-11-16 13:55:50,033 INFO __main__: DB URL: sqlite:///data/traffic.db
+2025-11-16 13:55:50,033 INFO __main__: DB Pfad (resolv.): E:\_____1111____Projekte-Programmierung\______Famo TrafficApp 3.0\data\traffic.db
+2025-11-16 13:55:50,034 INFO __main__: OSRM URL: http://127.0.0.1:5000
+2025-11-16 13:55:50,034 INFO __main__: OSRM Timeout: 4 Sekunden
+2025-11-16 13:55:50,034 INFO __main__: Debug-Routen: deaktiviert
+2025-11-16 13:55:50,034 INFO __main__: ======================================================================
+INFO:     Will watch for changes in these directories: ['E:\\_____1111____Projekte-Programmierung\\______Famo TrafficApp 3.0\\backend', 'E:\\_____1111____Projekte-Programmierung\\______Famo TrafficApp 3.0\\db', 'E:\\_____1111____Projekte-Programmierung\\______Famo TrafficApp 3.0\\routes', 'E:\\_____1111____Projekte-Programmierung\\______Famo TrafficApp 3.0\\services']
+INFO:     Uvicorn running on http://127.0.0.1:8111 (Press CTRL+C to quit)
+INFO:     Started reloader process [29568] using WatchFiles
+2025-11-16 13:55:50,554 INFO logging_setup: Logging initialisiert: Level=INFO, Access-Level=WARNING
+2025-11-16 13:55:50,558 INFO db.schema: Spalte 'next_attempt' ist bereits vorhanden in geo_fail.
+2025-11-16 13:55:50,558 INFO db.schema: Index gepr³ft/angelegt: idx_geo_fail_next_attempt.
+[OK] DB-Integrity-Check: OK
+[AddressMapper] WARNUNG: Konfigurationsdatei address_mappings.json nicht gefunden - verwende Standardwerte
+2025-11-16 13:55:51,730 INFO services.llm_optimizer: LLM-Optimizer initialized successfully
+2025-11-16 13:55:51,742 INFO services.osrm_client: OSRM-Client initialisiert: http://127.0.0.1:5000 (Profil: driving)
+2025-11-16 13:55:51,781 INFO backend.app_setup: Config-Verzeichnis sichergestellt: E:\_____1111____Projekte-Programmierung\______Famo TrafficApp 3.0\config
+2025-11-16 13:55:51,781 INFO backend.app_setup: ======================================================================
+2025-11-16 13:55:51,781 INFO backend.app_setup: App-Factory: Initialisiere TrafficApp
+2025-11-16 13:55:51,781 INFO backend.app_setup: ======================================================================
+2025-11-16 13:55:51,781 INFO backend.app_setup: DB URL: sqlite:///data/traffic.db
+2025-11-16 13:55:51,781 INFO backend.app_setup: DB Pfad: E:\_____1111____Projekte-Programmierung\______Famo TrafficApp 3.0\data\traffic.db
+2025-11-16 13:55:51,781 INFO backend.app_setup: OSRM URL: http://127.0.0.1:5000
+2025-11-16 13:55:51,782 INFO db.schema: Spalte 'next_attempt' ist bereits vorhanden in geo_fail.
+2025-11-16 13:55:51,782 INFO db.schema: Index gepr├╝ft/angelegt: idx_geo_fail_next_attempt.
+2025-11-16 13:55:51,783 INFO backend.app_setup: DB-Schema verifiziert
+[LOGGING] UTF-8 Logging konfiguriert
+[SMOKE TEST] Starte Encoding-Test...
+[HEX SMOKE] 4C C3 B6 62 74 61 75 65 72 20 53 74 72 61 C3 9F 65 20 31 2C 20 30 31 38 30 39 20 48 65 69 64 65 6E 61 75
+2025-11-16 13:55:51,810 - backend.utils.encoding_guards - INFO - [HEX SMOKE] 4C C3 B6 62 74 61 75 65 72 20 53 74 72 61 C3 9F 65 20 31 2C 20 30 31 38 30 39 20 48 65 69 64 65 6E 61 75
+[SMOKE TEST] Ô£à Kein Mojibake erkannt
+[GEOCODE URL] L%C3%B6btauer%20Stra%C3%9Fe%201%2C%2001809%20Heidenau
+2025-11-16 13:55:51,810 - backend.utils.encoding_guards - INFO - [GEOCODE URL] L%C3%B6btauer%20Stra%C3%9Fe%201%2C%2001809%20Heidenau
+INFO:     Started server process [20124]
+INFO:     Waiting for application startup.
+[SMOKE TEST] Ô£à Geocoding-URL korrekt
+[SMOKE TEST] Ô£à UTF-8 Roundtrip erfolgreich
+[SMOKE TEST] Ô£à Korrekte UTF-8-Sequenzen erkannt
+[SMOKE TEST] Ô£à Alle Tests erfolgreich!
+2025-11-16 13:55:51,814 - startup - INFO - ======================================================================
+2025-11-16 13:55:51,816 - startup - INFO - ROUTE-MAP: Registrierte API-Endpoints
+2025-11-16 13:55:51,816 - startup - INFO - ======================================================================
+2025-11-16 13:55:51,816 - startup - INFO - DELETE               /api/tourplan/suggest/accept/{query:path}          [api_remove_alias]
+2025-11-16 13:55:51,816 - startup - INFO - DELETE               /api/traffic/cameras/{camera_id}                   [delete_camera]
+2025-11-16 13:55:51,816 - startup - INFO - DELETE               /api/traffic/incidents/{incident_id}               [delete_incident]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /                                                  [root]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /_debug/routes                                     [list_routes]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /admin.html                                        [admin_page]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /admin/ki-improvements                             [ki_improvements_dashboard]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /admin/ki-kosten                                   [ki_kosten_dashboard]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /admin/login.html                                  [admin_login_page]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/address-recognition/status                    [recognition_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/audit/geo                                     [audit_geo]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/audit/geocoding                               [audit_geocoding]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/audit/manual-queue                            [get_manual_queue]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/audit/status                                  [audit_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/auth/check                                    [check_auth]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/auth/status                                   [auth_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/backup/list                                   [api_list_backups]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/code-checker/learned-patterns                 [get_learned_patterns]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/code-checker/status                           [get_checker_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/code-checker/status                           [get_checker_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/code-improvement-job/status                   [get_job_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/coordinate/verify-from-workflow               [verify_from_workflow]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/cost-tracker/budget-status                    [get_budget_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/cost-tracker/models                           [get_models_info]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/cost-tracker/stats                            [get_cost_stats]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/cost-tracker/usage                            [get_usage_by_operation]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/db/stats                                      [get_db_stats]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/endpoint-flow/flow                            [get_data_flow]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/endpoint-flow/modules                         [get_modules]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/geocode                                       [geocode_address]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/geocode/fail-cache                            [fail_cache_list]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/geocode/fail-reasons                          [fail_reasons]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/geocode/fail-stats                            [fail_stats]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/geocode/fail-status                           [fail_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/ki-improvements/costs                         [get_costs]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/ki-improvements/limits                        [get_limits]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/ki-improvements/performance                   [get_performance]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/ki-improvements/recent                        [get_recent_improvements]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/ki-improvements/stats                         [get_improvement_stats]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/llm/monitoring                                [llm_monitoring_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/llm/templates                                 [llm_templates]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/manual/list                                   [manual_list]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/manual/stats                                  [manual_stats]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/osrm/metrics                                  [get_osrm_metrics_endpoint]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/osrm/metrics/errors                           [get_osrm_errors]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/stats/daily                                   [daily]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/stats/export/csv                              [export_csv]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/stats/export/json                             [export_json]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/stats/monthly                                 [monthly]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/stats/overview                                [overview]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/system/rules                                  [get_system_rules]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/system/rules/self-check                       [system_rules_self_check]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tests/list                                    [test_list]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tests/modules                                 [test_modules]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tests/status                                  [test_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tour/route-details                            [route_details_get]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tourplaene/list                               [api_tourplaene_list]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tourplaene/list                               [list_tourplaene]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tourplan/bulk-progress/{session_id}           [get_bulk_progress]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tourplan/geocode-missing                      [api_geocode_missing]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tourplan/list                                 [list_tourplans]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tourplan/match                                [api_tourplan_match]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tourplan/status                               [api_tourplan_status]
+2025-11-16 13:55:51,816 - startup - INFO - GET                  /api/tourplan/suggest                              [api_tourplan_suggest]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /api/tourplan/suggest/accept/stats                 [api_alias_stats]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /api/tourplan/suggest/stats                        [api_tourplan_suggest_stats]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /api/tourplan/triage                               [triage]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /api/traffic/cameras                               [get_cameras]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /api/traffic/incidents                             [get_incidents]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /api/upload/status                                 [upload_status]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /api/workflow/geocoding-progress/{session_id}      [get_geocoding_progress]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /api/workflow/status                               [workflow_status]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /audit/orig-integrity                              [audit_integrity]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /debug/geo/peek                                    [debug_geo_peek]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /debug/geo/stats                                   [debug_geo_stats]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /debug/info                                        [debug_info]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /engine/tours/{tour_uid}/status                    [get_tour_status]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /export/tourplan                                   [export_tourplan]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /health                                            [health_root]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /health/app                                        [health_app]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /health/db                                         [health_db]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /health/live                                       [health_live]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /health/osrm                                       [health_osrm]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /health/osrm                                       [health_osrm]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /health/osrm/sample-route                          [health_osrm_sample]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /health/status                                     [health_status]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /healthz                                           [healthz]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /live                                              [health_live]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /metrics/simple                                    [metrics_simple]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /osrm                                              [health_osrm_endpoint]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /panel-map.html                                    [panel_map]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /panel-tours.html                                  [panel_tours]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /readyz                                            [readyz]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /summary                                           [summary]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /ui/                                               [ui_root]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /ui/ai-test                                        [ai_test_page]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /ui/test-dashboard                                 [test_dashboard]
+2025-11-16 13:55:51,817 - startup - INFO - GET                  /ui/tourplan-management                            [tourplan_management]
+2025-11-16 13:55:51,817 - startup - INFO - GET, HEAD            /docs                                              [swagger_ui_html]
+2025-11-16 13:55:51,817 - startup - INFO - GET, HEAD            /docs/oauth2-redirect                              [swagger_ui_redirect]
+2025-11-16 13:55:51,817 - startup - INFO - GET, HEAD            /openapi.json                                      [openapi]
+2025-11-16 13:55:51,817 - startup - INFO - GET, HEAD            /redoc                                             [redoc_html]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/ai-test/analyze                               [analyze_csv_ai]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/ai-tour-classify                              [ai_tour_classify]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/ai-tour-group                                 [ai_tour_group]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/audit/export-manual-queue                     [export_manual_queue]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/auth/login                                    [login]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/auth/logout                                   [logout]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/backup/cleanup                                [api_cleanup_backups]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/backup/create                                 [api_create_backup]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/backup/restore                                [api_restore_backup]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/code-checker/add-lesson                       [add_lesson]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/code-checker/analyze                          [analyze_code]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/code-checker/improve                          [improve_code]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/code-checker/reload-patterns                  [reload_patterns]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/code-improvement-job/run-once                 [run_job_once]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/code-improvement-job/start                    [start_job]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/code-improvement-job/stop                     [stop_job]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/coordinate/verify-batch                       [verify_batch_coordinates]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/coordinate/verify-single                      [verify_single_coordinate]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/cost-tracker/reset-daily                      [reset_daily_stats]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/csv-tour-process                              [csv_tour_process]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/errors/auto-log                               [auto_log_error]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/geocode/cleanup-fail-cache                    [cleanup_fail_cache]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/geocode/clear-all-fail-cache                  [clear_all_fail_cache]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/geocode/fail-cache/clear                      [fail_cache_clear]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/geocode/force-retry                           [force_retry]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/llm/optimize                                  [llm_optimize_route]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/manual/add                                    [manual_add]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/manual/close                                  [manual_close]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/osrm/metrics/reset                            [reset_osrm_metrics]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/process-csv-direct                            [process_csv_direct]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/tests/run                                     [run_tests]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/tour/optimize                                 [optimize_tour_with_ai]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/tour/route-details                            [route_details]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/tourplan-analysis                             [api_tourplan_analysis]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/tourplan-analysis                             [tourplan_analysis]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/tourplan-visual-test                          [tourplan_visual_test]
+2025-11-16 13:55:51,817 - startup - INFO - POST                 /api/tourplan/batch-geocode                        [batch_geocode_tourplan]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/tourplan/bulk-process-all                     [bulk_process_all_csv]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/tourplan/geocode-file                         [geocode_single_file]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/tourplan/manual-geo                           [api_manual_geo]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/tourplan/match                                [api_tourplan_match_post]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/tourplan/suggest/accept                       [api_accept_suggestion]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/traffic/cameras                               [create_camera]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/traffic/incidents                             [create_incident]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/upload/cleanup                                [cleanup_staging]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/upload/csv                                    [upload_csv]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/workflow/complete                             [complete_workflow]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /api/workflow/upload                               [workflow_upload]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /engine/tours/ingest                               [ingest_tours]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /engine/tours/optimize                             [optimize_tour]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /engine/tours/pirna/cluster                        [cluster_pirna_tour]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /engine/tours/plan_by_sector                       [plan_by_sector]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /engine/tours/sectorize                            [sectorize_tour]
+2025-11-16 13:55:51,818 - startup - INFO - POST                 /engine/tours/split                                [split_tour]
+2025-11-16 13:55:51,818 - startup - INFO - PUT                  /api/system/rules                                  [update_system_rules]
+2025-11-16 13:55:51,818 - startup - INFO - ======================================================================
+2025-11-16 13:55:51,818 - startup - INFO - Gesamt: 157 Routen registriert
+2025-11-16 13:55:51,818 - startup - INFO - ======================================================================
+[LOGGING] UTF-8 Logging konfiguriert
+[SMOKE TEST] Starte Encoding-Test...
+[HEX SMOKE] 4C C3 B6 62 74 61 75 65 72 20 53 74 72 61 C3 9F 65 20 31 2C 20 30 31 38 30 39 20 48 65 69 64 65 6E 61 75
+2025-11-16 13:55:51,818 - backend.utils.encoding_guards - INFO - [HEX SMOKE] 4C C3 B6 62 74 61 75 65 72 20 53 74 72 61 C3 9F 65 20 31 2C 20 30 31 38 30 39 20 48 65 69 64 65 6E 61 75
+[SMOKE TEST] Ô£à Kein Mojibake erkannt
+[GEOCODE URL] L%C3%B6btauer%20Stra%C3%9Fe%201%2C%2001809%20Heidenau
+2025-11-16 13:55:51,818 - backend.utils.encoding_guards - INFO - [GEOCODE URL] L%C3%B6btauer%20Stra%C3%9Fe%201%2C%2001809%20Heidenau
+[SMOKE TEST] Ô£à Geocoding-URL korrekt
+[SMOKE TEST] Ô£à UTF-8 Roundtrip erfolgreich
+[SMOKE TEST] Ô£à Korrekte UTF-8-Sequenzen erkannt
+[SMOKE TEST] Ô£à Alle Tests erfolgreich!
+2025-11-16 13:55:51,824 - backend.services.ai_code_checker - INFO - [AI-CodeChecker] Auto-Reload Task gestartet (alle 6 Stunden)
+2025-11-16 13:55:51,825 - startup - INFO - [STARTUP] KI-CodeChecker Background-Job gestartet
+2025-11-16 13:55:51,825 - startup - INFO - ======================================================================
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE-MAP: Registrierte API-Endpoints
+2025-11-16 13:55:51,825 - startup - INFO - ======================================================================
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: add_lesson                 /api/code-checker/add-lesson  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: admin_login_page           /admin/login.html  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: admin_page                 /admin.html  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: ai_test_page               /ui/ai-test  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: ai_tour_classify           /api/ai-tour-classify  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: ai_tour_group              /api/ai-tour-group  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: analyze_code               /api/code-checker/analyze  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: analyze_csv_ai             /api/ai-test/analyze  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_accept_suggestion      /api/tourplan/suggest/accept  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_alias_stats            /api/tourplan/suggest/accept/stats  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_cleanup_backups        /api/backup/cleanup  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_create_backup          /api/backup/create  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_geocode_missing        /api/tourplan/geocode-missing  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_list_backups           /api/backup/list  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_manual_geo             /api/tourplan/manual-geo  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_remove_alias           /api/tourplan/suggest/accept/{query:path}  DELETE
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_restore_backup         /api/backup/restore  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_tourplaene_list        /api/tourplaene/list  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_tourplan_analysis      /api/tourplan-analysis  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_tourplan_match         /api/tourplan/match  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_tourplan_match_post    /api/tourplan/match  POST
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_tourplan_status        /api/tourplan/status  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_tourplan_suggest       /api/tourplan/suggest  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: api_tourplan_suggest_stats  /api/tourplan/suggest/stats  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: audit_geo                  /api/audit/geo  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: audit_geocoding            /api/audit/geocoding  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: audit_integrity            /audit/orig-integrity  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: audit_status               /api/audit/status  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: auth_status                /api/auth/status  GET
+2025-11-16 13:55:51,825 - startup - INFO - ROUTE: auto_log_error             /api/errors/auto-log  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: batch_geocode_tourplan     /api/tourplan/batch-geocode  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: bulk_process_all_csv       /api/tourplan/bulk-process-all  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: check_auth                 /api/auth/check  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: cleanup_fail_cache         /api/geocode/cleanup-fail-cache  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: cleanup_staging            /api/upload/cleanup  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: clear_all_fail_cache       /api/geocode/clear-all-fail-cache  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: cluster_pirna_tour         /engine/tours/pirna/cluster  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: complete_workflow          /api/workflow/complete  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: create_camera              /api/traffic/cameras  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: create_incident            /api/traffic/incidents  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: csv_tour_process           /api/csv-tour-process  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: daily                      /api/stats/daily  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: debug_geo_peek             /debug/geo/peek  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: debug_geo_stats            /debug/geo/stats  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: debug_info                 /debug/info  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: delete_camera              /api/traffic/cameras/{camera_id}  DELETE
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: delete_incident            /api/traffic/incidents/{incident_id}  DELETE
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: export_csv                 /api/stats/export/csv  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: export_json                /api/stats/export/json  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: export_manual_queue        /api/audit/export-manual-queue  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: export_tourplan            /export/tourplan  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: fail_cache_clear           /api/geocode/fail-cache/clear  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: fail_cache_list            /api/geocode/fail-cache  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: fail_reasons               /api/geocode/fail-reasons  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: fail_stats                 /api/geocode/fail-stats  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: fail_status                /api/geocode/fail-status  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: force_retry                /api/geocode/force-retry  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: geocode_address            /api/geocode  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: geocode_single_file        /api/tourplan/geocode-file  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_budget_status          /api/cost-tracker/budget-status  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_bulk_progress          /api/tourplan/bulk-progress/{session_id}  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_cameras                /api/traffic/cameras  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_checker_status         /api/code-checker/status  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_checker_status         /api/code-checker/status  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_cost_stats             /api/cost-tracker/stats  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_costs                  /api/ki-improvements/costs  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_data_flow              /api/endpoint-flow/flow  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_db_stats               /api/db/stats  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_geocoding_progress     /api/workflow/geocoding-progress/{session_id}  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_improvement_stats      /api/ki-improvements/stats  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_incidents              /api/traffic/incidents  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_job_status             /api/code-improvement-job/status  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_learned_patterns       /api/code-checker/learned-patterns  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_limits                 /api/ki-improvements/limits  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_manual_queue           /api/audit/manual-queue  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_models_info            /api/cost-tracker/models  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_modules                /api/endpoint-flow/modules  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_osrm_errors            /api/osrm/metrics/errors  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_osrm_metrics_endpoint  /api/osrm/metrics  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_performance            /api/ki-improvements/performance  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_recent_improvements    /api/ki-improvements/recent  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_system_rules           /api/system/rules  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_tour_status            /engine/tours/{tour_uid}/status  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: get_usage_by_operation     /api/cost-tracker/usage  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_app                 /health/app  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_db                  /health/db  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_live                /health/live  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_live                /live  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_osrm                /health/osrm  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_osrm                /health/osrm  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_osrm_endpoint       /osrm  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_osrm_sample         /health/osrm/sample-route  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_root                /health  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: health_status              /health/status  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: healthz                    /healthz  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: improve_code               /api/code-checker/improve  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: ingest_tours               /engine/tours/ingest  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: ki_improvements_dashboard  /admin/ki-improvements  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: ki_kosten_dashboard        /admin/ki-kosten  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: list_routes                /_debug/routes  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: list_tourplaene            /api/tourplaene/list  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: list_tourplans             /api/tourplan/list  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: llm_monitoring_status      /api/llm/monitoring  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: llm_optimize_route         /api/llm/optimize  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: llm_templates              /api/llm/templates  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: login                      /api/auth/login  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: logout                     /api/auth/logout  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: manual_add                 /api/manual/add  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: manual_close               /api/manual/close  POST
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: manual_list                /api/manual/list  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: manual_stats               /api/manual/stats  GET
+2025-11-16 13:55:51,826 - startup - INFO - ROUTE: metrics_simple             /metrics/simple  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: monthly                    /api/stats/monthly  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: openapi                    /openapi.json  GET, HEAD
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: optimize_tour              /engine/tours/optimize  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: optimize_tour_with_ai      /api/tour/optimize  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: overview                   /api/stats/overview  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: panel_map                  /panel-map.html  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: panel_tours                /panel-tours.html  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: plan_by_sector             /engine/tours/plan_by_sector  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: process_csv_direct         /api/process-csv-direct  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: readyz                     /readyz  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: recognition_status         /api/address-recognition/status  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: redoc_html                 /redoc  GET, HEAD
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: reload_patterns            /api/code-checker/reload-patterns  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: reset_daily_stats          /api/cost-tracker/reset-daily  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: reset_osrm_metrics         /api/osrm/metrics/reset  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: root                       /  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: route_details              /api/tour/route-details  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: route_details_get          /api/tour/route-details  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: run_job_once               /api/code-improvement-job/run-once  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: run_tests                  /api/tests/run  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: sectorize_tour             /engine/tours/sectorize  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: split_tour                 /engine/tours/split  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: start_job                  /api/code-improvement-job/start  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: static                     /static  N/A
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: stop_job                   /api/code-improvement-job/stop  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: summary                    /summary  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: swagger_ui_html            /docs  GET, HEAD
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: swagger_ui_redirect        /docs/oauth2-redirect  GET, HEAD
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: system_rules_self_check    /api/system/rules/self-check  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: test_dashboard             /ui/test-dashboard  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: test_list                  /api/tests/list  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: test_modules               /api/tests/modules  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: test_status                /api/tests/status  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: tourplan_analysis          /api/tourplan-analysis  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: tourplan_management        /ui/tourplan-management  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: tourplan_visual_test       /api/tourplan-visual-test  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: triage                     /api/tourplan/triage  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: ui_root                    /ui/  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: update_system_rules        /api/system/rules  PUT
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: upload_csv                 /api/upload/csv  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: upload_status              /api/upload/status  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: verify_batch_coordinates   /api/coordinate/verify-batch  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: verify_from_workflow       /api/coordinate/verify-from-workflow  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: verify_single_coordinate   /api/coordinate/verify-single  POST
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: websocket_improvements     /ws/ki-improvements  N/A
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: workflow_status            /api/workflow/status  GET
+2025-11-16 13:55:51,827 - startup - INFO - ROUTE: workflow_upload            /api/workflow/upload  POST
+2025-11-16 13:55:51,827 - startup - INFO - ======================================================================
+2025-11-16 13:55:51,827 - startup - INFO - Gesamt: 159 Endpoints
+2025-11-16 13:55:51,827 - startup - INFO - Aktive Router: _debug, admin, admin.html, api, audit, debug, docs, engine, export, health, healthz, live, metrics, openapi.json, osrm, panel-map.html, panel-tours.html, readyz, redoc, static, summary, ui, ws
+2025-11-16 13:55:51,827 - startup - INFO - ======================================================================
+
+======================================================================
+[ROUTES] Registrierte API-Endpoints:
+======================================================================
+ROUTE: add_lesson                 /api/code-checker/add-lesson  POST
+ROUTE: admin_login_page           /admin/login.html  GET
+ROUTE: admin_page                 /admin.html  GET
+ROUTE: ai_test_page               /ui/ai-test  GET
+ROUTE: ai_tour_classify           /api/ai-tour-classify  POST
+ROUTE: ai_tour_group              /api/ai-tour-group  POST
+ROUTE: analyze_code               /api/code-checker/analyze  POST
+ROUTE: analyze_csv_ai             /api/ai-test/analyze  POST
+ROUTE: api_accept_suggestion      /api/tourplan/suggest/accept  POST
+ROUTE: api_alias_stats            /api/tourplan/suggest/accept/stats  GET
+ROUTE: api_cleanup_backups        /api/backup/cleanup  POST
+ROUTE: api_create_backup          /api/backup/create  POST
+ROUTE: api_geocode_missing        /api/tourplan/geocode-missing  GET
+ROUTE: api_list_backups           /api/backup/list  GET
+ROUTE: api_manual_geo             /api/tourplan/manual-geo  POST
+ROUTE: api_remove_alias           /api/tourplan/suggest/accept/{query:path}  DELETE
+ROUTE: api_restore_backup         /api/backup/restore  POST
+ROUTE: api_tourplaene_list        /api/tourplaene/list  GET
+ROUTE: api_tourplan_analysis      /api/tourplan-analysis  POST
+ROUTE: api_tourplan_match         /api/tourplan/match  GET
+ROUTE: api_tourplan_match_post    /api/tourplan/match  POST
+ROUTE: api_tourplan_status        /api/tourplan/status  GET
+ROUTE: api_tourplan_suggest       /api/tourplan/suggest  GET
+ROUTE: api_tourplan_suggest_stats  /api/tourplan/suggest/stats  GET
+ROUTE: audit_geo                  /api/audit/geo  GET
+ROUTE: audit_geocoding            /api/audit/geocoding  GET
+ROUTE: audit_integrity            /audit/orig-integrity  GET
+ROUTE: audit_status               /api/audit/status  GET
+ROUTE: auth_status                /api/auth/status  GET
+ROUTE: auto_log_error             /api/errors/auto-log  POST
+ROUTE: batch_geocode_tourplan     /api/tourplan/batch-geocode  POST
+ROUTE: bulk_process_all_csv       /api/tourplan/bulk-process-all  POST
+ROUTE: check_auth                 /api/auth/check  GET
+ROUTE: cleanup_fail_cache         /api/geocode/cleanup-fail-cache  POST
+ROUTE: cleanup_staging            /api/upload/cleanup  POST
+ROUTE: clear_all_fail_cache       /api/geocode/clear-all-fail-cache  POST
+ROUTE: cluster_pirna_tour         /engine/tours/pirna/cluster  POST
+ROUTE: complete_workflow          /api/workflow/complete  POST
+ROUTE: create_camera              /api/traffic/cameras  POST
+ROUTE: create_incident            /api/traffic/incidents  POST
+ROUTE: csv_tour_process           /api/csv-tour-process  POST
+ROUTE: daily                      /api/stats/daily  GET
+ROUTE: debug_geo_peek             /debug/geo/peek  GET
+ROUTE: debug_geo_stats            /debug/geo/stats  GET
+ROUTE: debug_info                 /debug/info  GET
+ROUTE: delete_camera              /api/traffic/cameras/{camera_id}  DELETE
+ROUTE: delete_incident            /api/traffic/incidents/{incident_id}  DELETE
+ROUTE: export_csv                 /api/stats/export/csv  GET
+ROUTE: export_json                /api/stats/export/json  GET
+ROUTE: export_manual_queue        /api/audit/export-manual-queue  POST
+ROUTE: export_tourplan            /export/tourplan  GET
+ROUTE: fail_cache_clear           /api/geocode/fail-cache/clear  POST
+ROUTE: fail_cache_list            /api/geocode/fail-cache  GET
+ROUTE: fail_reasons               /api/geocode/fail-reasons  GET
+ROUTE: fail_stats                 /api/geocode/fail-stats  GET
+ROUTE: fail_status                /api/geocode/fail-status  GET
+ROUTE: force_retry                /api/geocode/force-retry  POST
+ROUTE: geocode_address            /api/geocode  GET
+ROUTE: geocode_single_file        /api/tourplan/geocode-file  POST
+ROUTE: get_budget_status          /api/cost-tracker/budget-status  GET
+ROUTE: get_bulk_progress          /api/tourplan/bulk-progress/{session_id}  GET
+ROUTE: get_cameras                /api/traffic/cameras  GET
+ROUTE: get_checker_status         /api/code-checker/status  GET
+ROUTE: get_checker_status         /api/code-checker/status  GET
+ROUTE: get_cost_stats             /api/cost-tracker/stats  GET
+ROUTE: get_costs                  /api/ki-improvements/costs  GET
+ROUTE: get_data_flow              /api/endpoint-flow/flow  GET
+ROUTE: get_db_stats               /api/db/stats  GET
+ROUTE: get_geocoding_progress     /api/workflow/geocoding-progress/{session_id}  GET
+ROUTE: get_improvement_stats      /api/ki-improvements/stats  GET
+ROUTE: get_incidents              /api/traffic/incidents  GET
+ROUTE: get_job_status             /api/code-improvement-job/status  GET
+ROUTE: get_learned_patterns       /api/code-checker/learned-patterns  GET
+ROUTE: get_limits                 /api/ki-improvements/limits  GET
+ROUTE: get_manual_queue           /api/audit/manual-queue  GET
+ROUTE: get_models_info            /api/cost-tracker/models  GET
+ROUTE: get_modules                /api/endpoint-flow/modules  GET
+ROUTE: get_osrm_errors            /api/osrm/metrics/errors  GET
+ROUTE: get_osrm_metrics_endpoint  /api/osrm/metrics  GET
+ROUTE: get_performance            /api/ki-improvements/performance  GET
+ROUTE: get_recent_improvements    /api/ki-improvements/recent  GET
+ROUTE: get_system_rules           /api/system/rules  GET
+ROUTE: get_tour_status            /engine/tours/{tour_uid}/status  GET
+ROUTE: get_usage_by_operation     /api/cost-tracker/usage  GET
+ROUTE: health_app                 /health/app  GET
+ROUTE: health_db                  /health/db  GET
+ROUTE: health_live                /health/live  GET
+ROUTE: health_live                /live  GET
+ROUTE: health_osrm                /health/osrm  GET
+ROUTE: health_osrm                /health/osrm  GET
+ROUTE: health_osrm_endpoint       /osrm  GET
+ROUTE: health_osrm_sample         /health/osrm/sample-route  GET
+ROUTE: health_root                /health  GET
+ROUTE: health_status              /health/status  GET
+ROUTE: healthz                    /healthz  GET
+ROUTE: improve_code               /api/code-checker/improve  POST
+ROUTE: ingest_tours               /engine/tours/ingest  POST
+ROUTE: ki_improvements_dashboard  /admin/ki-improvements  GET
+ROUTE: ki_kosten_dashboard        /admin/ki-kosten  GET
+ROUTE: list_routes                /_debug/routes  GET
+ROUTE: list_tourplaene            /api/tourplaene/list  GET
+ROUTE: list_tourplans             /api/tourplan/list  GET
+ROUTE: llm_monitoring_status      /api/llm/monitoring  GET
+ROUTE: llm_optimize_route         /api/llm/optimize  POST
+ROUTE: llm_templates              /api/llm/templates  GET
+ROUTE: login                      /api/auth/login  POST
+ROUTE: logout                     /api/auth/logout  POST
+ROUTE: manual_add                 /api/manual/add  POST
+ROUTE: manual_close               /api/manual/close  POST
+ROUTE: manual_list                /api/manual/list  GET
+ROUTE: manual_stats               /api/manual/stats  GET
+ROUTE: metrics_simple             /metrics/simple  GET
+ROUTE: monthly                    /api/stats/monthly  GET
+ROUTE: openapi                    /openapi.json  GET, HEAD
+ROUTE: optimize_tour              /engine/tours/optimize  POST
+ROUTE: optimize_tour_with_ai      /api/tour/optimize  POST
+ROUTE: overview                   /api/stats/overview  GET
+ROUTE: panel_map                  /panel-map.html  GET
+ROUTE: panel_tours                /panel-tours.html  GET
+ROUTE: plan_by_sector             /engine/tours/plan_by_sector  POST
+ROUTE: process_csv_direct         /api/process-csv-direct  POST
+ROUTE: readyz                     /readyz  GET
+ROUTE: recognition_status         /api/address-recognition/status  GET
+ROUTE: redoc_html                 /redoc  GET, HEAD
+ROUTE: reload_patterns            /api/code-checker/reload-patterns  POST
+ROUTE: reset_daily_stats          /api/cost-tracker/reset-daily  POST
+ROUTE: reset_osrm_metrics         /api/osrm/metrics/reset  POST
+ROUTE: root                       /  GET
+ROUTE: route_details              /api/tour/route-details  POST
+ROUTE: route_details_get          /api/tour/route-details  GET
+ROUTE: run_job_once               /api/code-improvement-job/run-once  POST
+ROUTE: run_tests                  /api/tests/run  POST
+ROUTE: sectorize_tour             /engine/tours/sectorize  POST
+ROUTE: split_tour                 /engine/tours/split  POST
+ROUTE: start_job                  /api/code-improvement-job/start  POST
+ROUTE: static                     /static  N/A
+ROUTE: stop_job                   /api/code-improvement-job/stop  POST
+ROUTE: summary                    /summary  GET
+ROUTE: swagger_ui_html            /docs  GET, HEAD
+ROUTE: swagger_ui_redirect        /docs/oauth2-redirect  GET, HEAD
+ROUTE: system_rules_self_check    /api/system/rules/self-check  GET
+ROUTE: test_dashboard             /ui/test-dashboard  GET
+ROUTE: test_list                  /api/tests/list  GET
+ROUTE: test_modules               /api/tests/modules  GET
+ROUTE: test_status                /api/tests/status  GET
+ROUTE: tourplan_analysis          /api/tourplan-analysis  POST
+ROUTE: tourplan_management        /ui/tourplan-management  GET
+ROUTE: tourplan_visual_test       /api/tourplan-visual-test  POST
+ROUTE: triage                     /api/tourplan/triage  GET
+ROUTE: ui_root                    /ui/  GET
+ROUTE: update_system_rules        /api/system/rules  PUT
+ROUTE: upload_csv                 /api/upload/csv  POST
+ROUTE: upload_status              /api/upload/status  GET
+ROUTE: verify_batch_coordinates   /api/coordinate/verify-batch  POST
+ROUTE: verify_from_workflow       /api/coordinate/verify-from-workflow  GET
+ROUTE: verify_single_coordinate   /api/coordinate/verify-single  POST
+ROUTE: websocket_improvements     /ws/ki-improvements  N/A
+ROUTE: workflow_status            /api/workflow/status  GET
+ROUTE: workflow_upload            /api/workflow/upload  POST
+======================================================================
+[ROUTES] Gesamt: 159 Endpoints
+[ROUTES] Aktive Router: _debug, admin, admin.html, api, audit, debug, docs, engine, export, health, healthz, live, metrics, openapi.json, osrm, panel-map.html, panel-tours.html, readyz, redoc, static, summary, ui, ws
+======================================================================
+
+2025-11-16 13:55:51,827 - startup - INFO - [STARTUP] KI-CodeChecker Background-Job gestartet
+2025-11-16 13:55:51,828 - startup - INFO - ======================================================================
+2025-11-16 13:55:51,828 - startup - INFO - App erfolgreich gestartet
+2025-11-16 13:55:51,828 - startup - INFO - ======================================================================

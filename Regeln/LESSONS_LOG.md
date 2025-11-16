@@ -400,8 +400,8 @@ curl -X POST "http://localhost:8111/api/code-checker/analyze?file_path=backend/a
 
 ## Statistiken
 
-**Gesamt-Audits:** 2  
-**Kritische Fehler:** 2 (behoben)  
+**Gesamt-Audits:** 3  
+**Kritische Fehler:** 3 (behoben)  
 **Medium Fehler:** 0  
 **Low Fehler:** 0  
 **Enhancements:** 1 (KI-Integration)
@@ -412,13 +412,15 @@ curl -X POST "http://localhost:8111/api/code-checker/analyze?file_path=backend/a
 2. Syntax-Fehler (Frontend) – 1x
 3. Missing Defensive Checks – 1x
 4. Memory Leaks – 1x
+5. Venv-Infrastruktur-Probleme – 1x
 
-**Lessons Learned (Top 3):**
+**Lessons Learned (Top 5):**
 
 1. ✅ Defensive Programmierung ist Pflicht (nicht optional)
 2. ✅ Schema-Änderungen immer mit Migration-Script
 3. ✅ API-Kontrakt zwischen Backend und Frontend dokumentieren
-4. ✅ KI-Systeme sollten aus dokumentierten Fehlern lernen (neu!)
+4. ✅ KI-Systeme sollten aus dokumentierten Fehlern lernen
+5. ✅ Venv-Status bei Import-Fehlern prüfen - beschädigtes venv neu erstellen (schneller als Reparatur)
 
 ---
 
@@ -902,6 +904,180 @@ saveToursToStorage();
 
 ---
 
+## 2025-11-16 – Beschädigtes venv: SQLAlchemy/Numpy/Pandas Import-Fehler 🔴
+
+**Kategorie:** Infrastruktur (Python Environment)  
+**Schweregrad:** 🔴 KRITISCH  
+**Dateien:** `venv/`, `start_server.py`, `requirements.txt`
+
+### Symptom
+
+- Server startet nicht: `ImportError: cannot import name 'text' from 'sqlalchemy' (unknown location)`
+- Weitere Fehler: `ImportError: cannot import name 'text' from 'sqlalchemy.sql'`
+- Numpy-Fehler: `Error importing numpy: you should not try to import numpy from its source directory`
+- Pandas-Fehler: `ModuleNotFoundError: No module named 'pandas._libs.pandas_parser'`
+- Pip-Fehler: `ERROR: Could not install packages due to an OSError: [Errno 2] No such file or directory: '...\METADATA'`
+- **Server antwortet nicht** - Port 8111 bleibt frei trotz laufender Python-Prozesse
+
+### Ursache
+
+**Root Cause: Beschädigtes venv mit fehlenden METADATA-Dateien**
+
+**Wie kommt ein beschädigtes venv zustande?**
+
+1. **Unterbrochene Installationen:**
+   - Installation wird abgebrochen (Ctrl+C, Systemabsturz, Stromausfall)
+   - Pip schreibt METADATA-Dateien am Ende der Installation
+   - Bei Abbruch: Package-Dateien sind installiert, aber METADATA fehlt
+   - **Beispiel:** `pip install sqlalchemy` wird abgebrochen → `sqlalchemy/` existiert, aber `sqlalchemy-2.0.43.dist-info/METADATA` fehlt
+
+2. **Antivirus-Software / Windows Defender:**
+   - Antivirus löscht oder blockiert METADATA-Dateien (falsch-positiv)
+   - Windows Defender kann `.dist-info` Verzeichnisse als verdächtig markieren
+   - Dateien werden gelöscht, während pip sie noch benötigt
+   - **Besonders häufig:** Bei großen Packages (numpy, pandas, scipy)
+
+3. **Dateisystem-Fehler:**
+   - NTFS-Fehler, defekte Festplatte, USB-Stick-Probleme
+   - Dateien werden nicht vollständig geschrieben
+   - `METADATA`-Datei existiert, aber ist leer oder beschädigt
+
+4. **Manuelle Löschung:**
+   - Benutzer löscht versehentlich `.dist-info` Verzeichnisse
+   - Cleanup-Scripts löschen zu viel
+   - Antivirus-Scan löscht "verdächtige" Dateien
+
+5. **Pip-Upgrade-Probleme:**
+   - `pip install --upgrade pip` schlägt fehl
+   - Alte pip-Version wird deinstalliert, neue nicht vollständig installiert
+   - Pip selbst hat dann fehlende METADATA-Dateien
+
+6. **Parallele Installationen:**
+   - Mehrere `pip install` Prozesse gleichzeitig
+   - Race Conditions beim Schreiben von METADATA-Dateien
+   - Eine Installation überschreibt die METADATA der anderen
+
+7. **Venv-Kopieren/Backup-Probleme:**
+   - Venv wird kopiert statt neu erstellt
+   - Symlinks werden nicht korrekt kopiert (Windows)
+   - Dateiberechtigungen gehen verloren
+
+**Beschädigte pip-Metadaten (konkrete Beispiele):**
+   - `venv\Lib\site-packages\pip-24.3.1.dist-info\METADATA` fehlt
+   - `venv\Lib\site-packages\sqlalchemy-2.0.43.dist-info\METADATA` fehlt
+   - `venv\Lib\site-packages\typing_extensions-4.14.1.dist-info\METADATA` fehlt
+   - Weitere Packages betroffen
+
+2. **Pip kann Packages nicht verwalten:**
+   - `pip show sqlalchemy` schlägt fehl (METADATA fehlt)
+   - `pip uninstall` schlägt fehl (`no RECORD file found`)
+   - `pip install --force-reinstall` schlägt fehl (kann alte Version nicht deinstallieren)
+
+3. **Python kann Packages nicht importieren:**
+   - SQLAlchemy ist installiert, aber Python findet es nicht
+   - `import sqlalchemy` → `ModuleNotFoundError` oder `cannot import name 'text'`
+   - System-Python wird verwendet statt venv-Python
+
+4. **Server startet nicht:**
+   - `start_server.py` importiert `app_startup`
+   - `app_startup.py` importiert `db.schema`
+   - `db.schema.py` importiert `sqlalchemy.text` → **FEHLER**
+   - Server bricht ab, bevor er auf Port 8111 hört
+
+### Fix
+
+**Lösung: Venv komplett neu erstellen**
+
+```powershell
+# 1. Alle Python-Prozesse beenden
+taskkill /F /IM python.exe /T
+
+# 2. Altes venv löschen
+Remove-Item -Path "venv" -Recurse -Force
+
+# 3. Neues venv erstellen
+python -m venv venv
+
+# 4. Venv aktivieren
+.\venv\Scripts\Activate.ps1
+
+# 5. pip upgraden
+python -m pip install --upgrade pip
+
+# 6. Alle Dependencies installieren
+python -m pip install -r requirements.txt
+
+# 7. Server starten
+python start_server.py
+```
+
+**Zusätzlich: Start-Scripts aktualisiert**
+
+- `START_SERVER.ps1` - Aktiviert venv und startet Server mit venv-Python
+- `START_SERVER_WITH_LOGS.ps1` - Aktiviert venv, testet SQLAlchemy, startet Server
+- Scripts verwenden jetzt explizit `venv\Scripts\python.exe` statt System-Python
+
+### Ergebnis
+
+**Code-Qualität:**
+
+| Metrik | Vorher | Nachher |
+|--------|--------|---------|
+| Venv-Status | ❌ Beschädigt | ✅ Neu erstellt |
+| SQLAlchemy | ❌ Import-Fehler | ✅ Funktioniert |
+| Pandas | ❌ Import-Fehler | ✅ Funktioniert |
+| Numpy | ❌ Import-Fehler | ✅ Funktioniert |
+| Server-Start | ❌ Bricht ab | ✅ Startet erfolgreich |
+| Port 8111 | ❌ Frei | ✅ Belegt (wenn Server läuft) |
+
+**Erwartete Userwirkung:**
+- ✅ Server startet ohne Import-Fehler
+- ✅ Alle Dependencies funktionieren
+- ✅ Server antwortet auf Port 8111
+- ✅ Frontend ist erreichbar
+
+### Was die KI künftig tun soll
+
+1. **Venv-Status prüfen bei Import-Fehlern:**
+   - Wenn `ImportError` auftritt: Zuerst prüfen, ob venv aktiviert ist
+   - Prüfen, welches Python verwendet wird: `python -c "import sys; print(sys.executable)"`
+   - Prüfen, ob Package im venv installiert ist: `venv\Scripts\python.exe -c "import package"`
+
+2. **Beschädigte venv erkennen:**
+   - Wenn `pip show` fehlschlägt mit METADATA-Fehler → venv ist beschädigt
+   - Wenn `pip uninstall` fehlschlägt mit "no RECORD file" → venv ist beschädigt
+   - Wenn `ImportError` trotz `pip list` zeigt, dass Package installiert ist → venv ist beschädigt
+
+3. **Venv-Reparatur vs. Neu-Erstellung:**
+   - **Reparatur:** Nur wenn einzelne Packages betroffen sind (z.B. nur SQLAlchemy)
+   - **Neu-Erstellung:** Wenn mehrere Packages betroffen sind oder pip selbst beschädigt ist
+   - **Empfehlung:** Bei mehr als 2-3 beschädigten Packages → venv neu erstellen (schneller)
+
+4. **Start-Scripts immer mit venv-Python:**
+   - Scripts sollten IMMER `venv\Scripts\python.exe` verwenden, nicht System-Python
+   - Venv muss aktiviert sein ODER explizit venv-Python verwenden
+   - Teste SQLAlchemy-Import vor Server-Start
+
+5. **Server-Start im Terminal:**
+   - Server MUSS im Terminal laufen (nicht im Hintergrund)
+   - Hintergrund-Start funktioniert nicht zuverlässig
+   - Benutzer muss Terminal offen lassen
+
+6. **Fehler-Dokumentation:**
+   - Jeder venv-bezogene Fehler sollte dokumentiert werden
+   - Häufige Ursachen: Beschädigte Metadaten, falsches Python, venv nicht aktiviert
+   - Lösung immer dokumentieren (Reparatur vs. Neu-Erstellung)
+
+7. **Prävention von venv-Beschädigung:**
+   - Installationen nicht abbrechen (warten bis fertig)
+   - Antivirus-Ausnahmen für venv-Verzeichnis hinzufügen
+   - Keine parallelen pip-Installationen
+   - Venv nicht kopieren, immer neu erstellen
+   - Regelmäßige Dateisystem-Checks (chkdsk)
+   - Pip-Upgrades vorsichtig durchführen (erst testen)
+
+---
+
 **Ende des LESSONS_LOG**  
-**Letzte Aktualisierung:** 2025-11-15
+**Letzte Aktualisierung:** 2025-11-16
 

@@ -30,6 +30,32 @@ if config_env_path.exists():
     # Setze Standardwert für Debug-Routen, falls nicht explizit gesetzt
     os.environ.setdefault("ENABLE_DEBUG_ROUTES", "0")
 
+    # Venv Health Check (PRÜFT UND REPARIERT AUTOMATISCH)
+    try:
+        from backend.utils.venv_health_check import run_venv_health_check
+        logger.info("Führe Venv Health Check durch...")
+        venv_ok = run_venv_health_check(auto_fix=True)
+        if not venv_ok:
+            logger.error("=" * 70)
+            logger.error("VENV HEALTH CHECK FEHLGESCHLAGEN")
+            logger.error("=" * 70)
+            logger.error("Der Server kann nicht gestartet werden.")
+            logger.error("")
+            logger.error("Bitte behebe die Probleme manuell:")
+            logger.error("  1. Venv aktivieren: .\\venv\\Scripts\\Activate.ps1")
+            logger.error("  2. Oder venv neu erstellen: .\\recreate_venv.ps1")
+            logger.error("")
+            logger.error("Dann Server erneut starten.")
+            logger.error("=" * 70)
+            sys.exit(1)
+        logger.info("[OK] Venv Health Check: OK")
+    except ImportError as e:
+        logger.warning(f"Venv Health Check nicht verfügbar: {e}")
+        logger.warning("Server startet ohne Health Check (nicht empfohlen)")
+    except Exception as e:
+        logger.error(f"Venv Health Check fehlgeschlagen: {e}")
+        logger.error("Server startet trotzdem (kann zu Fehlern führen)")
+    
     # Startup-Skript importieren (stellt DB-Schema sicher)
     import app_startup  # noqa: F401
 
@@ -53,12 +79,13 @@ if cfg("app:feature_flags:strict_health_checks", False):
 import uvicorn
 import logging
 
-# Setup Logging
+# Setup Logging (FRÜH, damit Health Check loggen kann)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 log = logging.getLogger(__name__)
+logger = log  # Alias für Kompatibilität
 
 if __name__ == "__main__":
     from db.core import ENGINE

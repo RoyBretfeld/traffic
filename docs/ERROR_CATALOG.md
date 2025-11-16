@@ -86,6 +86,47 @@ Die Anwendung verwendet detailliertes Logging, um den Betriebsstatus und potenzi
 *   **`ImportError: cannot import name 'logger' from 'backend.utils.json_logging'`**: Dieser Fehler entstand, weil `backend.utils.json_logging` keinen globalen Logger als `logger` exportiert. Stattdessen sollte `logging.getLogger(__name__)` verwendet werden. **FIXED**: Die Importanweisung in `backend/services/real_routing.py` wurde korrigiert, um `import logging; logger = logging.getLogger(__name__)` zu verwenden.
 *   **`[AddressMapper] WARNUNG: Konfigurationsdatei address_mappings.json nicht gefunden`**: Eine optionale Konfigurationsdatei für Adress-Mappings wurde nicht gefunden. Dies ist oft keine kritische Fehlermeldung, kann aber die Genauigkeit der Adressauflösung beeinträchtigen.
 
+*   **`ImportError: cannot import name 'text' from 'sqlalchemy' (unknown location)` / `ImportError: cannot import name 'text' from 'sqlalchemy.sql'`**: SQLAlchemy kann nicht importiert werden, obwohl es installiert zu sein scheint.
+    *   **Ursache**: Das Python venv ist beschädigt (fehlende METADATA-Dateien in `*.dist-info` Verzeichnissen). 
+        *   **Häufige Ursachen:**
+            1. **Unterbrochene Installationen:** Installation wird abgebrochen (Ctrl+C, Systemabsturz, Stromausfall) → Package-Dateien installiert, aber METADATA fehlt
+            2. **Antivirus-Software:** Windows Defender oder andere AV-Tools löschen METADATA-Dateien (falsch-positiv)
+            3. **Dateisystem-Fehler:** NTFS-Fehler, defekte Festplatte → Dateien nicht vollständig geschrieben
+            4. **Manuelle Löschung:** Benutzer oder Cleanup-Scripts löschen `.dist-info` Verzeichnisse
+            5. **Pip-Upgrade-Probleme:** `pip install --upgrade pip` schlägt fehl → pip selbst beschädigt
+            6. **Parallele Installationen:** Mehrere `pip install` Prozesse gleichzeitig → Race Conditions
+            7. **Venv-Kopieren:** Venv wird kopiert statt neu erstellt → Symlinks/Berechtigungen gehen verloren
+        *   **Zusätzlich:** Das System-Python wird statt des venv-Pythons verwendet, wenn das venv nicht aktiviert ist.
+    *   **Symptome**: 
+        - `pip show sqlalchemy` schlägt fehl mit `FileNotFoundError: ...\METADATA`
+        - `pip uninstall` schlägt fehl mit `error: uninstall-no-record-file`
+        - Python-Prozesse laufen, aber Server antwortet nicht auf Port 8111
+        - Weitere Packages betroffen: Numpy (`Error importing numpy: you should not try to import numpy from its source directory`), Pandas (`ModuleNotFoundError: No module named 'pandas._libs.pandas_parser'`)
+    *   **Behebung**: 
+        1. Prüfe, ob venv aktiviert ist: `python -c "import sys; print(sys.executable)"` sollte auf `venv\Scripts\python.exe` zeigen
+        2. Prüfe venv-Status: `pip show sqlalchemy` - wenn METADATA-Fehler → venv ist beschädigt
+        3. **Lösung:** Venv komplett neu erstellen:
+           ```powershell
+           # Alle Python-Prozesse beenden
+           taskkill /F /IM python.exe /T
+           # Altes venv löschen
+           Remove-Item -Path "venv" -Recurse -Force
+           # Neues venv erstellen
+           python -m venv venv
+           # Venv aktivieren
+           .\venv\Scripts\Activate.ps1
+           # pip upgraden
+           python -m pip install --upgrade pip
+           # Dependencies installieren
+           python -m pip install -r requirements.txt
+           ```
+        4. **Alternative (nur bei einzelnen Packages):** Beschädigte dist-info Verzeichnisse löschen und Package neu installieren
+    *   **Prävention**: 
+        - Start-Scripts sollten immer `venv\Scripts\python.exe` verwenden (nicht System-Python)
+        - SQLAlchemy-Import vor Server-Start testen
+        - Venv-Status regelmäßig prüfen
+        - Bei mehr als 2-3 beschädigten Packages: venv neu erstellen (schneller als Reparatur)
+
 ## 3. `correlation_id` (Trace-ID)
 
 Jede Anfrage, die durch die `RequestIdMiddleware` läuft, erhält eine eindeutige `x-request-id` im Response-Header. Diese ID wird auch in den Logs für die gesamte Dauer der Anfrage protokolliert. Wenn ein Fehler auftritt, kann diese `x-request-id` verwendet werden, um alle relevanten Log-Einträge für diese spezifische Anfrage zu finden und das Problem zu diagnostizieren.
