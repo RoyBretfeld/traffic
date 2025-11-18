@@ -279,7 +279,8 @@ class OSRMClient:
         self,
         coords: List[Tuple[float, float]],
         use_polyline6: bool = False,
-        avoid_incidents: bool = True
+        avoid_incidents: bool = True,
+        timeout: Optional[float] = None
     ) -> Optional[Dict]:
         """
         Berechnet Route mit OSRM Route API (für Visualisierung).
@@ -339,7 +340,18 @@ class OSRMClient:
         
         response = None
         try:
-            response = self._make_request(url, params)
+            # Wenn timeout übergeben wurde, verwende es für diesen Request
+            # Ansonsten verwendet _make_request() das Standard-Timeout
+            if timeout is not None:
+                # Temporär Timeout überschreiben (für diesen Request)
+                original_read_timeout = self.read_timeout
+                self.read_timeout = timeout
+                try:
+                    response = self._make_request(url, params)
+                finally:
+                    self.read_timeout = original_read_timeout
+            else:
+                response = self._make_request(url, params)
         except (TransientError, QuotaError, RuntimeError) as e:
             self.logger.warning(f"Primärer OSRM-Server Fehler: {e}")
             
@@ -348,7 +360,16 @@ class OSRMClient:
             base = self.fallback_url.rstrip("/")
             url = f"{base}/route/v1/{self.profile}/{coord_string}"
             try:
-                response = self._make_request(url, params)
+                # Fallback auch mit Timeout (wenn gesetzt)
+                if timeout is not None:
+                    original_read_timeout = self.read_timeout
+                    self.read_timeout = timeout
+                    try:
+                        response = self._make_request(url, params)
+                    finally:
+                        self.read_timeout = original_read_timeout
+                else:
+                    response = self._make_request(url, params)
             except (TransientError, QuotaError, RuntimeError) as e:
                 self.logger.warning(f"Fallback OSRM-Server Fehler: {e}")
         

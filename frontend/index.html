@@ -5059,7 +5059,7 @@
             progressText.textContent = '0%';
             progressDetails.textContent = `Starte Optimierung...`;
             
-            updateAIStatus(`Starte Optimierung für ${toursToOptimize.length} Tour(en) (${wTours.length} W-Touren)...`, 'info');
+            updateAIStatus(`Starte Optimierung für ${toursToOptimize.length} Tour(en)...`, 'info');
             
             try {
                 // WICHTIG: Parallele Verarbeitung mit Batching (Semaphore-Pattern)
@@ -5114,6 +5114,10 @@
                     
                     let response;
                     try {
+                        // WICHTIG: Timeout hinzufügen um Blockierung zu verhindern (60 Sekunden)
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 Sekunden
+                        
                         response = await fetch('/api/tour/optimize', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -5121,8 +5125,11 @@
                                 tour_id: tour.tour_id || 'W-Tour',
                                 is_bar_tour: tour.is_bar_tour || false,  // WICHTIG: BAR-Status mitgeben
                                 stops: stopsWithCoords
-                            })
+                            }),
+                            signal: controller.signal
                         });
+                        
+                        clearTimeout(timeoutId);
                     } catch (fetch_error) {
                         console.error(`[SUB-ROUTES] Fetch-Fehler für Tour ${tour.tour_id}:`, fetch_error);
                         return { success: false, error: fetch_error.message, tour_id: tour.tour_id };
@@ -5447,6 +5454,7 @@
                 
                 // Zeige Ergebnisse
                 console.log(`[SUB-ROUTES] Zusammenfassung: ${successCount} erfolgreich, ${errorCount} Fehler, ${allSubRoutes.length} Routen generiert`);
+                console.log(`[SUB-ROUTES] Sub-Routen Details:`, allSubRoutes.map(r => `${r.tour_id} (${r.stops?.length || 0} Stops)`).join(', '));
                 
                 if (allSubRoutes.length > 0) {
                     status.innerHTML = `<i class="fas fa-check text-success"></i> ${allSubRoutes.length} Route(n) generiert! (${successCount} erfolgreich, ${errorCount} Fehler)`;
@@ -5935,15 +5943,19 @@
         }
         
         function updateToursWithSubRoutes(subRoutes) {
-            // Gruppiere nach ursprünglicher Tour-ID
+            // Gruppiere nach ursprünglicher Tour-ID (ohne Sub-Route-Suffix)
             const grouped = {};
             subRoutes.forEach(subRoute => {
-                const key = subRoute.tour_id;
-                if (!grouped[key]) {
-                    grouped[key] = [];
+                // Extrahiere Base-Tour-ID (z.B. "W-07.00 Uhr Tour A" -> "W-07.00 Uhr Tour")
+                // Entferne Sub-Route-Buchstaben am Ende (A, B, C, etc.)
+                const baseTourId = subRoute.tour_id.replace(/\s+[A-Z]$/, '').trim();
+                if (!grouped[baseTourId]) {
+                    grouped[baseTourId] = [];
                 }
-                grouped[key].push(subRoute);
+                grouped[baseTourId].push(subRoute);
             });
+            
+            console.log(`[UPDATE-TOURS] Gruppierte Sub-Routen:`, Object.keys(grouped).map(k => `${k}: ${grouped[k].length}`).join(', '));
             
             // Aktualisiere workflowResult mit Sub-Routen
             if (workflowResult && workflowResult.tours) {

@@ -3,7 +3,7 @@
 **Projekt:** FAMO TrafficApp 3.0  
 **Zweck:** Dokumentation aller kritischen Fehler und deren Lösungen als Lernbasis für zukünftige Audits
 
-**Letzte Aktualisierung:** 2025-11-18
+**Letzte Aktualisierung:** 2025-11-18 19:00
 
 ---
 
@@ -296,6 +296,42 @@ if (window.panelIPC) {
 - Tests ergänzen, die Subrouten für kleine Beispieltouren abdecken
 - Timeout-Handling bei OSRM-Calls verbessern
 - Defensive Checks im Frontend bei API-Responses
+
+---
+
+
+## 2025-11-18 – ReferenceError – wTours is not defined
+
+**Kategorie:** Frontend  
+**Schweregrad:** 🔴 KRITISCH
+**Dateien:** `promise-rejection`
+
+### Symptom
+
+- Browser-Konsole zeigt: `ReferenceError: wTours is not defined`
+- Datei: `promise-rejection`
+- URL: http://127.0.0.1:8111/
+- Browser: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36
+
+### Ursache
+
+**Undeclared Variable/Function:**
+- wTours is not defined
+- Variable/Funktion wurde nicht definiert oder ist außerhalb des Scopes
+
+### Fix
+
+**Variable/Function definieren:**
+- Deklariere Variable/Funktion
+- Prüfe ob Import fehlt
+- Prüfe Scope
+
+### Was die KI künftig tun soll
+
+1. Immer prüfen ob Variable/Funktion existiert
+2. Scope-Bewusstsein
+3. Import-Statements prüfen
+4. Defensive Programmierung
 
 ---
 
@@ -2337,7 +2373,193 @@ if pattern_normalized in tour_normalized or tour_normalized.startswith(pattern_n
 
 ---
 
+## 2025-11-18 – OSRM-Cache Schema-Fehler: params_hash / geometry_polyline6 Spalten fehlen
+
+**Kategorie:** Backend (Python) + Datenbank (SQLite)  
+**Schweregrad:** 🟡 MEDIUM  
+**Dateien:** `backend/cache/osrm_cache.py`, `data/traffic.db`
+
+### Symptom
+
+- Server-Logs zeigen wiederkehrende Fehler:
+  - `no such column: params_hash`
+  - `no such column: geometry_polyline6`
+  - `table osrm_cache has no column named params_hash`
+- OSRM-Cache funktioniert nicht (keine Caching-Vorteile)
+- Fehler treten bei jedem OSRM-Routing-Request auf
+
+### Ursache
+
+**Schema-Drift:** Die `osrm_cache` Tabelle existiert bereits mit altem Schema, aber der Code erwartet neue Spalten.
+
+1. **Tabelle existiert bereits:**
+   - `CREATE TABLE IF NOT EXISTS` erstellt Tabelle nur wenn sie nicht existiert
+   - Wenn Tabelle mit altem Schema existiert → keine Spalten werden hinzugefügt
+
+2. **Fehlende Migration:**
+   - `_ensure_table()` prüft nicht, ob Spalten existieren
+   - `ALTER TABLE ADD COLUMN` wird nicht ausgeführt
+   - Code versucht auf nicht-existierende Spalten zuzugreifen
+
+3. **SQLite-Limitierung:**
+   - SQLite unterstützt `ALTER TABLE ADD COLUMN` nur begrenzt
+   - Spalten müssen einzeln hinzugefügt werden
+   - `NOT NULL` Constraints können nicht direkt hinzugefügt werden (müssen mit `DEFAULT`)
+
+### Fix
+
+**Migration in `_ensure_table()` hinzugefügt:**
+```python
+# Prüfe vorhandene Spalten und füge fehlende hinzu (Migration)
+cursor = con.execute("PRAGMA table_info(osrm_cache)")
+existing_columns = [row[1] for row in cursor.fetchall()]
+
+# Füge fehlende Spalten hinzu
+if 'params_hash' not in existing_columns:
+    logger.info("OSRM-Cache: Füge Spalte 'params_hash' hinzu...")
+    con.execute("ALTER TABLE osrm_cache ADD COLUMN params_hash TEXT")
+
+if 'geometry_polyline6' not in existing_columns:
+    logger.info("OSRM-Cache: Füge Spalte 'geometry_polyline6' hinzu...")
+    con.execute("ALTER TABLE osrm_cache ADD COLUMN geometry_polyline6 TEXT")
+
+# ... weitere Spalten ...
+```
+
+**Vorgehen:**
+1. Prüfe vorhandene Spalten mit `PRAGMA table_info(osrm_cache)`
+2. Füge fehlende Spalten einzeln hinzu
+3. Erstelle Indizes nur wenn Tabelle vollständig ist
+
+### Ergebnis
+
+- ✅ OSRM-Cache Schema wird automatisch migriert
+- ✅ Fehlende Spalten werden beim ersten Zugriff hinzugefügt
+- ✅ Keine manuelle Migration nötig
+- ✅ Backward-kompatibel mit bestehenden Datenbanken
+
+### Was die KI künftig tun soll
+
+1. **Immer Schema-Migration prüfen:**
+   - Bei `CREATE TABLE IF NOT EXISTS`: Prüfe ob Spalten existieren
+   - Füge fehlende Spalten automatisch hinzu
+   - Verwende `PRAGMA table_info()` für Spalten-Check
+
+2. **SQLite-Limitierungen beachten:**
+   - `ALTER TABLE ADD COLUMN` funktioniert, aber ohne `NOT NULL` (außer mit `DEFAULT`)
+   - Spalten müssen einzeln hinzugefügt werden
+   - Indizes können erst nach Spalten-Erstellung erstellt werden
+
+3. **Migration-Logik in `_ensure_table()`:**
+   - Prüfe vorhandene Spalten
+   - Füge fehlende hinzu
+   - Erstelle Indizes nur wenn Tabelle vollständig ist
+   - Logge Migration-Schritte für Debugging
+
+---
+
+## 2025-11-18 – Sub-Routen werden nicht in Tour-Liste angezeigt (Gruppierungs-Problem)
+
+**Kategorie:** Frontend (JavaScript)  
+**Schweregrad:** 🔴 KRITISCH  
+**Dateien:** `frontend/index.html` (Zeile 5944-6040)
+
+### Symptom
+
+- Sub-Routen werden erfolgreich generiert (z.B. 28 Routen)
+- Status zeigt: "28 Route(n) generiert! (9 erfolgreich, 0 Fehler)"
+- **ABER:** Sub-Routen erscheinen nicht in der Tour-Liste
+- Nur ursprüngliche Haupttouren werden angezeigt (z.B. "W-07.00 Uhr Tour" statt "W-07.00 Uhr Tour A", "W-07.00 Uhr Tour B", etc.)
+
+### Ursache
+
+**Gruppierungs-Problem in `updateToursWithSubRoutes()`:**
+
+1. **ID-Mismatch:**
+   - Sub-Routen haben IDs wie `"W-07.00 Uhr Tour A"` (mit Buchstaben)
+   - Ursprüngliche Touren haben IDs wie `"W-07.00 Uhr Tour"` (ohne Buchstaben)
+   - Gruppierung schlägt fehl, weil IDs nicht übereinstimmen
+
+2. **Falsche Gruppierung:**
+   ```javascript
+   subRoutes.forEach(subRoute => {
+       const key = subRoute.tour_id;  // ❌ "W-07.00 Uhr Tour A"
+       grouped[key] = [...];
+   });
+   
+   // Später:
+   if (grouped[tour.tour_id]) {  // ❌ "W-07.00 Uhr Tour" → nicht gefunden!
+       // Wird nie ausgeführt
+   }
+   ```
+
+3. **Sub-Routen werden nicht ersetzt:**
+   - `workflowResult.tours` wird nicht aktualisiert
+   - `renderToursFromMatch()` rendert alte Haupttouren
+   - Sub-Routen bleiben in `allTourCustomers`, werden aber nicht angezeigt
+
+### Fix
+
+**Base-Tour-ID extrahieren:**
+```javascript
+function updateToursWithSubRoutes(subRoutes) {
+    // Gruppiere nach ursprünglicher Tour-ID (ohne Sub-Route-Suffix)
+    const grouped = {};
+    subRoutes.forEach(subRoute => {
+        // Extrahiere Base-Tour-ID (z.B. "W-07.00 Uhr Tour A" -> "W-07.00 Uhr Tour")
+        // Entferne Sub-Route-Buchstaben am Ende (A, B, C, etc.)
+        const baseTourId = subRoute.tour_id.replace(/\s+[A-Z]$/, '').trim();
+        if (!grouped[baseTourId]) {
+            grouped[baseTourId] = [];
+        }
+        grouped[baseTourId].push(subRoute);
+    });
+    
+    // Jetzt funktioniert die Gruppierung:
+    if (grouped[tour.tour_id]) {  // ✅ "W-07.00 Uhr Tour" → gefunden!
+        // Ersetze Tour mit Sub-Routen
+    }
+}
+```
+
+**Debug-Logging hinzugefügt:**
+```javascript
+console.log(`[UPDATE-TOURS] Gruppierte Sub-Routen:`, 
+    Object.keys(grouped).map(k => `${k}: ${grouped[k].length}`).join(', '));
+```
+
+### Ergebnis
+
+- ✅ Sub-Routen werden korrekt gruppiert
+- ✅ Base-Tour-ID wird extrahiert (entfernt `\s+[A-Z]$` am Ende)
+- ✅ Sub-Routen erscheinen in Tour-Liste
+- ✅ Debug-Logging zeigt Gruppierung
+
+### Was die KI künftig tun soll
+
+1. **ID-Matching immer prüfen:**
+   - Wenn Sub-Routen IDs haben wie "Tour A", "Tour B" → Base-ID extrahieren
+   - Verwende Regex oder String-Manipulation: `tour_id.replace(/\s+[A-Z]$/, '')`
+   - Prüfe ob Gruppierung funktioniert (Debug-Logging)
+
+2. **State-Management konsistent halten:**
+   - `workflowResult.tours` muss aktualisiert werden
+   - `allTourCustomers` muss synchronisiert werden
+   - `renderToursFromMatch()` muss nach Update aufgerufen werden
+
+3. **Sub-Routen-Format dokumentieren:**
+   - Sub-Routen haben Format: `"{baseTourId} {letter}"` (z.B. "W-07.00 Uhr Tour A")
+   - Base-Tour-ID ist ohne Buchstaben: `"W-07.00 Uhr Tour"`
+   - Gruppierung muss Base-ID verwenden
+
+4. **Debug-Logging bei State-Updates:**
+   - Zeige welche Sub-Routen gruppiert werden
+   - Zeige welche Touren ersetzt werden
+   - Zeige wie viele Touren nach Update vorhanden sind
+
+---
+
 **Ende des LESSONS_LOG**  
-**Letzte Aktualisierung:** 2025-11-18 18:30  
-**Statistik:** 21 Einträge (14 kritische Fehler, 5 mittlere Fehler, 2 Enhancements)
+**Letzte Aktualisierung:** 2025-11-18 19:00  
+**Statistik:** 23 Einträge (15 kritische Fehler, 6 mittlere Fehler, 2 Enhancements)
 

@@ -260,7 +260,8 @@ def _estimate_tour_time_without_return(stops: List[Dict], use_osrm: bool = True)
                 
                 if len(coords) >= 2:
                     # Hole Route vom Depot über alle Stopps (OHNE Rückfahrt!)
-                    route = client.get_route(coords)
+                    # WICHTIG: Timeout hinzufügen um Blockierung zu verhindern
+                    route = client.get_route(coords, timeout=5.0)
                     if route and route.get("source") == "osrm":
                         # OSRM-Route erfolgreich
                         driving_time_minutes = route.get("duration_min", 0.0)
@@ -334,7 +335,8 @@ def _estimate_back_to_depot_minutes(last_stop: Dict) -> float:
     if client.available:
         try:
             coords = [(last_stop['lat'], last_stop['lon']), (DEPOT_LAT, DEPOT_LON)]
-            route = client.get_route(coords)
+            # WICHTIG: Timeout hinzufügen um Blockierung zu verhindern
+            route = client.get_route(coords, timeout=5.0)
             if route and route.get("source") == "osrm":
                 return route.get("duration_min", 0.0)
         except Exception as e:

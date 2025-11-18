@@ -19,9 +19,10 @@ class OsrmCache:
     
     @staticmethod
     def _ensure_table():
-        """Stellt sicher, dass die Cache-Tabelle existiert."""
+        """Stellt sicher, dass die Cache-Tabelle existiert und alle Spalten hat."""
         con = sqlite3.connect(DB_PATH)
         try:
+            # Erstelle Tabelle falls nicht vorhanden
             con.execute("""
                 CREATE TABLE IF NOT EXISTS osrm_cache (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,6 +33,33 @@ class OsrmCache:
                     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+            
+            # Prüfe vorhandene Spalten und füge fehlende hinzu (Migration)
+            cursor = con.execute("PRAGMA table_info(osrm_cache)")
+            existing_columns = [row[1] for row in cursor.fetchall()]
+            
+            # Füge fehlende Spalten hinzu
+            if 'params_hash' not in existing_columns:
+                logger.info("OSRM-Cache: Füge Spalte 'params_hash' hinzu...")
+                con.execute("ALTER TABLE osrm_cache ADD COLUMN params_hash TEXT")
+            
+            if 'geometry_polyline6' not in existing_columns:
+                logger.info("OSRM-Cache: Füge Spalte 'geometry_polyline6' hinzu...")
+                con.execute("ALTER TABLE osrm_cache ADD COLUMN geometry_polyline6 TEXT")
+            
+            if 'distance_m' not in existing_columns:
+                logger.info("OSRM-Cache: Füge Spalte 'distance_m' hinzu...")
+                con.execute("ALTER TABLE osrm_cache ADD COLUMN distance_m INTEGER")
+            
+            if 'duration_s' not in existing_columns:
+                logger.info("OSRM-Cache: Füge Spalte 'duration_s' hinzu...")
+                con.execute("ALTER TABLE osrm_cache ADD COLUMN duration_s INTEGER")
+            
+            if 'created_at' not in existing_columns:
+                logger.info("OSRM-Cache: Füge Spalte 'created_at' hinzu...")
+                con.execute("ALTER TABLE osrm_cache ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+            
+            # Erstelle Indizes
             con.execute("""
                 CREATE UNIQUE INDEX IF NOT EXISTS idx_osrm_cache_params_hash 
                 ON osrm_cache(params_hash)
