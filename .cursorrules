@@ -9,14 +9,15 @@
 **⚠️ KRITISCH:** Vor JEDEM größeren Code-Umbau MÜSSEN diese Dateien gelesen werden:
 
 1. **`Global/GLOBAL_STANDARDS.md`** - 7 Arbeitsregeln, Audit-Prozess, Safety
-2. **`Regeln/STANDARDS_QUICK_REFERENCE.md`** - Schnellreferenz (kompakt)
-3. **`Regeln/REGELN_AUDITS.md`** - 7 unverhandelbare Audit-Regeln
-4. **`Regeln/CURSOR_PROMPT_TEMPLATE.md`** - 12 fertige Templates
+2. **`PROJECT_PROFILE.md`** - Stack, Infrastruktur, Module, Regeln
+3. **`Regeln/STANDARDS.md`** - Vollständige Standards (bei Bedarf)
+4. **`Regeln/STANDARDS_QUICK_REFERENCE.md`** - Schnellreferenz (kompakt)
+5. **`Regeln/REGELN_AUDITS.md`** - 7 unverhandelbare Audit-Regeln
+6. **`Regeln/AUDIT_CHECKLISTE.md`** - 9-Punkte-Checkliste
+7. **`README_AUDIT_COMPLETE.md`** - Vollständige Audit-Übersicht (konkreter Audit-Kontext)
 
 **Dann erst:**
-- **`PROJECT_PROFILE.md`** - Stack, Infrastruktur, Module, Regeln
-- **`Regeln/STANDARDS.md`** - Vollständige Standards (bei Bedarf)
-- **`Regeln/AUDIT_CHECKLISTE.md`** - 9-Punkte-Checkliste
+- **`Regeln/CURSOR_PROMPT_TEMPLATE.md`** - 12 fertige Templates
 - **`Regeln/LESSONS_LOG.md`** - Lernhistorie (bekannte Fehler)
 - **`Regeln/CURSOR_WORKFLOW.md`** - 6-Schritt-Workflow-Prozess
 - **`Regeln/AUDIT_FLOW_ROUTING.md`** - Modularer Audit-Flow (Routing/OSRM)

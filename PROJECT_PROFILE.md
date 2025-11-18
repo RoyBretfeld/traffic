@@ -1,7 +1,7 @@
 # 📋 Projektprofil – FAMO TrafficApp 3.0
 
-**Version:** 1.0  
-**Stand:** 2025-11-14  
+**Version:** 1.1  
+**Stand:** 2025-11-16  
 **Zweck:** Projektspezifische Regeln und Kontext für Cursor AI
 
 ---
@@ -510,7 +510,7 @@ Dieses Profil **ergänzt** die globalen Regeln aus:
 ---
 
 **Version:** 1.0  
-**Letzte Aktualisierung:** 2025-11-14  
+**Letzte Aktualisierung:** 2025-11-16  
 **Projekt:** FAMO TrafficApp 3.0
 
 🚀 **Strukturiert. Nachvollziehbar. Fehlerfrei!**

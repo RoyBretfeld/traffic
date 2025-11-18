@@ -123,13 +123,27 @@ def should_process_tour(tour_name: str, ignore_list: list, allow_list: list) -> 
         pattern_normalized = pattern_upper.replace('.', '').replace(' ', '').replace('`', '').replace("'", "")
         tour_normalized = tour_name_upper.replace('.', '').replace(' ', '').replace('`', '').replace("'", "")
         
-        # Prüfe verschiedene Varianten
-        if (tour_name_upper.startswith(pattern_upper) or 
-            pattern_upper in tour_name_upper or
-            pattern_normalized in tour_normalized or
-            tour_normalized.startswith(pattern_normalized)):
-            log_to_file(f"[FILTER] Tour '{tour_name}' ignoriert (Pattern: '{ignore_pattern}')")
-            return False  # Tour wird ignoriert
+        # WICHTIG: Für sehr kurze Patterns (1-2 Zeichen): Nur am Anfang oder als ganzes Wort matchen
+        # Verhindert False Positives (z.B. "T" matcht nicht "Tour")
+        if len(pattern_upper) <= 2:
+            # Kurze Patterns: Nur am Anfang oder mit Trennzeichen (Leerzeichen, Bindestrich, Punkt)
+            if (tour_name_upper.startswith(pattern_upper + ' ') or
+                tour_name_upper.startswith(pattern_upper + '-') or
+                tour_name_upper.startswith(pattern_upper + '.') or
+                tour_name_upper.startswith(pattern_upper) and len(tour_name_upper) == len(pattern_upper) or
+                f' {pattern_upper} ' in f' {tour_name_upper} ' or
+                f'-{pattern_upper}' in tour_name_upper or
+                f'.{pattern_upper}' in tour_name_upper):
+                log_to_file(f"[FILTER] Tour '{tour_name}' ignoriert (Pattern: '{ignore_pattern}')")
+                return False  # Tour wird ignoriert
+        else:
+            # Längere Patterns: Flexibleres Matching (wie bisher)
+            if (tour_name_upper.startswith(pattern_upper) or 
+                pattern_upper in tour_name_upper or
+                pattern_normalized in tour_normalized or
+                tour_normalized.startswith(pattern_normalized)):
+                log_to_file(f"[FILTER] Tour '{tour_name}' ignoriert (Pattern: '{ignore_pattern}')")
+                return False  # Tour wird ignoriert
     
     # 2. Wenn Allow-Liste vorhanden und nicht leer: Nur diese Touren erlauben
     if allow_list and len(allow_list) > 0:
@@ -1384,7 +1398,8 @@ async def workflow_upload(file: UploadFile = File(...)):
                                         warning_message = f"Keine Koordinaten für {customer.get('name', 'Unbekannt')} - {address}"
                                         warnings.append(warning_message)
                                         _geocoding_progress[session_id]["current"] = f"Fehler: {customer_name} ({processed_count}/{total_customers})"
-                                        log_to_file(f"[GEOCODE] FEHLER: Fehlgeschlagen: {address}")
+                                        log_to_file(f"[GEOCODE] FEHLER: Fehlgeschlagen für Adresse: '{address}' (Kunde: {customer_name})")
+                                        # WICHTIG: Kunde wird trotzdem hinzugefügt (ohne Koordinaten), damit Tour erstellt wird
                             else:
                                 # Keine Adresse - aber Kunde wird trotzdem hinzugefügt (z.B. für PF-Kunden ohne Synonym)
                                 # WICHTIG: Nicht als kritischer Fehler behandeln, sondern als Warnung
@@ -1428,6 +1443,8 @@ async def workflow_upload(file: UploadFile = File(...)):
                                 if not any(p in tour_name.upper() for p in allow_list):
                                     ignored_reasons.append(f"Nicht in Allow-Liste: {allow_list}")
                             log_to_file(f"[WORKFLOW] Tour '{tour_name}' übersprungen ({', '.join(ignored_reasons) if ignored_reasons else 'Filter-Regel'})")
+                            # WICHTIG: Füge Warnung hinzu, damit Benutzer sieht warum Tour fehlt
+                            warnings.append(f"Tour '{tour_name}' wurde durch Filter entfernt ({', '.join(ignored_reasons) if ignored_reasons else 'Filter-Regel'})")
                             continue  # Überspringe diese Tour komplett
                         
                         # WICHTIG: Workflow soll NUR zusammenfassen, NICHT aufteilen!
@@ -1475,11 +1492,19 @@ async def workflow_upload(file: UploadFile = File(...)):
                 # ✅ FILTER: Ignorierte Touren aus der Antwort entfernen (werden nicht angezeigt)
                 ignore_list, allow_list = load_tour_filter_lists()
                 filtered_tours = []
+                filtered_out_count = 0
                 for tour in optimized_tours:
                     tour_id = tour.get("tour_id") if isinstance(tour, dict) else getattr(tour, "tour_id", None)
                     if tour_id and not should_process_tour(tour_id, ignore_list, allow_list):
+                        filtered_out_count += 1
+                        log_to_file(f"[WORKFLOW] Tour '{tour_id}' durch Filter entfernt (Ignore/Allow-Liste)")
                         continue  # Tour überspringen - nicht in Antwort aufnehmen
                     filtered_tours.append(tour)
+                
+                # WICHTIG: Wenn ALLE Touren gefiltert wurden, füge Warnung hinzu
+                if len(optimized_tours) > 0 and len(filtered_tours) == 0:
+                    warnings.append(f"ALLE {len(optimized_tours)} Touren wurden durch Filter-Liste entfernt (Allow-Liste: {allow_list}, Ignore-Liste: {ignore_list[:3]}...)")
+                    log_to_file(f"[WORKFLOW] ⚠️ KRITISCH: Alle Touren gefiltert! Allow-Liste: {allow_list}, Ignore-Liste: {ignore_list}")
                 
                 return JSONResponse({
                     "success": True,

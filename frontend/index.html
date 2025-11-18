@@ -1803,13 +1803,22 @@
                         errorMsg = data.error;
                     }
                     
-                    // Zeige auch Warnings falls vorhanden
+                    // Zeige auch Warnings falls vorhanden (inkl. Filter-Warnungen)
                     if (data.warnings && data.warnings.length > 0) {
-                        errorMsg += ` (${data.warnings.length} Warnungen)`;
+                        // Prüfe ob Filter-Warnung vorhanden
+                        const filterWarning = data.warnings.find(w => w.includes('Filter entfernt') || w.includes('durch Filter-Liste'));
+                        if (filterWarning) {
+                            errorMsg = filterWarning;
+                        } else {
+                            errorMsg += ` (${data.warnings.length} Warnungen)`;
+                        }
+                        // Zeige erste 3 Warnungen in Konsole
+                        console.warn('[WORKFLOW] Warnungen:', data.warnings.slice(0, 3));
                     }
                     
                     updateWorkflowStatus(`<span class="text-warning">Workflow abgeschlossen, aber keine Touren gefunden: ${errorMsg}</span>`);
                     console.error('Workflow Details:', data);
+                    console.error('[WORKFLOW] Mögliche Ursachen: 1) Alle Touren durch Filter-Liste entfernt, 2) Geocoding fehlgeschlagen, 3) Parser findet keine Touren');
                 } else {
                     updateWorkflowStatus(`<span class="text-danger">Workflow fehlgeschlagen: ${data.detail || data.error || 'HTTP ' + response.status}</span>`);
                 }
@@ -5013,35 +5022,24 @@
             }
             
             // Finde alle Touren, die optimiert werden müssen
-            // Regel: Touren mit > 4 Kunden (inkl. W-Touren und andere große Touren wie PIR, BZ, CB, etc.)
+            // Regel: NUR Touren mit > 4 Kunden (keine Spezialbehandlung für W-Touren mehr)
             const MIN_CUSTOMERS_FOR_SUB_ROUTES = 4;
             
             const toursToOptimize = workflowResult.tours.filter(t => {
                 const stops = t.stops || [];
                 const customerCount = stops.length;
                 
-                // W-Touren immer einschließen
-                const tourId = t.tour_id || '';
-                const isWTour = /^W-\d+\.\d+/.test(tourId);
-                
-                // Oder andere Touren mit > 4 Kunden
-                const isLargeTour = customerCount > MIN_CUSTOMERS_FOR_SUB_ROUTES;
-                
-                return isWTour || isLargeTour;
+                // NUR Touren mit mehr als 4 Kunden aufteilen
+                return customerCount > MIN_CUSTOMERS_FOR_SUB_ROUTES;
             });
             
             if (toursToOptimize.length === 0) {
-                updateAIStatus(`Keine Touren zum Optimieren gefunden. (W-Touren oder Touren mit > ${MIN_CUSTOMERS_FOR_SUB_ROUTES} Kunden)`, 'warning');
-                alert(`Keine Touren zum Optimieren gefunden.\n\nGesucht werden:\n- W-Touren (z.B. W-07.00, W-09.00)\n- Oder Touren mit mehr als ${MIN_CUSTOMERS_FOR_SUB_ROUTES} Kunden`);
+                updateAIStatus(`Keine Touren zum Optimieren gefunden. (Touren mit > ${MIN_CUSTOMERS_FOR_SUB_ROUTES} Kunden)`, 'warning');
+                alert(`Keine Touren zum Optimieren gefunden.\n\nGesucht werden Touren mit mehr als ${MIN_CUSTOMERS_FOR_SUB_ROUTES} Kunden.`);
                 return;
             }
             
-            const wTours = toursToOptimize.filter(t => {
-                const tourId = t.tour_id || '';
-                return /^W-\d+\.\d+/.test(tourId);
-            });
-            
-            console.log(`[SUB-ROUTES] Gefunden: ${toursToOptimize.length} Tour(en) zum Optimieren (${wTours.length} W-Touren, ${toursToOptimize.length - wTours.length} andere große Touren)`);
+            console.log(`[SUB-ROUTES] Gefunden: ${toursToOptimize.length} Tour(en) zum Optimieren (alle mit > ${MIN_CUSTOMERS_FOR_SUB_ROUTES} Kunden)`);
             
             // UI: Zeige Fortschritt
             btn.disabled = true;

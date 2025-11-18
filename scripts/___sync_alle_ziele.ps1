@@ -1,6 +1,8 @@
 #!/usr/bin/env pwsh
-# Synchronisiert Projekt zu BEIDEN Zielpfaden (H: und G: Cloud)
+# Synchronisiert Projekt zu BEIDEN Zielpfaden (H: und G: Google Drive)
 # Inkl. Datenbank-Dateien und System-Daten
+#
+# HINWEIS: G:\Meine Ablage\... ist der Google Drive Ordner (nicht OneDrive!)
 
 param(
     [ValidateSet("to", "from")]
@@ -9,7 +11,7 @@ param(
 
 $SourcePath = "E:\_____1111____Projekte-Programmierung\______Famo TrafficApp 3.0"
 $TargetPathH = "H:\_____1111____Projekte-Programmierung\______Famo TrafficApp 3.0"
-$TargetPathG = "G:\Meine Ablage\_____1111____Projekte-Programmierung\______Famo TrafficApp 3.0"
+$TargetPathG = "G:\Meine Ablage\_____1111____Projekte-Programmierung\______Famo TrafficApp 3.0"  # Google Drive Ordner
 
 if (-not (Test-Path $SourcePath)) {
     Write-Host "FEHLER: Quellpfad nicht gefunden: $SourcePath" -ForegroundColor Red

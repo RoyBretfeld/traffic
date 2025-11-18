@@ -4,7 +4,6 @@
     "DPD",
     "DVD",
     "CB",
-    "T",
     "BZ",
     "CB Anlief",
     "TA Anlief",
@@ -31,15 +30,12 @@
     "BUZ T16 Anlief",
     "BU`Z T16 Anlief"
   ],
-  "allow_tours": [
-    "W-",
-    "PIR Anlief."
-  ],
+  "allow_tours": [],
   "description": "Touren die nicht in die Routenplanung einbezogen werden sollen",
   "allow_description": "Touren die VERARBEITET werden sollen (wenn Liste vorhanden, werden NUR diese Touren verarbeitet)",
   "reason": "Pickup/Nachtlieferung - werden separat gehandhabt",
-  "allow_reason": "W-Touren und PIR Anlief. werden verarbeitet",
-  "last_updated": "2025-11-16",
+  "allow_reason": "Alle Touren werden verarbeitet (außer Ignore-Liste)",
+  "last_updated": "2025-11-18",
   "usage": {
     "ignore_tours": "Touren mit diesen Patterns werden übersprungen",
     "allow_tours": "Wenn diese Liste vorhanden ist und nicht leer, werden NUR Touren verarbeitet die hier stehen. Ignore-Liste hat Vorrang."

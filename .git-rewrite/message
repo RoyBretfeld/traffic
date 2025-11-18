@@ -1,0 +1,11 @@
+feat: Prompt 17 - Vorschlaege uebernehmen (Alias) + Audit implementiert
+
+- Alias-Schema (geo_alias, geo_audit) mit idempotenter Erstellung
+- Alias-Repository mit set_alias, resolve_aliases, remove_alias, get_alias_stats
+- Match-Route alias-faehig gemacht (alias_of Feld hinzugefuegt)
+- Accept-Endpoint POST /api/tourplan/suggest/accept fuer Vorschlag-Uebernahme
+- Unit-Tests (7/7 bestanden) fuer komplette Alias-Funktionalitaet
+- Keine Daten-Duplikation - Aliasse verweisen auf bestehende geo_cache Eintraege
+- Audit-Log fuer alle Alias-Aktionen
+
+Akzeptanzkriterien erfuellt âœ…

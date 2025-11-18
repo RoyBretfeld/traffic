@@ -1,7 +1,7 @@
 # 📚 FAMO TrafficApp - Zentrale Dokumentations-Übersicht
 
-**Version:** 2.0  
-**Stand:** 2025-11-15  
+**Version:** 2.1  
+**Stand:** 2025-11-16  
 **Zweck:** Single Source of Truth für alle Projektdokumente
 
 ---
@@ -44,11 +44,14 @@ TrafficApp/
 ### **🤖 Für Cursor AI:**
 
 **Lesereihenfolge bei jeder Aufgabe:**
-1. → [`PROJECT_PROFILE.md`](PROJECT_PROFILE.md) - Projektkontext
-2. → [`Global/GLOBAL_STANDARDS.md`](Global/GLOBAL_STANDARDS.md) - Globale Regeln
+1. → [`Global/GLOBAL_STANDARDS.md`](Global/GLOBAL_STANDARDS.md) - Globale Regeln
+2. → [`PROJECT_PROFILE.md`](PROJECT_PROFILE.md) - Projektkontext
 3. → [`Regeln/STANDARDS.md`](Regeln/STANDARDS.md) - Projekt-Standards
-4. → [`Regeln/LESSONS_LOG.md`](Regeln/LESSONS_LOG.md) - Bekannte Fehler
-5. → [`Regeln/AUDIT_CHECKLISTE.md`](Regeln/AUDIT_CHECKLISTE.md) - Checkliste
+4. → [`Regeln/STANDARDS_QUICK_REFERENCE.md`](Regeln/STANDARDS_QUICK_REFERENCE.md) - Schnellreferenz
+5. → [`Regeln/REGELN_AUDITS.md`](Regeln/REGELN_AUDITS.md) - Audit-Regeln
+6. → [`Regeln/AUDIT_CHECKLISTE.md`](Regeln/AUDIT_CHECKLISTE.md) - Checkliste
+7. → [`README_AUDIT_COMPLETE.md`](README_AUDIT_COMPLETE.md) - **Audit-Gesamtüberblick** ⭐
+8. → [`Regeln/LESSONS_LOG.md`](Regeln/LESSONS_LOG.md) - Bekannte Fehler
 
 **Praktische Beispiele:**
 - → [`Global/CURSOR_USAGE_BEISPIEL.md`](Global/CURSOR_USAGE_BEISPIEL.md) - Copy & Paste Prompts
@@ -108,7 +111,15 @@ TrafficApp/
 
 ---
 
-### **Ebene 4: Pointer & Übersichten**
+### **Ebene 4: Architektur & Module**
+
+| Datei | Zweck | Zielgruppe |
+|-------|-------|------------|
+| [`MODULE_MAP.md`](MODULE_MAP.md) | **Modul-Index** (Module & Kommunikation) ⭐ | Cursor + Entwickler |
+| [`docs/ARCHITEKTUR_KOMPLETT.md`](docs/ARCHITEKTUR_KOMPLETT.md) | Komplette Architektur-Übersicht | Cursor + Entwickler |
+| [`docs/Architecture.md`](docs/Architecture.md) | Basis-Architektur-Dokumentation | Alle |
+
+### **Ebene 5: Pointer & Übersichten**
 
 | Datei | Zweck | Zielgruppe |
 |-------|-------|------------|
@@ -244,8 +255,8 @@ TrafficApp/
 
 ## 🗺️ **Roadmap & Versioning**
 
-**Aktuelle Version:** 2.0  
-**Letztes Update:** 2025-11-15
+**Aktuelle Version:** 2.1  
+**Letztes Update:** 2025-11-16
 
 **Was ist neu in 2.0:**
 - ✨ 3-Ebenen-Struktur (Global → Projekt → Standards)
@@ -285,8 +296,8 @@ TrafficApp/
 
 ---
 
-**Version:** 2.0  
-**Stand:** 2025-11-15  
+**Version:** 2.1  
+**Stand:** 2025-11-16  
 **Projekt:** FAMO TrafficApp 3.0
 
 📚 **Single Source of Truth für alle Dokumente**

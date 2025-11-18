@@ -1,8 +1,67 @@
 # FAMO TrafficApp - Komplette Architektur-Übersicht
 
+**Version:** 2.0  
 **Erstellt:** 2025-01-10  
+**Letzte Aktualisierung:** 2025-11-16  
 **Status:** Aktuell  
 **Zweck:** Umfassende Übersicht aller Module, Komponenten und Statistiken für KI-Assistenten
+
+> **⚠️ WICHTIG:** Diese Dokumentation muss bei Änderungen an Routing/OSRM, Touren-Workflow, Infrastruktur oder Hauptmodulen aktualisiert werden.  
+> Siehe auch: [`MODULE_MAP.md`](../MODULE_MAP.md) für detaillierte Modul-Kommunikation.
+
+---
+
+## 1️⃣ Systemübersicht
+
+### High-Level-Architektur
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Client (Browser)                          │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  Frontend (Vanilla JS/HTML)                          │   │
+│  │  - index.html (Haupt-UI)                             │   │
+│  │  - admin.html (Admin-Bereich)                        │   │
+│  │  - Leaflet.js (Karten)                               │   │
+│  └──────────────────────────────────────────────────────┘   │
+└────────────────────────────┬────────────────────────────────┘
+                             │ HTTP/REST (Port 8111)
+┌────────────────────────────▼────────────────────────────────┐
+│              Backend (FastAPI, Python 3.10)                  │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  API-Routen (backend/routes/)                       │   │
+│  │  - workflow_api.py                                  │   │
+│  │  - engine_api.py                                     │   │
+│  │  - health_check.py                                   │   │
+│  └──────────────────────────────────────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  Services (services/, backend/services/)             │   │
+│  │  - osrm_client.py                                    │   │
+│  │  - llm_optimizer.py                                  │   │
+│  │  - sector_planner.py                                 │   │
+│  └──────────────────────────────────────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  Repositories (repositories/)                         │   │
+│  │  - geo_repo.py                                        │   │
+│  └──────────────────────────────────────────────────────┘   │
+└────────────────────────────┬────────────────────────────────┘
+                             │
+        ┌────────────────────┼────────────────────┐
+        │                    │                    │
+┌───────▼────────┐  ┌────────▼────────┐  ┌───────▼────────┐
+│ OSRM Container │  │ SQLite DBs      │  │ OpenAI API     │
+│ (Docker/LXC)   │  │ (data/)         │  │ (GPT-4o-mini)  │
+│ Port 5000/5011 │  │ traffic.db      │  │                │
+└────────────────┘  └─────────────────┘  └────────────────┘
+```
+
+### Datenfluss (High-Level)
+
+1. **Frontend** sendet Request → **Backend API-Route**
+2. **API-Route** nutzt **Services** für Business-Logik
+3. **Services** nutzen **Repositories** für DB-Zugriff
+4. **Services** kommunizieren mit **externen Services** (OSRM, OpenAI)
+5. **Response** zurück an **Frontend**
 
 ---
 
@@ -402,6 +461,191 @@
 
 ---
 
+## 2️⃣ Touren-Workflow (Detailliert)
+
+### Kompletter Datenfluss: Import → Geocoding → Matching → Routing → Sub-Routen → Export
+
+```
+1. CSV-Upload (Frontend)
+   ↓
+2. POST /api/workflow/upload (workflow_api)
+   ↓
+3. Parser (tour_plan_parser.py)
+   - Format-Erkennung (TEHA vs. Standard)
+   - Encoding-Erkennung (CP850, UTF-8)
+   - Mojibake-Reparatur
+   - Synonym-Auflösung (SynonymStore)
+   ↓
+4. Geocoding (DB-First-Strategie)
+   - geo_repo.get() → Cache-Check
+   - Falls nicht gefunden: geocode_address() → Geoapify API
+   - geo_repo.upsert() → Speichern in DB
+   - Fehlgeschlagene → geo_fail_repo (Retry-Logic)
+   ↓
+5. Tour-Konsolidierung (tour_consolidator.py)
+   - T10-Touren zusammenführen
+   - Duplikat-Erkennung
+   ↓
+6. Tour-Filterung (tour_ignore_list.json)
+   - ignore_tours vs. allow_tours
+   - W-Touren, CB, BZ, PIR automatisch erkannt
+   ↓
+7. Sektor-Planung / Clustering
+   - W-Touren: sector_planner.py (N/O/S/W)
+   - PIRNA-Touren: pirna_clusterer.py (K-Means)
+   ↓
+8. Route-Optimierung
+   - llm_optimizer.py (OpenAI GPT-4o-mini)
+   - ODER Nearest-Neighbor (Fallback)
+   - osrm_client.py (Distanzen via Table API)
+   ↓
+9. OSRM-Route-Berechnung (real_routing.py)
+   - Route API für Geometrie (Polyline6)
+   - osrm_client.py (Route API)
+   ↓
+10. Zeitbox-Validierung
+    - 65 Min ohne Rückfahrt
+    - 90 Min mit Rückfahrt
+    - Proaktive Aufteilung bei Überschreitung
+    ↓
+11. Sub-Routen-Generierung (bei Bedarf)
+    - Automatische Aufteilung großer Touren
+    - Sub-Route-Suffix (-A, -B, -C, ...)
+    ↓
+12. Response an Frontend
+    - Touren mit Koordinaten
+    - Route-Geometrie (Polyline6)
+    - Sub-Routen-Liste
+    - Statistiken
+```
+
+### Wichtige Entscheidungspunkte
+
+- **Tour-Filter:** `config/tour_ignore_list.json` bestimmt, welche Touren verarbeitet werden
+- **Sektor-Planung:** Nur für W-Touren, CB, BZ, PIR (automatisch erkannt)
+- **OSRM-First:** Distanzen immer über OSRM, Fallback: Haversine
+- **DB-First Geocoding:** Cache → Geoapify → Speichern (minimiert API-Calls)
+
+---
+
+## 3️⃣ Routing-Stack
+
+### OSRM-Container (Proxmox vs. Docker)
+
+**Proxmox-LXC (Produktion):**
+- **Container-ID:** 101
+- **Hostname:** `OSRM`
+- **IP:** `172.16.1.191` (DHCP, Bridge: `vmbr0`)
+- **Port:** `5011`
+- **Konfiguration:** `OSRM_BASE_URL=http://172.16.1.191:5011`
+
+**Docker (Entwicklung/Heim):**
+- **Container:** `osrm-backend` (Docker Desktop)
+- **Port:** `5000` (Standard) oder `5011`
+- **Konfiguration:** `OSRM_BASE_URL=http://127.0.0.1:5000`
+
+### OSRM-Client (`services/osrm_client.py`)
+
+**Features:**
+- **Route API:** Punkt-zu-Punkt-Routen mit Polyline6-Geometrie
+- **Table API:** Distanz-Matrizen (1×N, N×N)
+- **Circuit Breaker:** Automatische Fehlerbehandlung bei OSRM-Ausfall
+- **Timeout-Handling:** Max. 30s pro Request
+- **Lazy-Initialisierung:** Wird erst beim ersten Zugriff erstellt (nach `config.env` Laden)
+
+**Fallback-Strategie:**
+- OSRM nicht verfügbar → Haversine-Distanz (Luftlinie)
+- Timeout → Haversine-Distanz
+- Circuit Breaker aktiv → Haversine-Distanz
+
+### Routing-Optimierung
+
+**Strategie:** OSRM-First
+1. OSRM Table API für Distanzen
+2. LLM-Optimierung (OpenAI) mit OSRM-Distanzen
+3. OSRM Route API für Geometrie (Polyline6)
+4. Fallback: Haversine bei OSRM-Ausfall
+
+---
+
+## 4️⃣ Module & Verantwortung
+
+### Backend-Services (Kurz-Zusammenfassung)
+
+| Service | Verantwortung | Wird genutzt von |
+|---------|--------------|------------------|
+| `osrm_client` | OSRM-Routing (Route API, Table API) | `workflow_api`, `engine_api`, `real_routing`, `sector_planner` |
+| `geocode` | Geocoding (DB-First: Cache → Geoapify) | `workflow_api`, `tourplan_geofill` |
+| `llm_optimizer` | LLM-Route-Optimierung (OpenAI) | `workflow_api` |
+| `sector_planner` | Dresden-Quadranten-Planung (N/O/S/W) | `workflow_api`, `engine_api` |
+| `pirna_clusterer` | K-Means-Clustering für PIRNA-Touren | `engine_api` |
+| `real_routing` | Route-Details mit OSRM-Geometrie | `workflow_api` |
+| `tour_consolidator` | T10-Touren-Konsolidierung | `workflow_api` |
+| `uid_service` | UID-Generierung für Touren/Stops | `engine_api`, `sector_planner` |
+| `cost_tracker` | KI-Kosten-Tracking | `cost_tracker_api`, `ki_activity_api` |
+| `error_learning_service` | Fehler-Lernsystem | `ki_effectiveness_api` |
+
+### Frontend-Komponenten
+
+| Komponente | Verantwortung | Nutzt API |
+|-----------|--------------|-----------|
+| `index.html` | Haupt-UI (Karte, Tourübersicht, Workflow) | `/api/workflow/upload`, `/api/tour/optimize`, `/api/tour/route-details` |
+| `admin.html` | Admin-Hauptseite (Tabs: System, DB, KI) | `/health/db`, `/api/db/list`, `/api/db/schemas` |
+| `ki-kosten.html` | KI-Kosten-Übersicht | `/api/cost-tracker/stats`, `/api/cost-tracker/current-model` |
+| `ki-verhalten.html` | KI-Verhalten-Dashboard | `/api/ki/activity-log`, `/api/ki/effectiveness` |
+| `tour-filter.html` | Tour-Filter-Verwaltung | `/api/tour-filter` |
+
+**Detaillierte Modul-Kommunikation:** Siehe [`MODULE_MAP.md`](../MODULE_MAP.md)
+
+---
+
+## 5️⃣ Infra & Ports
+
+### Proxmox-Host
+
+**Container-Übersicht:**
+- **OSRM-Container (LXC 101):**
+  - Hostname: `OSRM`
+  - IP: `172.16.1.191` (DHCP, Bridge: `vmbr0`)
+  - Port: `5011` (OSRM)
+  - Status: Produktiv
+
+**Netzwerk:**
+- Bridge: `vmbr0`
+- DHCP: Aktiv
+- Firewall: Konfiguriert
+
+### Lokale Entwicklung (Docker)
+
+**OSRM-Container:**
+- Container: `osrm-backend`
+- Port: `5000` (Standard) oder `5011`
+- URL: `http://127.0.0.1:5000` oder `http://localhost:5011`
+
+**Backend (FastAPI):**
+- Port: `8111` (Standard)
+- URL: `http://127.0.0.1:8111`
+- Start: `python start_server.py` oder `uvicorn backend.app:app --reload --port 8111`
+
+### Weitere Services (geplant/optional)
+
+- **Frigate:** Port `5000` (falls konfiguriert)
+- **Weitere Container:** Siehe Proxmox-Übersicht
+
+### Konfiguration
+
+**Backend (`config.env`):**
+```bash
+OSRM_BASE_URL=http://172.16.1.191:5011  # Proxmox
+# ODER:
+OSRM_BASE_URL=http://127.0.0.1:5000     # Docker (lokal)
+```
+
+**Frontend:**
+- Backend-URL: `http://127.0.0.1:8111` (fest codiert in `index.html`)
+
+---
+
 ## 🔄 Datenfluss
 
 ### Typischer Workflow
@@ -693,6 +937,25 @@ FAMO TrafficApp 3.0/
 
 ---
 
-**Letzte Aktualisierung:** 2025-01-10  
+**Letzte Aktualisierung:** 2025-11-16  
 **Nächste Schritte:** Implementierung gemäß `docs/STATISTIK_NAV_ADMIN_PLAN.md` und `docs/licensing-plan.md`
+
+---
+
+## 📋 Wartung & Aktualisierung
+
+**Pflicht-Update bei:**
+- ✅ Änderung an **Routing / OSRM-Anbindung**
+- ✅ Änderungen im **Touren-Workflow** (neuer Schritt, neue Queue)
+- ✅ Änderungen an **Infra** (Container-IP, Ports, Docker vs. LXC)
+- ✅ Einführung/Entfernung von **Hauptmodulen** (neue Services, neue Routen)
+
+**Regel:** Kein größerer Merge/Commit ohne zu prüfen:
+> "Hat sich durch diese Änderung die Architektur sichtbar verändert?"  
+> Wenn ja → Abschnitt in `ARCHITEKTUR_KOMPLETT.md` + `MODULE_MAP.md` anpassen.
+
+**Siehe auch:**
+- [`MODULE_MAP.md`](../MODULE_MAP.md) - Detaillierte Modul-Kommunikation
+- [`docs/Architecture.md`](Architecture.md) - Basis-Architektur
+- [`PROJECT_PROFILE.md`](../PROJECT_PROFILE.md) - Projektkontext
 

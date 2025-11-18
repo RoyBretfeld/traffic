@@ -130,6 +130,7 @@ def setup_routers(app: FastAPI) -> None:
     from backend.routes.tourplan_bulk_analysis import router as tourplan_bulk_analysis_router
     from backend.routes.tourplan_triage import router as tourplan_triage_router
     from backend.routes.tourplan_bulk_process import router as tourplan_bulk_process_router
+    from backend.routes.multi_tour_generator_api import router as multi_tour_generator_router
     from backend.routes.upload_csv import router as upload_csv_router
     from backend.routes.audit_geocoding import router as audit_geocoding_router
     from backend.routes.workflow_api import router as workflow_api_router
@@ -181,6 +182,7 @@ def setup_routers(app: FastAPI) -> None:
         tourplan_bulk_analysis_router,
         tourplan_triage_router,
         tourplan_bulk_process_router,
+        multi_tour_generator_router,
         upload_csv_router,
         audit_geocoding_router,
         workflow_api_router,

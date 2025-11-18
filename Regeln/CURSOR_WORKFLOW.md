@@ -38,6 +38,64 @@ Regeln/
 
 ---
 
+## 3. Standard-Ablauf für Cursor bei Audits
+
+**⚠️ KRITISCH: Lesereihenfolge für Cursor (Pflicht):**
+
+1. `Global/GLOBAL_STANDARDS.md`
+2. `PROJECT_PROFILE.md`
+3. `Regeln/STANDARDS.md`
+4. `Regeln/STANDARDS_QUICK_REFERENCE.md`
+5. `Regeln/REGELN_AUDITS.md`
+6. `Regeln/AUDIT_CHECKLISTE.md`
+7. `README_AUDIT_COMPLETE.md` (konkreter Audit-Kontext)
+
+**Cursor soll diese Reihenfolge explizit im Prompt erwähnt bekommen.**
+
+### Scope-Definition pro Audit
+
+Für jedes Audit muss Cursor den Scope klar benennen, z.B.:
+
+**Beispiel: Sub-Routen / Routing / OSRM**
+
+* **Backend:**
+  * `backend/routes/...`
+  * `backend/services/...`
+  * `backend/engine/...`
+
+* **Frontend:**
+  * `frontend/index.html`
+  * `frontend/js/...`
+
+* **Tests & Logs:**
+  * Relevante Testdateien
+  * Logauszüge / Fehlerberichte (500, 402, Sub-Routen-Fehler usw.)
+
+**Cursor soll bei jedem Audit zuerst:**
+
+1. Scope in Stichpunkten auflisten
+2. Dateien nennen, die analysiert werden
+3. Dann erst Änderungen vorschlagen
+
+### Pflicht: Backend UND Frontend prüfen
+
+Cursor darf Routing-Themen niemals nur backendseitig betrachten.
+
+**Immer prüfen:**
+
+* Stimmen die API-Endpunkte (`/api/tour/route-details`, Sub-Routen-Endpunkte)?
+* Passt der JSON-Response zur Frontend-Erwartung?
+* Werden Fehler im Frontend korrekt angezeigt?
+* Werden leere / fehlerhafte Antworten sauber behandelt?
+
+**Besonders beim Sub-Routen-Generator:**
+
+* Prüfen, ob die generierten Daten **vom Backend kommen**
+* Prüfen, ob das Frontend sie **richtig rendert**
+* Prüfen, ob die Route im UI **sichtbar** wird (Map-Layer, Marker, Linien)
+
+---
+
 ## 3. Feste Regeln für Code-Audits mit Cursor
 
 ### 1. **Audit-ZIP Pflicht**

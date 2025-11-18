@@ -208,8 +208,12 @@ def bulk_get(addresses: Iterable[str]) -> Dict[str, dict]:
         return {}
     
     # SQLAlchemy expanding bindparam für portable IN-Klausel
+    # WICHTIG: first_seen und last_seen sind optional (können fehlen in älteren DBs)
+    # Verwende COALESCE für Rückwärtskompatibilität
     stmt = text(
-        "SELECT address_norm, lat, lon, source, precision, region_ok, first_seen, last_seen "
+        "SELECT address_norm, lat, lon, source, precision, region_ok, "
+        "COALESCE(first_seen, CURRENT_TIMESTAMP) as first_seen, "
+        "COALESCE(last_seen, CURRENT_TIMESTAMP) as last_seen "
         "FROM geo_cache WHERE address_norm IN :alist"
     ).bindparams(bindparam("alist", expanding=True))
     

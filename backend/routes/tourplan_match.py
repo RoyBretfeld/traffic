@@ -66,7 +66,7 @@ async def api_tourplan_match(file: str = Query(..., min_length=3, description="P
     except HTTPException:
         raise
     except Exception as e:
-        enhanced_logger.error(f"Match fehlgeschlagen für Datei '{file}': {str(e)}", exc_info=e)
+        enhanced_logger.error(f"Match fehlgeschlagen für Datei '{file}': {str(e)}", error=e)
         error_msg = f"match failed: {str(e)}"
         raise HTTPException(500, detail=error_msg)
 

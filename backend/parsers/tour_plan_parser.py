@@ -245,18 +245,21 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
                 synonym_lon = None
                 resolved_customer_id = None
                 
-                if first_cell:
-                    kdnr_synonym = synonym_store.resolve(f"KdNr:{first_cell}")
-                    if kdnr_synonym:
-                        # Übernehme Adresse aus Synonym (auch wenn sie leer ist, damit sie später gesetzt wird)
-                        synonym_street = kdnr_synonym.street or street or ""
-                        synonym_postal_code = kdnr_synonym.postal_code or postal_code or ""
-                        synonym_city = kdnr_synonym.city or city or ""
-                        synonym_lat = kdnr_synonym.lat
-                        synonym_lon = kdnr_synonym.lon
-                        resolved_customer_id = kdnr_synonym.customer_id
-                        logging.info(f"[SYNONYM] KdNr:{first_cell} → Synonym gefunden: street='{synonym_street}', city='{synonym_city}', lat={synonym_lat}, lon={synonym_lon}")
-                
+                if first_cell and synonym_store:
+                    try:
+                        kdnr_synonym = synonym_store.resolve(f"KdNr:{first_cell}")
+                        if kdnr_synonym:
+                            # Übernehme Adresse aus Synonym (auch wenn sie leer ist, damit sie später gesetzt wird)
+                            synonym_street = kdnr_synonym.street or street or ""
+                            synonym_postal_code = kdnr_synonym.postal_code or postal_code or ""
+                            synonym_city = kdnr_synonym.city or city or ""
+                            synonym_lat = kdnr_synonym.lat
+                            synonym_lon = kdnr_synonym.lon
+                            resolved_customer_id = kdnr_synonym.customer_id
+                            # Logging entfernt - verursacht Terminal-Spam
+                            # logging.debug(f"[SYNONYM] KdNr:{first_cell} → Synonym gefunden: street='{synonym_street}', city='{synonym_city}', lat={synonym_lat}, lon={synonym_lon}")
+                        else:
+                            kdnr_synonym = None
                     except Exception as resolve_error:
                         logging.warning(f"[SYNONYM] Fehler bei KdNr-Auflösung für '{first_cell}': {resolve_error}")
                         kdnr_synonym = None
@@ -280,7 +283,8 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
                                 if name_synonym.lon:
                                     synonym_lon = name_synonym.lon
                                 resolved_customer_id = name_synonym.customer_id or resolved_customer_id
-                                logging.info(f"[SYNONYM] Name '{name}' → Synonym KORRIGIERT Adresse: street='{synonym_street}', city='{synonym_city}', real_customer_id={resolved_customer_id}")
+                                # Logging entfernt - verursacht Terminal-Spam
+                                # logging.debug(f"[SYNONYM] Name '{name}' → Synonym KORRIGIERT Adresse: street='{synonym_street}', city='{synonym_city}', real_customer_id={resolved_customer_id}")
                             elif not (synonym_street.strip() and synonym_postal_code.strip() and synonym_city.strip()):
                                 # Fallback: Nur wenn noch keine vollständige Adresse vorhanden
                                 synonym_street = name_synonym.street or synonym_street or ""
@@ -291,16 +295,18 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
                                 if not synonym_lon:
                                     synonym_lon = name_synonym.lon
                                 resolved_customer_id = name_synonym.customer_id or resolved_customer_id
-                                logging.info(f"[SYNONYM] Name '{name}' → Synonym gefunden: street='{synonym_street}', city='{synonym_city}'")
+                                # Logging entfernt - verursacht Terminal-Spam
+                                # logging.debug(f"[SYNONYM] Name '{name}' → Synonym gefunden: street='{synonym_street}', city='{synonym_city}'")
                     except Exception as resolve_error:
                         logging.warning(f"[SYNONYM] Fehler bei Name-Auflösung für '{name}': {resolve_error}")
                         name_synonym = None
                 else:
                     name_synonym = None
                 
-                # 3. Logging für Debugging
-                if first_cell and (synonym_street or synonym_postal_code or synonym_city):
-                    logging.info(f"[SYNONYM] Final für KdNr:{first_cell}: street='{synonym_street}', postal='{synonym_postal_code}', city='{synonym_city}', lat={synonym_lat}, lon={synonym_lon}")
+                # 3. Logging entfernt - verursacht zu viel Terminal-Spam
+                # Falls Debugging nötig: Temporär wieder aktivieren mit logging.debug()
+                # if first_cell and (synonym_street or synonym_postal_code or synonym_city):
+                #     logging.debug(f"[SYNONYM] Final für KdNr:{first_cell}: street='{synonym_street}', postal='{synonym_postal_code}', city='{synonym_city}', lat={synonym_lat}, lon={synonym_lon}")
             except Exception as e:
                 logging.warning(f"[SYNONYM] Fehler bei Synonym-Auflösung (überspringe): {e}")
                 # Bei Fehlern: Verwende originale Werte (nicht blockieren!)
@@ -322,7 +328,8 @@ def _extract_tours(file_path: Union[str, Path]) -> Tuple[List[str], Dict[str, Li
         if synonym_lat is not None and synonym_lon is not None:
             customer._synonym_lat = synonym_lat
             customer._synonym_lon = synonym_lon
-            logging.info(f"[SYNONYM] Koordinaten für KdNr:{first_cell} übernommen: lat={synonym_lat}, lon={synonym_lon}")
+            # Logging entfernt - verursacht Terminal-Spam
+            # logging.debug(f"[SYNONYM] Koordinaten für KdNr:{first_cell} übernommen: lat={synonym_lat}, lon={synonym_lon}")
         
         # Zuordnung: BAR-Kunden -> pending_bar, normale -> direkt zur Tour
         if bar_mode:

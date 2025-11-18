@@ -1,7 +1,9 @@
-# Cloud-Synchronisation: OneDrive → Projekt
+# Cloud-Synchronisation: Google Drive → Projekt
 # 
-# Synchronisiert wichtige Dateien vom Cloud-Ordner zurück zum Projekt:
+# Synchronisiert wichtige Dateien vom Google Drive Ordner zurück zum Projekt:
 # G:\Meine Ablage\_____1111____Projekte-Programmierung\______Famo TrafficApp 3.0
+#
+# HINWEIS: G:\Meine Ablage\... ist der Google Drive Ordner (nicht OneDrive!)
 #
 # Nutzung:
 #   .\scripts\sync_from_cloud.ps1
