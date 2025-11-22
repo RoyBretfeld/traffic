@@ -1,0 +1,64 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    # Nightly Baseline-Scan auf main
+    - cron: '0 2 * * *'
+
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Vollständige Historie für Diffs
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install ruff mypy bandit
+      
+      - name: S1 - Static Analysis
+        run: |
+          echo "## Static Analysis Results" >> $GITHUB_STEP_SUMMARY
+          ruff check . --output-format=github >> $GITHUB_STEP_SUMMARY || true
+          mypy backend/ --ignore-missing-imports >> $GITHUB_STEP_SUMMARY || true
+      
+      - name: S1 - Security Scan
+        run: |
+          bandit -r backend/ -f json -o bandit-report.json || true
+          echo "## Security Scan (Bandit)" >> $GITHUB_STEP_SUMMARY
+          cat bandit-report.json >> $GITHUB_STEP_SUMMARY || true
+      
+      - name: S1 - Tests
+        run: |
+          pytest tests/ -q --tb=short || true
+      
+      - name: S2/S3 - AI Review (Advisor Mode)
+        run: |
+          echo "## AI Code Review (Advisor Mode)" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ AI Review Tool wird noch implementiert" >> $GITHUB_STEP_SUMMARY
+          echo "Siehe: docs/ai/REVIEW_PIPELINE.md" >> $GITHUB_STEP_SUMMARY
+          # TODO: python tools/ai_review.py --mode=patterns --out ai_reports/${{ github.sha }}
+          # TODO: python tools/ai_review.py --mode=security --out ai_reports/${{ github.sha }}
+      
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-reports-${{ github.sha }}
+          path: |
+            ai_reports/
+            bandit-report.json
+          retention-days: 7
+
