@@ -11,6 +11,7 @@ from typing import List, Dict, Any
 import pandas as pd
 import sqlite3
 import logging
+import re
 from pydantic import BaseModel
 from sqlalchemy import text
 
@@ -25,6 +26,10 @@ logger = logging.getLogger(__name__)
 # Tourenpläne-Verzeichnis
 TOURPLAENE_DIR = Path("Tourplaene")
 TOURPLAENE_DIR.mkdir(exist_ok=True)
+
+# SC-07: Filename-Whitelist (nur erlaubte Zeichen)
+SAFE_FILENAME = re.compile(r"^[A-Za-z0-9_.\-]+$")
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10MB Limit
 
 
 class GeocodeFileRequest(BaseModel):
@@ -43,6 +48,16 @@ async def batch_geocode_tourplan(file: UploadFile = File(...), session: dict = D
     safe_print(f"[DB-API] Batch-Geocode Upload: {file.filename}")
     
     try:
+        # SC-07: Filename-Whitelist (Path Traversal verhindern)
+        if not file.filename or not SAFE_FILENAME.match(file.filename):
+            raise HTTPException(400, detail="Ungültiger Dateiname. Nur A-Z, a-z, 0-9, _, ., - erlaubt")
+        
+        # SC-07: Größen-Limit
+        content_preview = await file.read(MAX_UPLOAD_BYTES + 1)
+        if len(content_preview) > MAX_UPLOAD_BYTES:
+            raise HTTPException(413, detail=f"Datei zu groß (max {MAX_UPLOAD_BYTES} Bytes)")
+        await file.seek(0)  # Zurück zum Anfang für weitere Verarbeitung
+        
         from backend.db.dao import geocache_get
         from repositories.geo_repo import get as geo_repo_get
         from backend.parsers.tour_plan_parser import parse_tour_plan_to_dict
@@ -50,11 +65,13 @@ async def batch_geocode_tourplan(file: UploadFile = File(...), session: dict = D
         import tempfile
         import os
         
-        # WICHTIG: Tourplaene-Verzeichnis ist READ-ONLY! Dateien sind bereits dort.
-        # Prüfe zuerst, ob Datei bereits im Tourplaene-Verzeichnis existiert
-        file_path = TOURPLAENE_DIR / file.filename
-        
+        # SC-07: Pfad-Check mit resolve() (Path Traversal verhindern)
+        # Nur wenn Datei im Tourplaene-Verzeichnis existiert
+        file_path = (TOURPLAENE_DIR / file.filename).resolve()
         if file_path.exists():
+            # Prüfe ob Pfad innerhalb des erlaubten Verzeichnisses ist
+            if not str(file_path).startswith(str(TOURPLAENE_DIR.resolve())):
+                raise HTTPException(400, detail="Pfad außerhalb des erlaubten Verzeichnisses")
             # Datei existiert bereits - verwende sie direkt (kein Schreibzugriff nötig)
             safe_print(f"[DB-API] Datei bereits vorhanden, verwende: {file_path}")
             tmp_path = str(file_path.resolve())
@@ -299,7 +316,15 @@ async def geocode_single_file(request: GeocodeFileRequest, session: dict = Depen
     Geocodiert einen einzelnen Tourplan (aus dem Tourplaene-Verzeichnis).
     """
     filename = request.filename
-    file_path = TOURPLAENE_DIR / filename
+    
+    # SC-07: Filename-Whitelist (Path Traversal verhindern)
+    if not SAFE_FILENAME.match(filename):
+        raise HTTPException(400, detail="Ungültiger Dateiname. Nur A-Z, a-z, 0-9, _, ., - erlaubt")
+    
+    # SC-07: Pfad-Check mit resolve() (Path Traversal verhindern)
+    file_path = (TOURPLAENE_DIR / filename).resolve()
+    if not str(file_path).startswith(str(TOURPLAENE_DIR.resolve())):
+        raise HTTPException(400, detail="Pfad außerhalb des erlaubten Verzeichnisses")
     
     if not file_path.exists():
         raise HTTPException(status_code=404, detail=f"Tourplan nicht gefunden: {filename}")

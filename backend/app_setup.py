@@ -84,6 +84,10 @@ def setup_middleware(app: FastAPI) -> None:
     from backend.middlewares.rate_limit import RateLimitMiddleware
     app.add_middleware(RateLimitMiddleware)
     
+    # Security-Header (SC-11)
+    from backend.middlewares.security_headers import SecurityHeadersMiddleware
+    app.add_middleware(SecurityHeadersMiddleware)
+    
     # CORS Middleware (SC-06: Kein "*" mit Credentials in Prod)
     # In Development: Erlaube alle Origins für lokale Entwicklung
     # In Production: Nur erlaubte Domains

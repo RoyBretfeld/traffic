@@ -3,7 +3,7 @@ API-Endpunkte für Tourplan-Übersicht
 Zeigt Gesamtdaten von Tourplänen (gruppiert nach Datum)
 Kombiniert Daten aus DB und tourplaene Verzeichnis
 """
-from fastapi import APIRouter, HTTPException, Query, UploadFile, File
+from fastapi import APIRouter, HTTPException, Query, UploadFile, File, Depends
 from fastapi.responses import JSONResponse
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
@@ -14,6 +14,7 @@ import json
 import logging
 import os
 import re
+from backend.routes.auth_api import require_admin
 
 logger = logging.getLogger(__name__)
 
@@ -374,11 +375,20 @@ async def get_tourplan_tours(
 
 
 @router.post("/upload")
-async def upload_tourplan(file: UploadFile = File(...)):
+async def upload_tourplan(file: UploadFile = File(...), session: dict = Depends(require_admin)):
     """
     Lädt einen Tourplan hoch und speichert ihn im tourplaene Verzeichnis.
     """
     try:
+        # SC-07: Validierung
+        if not file.filename:
+            raise HTTPException(400, detail="Kein Dateiname angegeben")
+        
+        # SC-07: Filename-Whitelist (Path Traversal verhindern)
+        SAFE_FILENAME = re.compile(r"^[A-Za-z0-9_.\-]+$")
+        if not SAFE_FILENAME.match(file.filename):
+            raise HTTPException(400, detail="Ungültiger Dateiname. Nur A-Z, a-z, 0-9, _, ., - erlaubt")
+        
         # Prüfe Dateityp
         if not file.filename.lower().endswith('.csv'):
             return JSONResponse({
@@ -386,11 +396,20 @@ async def upload_tourplan(file: UploadFile = File(...)):
                 "error": "Nur CSV-Dateien sind erlaubt"
             }, status_code=400)
         
+        # SC-07: Größen-Limit
+        MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10MB
+        content_preview = await file.read(MAX_UPLOAD_BYTES + 1)
+        if len(content_preview) > MAX_UPLOAD_BYTES:
+            raise HTTPException(413, detail=f"Datei zu groß (max {MAX_UPLOAD_BYTES} Bytes)")
+        await file.seek(0)  # Zurück zum Anfang
+        
         # Stelle sicher, dass Verzeichnis existiert
         TOURPLAENE_DIR.mkdir(parents=True, exist_ok=True)
         
-        # Speichere Datei
-        file_path = TOURPLAENE_DIR / file.filename
+        # SC-07: Pfad-Check mit resolve() (Path Traversal verhindern)
+        file_path = (TOURPLAENE_DIR / file.filename).resolve()
+        if not str(file_path).startswith(str(TOURPLAENE_DIR.resolve())):
+            raise HTTPException(400, detail="Pfad außerhalb des erlaubten Verzeichnisses")
         
         # Prüfe ob Datei bereits existiert
         if file_path.exists():

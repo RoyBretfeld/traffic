@@ -84,7 +84,9 @@ except ImportError:
     _HAS_PROTECTION = False
 
 # Sichere Dateinamen (nur alphanumerisch, Punkte, Bindestriche, Unterstriche)
-SAFE = re.compile(r"[^A-Za-z0-9_.\-]+")
+# SC-07: Filename-Whitelist (nur erlaubte Zeichen)
+SAFE_FILENAME = re.compile(r"^[A-Za-z0-9_.\-]+$")
+MAX_BYTES = 10 * 1024 * 1024  # 10MB Limit
 MAX_BYTES = 5 * 1024 * 1024  # 5MB Limit
 
 def _heuristic_decode(raw: bytes, skip_mojibake_check: bool = False) -> tuple[str, str]:
@@ -172,8 +174,14 @@ async def process_csv_direct(filename: str, session: dict = Depends(require_admi
         JSON mit Verarbeitungsergebnissen
     """
     try:
-        # Dateipfad validieren
-        csv_path = TOURPLAENE_DIR / filename
+        # SC-07: Filename-Whitelist (Path Traversal verhindern)
+        if not SAFE_FILENAME.match(filename):
+            raise HTTPException(400, detail="Ungültiger Dateiname. Nur A-Z, a-z, 0-9, _, ., - erlaubt")
+        
+        # SC-07: Pfad-Check mit resolve() (Path Traversal verhindern)
+        csv_path = (TOURPLAENE_DIR / filename).resolve()
+        if not str(csv_path).startswith(str(TOURPLAENE_DIR.resolve())):
+            raise HTTPException(400, detail="Pfad außerhalb des erlaubten Verzeichnisses")
         
         if not csv_path.exists():
             raise HTTPException(404, detail=f"Datei nicht gefunden: {filename}")
@@ -219,23 +227,29 @@ async def upload_csv(file: UploadFile = File(...), session: dict = Depends(requi
         enhanced_logger.warning(f"Externer Upload: {file.filename}")
         enhanced_logger.warning("Verwenden Sie /api/process-csv-direct für Tourpläne aus dem Tourplaene-Verzeichnis!")
 
-        # Validierung
+        # SC-07: Validierung
         if not file.filename:
             raise HTTPException(400, detail="Kein Dateiname angegeben")
+
+        # SC-07: Filename-Whitelist (Path Traversal verhindern)
+        if not SAFE_FILENAME.match(file.filename):
+            raise HTTPException(400, detail="Ungültiger Dateiname. Nur A-Z, a-z, 0-9, _, ., - erlaubt")
 
         if not file.filename.lower().endswith('.csv'):
             raise HTTPException(400, detail="only .csv allowed")
         
-        # Sicheren Dateinamen generieren
-        safe_name = SAFE.sub('_', file.filename)
+        # Sicheren Dateinamen generieren (bereits validiert durch SAFE_FILENAME)
+        safe_name = file.filename
         timestamp = int(time.time())
         staged_name = f"{timestamp}_{safe_name}"
         staged_path = STAGING / staged_name
         
-        # WICHTIG: Stelle sicher, dass staged_path absolut ist
+        # SC-07: Pfad-Check mit resolve() (Path Traversal verhindern)
         staged_path = staged_path.resolve()
+        if not str(staged_path).startswith(str(STAGING.resolve())):
+            raise HTTPException(400, detail="Pfad außerhalb des erlaubten Staging-Verzeichnisses")
         
-        # Datei lesen und validieren
+        # SC-07: Größen-Limit
         content = await file.read()
         if len(content) > MAX_BYTES:
             raise HTTPException(413, detail=f"Datei zu groß (max {MAX_BYTES} Bytes)")
