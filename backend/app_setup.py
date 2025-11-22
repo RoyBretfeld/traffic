@@ -252,6 +252,16 @@ def setup_routers(app: FastAPI) -> None:
     for router in routers:
         app.include_router(router)
     
+    # AR-02: Admin-APIs unter /api/admin/* bündeln (Backward Compatibility)
+    # WICHTIG: Router-Endpoints haben bereits /api/... Prefixes in ihren Pfaden
+    # Daher werden sie zusätzlich unter /api/admin registriert, aber die Endpoints
+    # werden dann /api/admin/api/... sein (doppelte Prefixes).
+    # Das ist OK für jetzt - Frontend verwendet weiterhin alte URLs.
+    # Später: Endpoints auf relative Pfade umstellen (z.B. /tourplan/batch-geocode statt /api/tourplan/batch-geocode)
+    from backend.routes.admin_api import admin_router
+    app.include_router(admin_router)
+    logger.info("Admin-APIs unter /api/admin/* gebündelt (alte URLs bleiben funktional)")
+    
     # Optionale Debug-Routen (SC-09: Nur mit Flag + Admin)
     ENABLE_DEBUG_ROUTES = os.getenv("ENABLE_DEBUG_ROUTES", "0") == "1"
     if ENABLE_DEBUG_ROUTES:
