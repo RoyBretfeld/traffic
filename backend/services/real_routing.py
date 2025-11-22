@@ -280,11 +280,61 @@ class RealRoutingService:
 
 _logger = logging.getLogger(__name__)
 
+
+def _decode_polyline6_to_coords(encoded: str) -> List[Tuple[float, float]]:
+    """
+    Dekodiert Polyline6-String (OSRM Format) zu Koordinaten-Liste.
+    
+    Args:
+        encoded: Polyline6-encoded String
+    
+    Returns:
+        Liste von (lat, lon) Tupeln
+    """
+    if not encoded or not isinstance(encoded, str):
+        return []
+    
+    coords: List[Tuple[float, float]] = []
+    index = 0
+    lat = 0
+    lon = 0
+    shift = 5
+    
+    def next_value():
+        nonlocal index
+        result = 0
+        b = None
+        i = 0
+        while True:
+            if index >= len(encoded):
+                return None
+            b = ord(encoded[index]) - 63
+            index += 1
+            result |= (b & 0x1f) << (i * shift)
+            i += 1
+            if b < 0x20:
+                break
+        return ~(result >> 1) if (result & 1) else (result >> 1)
+    
+    while index < len(encoded):
+        dlat = next_value()
+        dlon = next_value()
+        if dlat is None or dlon is None:
+            break
+        lat += dlat
+        lon += dlon
+        coords.append((lat / 1e6, lon / 1e6))
+    
+    return coords
+
+
 class RouteDetailsReq(BaseModel):
     stops: List[Dict[str, float]]  # [{"lon": float, "lat": float}, ...]
     overview: str = "full"
     geometries: str = "polyline6"
     profile: str = "driving"
+    tour_id: Optional[str] = None  # Optional: Tour-ID zum Speichern der Routen-Daten
+    datum: Optional[str] = None  # Optional: Tour-Datum (YYYY-MM-DD) zum Speichern
 
 async def build_route_details(req: RouteDetailsReq) -> Dict[str, Any]:
     """
@@ -352,5 +402,115 @@ async def build_route_details(req: RouteDetailsReq) -> Dict[str, Any]:
     except Exception as e:
         _logger.error(f"Unerwarteter Fehler in build_route_details: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Interner Serverfehler bei Routenberechnung: {type(e).__name__}: {e}")
+
+    # Hole Blitzer und Hindernisse entlang der Route
+    try:
+        from backend.services.live_traffic_data import get_live_traffic_service
+        
+        # Dekodiere Polyline6-Geometrie zu Route-Koordinaten (falls vorhanden)
+        route_coords: List[Tuple[float, float]] = []
+        
+        if result.get("geometry_polyline6"):
+            # Dekodiere Polyline6 zu Koordinaten
+            route_coords = _decode_polyline6_to_coords(result["geometry_polyline6"])
+        else:
+            # Fallback: Verwende Stopps-Koordinaten
+            route_coords = coords_raw
+        
+        if route_coords:
+            traffic_service = get_live_traffic_service()
+            _logger.debug(f"Route-Koordinaten: {len(route_coords)} Punkte")
+            
+            # Hole Blitzer entlang der Route (innerhalb 1 km)
+            cameras = traffic_service.get_cameras_near_route(route_coords, max_distance_km=1.0)
+            _logger.debug(f"Blitzer-Suche: {len(cameras)} gefunden")
+            result["speed_cameras"] = [
+                {
+                    "camera_id": cam.camera_id,
+                    "type": cam.type,
+                    "lat": cam.lat,
+                    "lon": cam.lon,
+                    "direction": cam.direction,
+                    "speed_limit": cam.speed_limit,
+                    "description": cam.description,
+                    "verified": cam.verified
+                }
+                for cam in cameras
+            ]
+            result["speed_camera_count"] = len(cameras)
+            
+            # Hole Hindernisse entlang der Route (innerhalb 300m - nur wirklich relevante)
+            incidents = traffic_service.get_incidents_near_route(route_coords, max_distance_km=0.3)
+            _logger.debug(f"Hindernisse-Suche: {len(incidents)} gefunden (max_distance=0.3km, min_severity=medium)")
+            result["traffic_incidents"] = [
+                {
+                    "incident_id": inc.incident_id,
+                    "type": inc.type,
+                    "lat": inc.lat,
+                    "lon": inc.lon,
+                    "severity": inc.severity,
+                    "description": inc.description,
+                    "delay_minutes": inc.delay_minutes,
+                    "radius_km": inc.radius_km,
+                    "affected_roads": inc.affected_roads or []
+                }
+                for inc in incidents
+            ]
+            result["traffic_incident_count"] = len(incidents)
+            
+            if cameras or incidents:
+                _logger.info(f"Route-Details: {len(cameras)} Blitzer, {len(incidents)} Hindernisse gefunden")
+            else:
+                _logger.debug(f"Route-Details: Keine Blitzer/Hindernisse gefunden (Route-Länge: {len(route_coords)} Punkte)")
+        else:
+            result["speed_cameras"] = []
+            result["speed_camera_count"] = 0
+            result["traffic_incidents"] = []
+            result["traffic_incident_count"] = 0
+            
+    except Exception as traffic_error:
+        # Fehler beim Laden von Blitzer/Hindernisse soll Route-Berechnung nicht beeinträchtigen
+        _logger.warning(f"Fehler beim Laden von Blitzer/Hindernisse: {traffic_error}", exc_info=True)
+        result["speed_cameras"] = []
+        result["speed_camera_count"] = 0
+        result["traffic_incidents"] = []
+        result["traffic_incident_count"] = 0
+
+    # Speichere Routen-Daten in DB, wenn tour_id und datum vorhanden sind
+    if req.tour_id and req.datum and result.get("total_distance_m") and result.get("total_duration_s"):
+        try:
+            from backend.db.dao import update_tour_route_data
+            from datetime import datetime
+            
+            # Konvertiere Distanz von Metern zu Kilometern
+            distanz_km = result["total_distance_m"] / 1000.0
+            # Konvertiere Zeit von Sekunden zu Minuten
+            gesamtzeit_min = int(result["total_duration_s"] / 60.0)
+            
+            updated = update_tour_route_data(
+                tour_id=req.tour_id,
+                datum=req.datum,
+                distanz_km=distanz_km,
+                gesamtzeit_min=gesamtzeit_min
+            )
+            
+            if updated:
+                _logger.info(f"Routen-Daten für Tour {req.tour_id} (Datum: {req.datum}) gespeichert: {distanz_km:.2f} km, {gesamtzeit_min} min")
+                
+                # Queue Tour für Vektorisierung (5 Minuten später)
+                try:
+                    from backend.services.tour_vectorizer import queue_tour_for_vectorization
+                    queue_tour_for_vectorization(
+                        tour_id=req.tour_id,
+                        datum=req.datum,
+                        delay_minutes=5
+                    )
+                except Exception as vec_error:
+                    _logger.warning(f"Fehler beim Queueing für Vektorisierung: {vec_error}")
+            else:
+                _logger.warning(f"Tour {req.tour_id} (Datum: {req.datum}) nicht in DB gefunden - Routen-Daten nicht gespeichert")
+        except Exception as save_error:
+            # Fehler beim Speichern soll die Route-Berechnung nicht beeinträchtigen
+            _logger.warning(f"Fehler beim Speichern der Routen-Daten: {save_error}", exc_info=True)
 
     return result

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geo-Cache Vorverarbeitung - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #0d6efd;
+            background-color: #f0f7ff;
+        }
+        .upload-area.dragover {
+            border-color: #0d6efd;
+            background-color: #e7f3ff;
+        }
+        .stats-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stats-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .admin-nav-item i {
+            font-size: 1.1em;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-dark bg-dark mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-route"></i> FAMO TrafficApp
+            </a>
+            <div>
+                <a class="text-white text-decoration-none me-3" href="/">
+                    <i class="fas fa-home"></i> Hauptseite
+                </a>
+                <a class="text-white text-decoration-none" href="/admin.html">
+                    <i class="fas fa-cog"></i> Admin
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <h1 class="mb-4"><i class="fas fa-database"></i> Geo-Cache Vorverarbeitung</h1>
+        
+        <!-- Admin Navigation -->
+        <div class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin.html" class="admin-nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Übersicht</span>
+                </a>
+                <a href="/admin/system.html" class="admin-nav-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
+                </a>
+                <a href="/admin/statistik.html" class="admin-nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item">
+                    <i class="fas fa-brain"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item">
+                    <i class="fas fa-file-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item active">
+                    <i class="fas fa-fill-drip"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Info-Box -->
+        <div class="alert alert-info mb-4">
+            <h5><i class="fas fa-info-circle"></i> Zweck dieser Seite</h5>
+            <p class="mb-0">
+                Füllen Sie den Geo-Cache mit historischen Tourplänen, bevor Sie den eigentlichen Workflow starten.
+                Da <strong>80%+ der Kunden wiederkehrende Kunden sind</strong>, werden die meisten Adressen bereits im Cache sein,
+                wenn Sie den Workflow ausführen. Das beschleunigt den Workflow erheblich!
+            </p>
+        </div>
+
+        <!-- Upload-Bereich -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-upload"></i> Tourpläne hochladen & Geo-Cache füllen</h5>
+            </div>
+            <div class="card-body">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                    <h5>Dateien hier ablegen oder klicken zum Auswählen</h5>
+                    <p class="text-muted">Mehrere CSV-Dateien möglich (max. 20 Dateien, je max. 50 MB)</p>
+                    <input type="file" id="fileInput" class="d-none" accept=".csv" multiple>
+                    <button class="btn btn-primary mt-3" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-folder-open"></i> Dateien auswählen
+                    </button>
+                </div>
+                
+                <div id="selectedFiles" class="mt-4" style="display: none;">
+                    <h6><i class="fas fa-list"></i> Ausgewählte Dateien:</h6>
+                    <div id="fileList"></div>
+                    <div class="mt-3">
+                        <button class="btn btn-success" id="startProcessingBtn" onclick="startProcessing()" disabled>
+                            <i class="fas fa-play"></i> Geo-Cache füllen starten
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearSelection()">
+                            <i class="fas fa-times"></i> Auswahl löschen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fortschrittsanzeige -->
+        <div class="card mb-4" id="progressCard" style="display: none;">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-tasks"></i> Verarbeitungsfortschritt</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span id="progressText">0 / 0 Dateien</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress" style="height: 30px;">
+                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                             role="progressbar" style="width: 0%">
+                        </div>
+                    </div>
+                </div>
+                <div id="currentFile" class="alert alert-light mb-0">
+                    <small>Bereit zum Starten...</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiken -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card border-primary">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Dateien verarbeitet</h6>
+                        <h3 class="text-primary" id="statsFilesProcessed">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card border-success">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Adressen gefunden</h6>
+                        <h3 class="text-success" id="statsTotalAddresses">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card border-info">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Bereits im Cache</h6>
+                        <h3 class="text-info" id="statsCached">0</h3>
+                        <small class="text-muted" id="statsCachePercent">0%</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card border-warning">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Neu geocodiert</h6>
+                        <h3 class="text-warning" id="statsNewGeocoded">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ergebnisse -->
+        <div class="card" id="resultsCard" style="display: none;">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-check-circle"></i> Verarbeitung abgeschlossen</h5>
+            </div>
+            <div class="card-body">
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFiles = [];
+        let processingStats = {
+            filesProcessed: 0,
+            totalAddresses: 0,
+            cached: 0,
+            newGeocoded: 0,
+            errors: 0,
+            failedAddresses: []  // Für manuelle Bearbeitung (Synonyme/Barkunden)
+        };
+
+        // File Input Handler
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            handleFiles(e.target.files);
+        });
+
+        // Drag & Drop
+        const uploadArea = document.getElementById('uploadArea');
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        uploadArea.addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        function handleFiles(files) {
+            const maxFiles = 20;
+            const maxSize = 50 * 1024 * 1024; // 50 MB
+            
+            if (files.length > maxFiles) {
+                alert(`Maximal ${maxFiles} Dateien erlaubt!`);
+                return;
+            }
+
+            for (let file of files) {
+                if (!file.name.toLowerCase().endsWith('.csv')) {
+                    alert(`${file.name}: Nur CSV-Dateien erlaubt!`);
+                    continue;
+                }
+                if (file.size > maxSize) {
+                    alert(`${file.name}: Datei zu groß (max. 50 MB)!`);
+                    continue;
+                }
+                if (!selectedFiles.find(f => f.name === file.name)) {
+                    selectedFiles.push(file);
+                }
+            }
+
+            updateFileList();
+        }
+
+        function updateFileList() {
+            const fileListDiv = document.getElementById('fileList');
+            const selectedFilesDiv = document.getElementById('selectedFiles');
+            const startBtn = document.getElementById('startProcessingBtn');
+
+            if (selectedFiles.length === 0) {
+                selectedFilesDiv.style.display = 'none';
+                startBtn.disabled = true;
+                return;
+            }
+
+            selectedFilesDiv.style.display = 'block';
+            startBtn.disabled = false;
+
+            fileListDiv.innerHTML = selectedFiles.map((file, index) => `
+                <div class="file-item">
+                    <span><i class="fas fa-file-csv"></i> ${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>
+                    <button class="btn btn-sm btn-danger" onclick="removeFile(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+
+        function clearSelection() {
+            selectedFiles = [];
+            document.getElementById('fileInput').value = '';
+            updateFileList();
+        }
+
+        async function startProcessing() {
+            if (selectedFiles.length === 0) {
+                alert('Bitte wählen Sie mindestens eine Datei aus.');
+                return;
+            }
+
+            // Reset Stats
+            processingStats = {
+                filesProcessed: 0,
+                totalAddresses: 0,
+                cached: 0,
+                newGeocoded: 0,
+                errors: 0
+            };
+
+            // UI Updates
+            document.getElementById('progressCard').style.display = 'block';
+            document.getElementById('resultsCard').style.display = 'none';
+            document.getElementById('startProcessingBtn').disabled = true;
+            updateStats();
+
+            // Process each file
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+                updateProgress(i + 1, selectedFiles.length, file.name);
+
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('/api/tourplan/batch-geocode', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+                    }
+
+                    const result = await response.json();
+                    console.log(`[GEO-CACHE] Ergebnis für ${file.name}:`, result);
+
+                    if (result.success) {
+                        processingStats.filesProcessed++;
+                        processingStats.totalAddresses += result.total_customers || 0;
+                        processingStats.newGeocoded += result.geocoded_count || 0;
+                        processingStats.cached += result.cached_count || 0;
+                        processingStats.errors += result.error_count || 0;
+                        
+                        // Fehlende Adressen für manuelle Bearbeitung sammeln
+                        if (result.failed_addresses && result.failed_addresses.length > 0) {
+                            processingStats.failedAddresses = processingStats.failedAddresses || [];
+                            processingStats.failedAddresses.push(...result.failed_addresses);
+                        }
+                        
+                        // Warnung wenn Datei verarbeitet wurde, aber keine Adressen gefunden
+                        if (result.total_customers === 0) {
+                            console.warn(`[GEO-CACHE] Warnung: ${file.name} wurde verarbeitet, aber keine Adressen gefunden. Mögliche Ursachen: Leere Datei, falsche Spalten, oder alle Zeilen übersprungen.`);
+                        }
+                    } else {
+                        // Datei konnte nicht verarbeitet werden (z.B. falsche Spalten)
+                        console.error(`[GEO-CACHE] Fehler bei ${file.name}:`, result.error);
+                        processingStats.errors++;
+                        // Füge Fehler-Info zu failedAddresses hinzu
+                        processingStats.failedAddresses = processingStats.failedAddresses || [];
+                        processingStats.failedAddresses.push({
+                            name: file.name,
+                            address: `Datei-Fehler: ${result.error || 'Unbekannter Fehler'}`
+                        });
+                    }
+
+                    updateStats();
+                    updateProgress(i + 1, selectedFiles.length, file.name);
+
+                } catch (error) {
+                    console.error(`Fehler beim Verarbeiten von ${file.name}:`, error);
+                    processingStats.errors++;
+                    updateStats();
+                }
+            }
+
+            // Finished
+            document.getElementById('startProcessingBtn').disabled = false;
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            const cacheHitRate = processingStats.totalAddresses > 0 
+                ? Math.round((processingStats.cached / (processingStats.cached + processingStats.newGeocoded + processingStats.errors)) * 100)
+                : 0;
+            
+            let resultsHTML = `
+                <div class="alert alert-success">
+                    <h6><i class="fas fa-check-circle"></i> Verarbeitung abgeschlossen!</h6>
+                    <ul class="mb-0">
+                        <li><strong>${processingStats.filesProcessed}</strong> Dateien verarbeitet</li>
+                        <li><strong>${processingStats.totalAddresses}</strong> Adressen gefunden</li>
+                        <li><strong>${processingStats.cached}</strong> bereits im Cache (${cacheHitRate}% Cache-Hit-Rate)</li>
+                        <li><strong>${processingStats.newGeocoded}</strong> neu geocodiert</li>
+                        <li><strong>${processingStats.errors}</strong> Fehler (Synonyme/Barkunden - manuelle Bearbeitung nötig)</li>
+                    </ul>
+                </div>
+            `;
+            
+            // Zeige fehlende Adressen für manuelle Bearbeitung
+            if (processingStats.failedAddresses && processingStats.failedAddresses.length > 0) {
+                resultsHTML += `
+                    <div class="alert alert-warning mt-3">
+                        <h6><i class="fas fa-exclamation-triangle"></i> Fehlende Adressen für manuelle Bearbeitung (${processingStats.failedAddresses.length})</h6>
+                        <p class="mb-2">Diese Adressen konnten nicht automatisch geocodiert werden (Synonyme/Barkunden). Bitte manuell bearbeiten:</p>
+                        <div style="max-height: 300px; overflow-y: auto;">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Kundenname</th>
+                                        <th>Adresse</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${processingStats.failedAddresses.slice(0, 50).map(addr => `
+                                        <tr>
+                                            <td>${escapeHtml(addr.name || '')}</td>
+                                            <td>${escapeHtml(addr.address || '')}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                            ${processingStats.failedAddresses.length > 50 ? `<p class="text-muted"><small>... und ${processingStats.failedAddresses.length - 50} weitere</small></p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('resultsContent').innerHTML = resultsHTML;
+        }
+
+        function updateProgress(current, total, filename) {
+            const percent = Math.round((current / total) * 100);
+            document.getElementById('progressText').textContent = `${current} / ${total} Dateien`;
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+            document.getElementById('currentFile').innerHTML = `<small><i class="fas fa-file-csv"></i> Aktuell: ${filename}</small>`;
+        }
+
+        function updateStats() {
+            document.getElementById('statsFilesProcessed').textContent = processingStats.filesProcessed;
+            document.getElementById('statsTotalAddresses').textContent = processingStats.totalAddresses;
+            document.getElementById('statsNewGeocoded').textContent = processingStats.newGeocoded;
+            
+            // Cache-Hit-Rate (geschätzt: wenn nicht neu geocodiert, dann im Cache)
+            const cacheHitRate = processingStats.totalAddresses > 0 
+                ? Math.round(((processingStats.totalAddresses - processingStats.newGeocoded) / processingStats.totalAddresses) * 100)
+                : 0;
+            document.getElementById('statsCached').textContent = processingStats.cached;
+            document.getElementById('statsCachePercent').textContent = `${cacheHitRate}%`;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
+

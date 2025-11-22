@@ -27,8 +27,7 @@
     "BZ T16 Anlief",
     "CB Anlief. T16",
     "Anlief. T16",
-    "BUZ T16 Anlief",
-    "BU`Z T16 Anlief"
+    "BUZ T16 Anlief"
   ],
   "allow_tours": [],
   "description": "Touren die nicht in die Routenplanung einbezogen werden sollen",

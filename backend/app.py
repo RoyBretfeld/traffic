@@ -220,6 +220,220 @@ def create_app() -> FastAPI:
         except FileNotFoundError:
             raise HTTPException(status_code=404, detail="Tour-Filter Seite nicht gefunden")
     
+    @app.get("/admin/dataflow.html", response_class=HTMLResponse)
+    async def dataflow_page(request: Request):
+        """Datenfluss-Visualisierung (geschützt)."""
+        # Auth-Check
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            # Redirect zu Login
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/dataflow.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/dataflow.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Datenfluss-Seite nicht gefunden")
+    
+    @app.get("/admin/tour-import.html", response_class=HTMLResponse)
+    async def tour_import_page(request: Request):
+        """Tour-Import & Vorladen Seite (geschützt)."""
+        # Auth-Check
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            # Redirect zu Login
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/tour-import.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/tour-import.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Tour-Import-Seite nicht gefunden")
+    
+    @app.get("/admin/tour-filter.html", response_class=HTMLResponse)
+    async def tour_filter_page(request: Request):
+        """Tour-Filter Seite (geschützt)."""
+        # Auth-Check
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            # Redirect zu Login
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/tour-filter.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/tour-filter.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Tour-Filter-Seite nicht gefunden")
+    
+    @app.get("/admin/system.html", response_class=HTMLResponse)
+    async def admin_system_page(request: Request):
+        """System/Health Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/system.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/system.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="System-Seite nicht gefunden")
+    
+    @app.get("/admin/statistik.html", response_class=HTMLResponse)
+    async def admin_statistik_page(request: Request):
+        """Statistik-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/statistik.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/statistik.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Statistik-Seite nicht gefunden")
+    
+    @app.get("/admin/systemregeln.html", response_class=HTMLResponse)
+    async def admin_systemregeln_page(request: Request):
+        """Systemregeln-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/systemregeln.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/systemregeln.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Systemregeln-Seite nicht gefunden")
+    
+    @app.get("/admin/ki-integration.html", response_class=HTMLResponse)
+    async def admin_ki_integration_page(request: Request):
+        """KI-Integration-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/ki-integration.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/ki-integration.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="KI-Integration-Seite nicht gefunden")
+    
+    @app.get("/admin/ki-improvements.html", response_class=HTMLResponse)
+    async def admin_ki_improvements_page(request: Request):
+        """KI-CodeChecker-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/ki-improvements.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/ki-improvements.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="KI-CodeChecker-Seite nicht gefunden")
+    
+    @app.get("/admin/ki-kosten.html", response_class=HTMLResponse)
+    async def admin_ki_kosten_page(request: Request):
+        """KI-Kosten-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/ki-kosten.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/ki-kosten.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="KI-Kosten-Seite nicht gefunden")
+    
+    @app.get("/admin/ki-verhalten.html", response_class=HTMLResponse)
+    async def admin_ki_verhalten_page(request: Request):
+        """KI-Verhalten-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/ki-verhalten.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/ki-verhalten.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="KI-Verhalten-Seite nicht gefunden")
+    
+    @app.get("/admin/db-verwaltung.html", response_class=HTMLResponse)
+    async def admin_db_verwaltung_page(request: Request):
+        """DB-Verwaltung-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/db-verwaltung.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/db-verwaltung.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="DB-Verwaltung-Seite nicht gefunden")
+    
+    @app.get("/admin/tourplan-uebersicht.html", response_class=HTMLResponse)
+    async def admin_tourplan_uebersicht_page(request: Request):
+        """Tourplan-Übersicht-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/tourplan-uebersicht.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/tourplan-uebersicht.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Tourplan-Übersicht-Seite nicht gefunden")
+
+    @app.get("/admin/geo-cache-vorverarbeitung.html", response_class=HTMLResponse)
+    async def admin_geo_cache_vorverarbeitung_page(request: Request):
+        """Geo-Cache Vorverarbeitung-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/geo-cache-vorverarbeitung.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/geo-cache-vorverarbeitung.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Geo-Cache Vorverarbeitung-Seite nicht gefunden")
+    
     @app.get("/admin.html", response_class=HTMLResponse)
     async def admin_page(request: Request):
         """Admin-Hauptseite (geschützt)."""

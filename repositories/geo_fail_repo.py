@@ -184,11 +184,28 @@ def cleanup_expired():
     """
     Bereinigt abgelaufene Einträge aus dem Fail-Cache.
     Diese Funktion wird automatisch aufgerufen, damit abgelaufene Adressen wieder versucht werden.
+    
+    WICHTIG: Verwendet next_attempt (INTEGER = Unix-Timestamp) statt until (TIMESTAMP).
     """
     _ensure_schema()
     try:
+        import time
+        current_timestamp = int(time.time())
+        
         with ENGINE.begin() as c:
-            result = c.execute(text("DELETE FROM geo_fail WHERE until IS NOT NULL AND until <= CURRENT_TIMESTAMP"))
+            # Prüfe ob Spalte next_attempt existiert
+            from db.schema import column_exists
+            if column_exists(c, "geo_fail", "next_attempt"):
+                # Verwende next_attempt (INTEGER = Unix-Timestamp)
+                result = c.execute(text("DELETE FROM geo_fail WHERE next_attempt IS NOT NULL AND next_attempt <= :now"), {"now": current_timestamp})
+            else:
+                # Fallback: Versuche until (falls vorhanden)
+                try:
+                    result = c.execute(text("DELETE FROM geo_fail WHERE until IS NOT NULL AND until <= CURRENT_TIMESTAMP"))
+                except Exception:
+                    # Weder next_attempt noch until vorhanden - nichts zu bereinigen
+                    return 0
+            
             count = result.rowcount
             if count > 0:
                 print(f"[FAIL-CACHE] {count} abgelaufene Einträge bereinigt - werden erneut versucht")

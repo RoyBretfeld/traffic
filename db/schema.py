@@ -230,3 +230,59 @@ def ensure_schema():
     except Exception as e:
         import logging
         logging.getLogger(__name__).warning(f"[SCHEMA] Error-Learning-Schema fehlgeschlagen: {e}")
+    
+    # Migration 020: Tour-Import & Vorladen
+    try:
+        from pathlib import Path
+        migration_path = Path(__file__).parent.parent / "db" / "migrations" / "020_import_batches.sql"
+        if migration_path.exists():
+            migration_sql = migration_path.read_text(encoding="utf-8")
+            with ENGINE.begin() as conn:
+                # Prüfe ob Migration bereits angewendet wurde
+                try:
+                    conn.exec_driver_sql("CREATE TABLE IF NOT EXISTS __schema_migrations (name TEXT PRIMARY KEY, applied_at TEXT)")
+                    cur = conn.exec_driver_sql("SELECT 1 FROM __schema_migrations WHERE name=?", ("020_import_batches",))
+                    if cur.fetchone():
+                        # Migration bereits angewendet
+                        pass
+                    else:
+                        # Wende Migration an
+                        # WICHTIG: Führe Statements in der richtigen Reihenfolge aus
+                        # (erst Tabellen, dann Indizes)
+                        statements = migration_sql.split(';')
+                        for stmt in statements:
+                            stmt = stmt.strip()
+                            if stmt and not stmt.startswith('--') and not stmt.upper().startswith('PRAGMA'):
+                                try:
+                                    conn.exec_driver_sql(stmt)
+                                except Exception as stmt_error:
+                                    # Wenn Index-Erstellung fehlschlägt (Tabelle existiert nicht), 
+                                    # versuche es später nochmal nach Tabellen-Erstellung
+                                    if 'INDEX' in stmt.upper() and 'no such table' in str(stmt_error).lower():
+                                        import logging
+                                        logging.getLogger(__name__).warning(f"Migration 020: Index-Erstellung fehlgeschlagen (Tabelle existiert noch nicht): {stmt[:50]}... - wird später erneut versucht")
+                                    else:
+                                        raise  # Andere Fehler weiterwerfen
+                        
+                        # PRAGMA-Statements separat ausführen (nach Tabellen-Erstellung)
+                        for stmt in statements:
+                            stmt = stmt.strip()
+                            if stmt and stmt.upper().startswith('PRAGMA'):
+                                try:
+                                    conn.exec_driver_sql(stmt)
+                                except Exception:
+                                    pass  # PRAGMA-Fehler sind nicht kritisch
+                        
+                        # Markiere Migration als angewendet
+                        conn.exec_driver_sql(
+                            "INSERT INTO __schema_migrations(name, applied_at) VALUES(?, datetime('now'))",
+                            ("020_import_batches",)
+                        )
+                        import logging
+                        logging.getLogger(__name__).info("Migration 020 angewendet: Tour-Import & Vorladen")
+                except Exception as e:
+                    import logging
+                    logging.getLogger(__name__).warning(f"Migration 020 fehlgeschlagen: {e}")
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).debug(f"Migration 020 nicht verfügbar: {e}")

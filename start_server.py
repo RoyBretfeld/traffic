@@ -68,6 +68,7 @@ if config_env_path.exists():
     import app_startup  # noqa: F401
 
 # DB-Integrity-Check (Phase 1: Quick-Check beim Start)
+# WICHTIG: Nur Warnung, kein Abbruch - Server startet trotzdem
 from backend.config import cfg
 if cfg("app:feature_flags:strict_health_checks", False):
     try:
@@ -77,12 +78,15 @@ if cfg("app:feature_flags:strict_health_checks", False):
             result = conn.execute(text("PRAGMA quick_check"))
             check_result = result.scalar()
             if check_result != "ok":
-                print(f"[WARNUNG] DB-Integrity-Check fehlgeschlagen: {check_result}")
-                print("   Die Datenbank koennte beschaedigt sein. Bitte Backup pruefen.")
+                logger.warning(f"DB-Integrity-Check fehlgeschlagen: {check_result}")
+                logger.warning("   Die Datenbank koennte beschaedigt sein. Bitte Backup pruefen.")
+                logger.warning("   Server startet trotzdem - verwenden Sie scripts/repair_db.py zur Reparatur.")
             else:
-                print("[OK] DB-Integrity-Check: OK")
+                logger.info("[OK] DB-Integrity-Check: OK")
     except Exception as e:
-        print(f"[WARNUNG] DB-Integrity-Check konnte nicht ausgefuehrt werden: {e}")
+        # Kein Abbruch - nur Warnung loggen
+        logger.warning(f"DB-Integrity-Check konnte nicht ausgefuehrt werden: {e}")
+        logger.warning("   Server startet trotzdem - dies ist normal, wenn die DB noch nicht existiert.")
 
 import uvicorn
 import logging

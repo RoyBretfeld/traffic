@@ -150,3 +150,101 @@ async def export_json(period: str = "monthly", count: int = 12):
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 
+
+@router.get("/costs")
+async def costs_stats(from_date: str = None, to_date: str = None, group: str = "day"):
+    """
+    Liefert Kosten-Statistiken für einen Zeitraum.
+    
+    Args:
+        from_date: Start-Datum (YYYY-MM-DD), optional (Standard: heute - 30 Tage)
+        to_date: End-Datum (YYYY-MM-DD), optional (Standard: heute)
+        group: "day" oder "week" (Standard: "day")
+    
+    Returns:
+        JSON mit Kosten-KPIs pro Tag/Woche
+    """
+    stats_enabled = cfg("app:feature_flags:stats_box_enabled", True)
+    if not stats_enabled:
+        return JSONResponse({"error": "Stats-Box deaktiviert"}, status_code=503)
+    
+    try:
+        from datetime import datetime, timedelta
+        
+        if not to_date:
+            to_date = datetime.now().strftime("%Y-%m-%d")
+        if not from_date:
+            from_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+        
+        # Parse dates
+        from_dt = datetime.strptime(from_date, "%Y-%m-%d")
+        to_dt = datetime.strptime(to_date, "%Y-%m-%d")
+        
+        if group == "week":
+            # Wochenweise Aggregation
+            stats = []
+            current = from_dt
+            while current <= to_dt:
+                week_start = current
+                week_end = min(current + timedelta(days=6), to_dt)
+                
+                # Aggregiere Daten für diese Woche
+                week_days = get_daily_stats((week_end - week_start).days + 1)
+                week_days = [d for d in week_days if week_start.strftime("%Y-%m-%d") <= d["date"] <= week_end.strftime("%Y-%m-%d")]
+                
+                if week_days:
+                    total_tours = sum(d.get("tours", 0) for d in week_days)
+                    total_stops = sum(d.get("stops", 0) for d in week_days)
+                    total_km = sum(d.get("km", 0) for d in week_days)
+                    total_cost = sum(d.get("total_cost", 0) for d in week_days)
+                    total_time = sum(d.get("total_time_min", 0) for d in week_days)
+                    
+                    stats.append({
+                        "date": week_start.strftime("%Y-%m-%d"),
+                        "week": f"{week_start.strftime('%Y-W%V')}",
+                        "total_tours": total_tours,
+                        "total_stops": total_stops,
+                        "total_distance_km": round(total_km, 2),
+                        "total_time_min": round(total_time, 1),
+                        "total_cost": round(total_cost, 2),
+                        "avg_stops_per_tour": round(total_stops / total_tours, 2) if total_tours > 0 else 0.0,
+                        "avg_distance_per_tour_km": round(total_km / total_tours, 2) if total_tours > 0 else 0.0,
+                        "avg_cost_per_tour": round(total_cost / total_tours, 2) if total_tours > 0 else 0.0,
+                        "avg_cost_per_stop": round(total_cost / total_stops, 2) if total_stops > 0 else 0.0,
+                        "avg_cost_per_km": round(total_cost / total_km, 2) if total_km > 0 else 0.0
+                    })
+                
+                current = week_end + timedelta(days=1)
+            
+            return JSONResponse(stats)
+        else:
+            # Tagesweise Aggregation
+            days = (to_dt - from_dt).days + 1
+            stats = get_daily_stats(days)
+            
+            # Filtere nach Datumsbereich
+            filtered_stats = [
+                s for s in stats 
+                if from_date <= s["date"] <= to_date
+            ]
+            
+            # Formatiere für API-Response
+            result = []
+            for s in filtered_stats:
+                result.append({
+                    "date": s["date"],
+                    "total_tours": s.get("tours", 0),
+                    "total_stops": s.get("stops", 0),
+                    "total_distance_km": s.get("km", 0.0),
+                    "total_time_min": s.get("total_time_min", 0.0),
+                    "total_cost": s.get("total_cost", 0.0),
+                    "avg_stops_per_tour": s.get("avg_stops_per_tour", 0.0),
+                    "avg_distance_per_tour_km": s.get("avg_distance_per_tour_km", 0.0),
+                    "avg_cost_per_tour": s.get("avg_cost_per_tour", 0.0),
+                    "avg_cost_per_stop": s.get("avg_cost_per_stop", 0.0),
+                    "avg_cost_per_km": s.get("avg_cost_per_km", 0.0)
+                })
+            
+            return JSONResponse(result)
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=500)

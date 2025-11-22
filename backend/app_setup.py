@@ -145,6 +145,7 @@ def setup_routers(app: FastAPI) -> None:
     from backend.routes.engine_api import router as engine_api_router
     from backend.routes.coordinate_verify_api import router as coordinate_verify_router
     from backend.routes.stats_api import router as stats_api_router
+    from backend.routes.tour_import_api import router as tour_import_router
     from backend.routes.live_traffic_api import router as live_traffic_api_router
     from backend.routes.ki_improvements_api import router as ki_improvements_api_router
     from backend.routes.code_checker_api import router as code_checker_api_router
@@ -163,6 +164,7 @@ def setup_routers(app: FastAPI) -> None:
     from backend.routes.ki_activity_api import router as ki_activity_api_router
     from backend.routes.ki_effectiveness_api import router as ki_effectiveness_api_router
     from backend.routes.tour_filter_api import router as tour_filter_api_router
+    from backend.routes.tourplan_api import router as tourplan_api_router
     
     # Registriere alle Router
     routers = [
@@ -207,6 +209,7 @@ def setup_routers(app: FastAPI) -> None:
         health_routes,
         debug_health_router,
         system_rules_api_router,
+        tourplan_api_router,  # Muss VOR db_management_api_router sein (gleicher Pfad)
         db_management_api_router,
         db_schema_api_router,
         error_logger_api_router,
@@ -214,7 +217,8 @@ def setup_routers(app: FastAPI) -> None:
         ki_learning_api_router,
         ki_activity_api_router,
         ki_effectiveness_api_router,
-        tour_filter_api_router
+        tour_filter_api_router,
+        tour_import_router
     ]
     
     for router in routers:
@@ -341,6 +345,15 @@ def setup_startup_handlers(app: FastAPI) -> None:
             log.info("[STARTUP] ✅ Error-Pattern-Aggregator gestartet")
         except Exception as e:
             log.warning(f"[STARTUP] ⚠️ Error-Pattern-Aggregator konnte nicht gestartet werden: {e}")
+        
+        # Tour-Vectorizer starten (Hintergrund-Job)
+        try:
+            from backend.services.tour_vectorizer import run_vectorizer_loop
+            # Starte Vectorizer-Loop im Hintergrund (alle 30 Sekunden)
+            asyncio.create_task(run_vectorizer_loop(interval_seconds=30))
+            log.info("[STARTUP] ✅ Tour-Vectorizer gestartet")
+        except Exception as e:
+            log.warning(f"[STARTUP] ⚠️ Tour-Vectorizer konnte nicht gestartet werden: {e}")
         
         # Lessons-Updater starten (Hintergrund-Job, täglich)
         try:

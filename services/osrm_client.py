@@ -216,10 +216,16 @@ class OSRMClient:
     ) -> Optional[Dict[Tuple[int, int], Dict[str, float]]]:
         """
         Berechnet Distanz-Matrix mit OSRM Table API.
+        
+        Args:
+            coords: Liste von Koordinaten im Format [(lat, lon), (lat, lon), ...]
+                   (WICHTIG: Anderes Format als get_route!)
         """
         if len(coords) < 2:
             return None
         
+        # WICHTIG: get_distance_matrix erhält coords als [(lat, lon), ...]
+        # Daher: Iteriere als (lat, lon) und formatiere als "lon,lat"
         coord_string = ";".join(f"{lon},{lat}" for lat, lon in coords)
         
         base = self.base_url.rstrip("/")
@@ -328,7 +334,16 @@ class OSRMClient:
         except Exception as e:
             self.logger.debug(f"Cache-Check fehlgeschlagen: {e}")
         
-        coord_string = ";".join(f"{lon},{lat}" for lat, lon in coords)
+        # WICHTIG: OSRM erwartet Format "lon,lat;lon,lat;..."
+        # coords ist bereits im Format [(lon, lat), (lon, lat), ...] (siehe build_route_details)
+        # ABER: Die Schleife iteriert als (lat, lon), daher müssen wir die Reihenfolge korrigieren
+        coord_string = ";".join(f"{lon},{lat}" for lon, lat in coords)
+        
+        # DEBUG: Logge erste 3 Koordinaten für Fehleranalyse
+        if len(coords) > 0:
+            first_coords = coords[:3]
+            self.logger.debug(f"OSRM Request: {len(coords)} Koordinaten, erste 3: {first_coords}")
+            self.logger.debug(f"OSRM URL-String (erste 50 Zeichen): {coord_string[:50]}...")
         
         base = self.base_url.rstrip("/")
         url = f"{base}/route/v1/{self.profile}/{coord_string}"
@@ -380,15 +395,34 @@ class OSRMClient:
             data = response.json()
             routes = data.get("routes", [])
             if not routes:
+                self.logger.warning("OSRM: Keine Routes in Response")
                 return None
             
             route = routes[0]
+            distance_m = route.get("distance", 0)
+            duration_s = route.get("duration", 0)
+            geometry = route.get("geometry", "")
+            
+            # WICHTIG: Prüfe ob Route gültig ist (distance > 0)
+            if distance_m == 0 or duration_s == 0:
+                self.logger.warning(f"OSRM: Route hat distance_m={distance_m}, duration_s={duration_s} - möglicherweise ungültig")
+                self.logger.warning(f"OSRM: Geometry-Länge: {len(geometry) if geometry else 0} Zeichen")
+                self.logger.warning(f"OSRM: Request-URL war: {url}")
+                self.logger.warning(f"OSRM: Koordinaten waren: {coords[:3]}... (erste 3)")
+                # Prüfe ob Geometry leer oder ungültig ist
+                if not geometry or len(geometry.strip()) == 0:
+                    self.logger.warning("OSRM: Geometry ist leer - Route ist ungültig")
+                    return None
+                # WICHTIG: Auch wenn Geometry vorhanden ist, aber distance=0, ist die Route ungültig
+                self.logger.warning("OSRM: Route hat distance=0 aber Geometry vorhanden - möglicherweise alle Koordinaten identisch")
+                return None  # ❌ Nicht cachen, Fallback verwenden
+            
             result = {
-                "geometry": route.get("geometry"),
-                "distance_m": route.get("distance"),
-                "duration_s": route.get("duration"),
-                "distance_km": route.get("distance", 0) / 1000.0,
-                "duration_min": route.get("duration", 0) / 60.0,
+                "geometry": geometry,
+                "distance_m": distance_m,
+                "duration_s": duration_s,
+                "distance_km": distance_m / 1000.0,
+                "duration_min": duration_s / 60.0,
                 "cached": False
             }
             
@@ -445,8 +479,13 @@ class OSRMClient:
     def _test_health_for_url(self, base_url: str, test_coords: List[Tuple[float, float]]) -> OSRMHealth:
         """
         Testet einen spezifischen OSRM-URL und gibt OSRMHealth zurück.
+        
+        Args:
+            test_coords: Liste von Koordinaten im Format [(lat, lon), (lat, lon), ...]
         """
         try:
+            # WICHTIG: test_coords ist im Format [(lat, lon), ...] (siehe check_health)
+            # Daher: Iteriere als (lat, lon) und formatiere als "lon,lat"
             coord_string = ";".join(f"{lon},{lat}" for lat, lon in test_coords)
             base = base_url.rstrip("/")
             

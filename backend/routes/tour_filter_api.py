@@ -105,6 +105,158 @@ async def get_tour_filters():
         raise HTTPException(status_code=500, detail=f"Fehler beim Abrufen der Filter: {e}")
 
 
+@router.get("/api/tour-filter/allowed")
+async def get_allowed_tours():
+    """
+    Gibt alle erlaubten Touren zurück (alle, die nicht in der Ignore-Liste stehen).
+    Holt Touren aus der Datenbank.
+    """
+    try:
+        from db.core import ENGINE
+        from sqlalchemy import text
+        
+        # Lade Ignore-Liste
+        filter_data = load_filter_data()
+        ignore_patterns = filter_data.get("ignore_tours", [])
+        
+        # Hole alle Touren aus der DB
+        allowed_tours = []
+        try:
+            with ENGINE.connect() as conn:
+                # Prüfe ob touren-Tabelle existiert
+                result = conn.execute(text("""
+                    SELECT name FROM sqlite_master 
+                    WHERE type='table' AND name='touren'
+                """))
+                if not result.fetchone():
+                    # Keine Touren-Tabelle vorhanden
+                    return JSONResponse({
+                        "success": True,
+                        "allowed_tours": [],
+                        "message": "Keine Touren-Tabelle in der Datenbank gefunden"
+                    })
+                
+                # Hole alle Tour-IDs (NICHT DISTINCT, da wir Duplikate zusammenführen wollen)
+                result = conn.execute(text("""
+                    SELECT tour_id, kunden_ids
+                    FROM touren 
+                    WHERE tour_id IS NOT NULL AND tour_id != ''
+                    ORDER BY tour_id
+                """))
+                
+                all_tours = []
+                for row in result.fetchall():
+                    tour_id = row[0]
+                    kunden_ids_str = row[1] or '[]'
+                    
+                    # Zähle Stops (kunden_ids ist JSON-Array)
+                    import json
+                    try:
+                        kunden_ids = json.loads(kunden_ids_str) if kunden_ids_str else []
+                        stop_count = len(kunden_ids) if isinstance(kunden_ids, list) else 0
+                    except (json.JSONDecodeError, TypeError):
+                        # Fallback: Zähle Kommas
+                        stop_count = kunden_ids_str.count(',') + 1 if kunden_ids_str and kunden_ids_str != '[]' else 0
+                    
+                    all_tours.append({
+                        'tour_id': tour_id,
+                        'stop_count': stop_count
+                    })
+                
+                # Normalisiere Tour-IDs (entferne "Uhr Tour", "Uhr BAR", "Uhr", etc. für Gruppierung)
+                import re
+                def normalize_tour_id(tour_id: str) -> str:
+                    """Normalisiert Tour-ID für Duplikat-Erkennung"""
+                    # Entferne "Uhr Tour", "Uhr BAR", "Tour", "BAR", "Uhr" am Ende
+                    # Reihenfolge wichtig: zuerst "Uhr Tour", dann "Uhr", dann "Tour"
+                    normalized = tour_id
+                    normalized = re.sub(r'\s*Uhr\s*(Tour|BAR)$', '', normalized, flags=re.IGNORECASE).strip()
+                    normalized = re.sub(r'\s*Uhr$', '', normalized, flags=re.IGNORECASE).strip()
+                    normalized = re.sub(r'\s*(Tour|BAR)$', '', normalized, flags=re.IGNORECASE).strip()
+                    # Entferne führende/abschließende Leerzeichen
+                    return normalized.strip()
+                
+                # Sammle Touren mit normalisierten IDs (für Duplikat-Erkennung)
+                tour_map = {}  # normalized_id -> tour_id (bevorzuge kürzere Version)
+                
+                # Importiere Filter-Logik aus workflow_api
+                from backend.routes.workflow_api import should_process_tour_admin
+                
+                # Filtere gegen Ignore-Liste und ungültige Touren
+                for tour_info in all_tours:
+                    tour_id = tour_info['tour_id']
+                    stop_count = tour_info['stop_count']
+                    
+                    # Ignoriere "Unknown" und Touren ohne Stops
+                    if tour_id.upper() == 'UNKNOWN' or stop_count == 0:
+                        continue
+                    
+                    # Verwende die gleiche Filter-Logik wie im Workflow (Admin-Kontext)
+                    # should_process_tour_admin prüft Ignore-Liste und Allow-Liste korrekt
+                    allow_list = filter_data.get("allow_tours", [])
+                    if should_process_tour_admin(tour_id, ignore_patterns, allow_list):
+                        # Normalisiere für Duplikat-Erkennung
+                        normalized = normalize_tour_id(tour_id)
+                        
+                        # Wenn bereits vorhanden, behalte bessere Version
+                        if normalized in tour_map:
+                            existing = tour_map[normalized]
+                            # Finde bestehende Tour-Info
+                            existing_info = next((t for t in all_tours if t['tour_id'] == existing), None)
+                            existing_stops = existing_info['stop_count'] if existing_info else 0
+                            
+                            # Entscheidung: Bevorzuge Version mit mehr Stops, bei Gleichstand kürzere ID
+                            should_replace = False
+                            if stop_count > existing_stops:
+                                should_replace = True
+                            elif stop_count == existing_stops:
+                                # Gleiche Anzahl Stops: Bevorzuge kürzere Tour-ID
+                                if len(tour_id) < len(existing):
+                                    should_replace = True
+                                elif len(tour_id) == len(existing) and tour_id < existing:
+                                    should_replace = True
+                            
+                            if should_replace:
+                                tour_map[normalized] = tour_id
+                                logger.debug(f"[TOUR-FILTER] Ersetze '{existing}' durch '{tour_id}' (normalisiert: {normalized})")
+                        else:
+                            tour_map[normalized] = tour_id
+                
+                # Debug: Logge Duplikate
+                logger.debug(f"[TOUR-FILTER] Normalisierte Touren: {len(tour_map)} eindeutige, {len(all_tours)} total")
+                
+                # Konvertiere Map zu Liste (sortiert)
+                allowed_tours = sorted(tour_map.values())
+                
+                # Finale Duplikat-Prüfung: Entferne Duplikate basierend auf normalisierten IDs
+                final_allowed = []
+                seen_normalized = set()
+                for tid in allowed_tours:
+                    normalized = normalize_tour_id(tid)
+                    if normalized not in seen_normalized:
+                        final_allowed.append(tid)
+                        seen_normalized.add(normalized)
+                    else:
+                        logger.debug(f"[TOUR-FILTER] Entferne Duplikat: {tid} (normalisiert: {normalized})")
+                
+                allowed_tours = sorted(final_allowed)
+        
+        except Exception as db_error:
+            logger.warning(f"Fehler beim Abrufen der Touren aus DB: {db_error}")
+            # Fallback: Leere Liste
+            allowed_tours = []
+        
+        return JSONResponse({
+            "success": True,
+            "allowed_tours": allowed_tours,
+            "total_count": len(allowed_tours),
+            "ignore_patterns": ignore_patterns
+        })
+    except Exception as e:
+        logger.error(f"Fehler beim Abrufen der erlaubten Touren: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Fehler beim Abrufen der erlaubten Touren: {e}")
+
+
 @router.put("/api/tour-filter")
 async def update_tour_filters(update: TourFilterUpdate):
     """

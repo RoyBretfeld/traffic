@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenfluss & System-Architektur - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .dataflow-container {
+            width: 100%;
+            overflow-x: auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .dataflow-svg {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            background: white;
+            border-radius: 4px;
+        }
+        .phase-group:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+        .db-symbol:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        .stat-card {
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .admin-nav-item i {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Hauptseite</a>
+                <a class="nav-link active" href="/admin/dataflow.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <h1><i class="fas fa-project-diagram"></i> Datenfluss & System-Architektur</h1>
+        
+        <!-- Admin-Navigation -->
+        <nav class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin/system.html" class="admin-nav-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
+                </a>
+                <a href="/admin/statistik.html" class="admin-nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item">
+                    <i class="fas fa-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                    <i class="fas fa-list-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item active">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+            </div>
+        </nav>
+        
+        <p class="text-muted">
+            Visualisierung des End-to-End-Datenflusses von der Tourenplanung bis zur KI-Auswertung.
+            <a href="/docs/DATENFLUSS_ROUTEN_DB_KI_LEARNING.md" target="_blank" class="ms-2">
+                <i class="fas fa-external-link-alt"></i> Vollständige Dokumentation
+            </a>
+        </p>
+
+        <!-- Datenfluss-Diagramm -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-sitemap"></i> Datenfluss-Diagramm</h5>
+            </div>
+            <div class="card-body">
+                <div id="dataflow-diagram" class="dataflow-container">
+                    <div class="text-center p-4">
+                        <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+                        <p class="text-muted mt-2">Lade Datenfluss-Visualisierung...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status-Übersicht -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Datenbank-Statistiken</h5>
+            </div>
+            <div class="card-body">
+                <div class="row" id="dataflow-stats">
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center border-primary stat-card">
+                            <div class="card-body">
+                                <h4 class="text-primary" id="stat-tours">-</h4>
+                                <small>Touren in DB</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center border-success stat-card">
+                            <div class="card-body">
+                                <h4 class="text-success" id="stat-stops">-</h4>
+                                <small>Tour-Stops</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center border-warning stat-card">
+                            <div class="card-body">
+                                <h4 class="text-warning" id="stat-events">-</h4>
+                                <small>Tour-Events</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center border-info stat-card">
+                            <div class="card-body">
+                                <h4 class="text-info" id="stat-embeddings">-</h4>
+                                <small>KI-Embeddings</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary" onclick="loadDataflowStats()">
+                        <i class="fas fa-sync"></i> Aktualisieren
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phasen-Erklärung -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0"><i class="fas fa-upload"></i> Phase 1: Planung & CSV-Import</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="small mb-0">
+                            <li>CSV-Tourenplan wird hochgeladen</li>
+                            <li>Backend parst CSV und erstellt Tour-Struktur</li>
+                            <li>OSRM + Optimierung berechnen Routen</li>
+                            <li>Geocoding für fehlende Adressen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0"><i class="fas fa-truck"></i> Phase 2: Tour-Durchführung</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="small mb-0">
+                            <li>Fahrer startet Tour (Status: in_progress)</li>
+                            <li>Ist-Ankunftszeiten werden erfasst</li>
+                            <li>Manuelle Änderungen möglich</li>
+                            <li>Events (Stau, Umleitungen) werden geloggt</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h6 class="mb-0"><i class="fas fa-database"></i> Phase 3: DB-Speicherung</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="small mb-0">
+                            <li>Tour-Status → completed/aborted</li>
+                            <li>Kennzahlen werden berechnet</li>
+                            <li>Daten werden in DB gespeichert:
+                                <ul>
+                                    <li><code>tours</code> - Tour-Übersicht</li>
+                                    <li><code>tour_stops</code> - Einzelne Stopps</li>
+                                    <li><code>tour_events</code> - Ereignis-Log</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0"><i class="fas fa-robot"></i> Phase 4: KI-Auswertung</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="small mb-0">
+                            <li>Hintergrundprozess erzeugt Embeddings</li>
+                            <li>Vektoren werden in <code>route_embeddings</code> gespeichert</li>
+                            <li>KI nutzt Historie für Vorschläge</li>
+                            <li>Ähnlichkeitssuche für neue Touren</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function renderDataflowDiagram() {
+            const container = document.getElementById('dataflow-diagram');
+            if (!container) {
+                console.warn('[DATAFLOW] Container dataflow-diagram nicht gefunden');
+                return;
+            }
+            
+            console.log('[DATAFLOW] Rendere Diagramm...');
+            
+            // SVG-basierte Flowchart-Visualisierung
+            const svg = `
+                <svg viewBox="0 0 1200 600" class="dataflow-svg">
+                    <!-- Hintergrund -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <polygon points="0 0, 10 3, 0 6" fill="#007bff" />
+                        </marker>
+                        <linearGradient id="phase1" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#e3f2fd;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#bbdefb;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="phase2" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fff3e0;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ffe0b2;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="phase3" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#f3e5f5;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#e1bee7;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="phase4" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#e8f5e9;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#c8e6c9;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Phase 1: Planung & CSV-Import -->
+                    <g class="phase-group" data-phase="1">
+                        <rect x="50" y="50" width="200" height="120" rx="10" fill="url(#phase1)" stroke="#1976d2" stroke-width="2"/>
+                        <text x="150" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#1565c0">Phase 1</text>
+                        <text x="150" y="110" text-anchor="middle" font-size="12" fill="#1565c0">CSV-Import</text>
+                        <text x="150" y="130" text-anchor="middle" font-size="12" fill="#1565c0">Parsing &amp; Geocoding</text>
+                        <text x="150" y="150" text-anchor="middle" font-size="12" fill="#1565c0">OSRM-Routing</text>
+                    </g>
+                    
+                    <!-- Pfeil 1 -->
+                    <line x1="250" y1="110" x2="300" y2="110" stroke="#007bff" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Phase 2: Durchführung -->
+                    <g class="phase-group" data-phase="2">
+                        <rect x="300" y="50" width="200" height="120" rx="10" fill="url(#phase2)" stroke="#f57c00" stroke-width="2"/>
+                        <text x="400" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#e65100">Phase 2</text>
+                        <text x="400" y="110" text-anchor="middle" font-size="12" fill="#e65100">Tour-Durchführung</text>
+                        <text x="400" y="130" text-anchor="middle" font-size="12" fill="#e65100">Ist-Daten sammeln</text>
+                        <text x="400" y="150" text-anchor="middle" font-size="12" fill="#e65100">Events &amp; Abweichungen</text>
+                    </g>
+                    
+                    <!-- Pfeil 2 -->
+                    <line x1="500" y1="110" x2="550" y2="110" stroke="#007bff" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Phase 3: Speicherung -->
+                    <g class="phase-group" data-phase="3">
+                        <rect x="550" y="50" width="200" height="120" rx="10" fill="url(#phase3)" stroke="#7b1fa2" stroke-width="2"/>
+                        <text x="650" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#6a1b9a">Phase 3</text>
+                        <text x="650" y="110" text-anchor="middle" font-size="12" fill="#6a1b9a">DB-Speicherung</text>
+                        <text x="650" y="130" text-anchor="middle" font-size="12" fill="#6a1b9a">tours, tour_stops</text>
+                        <text x="650" y="150" text-anchor="middle" font-size="12" fill="#6a1b9a">tour_events</text>
+                    </g>
+                    
+                    <!-- Pfeil 3 (nach unten) -->
+                    <line x1="650" y1="170" x2="650" y2="250" stroke="#007bff" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Phase 4: KI-Auswertung -->
+                    <g class="phase-group" data-phase="4">
+                        <rect x="550" y="250" width="200" height="120" rx="10" fill="url(#phase4)" stroke="#388e3c" stroke-width="2"/>
+                        <text x="650" y="290" text-anchor="middle" font-size="16" font-weight="bold" fill="#2e7d32">Phase 4</text>
+                        <text x="650" y="310" text-anchor="middle" font-size="12" fill="#2e7d32">KI-Auswertung</text>
+                        <text x="650" y="330" text-anchor="middle" font-size="12" fill="#2e7d32">Embedding-Erzeugung</text>
+                        <text x="650" y="350" text-anchor="middle" font-size="12" fill="#2e7d32">Vektor-DB</text>
+                    </g>
+                    
+                    <!-- Pfeil 4 (zurück nach links) -->
+                    <line x1="550" y1="310" x2="300" y2="310" stroke="#007bff" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <text x="425" y="300" text-anchor="middle" font-size="10" fill="#666">KI-Vorschläge</text>
+                    
+                    <!-- Datenbank-Symbole -->
+                    <g class="db-symbol" data-db="tours">
+                        <ellipse cx="700" cy="200" rx="40" ry="20" fill="#fff" stroke="#7b1fa2" stroke-width="2"/>
+                        <text x="700" y="205" text-anchor="middle" font-size="10" fill="#7b1fa2">tours</text>
+                    </g>
+                    <g class="db-symbol" data-db="stops">
+                        <ellipse cx="750" cy="200" rx="40" ry="20" fill="#fff" stroke="#7b1fa2" stroke-width="2"/>
+                        <text x="750" y="205" text-anchor="middle" font-size="10" fill="#7b1fa2">stops</text>
+                    </g>
+                    <g class="db-symbol" data-db="events">
+                        <ellipse cx="800" cy="200" rx="40" ry="20" fill="#fff" stroke="#7b1fa2" stroke-width="2"/>
+                        <text x="800" y="205" text-anchor="middle" font-size="10" fill="#7b1fa2">events</text>
+                    </g>
+                    <g class="db-symbol" data-db="embeddings">
+                        <ellipse cx="700" cy="400" rx="50" ry="20" fill="#fff" stroke="#388e3c" stroke-width="2"/>
+                        <text x="700" y="405" text-anchor="middle" font-size="10" fill="#388e3c">embeddings</text>
+                    </g>
+                    
+                    <!-- Verbindungslinien zu DB -->
+                    <line x1="650" y1="120" x2="700" y2="200" stroke="#9c27b0" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="650" y1="120" x2="750" y2="200" stroke="#9c27b0" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="650" y1="120" x2="800" y2="200" stroke="#9c27b0" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="650" y1="310" x2="700" y2="400" stroke="#4caf50" stroke-width="2" stroke-dasharray="5,5"/>
+                </svg>
+            `;
+            
+            try {
+                container.innerHTML = svg;
+                console.log('[DATAFLOW] Diagramm gerendert');
+            } catch (e) {
+                console.error('[DATAFLOW] Fehler beim Rendern:', e);
+                container.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Visualisierung konnte nicht geladen werden:</strong> ${escapeHtml(e.message)}
+                    </div>
+                `;
+            }
+        }
+        
+        async function loadDataflowStats() {
+            try {
+                const response = await fetch('/api/db/stats');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('stat-tours').textContent = data.tours_count || 0;
+                    document.getElementById('stat-stops').textContent = data.stops_count || 0;
+                    document.getElementById('stat-events').textContent = data.events_count || 0;
+                    document.getElementById('stat-embeddings').textContent = data.embeddings_count || 0;
+                } else {
+                    document.getElementById('stat-tours').textContent = '-';
+                    document.getElementById('stat-stops').textContent = '-';
+                    document.getElementById('stat-events').textContent = '-';
+                    document.getElementById('stat-embeddings').textContent = '-';
+                }
+            } catch (e) {
+                console.warn('Fehler beim Laden der Datenfluss-Statistiken:', e);
+                document.getElementById('stat-tours').textContent = '-';
+                document.getElementById('stat-stops').textContent = '-';
+                document.getElementById('stat-events').textContent = '-';
+                document.getElementById('stat-embeddings').textContent = '-';
+            }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDataflowDiagram();
+            loadDataflowStats();
+        });
+    </script>
+</body>
+</html>
+

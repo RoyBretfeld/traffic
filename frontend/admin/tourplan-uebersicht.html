@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourplan-Übersicht - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .admin-nav-item i {
+            font-size: 1.1em;
+        }
+        .kpi-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+        }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .kpi-card h4 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .tour-table {
+            font-size: 0.9rem;
+        }
+        .tour-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Hauptseite</a>
+                <a class="nav-link active" href="/admin/tourplan-uebersicht.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <h1><i class="fas fa-list-alt"></i> Tourplan-Übersicht</h1>
+        
+        <!-- Admin-Navigation -->
+        <nav class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin/system.html" class="admin-nav-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
+                </a>
+                <a href="/admin/statistik.html" class="admin-nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item">
+                    <i class="fas fa-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item active">
+                    <i class="fas fa-list-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Tourplan-Auswahl -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-calendar-alt"></i> Tourplan auswählen</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="tourplan-select" class="form-label">Tourplan auswählen:</label>
+                        <select id="tourplan-select" class="form-select" onchange="loadTourplanOverview()">
+                            <option value="">-- Bitte Tourplan auswählen --</option>
+                        </select>
+                        <small class="text-muted" id="tourplan-filename"></small>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end gap-2">
+                        <button class="btn btn-primary" onclick="loadTourplanList()">
+                            <i class="fas fa-sync"></i> Liste aktualisieren
+                        </button>
+                        <button class="btn btn-success" onclick="document.getElementById('file-upload').click()">
+                            <i class="fas fa-upload"></i> Tourplan hochladen
+                        </button>
+                        <input type="file" id="file-upload" accept=".csv" style="display: none;" onchange="uploadTourplan(event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gesamt-KPIs -->
+        <div id="kpi-section" style="display: none;">
+            <div class="row mb-4">
+                <div class="col-md-2 mb-3">
+                    <div class="card text-center border-primary kpi-card">
+                        <div class="card-body">
+                            <h4 class="text-primary mb-1" id="kpi-tours">-</h4>
+                            <small class="text-muted">Touren</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card text-center border-success kpi-card">
+                        <div class="card-body">
+                            <h4 class="text-success mb-1" id="kpi-stops">-</h4>
+                            <small class="text-muted">Stops</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card text-center border-info kpi-card">
+                        <div class="card-body">
+                            <h4 class="text-info mb-1" id="kpi-km">-</h4>
+                            <small class="text-muted">Kilometer</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card text-center border-warning kpi-card">
+                        <div class="card-body">
+                            <h4 class="text-warning mb-1" id="kpi-time">-</h4>
+                            <small class="text-muted">Zeit (Min)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card text-center border-danger kpi-card">
+                        <div class="card-body">
+                            <h4 class="text-danger mb-1" id="kpi-cost">-</h4>
+                            <small class="text-muted">Kosten</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card text-center border-secondary kpi-card">
+                        <div class="card-body">
+                            <h4 class="text-secondary mb-1" id="kpi-avg-stops">-</h4>
+                            <small class="text-muted">Ø Stops/Tour</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Touren-Liste -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Touren-Liste</h5>
+                    <button class="btn btn-sm btn-primary" onclick="loadTourplanTours()">
+                        <i class="fas fa-sync"></i> Aktualisieren
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="tours-loading" class="text-center py-4">
+                        <i class="fas fa-spinner fa-spin"></i> Lade Touren...
+                    </div>
+                    <div id="tours-content" style="display: none;">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover tour-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tour-ID</th>
+                                        <th>Stops</th>
+                                        <th>Distanz (km)</th>
+                                        <th>Zeit (Min)</th>
+                                        <th>Kosten (€)</th>
+                                        <th>Fahrer</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tours-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="tours-error" class="alert alert-danger" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Keine Daten -->
+        <div id="no-data" class="alert alert-info" style="display: none;">
+            <i class="fas fa-info-circle"></i> Bitte wählen Sie einen Tourplan aus.
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Formatierung für Währung
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('de-DE', { 
+                style: 'currency', 
+                currency: 'EUR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(value || 0);
+        }
+        
+        // Formatierung für Datum
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('de-DE', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit' 
+            });
+        }
+        
+        // Tourplan-Liste laden
+        async function loadTourplanList() {
+            try {
+                const response = await fetch('/api/tourplan/list');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                const select = document.getElementById('tourplan-select');
+                
+                // Leere Optionen (außer der ersten)
+                while (select.children.length > 1) {
+                    select.removeChild(select.lastChild);
+                }
+                
+                if (data.success && data.tourplans && data.tourplans.length > 0) {
+                    data.tourplans.forEach(tp => {
+                        // Überspringe Einträge ohne datum
+                        if (!tp.datum || tp.datum === 'undefined') {
+                            console.warn('Tourplan ohne Datum gefunden:', tp);
+                            return;
+                        }
+                        
+                        const option = document.createElement('option');
+                        option.value = tp.datum;
+                        // Zeige Dateinamen wenn vorhanden, sonst nur Datum
+                        let label = formatDate(tp.datum);
+                        if (tp.filename) {
+                            label += ` - ${tp.filename}`;
+                        }
+                        if (tp.tour_count > 0 || tp.total_stops > 0) {
+                            label += ` (${tp.tour_count || 0} Touren, ${tp.total_stops || 0} Stops)`;
+                        }
+                        option.textContent = label;
+                        option.dataset.filename = tp.filename || '';
+                        option.dataset.hasFile = tp.has_file ? 'true' : 'false';
+                        option.dataset.hasDbData = tp.has_db_data ? 'true' : 'false';
+                        select.appendChild(option);
+                    });
+                } else {
+                    const option = document.createElement('option');
+                    option.textContent = 'Keine Tourpläne gefunden';
+                    option.disabled = true;
+                    select.appendChild(option);
+                }
+                
+                // Zeige Verzeichnis-Info
+                if (data.tourplaene_dir) {
+                    console.log('Tourplaene-Verzeichnis:', data.tourplaene_dir, 'Existiert:', data.tourplaene_dir_exists);
+                }
+            } catch (e) {
+                console.error('Fehler beim Laden der Tourplan-Liste:', e);
+                alert(`Fehler beim Laden der Tourplan-Liste: ${e.message}`);
+            }
+        }
+        
+        // Tourplan-Übersicht laden
+        async function loadTourplanOverview() {
+            const selectElement = document.getElementById('tourplan-select');
+            const datum = selectElement ? selectElement.value : '';
+            const kpiSection = document.getElementById('kpi-section');
+            const noData = document.getElementById('no-data');
+            const filenameEl = document.getElementById('tourplan-filename');
+            
+            if (!datum || datum === '' || datum === 'undefined') {
+                kpiSection.style.display = 'none';
+                noData.style.display = 'block';
+                if (filenameEl) filenameEl.textContent = '';
+                return;
+            }
+            
+            // Zeige Dateinamen
+            const select = document.getElementById('tourplan-select');
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption && selectedOption.dataset.filename) {
+                filenameEl.textContent = `Datei: ${selectedOption.dataset.filename}`;
+                if (selectedOption.dataset.hasFile === 'false') {
+                    filenameEl.textContent += ' (nicht im Verzeichnis)';
+                    filenameEl.className = 'text-muted text-warning';
+                } else {
+                    filenameEl.className = 'text-muted';
+                }
+            } else {
+                filenameEl.textContent = '';
+            }
+            
+            noData.style.display = 'none';
+            kpiSection.style.display = 'block';
+            
+            try {
+                // Validiere Datum-Format (YYYY-MM-DD)
+                if (!datum.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                    throw new Error(`Ungültiges Datum-Format: ${datum}. Erwartet: YYYY-MM-DD`);
+                }
+                
+                const response = await fetch(`/api/tourplan/overview?datum=${encodeURIComponent(datum)}`);
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Unbekannter Fehler');
+                }
+                
+                // KPI-Boxen aktualisieren
+                document.getElementById('kpi-tours').textContent = data.tour_count || 0;
+                document.getElementById('kpi-stops').textContent = data.total_stops || 0;
+                document.getElementById('kpi-km').textContent = (data.total_km || 0).toFixed(1) + ' km';
+                document.getElementById('kpi-time').textContent = (data.total_time_min || 0) + ' min';
+                document.getElementById('kpi-cost').textContent = formatCurrency(data.total_cost || 0);
+                document.getElementById('kpi-avg-stops').textContent = (data.avg_stops_per_tour || 0).toFixed(1);
+                
+                // Touren-Liste laden
+                loadTourplanTours();
+            } catch (e) {
+                console.error('Fehler beim Laden der Tourplan-Übersicht:', e);
+                alert(`Fehler beim Laden der Tourplan-Übersicht: ${e.message}`);
+            }
+        }
+        
+        // Touren-Liste laden
+        async function loadTourplanTours() {
+            const datum = document.getElementById('tourplan-select').value;
+            const loadingEl = document.getElementById('tours-loading');
+            const contentEl = document.getElementById('tours-content');
+            const errorEl = document.getElementById('tours-error');
+            const tableBody = document.getElementById('tours-table-body');
+            
+            if (!datum) {
+                return;
+            }
+            
+            loadingEl.style.display = 'block';
+            contentEl.style.display = 'none';
+            errorEl.style.display = 'none';
+            
+            try {
+                const response = await fetch(`/api/tourplan/tours?datum=${datum}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Unbekannter Fehler');
+                }
+                
+                // Tabelle befüllen
+                tableBody.innerHTML = '';
+                
+                if (data.tours && data.tours.length > 0) {
+                    data.tours.forEach(tour => {
+                        const row = document.createElement('tr');
+                        
+                        // Status-Badge
+                        let statusBadge = '';
+                        if (tour.has_distance && tour.has_time) {
+                            statusBadge = '<span class="badge bg-success">Vollständig</span>';
+                        } else if (tour.has_distance || tour.has_time) {
+                            statusBadge = '<span class="badge bg-warning">Teilweise</span>';
+                        } else {
+                            statusBadge = '<span class="badge bg-secondary">Keine Daten</span>';
+                        }
+                        
+                        row.innerHTML = `
+                            <td>${tour.tour_id || '-'}</td>
+                            <td>${tour.stops_count || 0}</td>
+                            <td>${tour.distance_km !== null ? tour.distance_km.toFixed(2) : '-'}</td>
+                            <td>${tour.time_min !== null ? tour.time_min : '-'}</td>
+                            <td>${tour.cost !== null ? formatCurrency(tour.cost) : '-'}</td>
+                            <td>${tour.fahrer || '-'}</td>
+                            <td>${statusBadge}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Keine Touren gefunden</td></tr>';
+                }
+                
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+            } catch (e) {
+                loadingEl.style.display = 'none';
+                errorEl.textContent = `Fehler beim Laden der Touren: ${e.message}`;
+                errorEl.style.display = 'block';
+            }
+        }
+        
+        // Tourplan hochladen
+        async function uploadTourplan(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                alert('Nur CSV-Dateien sind erlaubt!');
+                event.target.value = '';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/api/tourplan/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(`Tourplan '${data.filename}' erfolgreich hochgeladen!`);
+                    // Liste neu laden
+                    await loadTourplanList();
+                    // Datei-Input zurücksetzen
+                    event.target.value = '';
+                } else {
+                    alert(`Fehler beim Hochladen: ${data.error}`);
+                }
+            } catch (e) {
+                console.error('Fehler beim Hochladen:', e);
+                alert(`Fehler beim Hochladen: ${e.message}`);
+            }
+        }
+        
+        // Beim Laden: Tourplan-Liste laden
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTourplanList();
+        });
+    </script>
+</body>
+</html>
+

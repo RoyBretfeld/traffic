@@ -14,6 +14,70 @@
         .health-error { border-left: 4px solid #dc3545; }
         .health-warning { border-left: 4px solid #ffc107; }
         .latency { font-size: 0.9em; color: #6c757d; }
+        .stat-kpi-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+        }
+        .stat-kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .stat-kpi-card h4 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .admin-nav-item i {
+            font-size: 1.1em;
+        }
     </style>
 </head>
 <body>
@@ -49,67 +113,151 @@
     <div class="container-fluid mt-4">
         <h1><i class="fas fa-cog"></i> Admin-Bereich</h1>
         
-        <!-- Tabs -->
-        <ul class="nav nav-tabs mt-3" id="adminTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="health-tab" data-bs-toggle="tab" data-bs-target="#health" type="button" role="tab">
-                    <i class="fas fa-heartbeat"></i> System/Health
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="testboard-tab" data-bs-toggle="tab" data-bs-target="#testboard" type="button" role="tab">
-                    <i class="fas fa-vial"></i> Testboard (Stub)
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="ai-test-tab" data-bs-toggle="tab" data-bs-target="#ai-test" type="button" role="tab">
-                    <i class="fas fa-robot"></i> AI-Test (Stub)
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats" type="button" role="tab">
-                    <i class="fas fa-chart-bar"></i> Statistik
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="rules-tab" data-bs-toggle="tab" data-bs-target="#rules" type="button" role="tab">
-                    <i class="fas fa-book"></i> Systemregeln
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="ki-integration-tab" data-bs-toggle="tab" data-bs-target="#ki-integration" type="button" role="tab">
-                    <i class="fas fa-robot"></i> KI-Integration
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="db-tab" data-bs-toggle="tab" data-bs-target="#db" type="button" role="tab">
-                    <i class="fas fa-database"></i> DB-Verwaltung
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="/admin/tour-filter" role="tab">
-                    <i class="fas fa-filter"></i> Tour-Filter
+        <!-- Admin-Navigation -->
+        <nav class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin/system.html" class="admin-nav-item active">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
                 </a>
-            </li>
-        </ul>
+                <a href="/admin/statistik.html" class="admin-nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item">
+                    <i class="fas fa-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item">
+                    <i class="fas fa-fill-drip"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                    <i class="fas fa-list-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Übersichtsseite -->
+        <div class="alert alert-info mb-4">
+            <i class="fas fa-info-circle"></i> 
+            <strong>Hinweis:</strong> Diese Seite ist eine Übersichtsseite. Für detaillierte Funktionen nutzen Sie bitte die Navigation oben.
+        </div>
 
-        <div class="tab-content mt-3" id="adminTabContent">
-            <!-- Health Tab -->
-            <div class="tab-pane fade show active" id="health" role="tabpanel">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card health-card" id="health-app-card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="fas fa-server"></i> App Health</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="health-app-content">Lade...</div>
-                            </div>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <a href="/admin/system.html" class="card text-decoration-none text-dark h-100">
+                    <div class="card-body text-center">
+                        <div class="text-success mb-2">
+                            <i class="fas fa-heartbeat fa-3x"></i>
                         </div>
+                        <h5 class="card-title">System/Health</h5>
+                        <p class="card-text text-muted">System-Status und Health-Checks</p>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card health-card" id="health-osrm-card">
-                            <div class="card-header">
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/statistik.html" class="card text-decoration-none text-dark h-100">
+                    <div class="card-body text-center">
+                        <div class="text-primary mb-2">
+                            <i class="fas fa-chart-bar fa-3x"></i>
+                        </div>
+                        <h5 class="card-title">Statistik</h5>
+                        <p class="card-text text-muted">KPIs, Charts und Export</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/systemregeln.html" class="card text-decoration-none text-dark h-100">
+                    <div class="card-body text-center">
+                        <div class="text-info mb-2">
+                            <i class="fas fa-book fa-3x"></i>
+                        </div>
+                        <h5 class="card-title">Systemregeln</h5>
+                        <p class="card-text text-muted">System-Konfigurationsregeln</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/ki-integration.html" class="card text-decoration-none text-dark h-100">
+                    <div class="card-body text-center">
+                        <div class="text-warning mb-2">
+                            <i class="fas fa-robot fa-3x"></i>
+                        </div>
+                        <h5 class="card-title">KI-Integration</h5>
+                        <p class="card-text text-muted">Kostenkontrolle & Verhalten</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/db-verwaltung.html" class="card text-decoration-none text-dark h-100">
+                    <div class="card-body text-center">
+                        <div class="text-secondary mb-2">
+                            <i class="fas fa-database fa-3x"></i>
+                        </div>
+                        <h5 class="card-title">DB-Verwaltung</h5>
+                        <p class="card-text text-muted">Datenbank-Informationen</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/tour-filter.html" class="card text-decoration-none text-dark h-100">
+                    <div class="card-body text-center">
+                        <div class="text-danger mb-2">
+                            <i class="fas fa-filter fa-3x"></i>
+                        </div>
+                        <h5 class="card-title">Tour-Filter</h5>
+                        <p class="card-text text-muted">Ignore/Allow-Listen</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/tour-import.html" class="card text-decoration-none text-dark h-100">
+                    <div class="card-body text-center">
+                        <div class="text-success mb-2">
+                            <i class="fas fa-upload fa-3x"></i>
+                        </div>
+                        <h5 class="card-title">Tour-Import</h5>
+                        <p class="card-text text-muted">Upload & Geocoding</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/dataflow.html" class="card text-decoration-none text-dark h-100">
+                    <div class="card-body text-center">
+                        <div class="text-primary mb-2">
+                            <i class="fas fa-project-diagram fa-3x"></i>
+                        </div>
+                        <h5 class="card-title">Datenfluss</h5>
+                        <p class="card-text text-muted">System-Architektur</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Übersichtsseite mit Karten -->
+        <!-- Alle Tab-Panes wurden entfernt, da die Funktionen jetzt auf separaten Seiten sind -->
                                 <h5 class="mb-0"><i class="fas fa-route"></i> OSRM Health</h5>
                             </div>
                             <div class="card-body">
@@ -137,63 +285,49 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Testboard Tab -->
-            <div class="tab-pane fade" id="testboard" role="tabpanel">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-vial"></i> Testboard</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <h6>API-Endpoints testen</h6>
-                            <div class="btn-group-vertical w-100" role="group">
-                                <button class="btn btn-outline-primary mb-2" onclick="testEndpoint('/health/app', 'health-app-result')">
-                                    <i class="fas fa-server"></i> Health App
-                                </button>
-                                <button class="btn btn-outline-primary mb-2" onclick="testEndpoint('/health/osrm', 'health-osrm-result')">
-                                    <i class="fas fa-route"></i> Health OSRM
-                                </button>
-                                <button class="btn btn-outline-primary mb-2" onclick="testEndpoint('/health/db', 'health-db-result')">
-                                    <i class="fas fa-database"></i> Health DB
-                                </button>
-                                <button class="btn btn-outline-primary mb-2" onclick="testEndpoint('/api/stats/overview', 'stats-result')">
-                                    <i class="fas fa-chart-bar"></i> Stats Overview
-                                </button>
+                    <div class="col-md-6">
+                        <div class="card health-card" id="health-workflow-card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-cogs"></i> Workflow Engine</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="health-workflow-content">Lade...</div>
                             </div>
                         </div>
-                        <div id="testboard-results">
-                            <h6>Test-Ergebnisse:</h6>
-                            <div id="health-app-result" class="test-result mb-2"></div>
-                            <div id="health-osrm-result" class="test-result mb-2"></div>
-                            <div id="health-db-result" class="test-result mb-2"></div>
-                            <div id="stats-result" class="test-result mb-2"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card health-card" id="health-llm-card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-robot"></i> LLM Integration</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="health-llm-content">Lade...</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- AI-Test Tab -->
-            <div class="tab-pane fade" id="ai-test" role="tabpanel">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-robot"></i> AI-Test</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> AI-Test-Funktionalität wird in Phase 2 implementiert.
+                    <div class="col-md-6">
+                        <div class="card health-card" id="health-system-rules-card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-book"></i> Systemregeln</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="health-system-rules-content">Lade...</div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <h6>LLM-Status</h6>
-                            <div id="llm-status" class="alert alert-secondary">
-                                <i class="fas fa-spinner fa-spin"></i> Lade LLM-Status...
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card health-card" id="health-combined-card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-check-circle"></i> Gesamt-Status</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="health-combined-content">Lade...</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Systemregeln Tab -->
             <div class="tab-pane fade" id="rules" role="tabpanel">
@@ -201,6 +335,92 @@
                     <div class="col-12">
                         <h3><i class="fas fa-book"></i> Systemregeln für Routen-Aufsplittung</h3>
                         <p class="text-muted">Diese Regeln werden vom LLM und der Optimierungs-Engine verwendet.</p>
+                        
+                        <!-- Editier-Formular für Systemregeln (oben) -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-edit"></i> Systemregeln bearbeiten</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="system-rules-form">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit-time-budget-without-return" class="form-label">
+                                                Zeitbudget ohne Rückfahrt (Minuten)
+                                            </label>
+                                            <input type="number" class="form-control" id="edit-time-budget-without-return" 
+                                                   min="1" max="120" step="1" required>
+                                            <small class="form-text text-muted">Hauptregel: Tour muss ≤ diesem Wert sein (ohne Rückfahrt)</small>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit-time-budget-with-return" class="form-label">
+                                                Zeitbudget mit Rückfahrt (Minuten)
+                                            </label>
+                                            <input type="number" class="form-control" id="edit-time-budget-with-return" 
+                                                   min="1" max="180" step="1" required>
+                                            <small class="form-text text-muted">Gesamtzeit inkl. Rückfahrt</small>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit-service-time-per-stop" class="form-label">
+                                                Service-Zeit pro Stop (Minuten)
+                                            </label>
+                                            <input type="number" class="form-control" id="edit-service-time-per-stop" 
+                                                   min="0.5" max="10" step="0.1" required>
+                                            <small class="form-text text-muted">Standard-Service-Zeit pro Kunde</small>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit-speed-kmh" class="form-label">
+                                                Durchschnittsgeschwindigkeit (km/h)
+                                            </label>
+                                            <input type="number" class="form-control" id="edit-speed-kmh" 
+                                                   min="10" max="100" step="1" required>
+                                            <small class="form-text text-muted">Für Stadtverkehr</small>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit-safety-factor" class="form-label">
+                                                Sicherheitsfaktor (Stadtverkehr)
+                                            </label>
+                                            <input type="number" class="form-control" id="edit-safety-factor" 
+                                                   min="1.0" max="2.0" step="0.1" required>
+                                            <small class="form-text text-muted">
+                                                <strong>Was ist das?</strong><br>
+                                                Der Sicherheitsfaktor kompensiert die Differenz zwischen Luftlinie (Haversine) und tatsächlicher Straßenentfernung im Stadtverkehr.<br>
+                                                <strong>Standard: 1.3</strong> bedeutet: Luftlinie × 1.3 = geschätzte Straßenentfernung<br>
+                                                <strong>Beispiel:</strong> 10 km Luftlinie → 13 km Straßenentfernung (bei Faktor 1.3)<br>
+                                                <strong>Warum?</strong> In Städten sind Straßen länger als die direkte Luftlinie (Einbahnstraßen, Umwege, Verkehrsführung).<br>
+                                                <strong>Anpassung:</strong> Höhere Werte (z.B. 1.5) für komplexe Stadtgebiete, niedrigere (z.B. 1.1) für einfache Routen.
+                                            </small>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="edit-depot-lat" class="form-label">
+                                                Depot Latitude
+                                            </label>
+                                            <input type="number" class="form-control" id="edit-depot-lat" 
+                                                   min="-90" max="90" step="0.0000001" required>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="edit-depot-lon" class="form-label">
+                                                Depot Longitude
+                                            </label>
+                                            <input type="number" class="form-control" id="edit-depot-lon" 
+                                                   min="-180" max="180" step="0.0000001" required>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> Speichern
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" onclick="resetSystemRulesForm()">
+                                            <i class="fas fa-undo"></i> Zurücksetzen
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="resetToDefaults()">
+                                            <i class="fas fa-redo"></i> Standard-Werte
+                                        </button>
+                                    </div>
+                                    <div id="rules-save-message" class="mt-3"></div>
+                                </form>
+                            </div>
+                        </div>
                         
                         <div class="card mb-3">
                             <div class="card-header bg-danger text-white">
@@ -340,6 +560,95 @@
                         </div>
                         
                         <div class="card mb-3">
+                            <div class="card-header bg-dark text-white">
+                                <h5 class="mb-0"><i class="fas fa-route"></i> 5.1. Routenoptimierung (Nearest-Neighbor + 2-Opt)</h5>
+                            </div>
+                            <div class="card-body">
+                                <h6>Optimierungsverfahren</h6>
+                                <p>Die Routenoptimierung erfolgt in zwei Schritten:</p>
+                                <ol>
+                                    <li><strong>Nearest-Neighbor (Nächster-Nachbar):</strong> Erstellt eine initiale Route</li>
+                                    <li><strong>2-Opt-Verbesserung:</strong> Optimiert die Route durch Entfernung von Kreuzungen</li>
+                                </ol>
+                                
+                                <h6 class="mt-3">1. Nearest-Neighbor-Verfahren</h6>
+                                <ul>
+                                    <li><strong>Funktionsweise:</strong>
+                                        <ul>
+                                            <li>Startet beim ersten Stopp (oder Depot)</li>
+                                            <li>Wählt immer den <strong>nächsten noch nicht besuchten Stopp</strong> (Luftlinie)</li>
+                                            <li>Wiederholt bis alle Stopps besucht sind</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Vorteile:</strong>
+                                        <ul>
+                                            <li>Sehr schnell (O(n²) Komplexität)</li>
+                                            <li>Deterministisch (immer gleiche Route bei gleichen Eingaben)</li>
+                                            <li>Keine externe Abhängigkeiten</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Nachteile:</strong>
+                                        <ul>
+                                            <li>Kann zu suboptimalen Routen führen (z.B. weit weg fahren, dann zurück)</li>
+                                            <li>Berücksichtigt nicht die Gesamtroute</li>
+                                            <li>Kann Kreuzungen in der Route erzeugen</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Warum verwenden wir es?</strong>
+                                        <ul>
+                                            <li>Als <strong>Fallback</strong>, wenn LLM-Optimierung nicht verfügbar ist</li>
+                                            <li>Als <strong>Startpunkt</strong> für die 2-Opt-Verbesserung</li>
+                                            <li>Garantiert immer eine gültige Route (auch bei vielen Stopps)</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                
+                                <h6 class="mt-3">2. 2-Opt-Verbesserung</h6>
+                                <ul>
+                                    <li><strong>Funktionsweise:</strong>
+                                        <ul>
+                                            <li>Testet alle möglichen Segment-Umkehrungen in der Route</li>
+                                            <li>Wenn eine Umkehrung die Gesamtdistanz verkürzt → übernimmt sie</li>
+                                            <li>Wiederholt bis keine Verbesserung mehr möglich (max. 10 Iterationen)</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Beispiel:</strong>
+                                        <ul>
+                                            <li><strong>Vorher:</strong> A → B → C → D → E (mit Kreuzung zwischen B-C und D-E)</li>
+                                            <li><strong>2-Opt Swap:</strong> Umkehrung von C-D → A → B → D → C → E</li>
+                                            <li><strong>Ergebnis:</strong> Kürzere Route ohne Kreuzung</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Vorteile:</strong>
+                                        <ul>
+                                            <li>Entfernt Kreuzungen aus der Route</li>
+                                            <li>Reduziert die Gesamtdistanz deutlich (oft 10-30% Verbesserung)</li>
+                                            <li>Verhindert unnötige Umwege durch die Stadt</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Warum kombinieren wir beide?</strong>
+                                        <ul>
+                                            <li><strong>Nearest-Neighbor:</strong> Schnelle initiale Route</li>
+                                            <li><strong>2-Opt:</strong> Verbessert die Route und entfernt Kreuzungen</li>
+                                            <li><strong>Ergebnis:</strong> Gute Balance zwischen Geschwindigkeit und Qualität</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                
+                                <h6 class="mt-3">Priorität der Optimierungsmethoden</h6>
+                                <ol>
+                                    <li><strong>LLM-Optimierung</strong> (wenn aktiviert und Confidence > 0.7)</li>
+                                    <li><strong>Nearest-Neighbor + 2-Opt</strong> (Fallback, wenn LLM nicht verfügbar)</li>
+                                    <li><strong>Original-Reihenfolge</strong> (nur bei kritischen Fehlern)</li>
+                                </ol>
+                                
+                                <div class="alert alert-info mt-3">
+                                    <i class="fas fa-info-circle"></i> <strong>Hinweis:</strong> Die 2-Opt-Verbesserung wurde am 2025-11-19 hinzugefügt, um das Problem von unnötigen Umwegen durch die Stadt zu beheben.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-3">
                             <div class="card-header bg-secondary text-white">
                                 <h5 class="mb-0"><i class="fas fa-compass"></i> 6. Sektor-Planung (W-Touren)</h5>
                             </div>
@@ -362,92 +671,6 @@
                             </div>
                         </div>
                         
-                        <!-- Editier-Formular für Systemregeln -->
-                        <div class="card mt-4">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="mb-0"><i class="fas fa-edit"></i> Systemregeln bearbeiten</h5>
-                            </div>
-                            <div class="card-body">
-                                <form id="system-rules-form">
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="edit-time-budget-without-return" class="form-label">
-                                                Zeitbudget ohne Rückfahrt (Minuten)
-                                            </label>
-                                            <input type="number" class="form-control" id="edit-time-budget-without-return" 
-                                                   min="1" max="120" step="1" required>
-                                            <small class="form-text text-muted">Hauptregel: Tour muss ≤ diesem Wert sein (ohne Rückfahrt)</small>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="edit-time-budget-with-return" class="form-label">
-                                                Zeitbudget mit Rückfahrt (Minuten)
-                                            </label>
-                                            <input type="number" class="form-control" id="edit-time-budget-with-return" 
-                                                   min="1" max="180" step="1" required>
-                                            <small class="form-text text-muted">Gesamtzeit inkl. Rückfahrt</small>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="edit-service-time-per-stop" class="form-label">
-                                                Service-Zeit pro Stop (Minuten)
-                                            </label>
-                                            <input type="number" class="form-control" id="edit-service-time-per-stop" 
-                                                   min="0.5" max="10" step="0.1" required>
-                                            <small class="form-text text-muted">Standard-Service-Zeit pro Kunde</small>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="edit-speed-kmh" class="form-label">
-                                                Durchschnittsgeschwindigkeit (km/h)
-                                            </label>
-                                            <input type="number" class="form-control" id="edit-speed-kmh" 
-                                                   min="10" max="100" step="1" required>
-                                            <small class="form-text text-muted">Für Stadtverkehr</small>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="edit-safety-factor" class="form-label">
-                                                Sicherheitsfaktor (Stadtverkehr)
-                                            </label>
-                                            <input type="number" class="form-control" id="edit-safety-factor" 
-                                                   min="1.0" max="2.0" step="0.1" required>
-                                            <small class="form-text text-muted">
-                                                <strong>Was ist das?</strong><br>
-                                                Der Sicherheitsfaktor kompensiert die Differenz zwischen Luftlinie (Haversine) und tatsächlicher Straßenentfernung im Stadtverkehr.<br>
-                                                <strong>Standard: 1.3</strong> bedeutet: Luftlinie × 1.3 = geschätzte Straßenentfernung<br>
-                                                <strong>Beispiel:</strong> 10 km Luftlinie → 13 km Straßenentfernung (bei Faktor 1.3)<br>
-                                                <strong>Warum?</strong> In Städten sind Straßen länger als die direkte Luftlinie (Einbahnstraßen, Umwege, Verkehrsführung).<br>
-                                                <strong>Anpassung:</strong> Höhere Werte (z.B. 1.5) für komplexe Stadtgebiete, niedrigere (z.B. 1.1) für einfache Routen.
-                                            </small>
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <label for="edit-depot-lat" class="form-label">
-                                                Depot Latitude
-                                            </label>
-                                            <input type="number" class="form-control" id="edit-depot-lat" 
-                                                   min="-90" max="90" step="0.0000001" required>
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <label for="edit-depot-lon" class="form-label">
-                                                Depot Longitude
-                                            </label>
-                                            <input type="number" class="form-control" id="edit-depot-lon" 
-                                                   min="-180" max="180" step="0.0000001" required>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex gap-2">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save"></i> Speichern
-                                        </button>
-                                        <button type="button" class="btn btn-secondary" onclick="resetSystemRulesForm()">
-                                            <i class="fas fa-undo"></i> Zurücksetzen
-                                        </button>
-                                        <button type="button" class="btn btn-outline-secondary" onclick="resetToDefaults()">
-                                            <i class="fas fa-redo"></i> Standard-Werte
-                                        </button>
-                                    </div>
-                                    <div id="rules-save-message" class="mt-3"></div>
-                                </form>
-                            </div>
-                        </div>
-                        
                         <div class="alert alert-info mt-3">
                             <h6><i class="fas fa-info-circle"></i> Hinweis</h6>
                             <p>Diese Regeln werden automatisch vom System angewendet. Änderungen werden in <code>config/system_rules.json</code> gespeichert.</p>
@@ -457,65 +680,37 @@
                 </div>
             </div>
             
-            <!-- KI-Integration Tab -->
+            <!-- KI-Integration Tab (vereinfacht) -->
             <div class="tab-pane fade" id="ki-integration" role="tabpanel">
-                <h3 class="mb-4"><i class="fas fa-robot"></i> KI-Integration</h3>
-                
-                <!-- Sektion 1: Aktive KI-Integrationen -->
-                <div class="card mb-4">
+                <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="fas fa-plug"></i> Aktive KI-Integrationen</h5>
+                        <h5 class="mb-0"><i class="fas fa-robot"></i> KI-Integration</h5>
                     </div>
                     <div class="card-body">
-                        <div class="row" id="ki-integrations-list">
-                            <div class="col-12 text-center">
-                                <i class="fas fa-spinner fa-spin"></i> Lade Integrationen...
+                        <p class="text-muted mb-4">Detaillierte KI-Analysen und Verwaltung finden Sie auf den spezialisierten Seiten:</p>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <a href="/admin/ki-improvements" class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3" style="min-height: 120px;">
+                                    <i class="fas fa-code fa-2x mb-2"></i>
+                                    <strong>KI-CodeChecker</strong>
+                                    <small class="text-muted mt-1">Code-Verbesserungen</small>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/ki-kosten" class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3" style="min-height: 120px;">
+                                    <i class="fas fa-coins fa-2x mb-2"></i>
+                                    <strong>KI-Kosten</strong>
+                                    <small class="text-muted mt-1">Kosten & Modelle</small>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/ki-verhalten" class="btn btn-outline-info w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3" style="min-height: 120px;">
+                                    <i class="fas fa-chart-bar fa-2x mb-2"></i>
+                                    <strong>KI-Verhalten</strong>
+                                    <small class="text-muted mt-1">Performance & Effektivität</small>
+                                </a>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Sektion 2: Konfiguration -->
-                <div class="card mb-4">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="fas fa-cog"></i> Konfiguration</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="ki-config">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h6><i class="fas fa-brain"></i> KI-Modell</h6>
-                                    <p class="text-muted" id="ki-current-model">Lade...</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <h6><i class="fas fa-chart-line"></i> Limits</h6>
-                                    <p class="text-muted" id="ki-limits">Lade...</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sektion 3: Quick-Links -->
-                <div class="card mb-4">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="fas fa-external-link-alt"></i> Detaillierte Seiten</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex gap-2 flex-wrap">
-                            <a href="/admin/ki-improvements" class="btn btn-outline-primary">
-                                <i class="fas fa-code"></i> KI-CodeChecker
-                            </a>
-                            <a href="/admin/ki-kosten" class="btn btn-outline-warning">
-                                <i class="fas fa-coins"></i> KI-Kosten & Modelle
-                            </a>
-                            <a href="/admin/ki-verhalten" class="btn btn-outline-info">
-                                <i class="fas fa-chart-bar"></i> KI-Verhalten
-                            </a>
-                        </div>
-                        <p class="text-muted mt-3 mb-0">
-                            <small>Weitere Details und Analysen finden Sie auf den spezialisierten Seiten.</small>
-                        </p>
                     </div>
                 </div>
             </div>
@@ -523,6 +718,58 @@
 
             <!-- Statistik Tab -->
             <div class="tab-pane fade" id="stats" role="tabpanel">
+                <!-- KPI-Boxen -->
+                <div class="row mb-4" id="stats-kpi-boxes">
+                    <div class="col-md-2 mb-3">
+                        <div class="card text-center border-primary stat-kpi-card">
+                            <div class="card-body">
+                                <h4 class="text-primary mb-1" id="kpi-tours">-</h4>
+                                <small class="text-muted">Touren gesamt</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card text-center border-success stat-kpi-card">
+                            <div class="card-body">
+                                <h4 class="text-success mb-1" id="kpi-km">-</h4>
+                                <small class="text-muted">Kilometer</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card text-center border-info stat-kpi-card">
+                            <div class="card-body">
+                                <h4 class="text-info mb-1" id="kpi-avg-stops">-</h4>
+                                <small class="text-muted">Ø Stops/Tour</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card text-center border-warning stat-kpi-card">
+                            <div class="card-body">
+                                <h4 class="text-warning mb-1" id="kpi-avg-delay">-</h4>
+                                <small class="text-muted">Ø Verspätung</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card text-center border-secondary stat-kpi-card">
+                            <div class="card-body">
+                                <h4 class="text-secondary mb-1" id="kpi-avg-score">-</h4>
+                                <small class="text-muted">Ø Success-Score</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card text-center border-danger stat-kpi-card">
+                            <div class="card-body">
+                                <h4 class="text-danger mb-1" id="kpi-abort-rate">-</h4>
+                                <small class="text-muted">Abbruchquote</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Statistik-Details</h5>
@@ -567,11 +814,19 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header"><h6 class="mb-0">Kilometer</h6></div>
+                                        <div class="card-header"><h6 class="mb-0">Kilometer geplant vs. real</h6></div>
                                         <div class="card-body">
                                             <canvas id="chart-km"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header"><h6 class="mb-0">Verspätung & Score</h6></div>
+                                        <div class="card-body">
+                                            <canvas id="chart-delay-score"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -589,8 +844,70 @@
                     </div>
                 </div>
             <!-- DB-Verwaltung Tab -->
-            <div class="tab-pane fade" id="db" role="tabpanel">
+            <div class="tab-pane fade" id="db" role="tabpanel" aria-labelledby="db-tab">
                 <h3 class="mb-4"><i class="fas fa-database"></i> Datenbank-Verwaltung</h3>
+                
+                <!-- Datenfluss-Visualisierung -->
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-project-diagram"></i> Datenfluss & System-Architektur</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">
+                            Visualisierung des End-to-End-Datenflusses von der Tourenplanung bis zur KI-Auswertung.
+                            <a href="/admin/dataflow.html" class="btn btn-sm btn-primary ms-2">
+                                <i class="fas fa-project-diagram"></i> Vollständige Visualisierung öffnen
+                            </a>
+                            <a href="/docs/DATENFLUSS_ROUTEN_DB_KI_LEARNING.md" target="_blank" class="ms-2">
+                                <i class="fas fa-external-link-alt"></i> Dokumentation
+                            </a>
+                        </p>
+                        
+                        <!-- Datenfluss-Diagramm -->
+                        <div id="dataflow-diagram" class="dataflow-container">
+                            <div class="text-center p-4">
+                                <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+                                <p class="text-muted mt-2">Lade Datenfluss-Visualisierung...</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Status-Übersicht -->
+                        <div class="row mt-4" id="dataflow-stats">
+                            <div class="col-md-3">
+                                <div class="card text-center border-primary">
+                                    <div class="card-body">
+                                        <h4 class="text-primary" id="stat-tours">-</h4>
+                                        <small>Touren in DB</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-success">
+                                    <div class="card-body">
+                                        <h4 class="text-success" id="stat-stops">-</h4>
+                                        <small>Tour-Stops</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-warning">
+                                    <div class="card-body">
+                                        <h4 class="text-warning" id="stat-events">-</h4>
+                                        <small>Tour-Events</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-info">
+                                    <div class="card-body">
+                                        <h4 class="text-info" id="stat-embeddings">-</h4>
+                                        <small>KI-Embeddings</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Batch Geocoding Section -->
                 <div class="card mb-4">
@@ -693,40 +1010,60 @@
                     </div>
                 </div>
 
-                <!-- Datenbank-Übersicht -->
+                <!-- DB-Info -->
                 <div class="card mb-4">
-                    <div class="card-header bg-secondary text-white">
-                        <h5 class="mb-0"><i class="fas fa-database"></i> Datenbank-Übersicht</h5>
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Datenbank-Informationen</h5>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            <h6><i class="fas fa-filter"></i> Datenbanken auswählen</h6>
-                            <div id="db-selection" class="row">
-                                <div class="col-12 text-center">
-                                    <i class="fas fa-spinner fa-spin"></i> Lade Datenbanken...
-                                </div>
+                        <div id="db-info-content">
+                            <div class="text-center py-3">
+                                <i class="fas fa-spinner fa-spin"></i> Lade DB-Informationen...
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <button class="btn btn-primary btn-sm" onclick="loadDatabaseList()">
-                                <i class="fas fa-sync"></i> Liste aktualisieren
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-primary" onclick="loadDBInfo()">
+                                <i class="fas fa-sync"></i> Aktualisieren
                             </button>
-                            <button class="btn btn-success btn-sm" onclick="loadSelectedSchemas()">
-                                <i class="fas fa-table"></i> Schemas anzeigen
-                            </button>
+                            <a href="/docs/DB_SCHEMA_ADMIN.md" target="_blank" class="btn btn-sm btn-outline-secondary ms-2">
+                                <i class="fas fa-book"></i> Schema-Dokumentation
+                            </a>
                         </div>
-                        <div id="db-list-container"></div>
                     </div>
                 </div>
 
-                <!-- Schema-Ansicht -->
-                <div class="card mb-4" id="schema-view-card" style="display: none;">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="fas fa-sitemap"></i> Schema-Informationen</h5>
+                <!-- Tabellenliste -->
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="fas fa-table"></i> Tabellen-Übersicht</h5>
                     </div>
                     <div class="card-body">
-                        <div id="schema-content">
-                            <p class="text-muted">Wählen Sie Datenbanken aus und klicken Sie auf "Schemas anzeigen".</p>
+                        <div id="db-tables-content">
+                            <div class="text-center py-3">
+                                <i class="fas fa-spinner fa-spin"></i> Lade Tabellen...
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-secondary" onclick="loadDBTables()">
+                                <i class="fas fa-sync"></i> Aktualisieren
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabellen-Details -->
+                <div class="card mb-4" id="table-details-card" style="display: none;">
+                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-list"></i> Tabellen-Details: <span id="table-details-name"></span></h5>
+                        <button class="btn btn-sm btn-light" onclick="closeTableDetails()">
+                            <i class="fas fa-times"></i> Schließen
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="table-details-content">
+                            <div class="text-center py-3">
+                                <i class="fas fa-spinner fa-spin"></i> Lade Details...
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -778,14 +1115,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Ende DB-Verwaltung Tab -->
-        </div>
-    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Navigation ist bereits direkt im HTML eingebettet, keine Initialisierung nötig
+        
         // Health-Checks laden
         async function loadHealthChecks() {
             // App Health
@@ -955,81 +1290,124 @@
                 document.getElementById('health-osrm-sample-card').classList.add('health-error');
                 document.getElementById('health-osrm-sample-content').innerHTML = `<div class="text-danger">Fehler: ${e.message}</div>`;
             }
-        }
-
-        // Testboard: Endpoint testen
-        async function testEndpoint(url, resultId) {
-            const resultDiv = document.getElementById(resultId);
-            if (!resultDiv) return;
             
-            resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm me-2"></div>Teste...';
-            resultDiv.className = 'test-result mb-2 alert alert-secondary';
-            
+            // Workflow Engine Status
             try {
-                const startTime = performance.now();
-                const response = await fetch(url);
-                const latency = Math.round(performance.now() - startTime);
-                const data = await response.json();
+                const workflowResponse = await fetch('/api/workflow/status');
+                const workflowData = await workflowResponse.json();
+                const workflowContent = document.getElementById('health-workflow-content');
                 
-                if (response.ok) {
-                    resultDiv.className = 'test-result mb-2 alert alert-success';
-                    resultDiv.innerHTML = `
-                        <strong>${url}</strong> - Status: ${response.status}<br>
-                        <small>Latenz: ${latency}ms</small><br>
-                        <pre class="mt-2 mb-0" style="font-size: 0.8em; max-height: 200px; overflow-y: auto;">${JSON.stringify(data, null, 2)}</pre>
+                if (workflowResponse.ok) {
+                    const llmStatus = workflowData.llm_status || 'unknown';
+                    const llmModel = workflowData.llm_model || 'N/A';
+                    const optimizer = workflowData.optimizer || 'N/A';
+                    
+                    workflowContent.innerHTML = `
+                        <div><i class="fas fa-check-circle text-success"></i> <strong>Status:</strong> Verfügbar</div>
+                        <div class="mt-2"><strong>Optimizer:</strong> ${escapeHtml(optimizer)}</div>
+                        <div><strong>LLM-Status:</strong> <span class="badge ${llmStatus === 'ok' ? 'bg-success' : 'bg-warning'}">${escapeHtml(llmStatus)}</span></div>
+                        <div><strong>LLM-Modell:</strong> ${escapeHtml(llmModel)}</div>
                     `;
                 } else {
-                    resultDiv.className = 'test-result mb-2 alert alert-warning';
-                    resultDiv.innerHTML = `
-                        <strong>${url}</strong> - Status: ${response.status}<br>
-                        <small>Latenz: ${latency}ms</small><br>
-                        <pre class="mt-2 mb-0" style="font-size: 0.8em;">${JSON.stringify(data, null, 2)}</pre>
-                    `;
+                    workflowContent.innerHTML = `<div class="text-danger">Fehler: ${workflowData.detail || 'Unbekannt'}</div>`;
                 }
             } catch (e) {
-                resultDiv.className = 'test-result mb-2 alert alert-danger';
-                resultDiv.innerHTML = `
-                    <strong>${url}</strong> - Fehler<br>
-                    <small>${e.message}</small>
-                `;
+                document.getElementById('health-workflow-content').innerHTML = `<div class="text-danger">Fehler: ${e.message}</div>`;
+            }
+            
+            // LLM Integration Status
+            try {
+                const llmResponse = await fetch('/api/llm/monitoring');
+                const llmData = await llmResponse.json();
+                const llmContent = document.getElementById('health-llm-content');
+                
+                if (llmResponse.ok) {
+                    const status = llmData.status || 'unknown';
+                    const model = llmData.model || 'N/A';
+                    const calls = llmData.total_calls || 0;
+                    const errors = llmData.total_errors || 0;
+                    
+                    llmContent.innerHTML = `
+                        <div><i class="fas fa-check-circle text-success"></i> <strong>Status:</strong> <span class="badge ${status === 'ok' ? 'bg-success' : 'bg-warning'}">${escapeHtml(status)}</span></div>
+                        <div class="mt-2"><strong>Modell:</strong> ${escapeHtml(model)}</div>
+                        <div><strong>API-Calls:</strong> ${calls}</div>
+                        <div><strong>Fehler:</strong> ${errors}</div>
+                    `;
+                } else {
+                    llmContent.innerHTML = `<div class="text-warning">LLM-Monitoring nicht verfügbar</div>`;
+                }
+            } catch (e) {
+                document.getElementById('health-llm-content').innerHTML = `<div class="text-warning">LLM-Status nicht verfügbar</div>`;
+            }
+            
+            // Systemregeln Status
+            try {
+                const rulesResponse = await fetch('/api/system/rules');
+                const rulesData = await rulesResponse.json();
+                const rulesContent = document.getElementById('health-system-rules-content');
+                
+                if (rulesResponse.ok) {
+                    const source = rulesData.source || 'unknown';
+                    const timeBudget = rulesData.time_budget_without_return || 'N/A';
+                    
+                    rulesContent.innerHTML = `
+                        <div><i class="fas fa-check-circle text-success"></i> <strong>Status:</strong> Verfügbar</div>
+                        <div class="mt-2"><strong>Quelle:</strong> ${escapeHtml(source)}</div>
+                        <div><strong>Zeitbudget:</strong> ${timeBudget} Min (ohne Rückfahrt)</div>
+                    `;
+                } else {
+                    rulesContent.innerHTML = `<div class="text-warning">Systemregeln nicht verfügbar</div>`;
+                }
+            } catch (e) {
+                document.getElementById('health-system-rules-content').innerHTML = `<div class="text-warning">Systemregeln-Status nicht verfügbar</div>`;
+            }
+            
+            // Gesamt-Status (kombiniert)
+            try {
+                const combinedResponse = await fetch('/health/status');
+                const combinedData = await combinedResponse.json();
+                const combinedContent = document.getElementById('health-combined-content');
+                
+                if (combinedResponse.ok) {
+                    const overallStatus = combinedData.status || 'unknown';
+                    const services = combinedData.services || {};
+                    
+                    const statusIcon = overallStatus === 'ok' ? 'fa-check-circle text-success' : 'fa-exclamation-triangle text-warning';
+                    const statusBadge = overallStatus === 'ok' ? 'bg-success' : 'bg-warning';
+                    
+                    let servicesHtml = '<div class="mt-2"><small>';
+                    for (const [service, info] of Object.entries(services)) {
+                        const serviceStatus = info.status || 'unknown';
+                        const serviceIcon = serviceStatus === 'ok' ? 'fa-check text-success' : 'fa-times text-danger';
+                        servicesHtml += `<div><i class="fas ${serviceIcon}"></i> ${service}: ${escapeHtml(info.message || 'N/A')}</div>`;
+                    }
+                    servicesHtml += '</small></div>';
+                    
+                    combinedContent.innerHTML = `
+                        <div><i class="fas ${statusIcon}"></i> <strong>Gesamt-Status:</strong> <span class="badge ${statusBadge}">${escapeHtml(overallStatus.toUpperCase())}</span></div>
+                        ${servicesHtml}
+                    `;
+                } else {
+                    combinedContent.innerHTML = `<div class="text-danger">Fehler beim Abrufen des Gesamt-Status</div>`;
+                }
+            } catch (e) {
+                document.getElementById('health-combined-content').innerHTML = `<div class="text-danger">Fehler: ${e.message}</div>`;
             }
         }
         
-        // LLM-Status laden
-        async function loadLLMStatus() {
-            const statusDiv = document.getElementById('llm-status');
-            if (!statusDiv) return;
-            
-            try {
-                // Prüfe ob LLM-Monitoring-Endpoint existiert
-                const response = await fetch('/api/llm/monitoring').catch(() => null);
-                if (response && response.ok) {
-                    const data = await response.json();
-                    statusDiv.className = 'alert alert-success';
-                    statusDiv.innerHTML = `
-                        <i class="fas fa-check-circle"></i> LLM verfügbar<br>
-                        <small><pre style="font-size: 0.8em;">${JSON.stringify(data, null, 2)}</pre></small>
-                    `;
-                } else {
-                    statusDiv.className = 'alert alert-warning';
-                    statusDiv.innerHTML = `
-                        <i class="fas fa-exclamation-triangle"></i> LLM-Status-Endpoint nicht verfügbar<br>
-                        <small>Endpoint: /api/llm/monitoring</small>
-                    `;
-                }
-            } catch (e) {
-                statusDiv.className = 'alert alert-secondary';
-                statusDiv.innerHTML = `
-                    <i class="fas fa-info-circle"></i> LLM-Status kann nicht geladen werden<br>
-                    <small>${e.message}</small>
-                `;
-            }
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
+
 
         // Chart-Instanzen
         let toursChart = null;
         let stopsChart = null;
         let kmChart = null;
+        let delayScoreChart = null;
 
         // Statistiken laden
         async function loadStats() {
@@ -1062,6 +1440,9 @@
                 // Charts aktualisieren
                 updateCharts(stats, period);
                 
+                // KPI-Boxen aktualisieren
+                updateKPIBoxes(stats);
+                
                 loadingEl.style.display = 'none';
                 contentEl.style.display = 'block';
             } catch (e) {
@@ -1071,13 +1452,38 @@
             }
         }
 
+        // KPI-Boxen aktualisieren
+        function updateKPIBoxes(stats) {
+            if (!stats || stats.length === 0) return;
+            
+            // Aggregiere über alle Perioden
+            const totalTours = stats.reduce((sum, s) => sum + (s.tours || 0), 0);
+            const totalKm = stats.reduce((sum, s) => sum + (s.km || 0), 0);
+            const totalStops = stats.reduce((sum, s) => sum + (s.stops || 0), 0);
+            const avgStops = totalTours > 0 ? (totalStops / totalTours).toFixed(1) : '0.0';
+            const avgDelay = stats.reduce((sum, s) => sum + (s.avg_delay_minutes || 0), 0) / stats.length;
+            const avgScore = stats.reduce((sum, s) => sum + (s.avg_success_score || 0), 0) / stats.length;
+            const totalAborted = stats.reduce((sum, s) => sum + (s.aborted_tours || 0), 0);
+            const abortRate = totalTours > 0 ? ((totalAborted / totalTours) * 100).toFixed(1) : '0.0';
+            
+            document.getElementById('kpi-tours').textContent = totalTours;
+            document.getElementById('kpi-km').textContent = totalKm.toFixed(0) + ' km';
+            document.getElementById('kpi-avg-stops').textContent = avgStops;
+            document.getElementById('kpi-avg-delay').textContent = avgDelay > 0 ? avgDelay.toFixed(1) + ' min' : '-';
+            document.getElementById('kpi-avg-score').textContent = avgScore > 0 ? avgScore.toFixed(1) : '-';
+            document.getElementById('kpi-abort-rate').textContent = abortRate + ' %';
+        }
+        
         // Charts aktualisieren
         function updateCharts(stats, period) {
             const labelKey = period === 'daily' ? 'date' : 'month';
             const labels = stats.map(s => s[labelKey]).reverse();
             const toursData = stats.map(s => s.tours).reverse();
             const stopsData = stats.map(s => s.stops).reverse();
-            const kmData = stats.map(s => s.km).reverse();
+            const kmPlannedData = stats.map(s => s.km_planned || s.km || 0).reverse();
+            const kmRealData = stats.map(s => s.km_real || s.km || 0).reverse();
+            const delayData = stats.map(s => s.avg_delay_minutes || 0).reverse();
+            const scoreData = stats.map(s => s.avg_success_score || 0).reverse();
 
             const chartConfig = {
                 type: 'line',
@@ -1085,7 +1491,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { display: false }
+                        legend: { display: true }
                     },
                     scales: {
                         y: { beginAtZero: true }
@@ -1125,19 +1531,82 @@
                 }
             });
 
-            // KM-Chart
+            // KM-Chart (geplant vs. real)
             if (kmChart) kmChart.destroy();
             kmChart = new Chart(document.getElementById('chart-km'), {
                 ...chartConfig,
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Kilometer',
-                        data: kmData,
+                        label: 'Geplant',
+                        data: kmPlannedData,
                         borderColor: 'rgb(54, 162, 235)',
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
                         tension: 0.1
+                    }, {
+                        label: 'Real',
+                        data: kmRealData,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.1
                     }]
+                }
+            });
+
+            // Verspätung & Score Chart
+            if (delayScoreChart) delayScoreChart.destroy();
+            delayScoreChart = new Chart(document.getElementById('chart-delay-score'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ø Verspätung (min)',
+                        data: delayData,
+                        backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                        borderColor: 'rgb(255, 206, 86)',
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Ø Success-Score',
+                        data: scoreData,
+                        type: 'line',
+                        borderColor: 'rgb(153, 102, 255)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        yAxisID: 'y1',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Verspätung (min)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Score (0-100)'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -1196,9 +1665,52 @@
         // Beim Laden: Health-Checks ausführen
         document.addEventListener('DOMContentLoaded', () => {
             loadHealthChecks();
-            loadLLMStatus();
             // Alle 30 Sekunden aktualisieren
             setInterval(loadHealthChecks, 30000);
+            
+            // Beim DB-Tab-Wechsel Datenfluss-Visualisierung und DB-Info laden
+            const dbTab = document.getElementById('db-tab');
+            if (dbTab) {
+                // Beim ersten Öffnen des Tabs
+                dbTab.addEventListener('shown.bs.tab', () => {
+                    console.log('[DATAFLOW] DB-Tab geöffnet, lade Visualisierung...');
+                    const dbTabPane = document.getElementById('db');
+                    if (dbTabPane) {
+                        // WICHTIG: Bootstrap benötigt 'show' Klasse für opacity: 1
+                        dbTabPane.classList.add('show', 'active');
+                        // Force visibility
+                        dbTabPane.style.display = 'block';
+                        dbTabPane.style.opacity = '1';
+                        dbTabPane.style.visibility = 'visible';
+                    }
+                    console.log('[DB-TAB] Tab-Pane gefunden:', !!dbTabPane, 'Aktiv:', dbTabPane?.classList.contains('active'), 'Show:', dbTabPane?.classList.contains('show'));
+                    // Warte kurz, damit der Tab-Inhalt sichtbar ist
+                    setTimeout(() => {
+                        console.log('[DB-TAB] Starte Ladevorgang...');
+                        renderDataflowDiagram();
+                        loadDataflowStats();
+                        loadDBInfo();
+                        loadDBTables();
+                    }, 100);
+                });
+                
+                // Prüfe ob DB-Tab bereits aktiv ist (z.B. beim direkten Aufruf)
+                const dbTabPane = document.getElementById('db');
+                if (dbTabPane && dbTabPane.classList.contains('active')) {
+                    // WICHTIG: Bootstrap benötigt 'show' Klasse für opacity: 1
+                    dbTabPane.classList.add('show');
+                    dbTabPane.style.display = 'block';
+                    dbTabPane.style.opacity = '1';
+                    dbTabPane.style.visibility = 'visible';
+                    console.log('[DB-TAB] Tab bereits aktiv beim Laden, show-Klasse hinzugefügt');
+                    setTimeout(() => {
+                        renderDataflowDiagram();
+                        loadDataflowStats();
+                        loadDBInfo();
+                        loadDBTables();
+                    }, 200);
+                }
+            }
             
             // Beim Tab-Wechsel Statistiken laden
             const statsTab = document.getElementById('stats-tab');
@@ -1415,6 +1927,144 @@
                 messageDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> Werte auf Standard zurückgesetzt. Bitte auf "Speichern" klicken, um zu übernehmen.</div>';
             }
         }
+        // ===== DATENFLUSS-VISUALISIERUNG =====
+        
+        function renderDataflowDiagram() {
+            const container = document.getElementById('dataflow-diagram');
+            if (!container) {
+                console.warn('[DATAFLOW] Container dataflow-diagram nicht gefunden');
+                return;
+            }
+            
+            console.log('[DATAFLOW] Rendere Diagramm...');
+            
+            // SVG-basierte Flowchart-Visualisierung
+            const svg = `
+                <svg viewBox="0 0 1200 600" class="dataflow-svg">
+                    <!-- Hintergrund -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <polygon points="0 0, 10 3, 0 6" fill="#007bff" />
+                        </marker>
+                        <linearGradient id="phase1" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#e3f2fd;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#bbdefb;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="phase2" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fff3e0;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ffe0b2;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="phase3" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#f3e5f5;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#e1bee7;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="phase4" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#e8f5e9;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#c8e6c9;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Phase 1: Planung & CSV-Import -->
+                    <g class="phase-group" data-phase="1">
+                        <rect x="50" y="50" width="200" height="120" rx="10" fill="url(#phase1)" stroke="#1976d2" stroke-width="2"/>
+                        <text x="150" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#1565c0">Phase 1</text>
+                        <text x="150" y="110" text-anchor="middle" font-size="12" fill="#1565c0">CSV-Import</text>
+                        <text x="150" y="130" text-anchor="middle" font-size="12" fill="#1565c0">Parsing &amp; Geocoding</text>
+                        <text x="150" y="150" text-anchor="middle" font-size="12" fill="#1565c0">OSRM-Routing</text>
+                    </g>
+                    
+                    <!-- Pfeil 1 -->
+                    <line x1="250" y1="110" x2="300" y2="110" stroke="#007bff" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Phase 2: Durchführung -->
+                    <g class="phase-group" data-phase="2">
+                        <rect x="300" y="50" width="200" height="120" rx="10" fill="url(#phase2)" stroke="#f57c00" stroke-width="2"/>
+                        <text x="400" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#e65100">Phase 2</text>
+                        <text x="400" y="110" text-anchor="middle" font-size="12" fill="#e65100">Tour-Durchführung</text>
+                        <text x="400" y="130" text-anchor="middle" font-size="12" fill="#e65100">Ist-Daten sammeln</text>
+                        <text x="400" y="150" text-anchor="middle" font-size="12" fill="#e65100">Events &amp; Abweichungen</text>
+                    </g>
+                    
+                    <!-- Pfeil 2 -->
+                    <line x1="500" y1="110" x2="550" y2="110" stroke="#007bff" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Phase 3: Speicherung -->
+                    <g class="phase-group" data-phase="3">
+                        <rect x="550" y="50" width="200" height="120" rx="10" fill="url(#phase3)" stroke="#7b1fa2" stroke-width="2"/>
+                        <text x="650" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#6a1b9a">Phase 3</text>
+                        <text x="650" y="110" text-anchor="middle" font-size="12" fill="#6a1b9a">DB-Speicherung</text>
+                        <text x="650" y="130" text-anchor="middle" font-size="12" fill="#6a1b9a">tours, tour_stops</text>
+                        <text x="650" y="150" text-anchor="middle" font-size="12" fill="#6a1b9a">tour_events</text>
+                    </g>
+                    
+                    <!-- Pfeil 3 (nach unten) -->
+                    <line x1="650" y1="170" x2="650" y2="250" stroke="#007bff" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Phase 4: KI-Auswertung -->
+                    <g class="phase-group" data-phase="4">
+                        <rect x="550" y="250" width="200" height="120" rx="10" fill="url(#phase4)" stroke="#388e3c" stroke-width="2"/>
+                        <text x="650" y="290" text-anchor="middle" font-size="16" font-weight="bold" fill="#2e7d32">Phase 4</text>
+                        <text x="650" y="310" text-anchor="middle" font-size="12" fill="#2e7d32">KI-Auswertung</text>
+                        <text x="650" y="330" text-anchor="middle" font-size="12" fill="#2e7d32">Embedding-Erzeugung</text>
+                        <text x="650" y="350" text-anchor="middle" font-size="12" fill="#2e7d32">Vektor-DB</text>
+                    </g>
+                    
+                    <!-- Pfeil 4 (zurück nach links) -->
+                    <line x1="550" y1="310" x2="300" y2="310" stroke="#007bff" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <text x="425" y="300" text-anchor="middle" font-size="10" fill="#666">KI-Vorschläge</text>
+                    
+                    <!-- Datenbank-Symbole -->
+                    <g class="db-symbol" data-db="tours">
+                        <ellipse cx="700" cy="200" rx="40" ry="20" fill="#fff" stroke="#7b1fa2" stroke-width="2"/>
+                        <text x="700" y="205" text-anchor="middle" font-size="10" fill="#7b1fa2">tours</text>
+                    </g>
+                    <g class="db-symbol" data-db="stops">
+                        <ellipse cx="750" cy="200" rx="40" ry="20" fill="#fff" stroke="#7b1fa2" stroke-width="2"/>
+                        <text x="750" y="205" text-anchor="middle" font-size="10" fill="#7b1fa2">stops</text>
+                    </g>
+                    <g class="db-symbol" data-db="events">
+                        <ellipse cx="800" cy="200" rx="40" ry="20" fill="#fff" stroke="#7b1fa2" stroke-width="2"/>
+                        <text x="800" y="205" text-anchor="middle" font-size="10" fill="#7b1fa2">events</text>
+                    </g>
+                    <g class="db-symbol" data-db="embeddings">
+                        <ellipse cx="700" cy="400" rx="50" ry="20" fill="#fff" stroke="#388e3c" stroke-width="2"/>
+                        <text x="700" y="405" text-anchor="middle" font-size="10" fill="#388e3c">embeddings</text>
+                    </g>
+                    
+                    <!-- Verbindungslinien zu DB -->
+                    <line x1="650" y1="120" x2="700" y2="200" stroke="#9c27b0" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="650" y1="120" x2="750" y2="200" stroke="#9c27b0" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="650" y1="120" x2="800" y2="200" stroke="#9c27b0" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="650" y1="310" x2="700" y2="400" stroke="#4caf50" stroke-width="2" stroke-dasharray="5,5"/>
+                </svg>
+            `;
+            
+            container.innerHTML = svg;
+            console.log('[DATAFLOW] Diagramm gerendert');
+        }
+        
+        async function loadDataflowStats() {
+            try {
+                // Lade Statistiken aus der Datenbank
+                const response = await fetch('/api/db/stats');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('stat-tours').textContent = data.tours_count || 0;
+                    document.getElementById('stat-stops').textContent = data.stops_count || 0;
+                    document.getElementById('stat-events').textContent = data.events_count || 0;
+                    document.getElementById('stat-embeddings').textContent = data.embeddings_count || 0;
+                } else {
+                    // Fallback: Zeige "-" wenn API nicht verfügbar
+                    document.getElementById('stat-tours').textContent = '-';
+                    document.getElementById('stat-stops').textContent = '-';
+                    document.getElementById('stat-events').textContent = '-';
+                    document.getElementById('stat-embeddings').textContent = '-';
+                }
+            } catch (e) {
+                console.warn('Fehler beim Laden der Datenfluss-Statistiken:', e);
+            }
+        }
+        
         // ===== DB-VERWALTUNG FUNKTIONEN =====
         
         // Validiere CSV-Dateien
@@ -1709,6 +2359,415 @@
             statusDiv.innerHTML = `<small>${message}</small>`;
         }
         
+        // Lade DB-Info
+        async function loadDBInfo() {
+            // Prüfe ob Tab sichtbar ist
+            const dbTabPane = document.getElementById('db');
+            if (!dbTabPane) {
+                console.warn('[DB-INFO] Tab-Pane nicht gefunden');
+                return;
+            }
+            
+            const isVisible = dbTabPane.classList.contains('show') || dbTabPane.classList.contains('active');
+            console.log('[DB-INFO] Tab sichtbar:', isVisible, 'Classes:', dbTabPane.className);
+            
+            const contentEl = document.getElementById('db-info-content');
+            if (!contentEl) {
+                console.error('[DB-INFO] Element db-info-content nicht gefunden');
+                return;
+            }
+            
+            console.log('[DB-INFO] Element gefunden, setze Loading...');
+            contentEl.innerHTML = '<div class="text-center py-3"><i class="fas fa-spinner fa-spin"></i> Lade DB-Informationen...</div>';
+            
+            try {
+                console.log('[DB-INFO] Lade DB-Informationen...');
+                const response = await fetch('/api/db/info');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('[DB-INFO] Antwort erhalten:', data);
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Unbekannter Fehler');
+                }
+                
+                const escapeHtml = (text) => {
+                    if (!text) return '';
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                };
+                
+                const htmlContent = `
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong><i class="fas fa-file"></i> Datenbank-Datei:</strong><br>
+                            <code>${escapeHtml(data.db_name || 'N/A')}</code><br>
+                            <small class="text-muted">${escapeHtml(data.db_path || 'N/A')}</small>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <strong><i class="fas fa-weight"></i> Größe:</strong><br>
+                            <span class="text-primary">${data.size_mb || 0} MB</span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <strong><i class="fas fa-table"></i> Tabellen:</strong><br>
+                            <span class="text-success">${data.table_count || 0}</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong><i class="fas fa-code-branch"></i> Schema-Version:</strong><br>
+                            <span class="text-info">${escapeHtml(data.schema_version || 'N/A')}</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong><i class="fas fa-list"></i> Tabellen-Namen:</strong><br>
+                            <small class="text-muted">${data.table_names && data.table_names.length > 0 ? data.table_names.map(t => escapeHtml(t)).join(', ') : 'Keine'}</small>
+                        </div>
+                    </div>
+                `;
+                
+                console.log('[DB-INFO] Setze innerHTML, Element vorhanden:', !!contentEl);
+                console.log('[DB-INFO] Element-Styles vorher:', {
+                    display: window.getComputedStyle(contentEl).display,
+                    visibility: window.getComputedStyle(contentEl).visibility,
+                    opacity: window.getComputedStyle(contentEl).opacity,
+                    height: window.getComputedStyle(contentEl).height
+                });
+                
+                // Prüfe Parent-Elemente VOR innerHTML
+                let parent = contentEl.parentElement;
+                let level = 0;
+                console.log('[DB-INFO] Parent-Hierarchie VOR innerHTML:');
+                while (parent && level < 5) {
+                    const styles = window.getComputedStyle(parent);
+                    console.log(`[DB-INFO] Parent Level ${level}:`, {
+                        tag: parent.tagName,
+                        id: parent.id,
+                        classes: parent.className,
+                        display: styles.display,
+                        visibility: styles.visibility,
+                        opacity: styles.opacity,
+                        height: styles.height,
+                        overflow: styles.overflow
+                    });
+                    parent = parent.parentElement;
+                    level++;
+                }
+                
+                contentEl.innerHTML = htmlContent;
+                
+                // Force visibility auf Element UND Parent
+                contentEl.style.display = 'block';
+                contentEl.style.visibility = 'visible';
+                contentEl.style.opacity = '1';
+                
+                // Prüfe und fixe Parent-Container
+                let parentEl = contentEl.parentElement;
+                while (parentEl && parentEl !== document.body) {
+                    const styles = window.getComputedStyle(parentEl);
+                    if (styles.display === 'none') {
+                        console.warn('[DB-INFO] Parent hat display:none, setze block:', parentEl.tagName, parentEl.className);
+                        parentEl.style.display = 'block';
+                    }
+                    if (styles.visibility === 'hidden') {
+                        console.warn('[DB-INFO] Parent hat visibility:hidden, setze visible:', parentEl.tagName, parentEl.className);
+                        parentEl.style.visibility = 'visible';
+                    }
+                    parentEl = parentEl.parentElement;
+                }
+                
+                console.log('[DB-INFO] innerHTML gesetzt, Inhalt-Länge:', contentEl.innerHTML.length);
+                console.log('[DB-INFO] Element-Styles nachher:', {
+                    display: window.getComputedStyle(contentEl).display,
+                    visibility: window.getComputedStyle(contentEl).visibility,
+                    opacity: window.getComputedStyle(contentEl).opacity,
+                    height: window.getComputedStyle(contentEl).height,
+                    innerHTMLPreview: contentEl.innerHTML.substring(0, 100)
+                });
+            } catch (error) {
+                console.error('[DB-INFO] Fehler:', error);
+                contentEl.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> Fehler: ${error.message}</div>`;
+            }
+        }
+        
+        // Lade Tabellenliste
+        async function loadDBTables() {
+            // Prüfe ob Tab sichtbar ist
+            const dbTabPane = document.getElementById('db');
+            if (!dbTabPane) {
+                console.warn('[DB-TABLES] Tab-Pane nicht gefunden');
+                return;
+            }
+            
+            const isVisible = dbTabPane.classList.contains('show') || dbTabPane.classList.contains('active');
+            console.log('[DB-TABLES] Tab sichtbar:', isVisible, 'Classes:', dbTabPane.className);
+            
+            const contentEl = document.getElementById('db-tables-content');
+            if (!contentEl) {
+                console.error('[DB-TABLES] Element db-tables-content nicht gefunden');
+                return;
+            }
+            
+            console.log('[DB-TABLES] Element gefunden, setze Loading...');
+            contentEl.innerHTML = '<div class="text-center py-3"><i class="fas fa-spinner fa-spin"></i> Lade Tabellen...</div>';
+            
+            try {
+                console.log('[DB-TABLES] Lade Tabellenliste...');
+                const response = await fetch('/api/db/tables');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('[DB-TABLES] Antwort erhalten:', data);
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Unbekannter Fehler');
+                }
+                
+                const tables = data.tables || [];
+                console.log(`[DB-TABLES] ${tables.length} Tabellen gefunden`);
+                
+                if (tables.length === 0) {
+                    contentEl.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> Keine Tabellen gefunden</div>';
+                    return;
+                }
+                
+                const escapeHtml = (text) => {
+                    if (!text) return '';
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                };
+                
+                const tableRows = tables.map(table => {
+                    const safeName = escapeHtml(table.name);
+                    const rowCount = table.row_count >= 0 ? table.row_count.toLocaleString() : 'Fehler';
+                    const safeNameForOnclick = safeName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    return `
+                        <tr>
+                            <td><code>${safeName}</code></td>
+                            <td>${escapeHtml(table.description)}</td>
+                            <td class="text-end"><strong>${rowCount}</strong></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary" onclick="showTableDetails('${safeNameForOnclick}')">
+                                    <i class="fas fa-eye"></i> Details
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                const htmlContent = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tabellenname</th>
+                                    <th>Beschreibung</th>
+                                    <th class="text-end">Zeilen</th>
+                                    <th class="text-center">Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                console.log('[DB-TABLES] Setze innerHTML, Element vorhanden:', !!contentEl);
+                console.log('[DB-TABLES] Element-Styles vorher:', {
+                    display: window.getComputedStyle(contentEl).display,
+                    visibility: window.getComputedStyle(contentEl).visibility,
+                    opacity: window.getComputedStyle(contentEl).opacity,
+                    height: window.getComputedStyle(contentEl).height
+                });
+                
+                // Prüfe Parent-Elemente VOR innerHTML
+                let parent = contentEl.parentElement;
+                let level = 0;
+                console.log('[DB-TABLES] Parent-Hierarchie VOR innerHTML:');
+                while (parent && level < 5) {
+                    const styles = window.getComputedStyle(parent);
+                    console.log(`[DB-TABLES] Parent Level ${level}:`, {
+                        tag: parent.tagName,
+                        id: parent.id,
+                        classes: parent.className,
+                        display: styles.display,
+                        visibility: styles.visibility,
+                        opacity: styles.opacity,
+                        height: styles.height,
+                        overflow: styles.overflow
+                    });
+                    parent = parent.parentElement;
+                    level++;
+                }
+                
+                contentEl.innerHTML = htmlContent;
+                
+                // Force visibility auf Element UND Parent
+                contentEl.style.display = 'block';
+                contentEl.style.visibility = 'visible';
+                contentEl.style.opacity = '1';
+                
+                // Prüfe und fixe Parent-Container
+                let parentEl = contentEl.parentElement;
+                while (parentEl && parentEl !== document.body) {
+                    const styles = window.getComputedStyle(parentEl);
+                    if (styles.display === 'none') {
+                        console.warn('[DB-TABLES] Parent hat display:none, setze block:', parentEl.tagName, parentEl.className);
+                        parentEl.style.display = 'block';
+                    }
+                    if (styles.visibility === 'hidden') {
+                        console.warn('[DB-TABLES] Parent hat visibility:hidden, setze visible:', parentEl.tagName, parentEl.className);
+                        parentEl.style.visibility = 'visible';
+                    }
+                    parentEl = parentEl.parentElement;
+                }
+                
+                console.log('[DB-TABLES] innerHTML gesetzt, Inhalt-Länge:', contentEl.innerHTML.length, 'Tabellen:', tables.length);
+                console.log('[DB-TABLES] Element-Styles nachher:', {
+                    display: window.getComputedStyle(contentEl).display,
+                    visibility: window.getComputedStyle(contentEl).visibility,
+                    opacity: window.getComputedStyle(contentEl).opacity,
+                    height: window.getComputedStyle(contentEl).height,
+                    innerHTMLPreview: contentEl.innerHTML.substring(0, 100)
+                });
+            } catch (error) {
+                console.error('[DB-TABLES] Fehler:', error);
+                contentEl.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> Fehler: ${error.message}</div>`;
+            }
+        }
+        
+        // Zeige Tabellen-Details
+        async function showTableDetails(tableName) {
+            const card = document.getElementById('table-details-card');
+            const nameEl = document.getElementById('table-details-name');
+            const contentEl = document.getElementById('table-details-content');
+            
+            card.style.display = 'block';
+            nameEl.textContent = tableName;
+            contentEl.innerHTML = '<div class="text-center py-3"><i class="fas fa-spinner fa-spin"></i> Lade Details...</div>';
+            
+            // Scroll zu Details
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            try {
+                const response = await fetch(`/api/db/table/${encodeURIComponent(tableName)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.error || 'Unbekannter Fehler');
+                }
+                
+                // Spalten
+                const columnsHtml = data.columns.map(col => `
+                    <tr>
+                        <td><code>${escapeHtml(col.name)}</code></td>
+                        <td>${escapeHtml(col.type)}</td>
+                        <td class="text-center">${col.not_null ? '<span class="badge bg-warning">NOT NULL</span>' : ''}</td>
+                        <td class="text-center">${col.primary_key ? '<span class="badge bg-primary">PK</span>' : ''}</td>
+                        <td><small class="text-muted">${col.default ? escapeHtml(String(col.default)) : '-'}</small></td>
+                    </tr>
+                `).join('');
+                
+                // Indizes
+                const indexesHtml = data.indexes.length > 0 ? data.indexes.map(idx => `
+                    <tr>
+                        <td><code>${escapeHtml(idx.name)}</code></td>
+                        <td>${idx.columns.join(', ')}</td>
+                        <td class="text-center">${idx.unique ? '<span class="badge bg-success">UNIQUE</span>' : ''}</td>
+                    </tr>
+                `).join('') : '<tr><td colspan="3" class="text-muted">Keine Indizes</td></tr>';
+                
+                // Vorschau
+                const previewHtml = data.preview && data.preview.length > 0 ? `
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    ${Object.keys(data.preview[0]).map(key => `<th>${escapeHtml(key)}</th>`).join('')}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.preview.map(row => `
+                                    <tr>
+                                        ${Object.values(row).map(val => `<td><small>${escapeHtml(String(val || ''))}</small></td>`).join('')}
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <small class="text-muted">Zeige erste 10 Zeilen (read-only)</small>
+                    </div>
+                ` : '<p class="text-muted">Keine Daten verfügbar</p>';
+                
+                contentEl.innerHTML = `
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-columns" type="button">Spalten</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-indexes" type="button">Indizes</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-preview" type="button">Vorschau</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tab-columns">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Typ</th>
+                                            <th class="text-center">NOT NULL</th>
+                                            <th class="text-center">Primary Key</th>
+                                            <th>Default</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${columnsHtml}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-indexes">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Index-Name</th>
+                                            <th>Spalten</th>
+                                            <th class="text-center">Unique</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${indexesHtml}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-preview">
+                            ${previewHtml}
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                contentEl.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> Fehler: ${error.message}</div>`;
+            }
+        }
+        
+        // Schließe Tabellen-Details
+        function closeTableDetails() {
+            document.getElementById('table-details-card').style.display = 'none';
+        }
+        
         // Lade DB-Statistiken
         async function loadDBStats() {
             try {
@@ -1732,6 +2791,16 @@
         // ===== DB-SCHEMA FUNKTIONEN =====
         
         async function loadDatabaseList() {
+            // Prüfe ob die Elemente existieren (alte Sektion wurde entfernt)
+            const container = document.getElementById('db-selection');
+            const listContainer = document.getElementById('db-list-container');
+            
+            if (!container || !listContainer) {
+                // Elemente existieren nicht mehr - Funktion überspringen (alte Sektion entfernt)
+                console.log('[DB-LIST] Alte DB-Liste-Sektion nicht mehr vorhanden - überspringe');
+                return;
+            }
+            
             try {
                 const response = await fetch('/api/db/list');
                 if (!response.ok) {
@@ -1739,8 +2808,6 @@
                 }
                 
                 const data = await response.json();
-                const container = document.getElementById('db-selection');
-                const listContainer = document.getElementById('db-list-container');
                 
                 if (!data.success || !data.databases) {
                     container.innerHTML = '<div class="alert alert-warning">Keine Datenbanken gefunden.</div>';
@@ -1794,8 +2861,10 @@
                 
             } catch (error) {
                 console.error('Fehler beim Laden der Datenbank-Liste:', error);
-                document.getElementById('db-selection').innerHTML = 
-                    `<div class="alert alert-danger">Fehler: ${error.message}</div>`;
+                const container = document.getElementById('db-selection');
+                if (container) {
+                    container.innerHTML = `<div class="alert alert-danger">Fehler: ${error.message}</div>`;
+                }
             }
         }
 
@@ -1938,132 +3007,10 @@
 
         // ===== KI-INTEGRATION FUNKTIONEN =====
         
-        async function loadKIIntegrations() {
-            try {
-                // Lade Integrationen-Info
-                const [statsResponse, usageResponse] = await Promise.all([
-                    fetch('/api/cost-tracker/stats'),
-                    fetch('/api/cost-tracker/usage')
-                ]);
-                
-                const stats = statsResponse.ok ? await statsResponse.json() : null;
-                const usage = usageResponse.ok ? await usageResponse.json() : null;
-                
-                const container = document.getElementById('ki-integrations-list');
-                
-                const integrations = [
-                    {
-                        name: "Code-Checker",
-                        model: stats?.default_model || "gpt-4o-mini",
-                        purpose: "Code-Analyse & Verbesserungen",
-                        active: true,
-                        calls: usage?.operations?.code_analysis?.calls || 0,
-                        cost: usage?.operations?.code_analysis?.cost || 0
-                    },
-                    {
-                        name: "Error-Pattern-Erkennung",
-                        model: stats?.default_model || "gpt-4o-mini",
-                        purpose: "Fehlerhistorie-Matching",
-                        active: true,
-                        calls: usage?.operations?.error_pattern_matching?.calls || 0,
-                        cost: usage?.operations?.error_pattern_matching?.cost || 0
-                    },
-                    {
-                        name: "Code-Improvement",
-                        model: stats?.default_model || "gpt-4o-mini",
-                        purpose: "Automatische Code-Verbesserungen",
-                        active: true,
-                        calls: usage?.operations?.code_improvement?.calls || 0,
-                        cost: usage?.operations?.code_improvement?.cost || 0
-                    }
-                ];
-                
-                let html = '';
-                integrations.forEach(int => {
-                    html += `
-                        <div class="col-md-4 mb-3">
-                            <div class="card ${int.active ? 'border-success' : 'border-secondary'}">
-                                <div class="card-body">
-                                    <h6 class="card-title">
-                                        ${int.active ? '<i class="fas fa-circle text-success"></i>' : '<i class="fas fa-circle text-secondary"></i>'}
-                                        <strong>${int.name}</strong>
-                                    </h6>
-                                    <p class="card-text text-muted"><small>${int.purpose}</small></p>
-                                    <div class="d-flex justify-content-between">
-                                        <small><strong>Modell:</strong> ${int.model}</small>
-                                    </div>
-                                    <div class="mt-2">
-                                        <small class="text-muted">
-                                            <i class="fas fa-phone"></i> ${int.calls} Calls
-                                            <span class="ms-2"><i class="fas fa-euro-sign"></i> ${int.cost.toFixed(4)} €</span>
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                container.innerHTML = html;
-                
-                // Lade auch Konfiguration
-                loadKIConfig(stats);
-                
-            } catch (error) {
-                console.error('Fehler beim Laden der KI-Integrationen:', error);
-                document.getElementById('ki-integrations-list').innerHTML = 
-                    `<div class="alert alert-danger">Fehler: ${error.message}</div>`;
-            }
-        }
-        
-        async function loadKIConfig(stats) {
-            try {
-                if (!stats) {
-                    const response = await fetch('/api/cost-tracker/stats');
-                    if (response.ok) {
-                        stats = await response.json();
-                    }
-                }
-                
-                if (stats) {
-                    document.getElementById('ki-current-model').innerHTML = `
-                        <strong>${stats.default_model || 'gpt-4o-mini'}</strong>
-                        <br><small class="text-muted">Standard-Modell für Code-Verbesserungen</small>
-                    `;
-                    
-                    document.getElementById('ki-limits').innerHTML = `
-                        <ul class="list-unstyled mb-0">
-                            <li><strong>Tägliches Limit:</strong> ${stats.daily_limit || stats.limits?.daily_limit || 5.0} €</li>
-                            <li><strong>API-Calls Limit:</strong> ${stats.daily_api_calls_limit || stats.limits?.daily_api_calls_limit || 50} / Tag</li>
-                            <li><strong>Verbesserungen Limit:</strong> ${stats.daily_improvements_limit || stats.limits?.daily_improvements_limit || 10} / Tag</li>
-                        </ul>
-                    `;
-                } else {
-                    document.getElementById('ki-current-model').innerHTML = '<span class="text-muted">Nicht verfügbar</span>';
-                    document.getElementById('ki-limits').innerHTML = '<span class="text-muted">Nicht verfügbar</span>';
-                }
-            } catch (error) {
-                console.error('Fehler beim Laden der KI-Konfiguration:', error);
-            }
-        }
 
-        // Lade DB-Liste beim Öffnen des Tabs
-        document.addEventListener('DOMContentLoaded', function() {
-            const dbTab = document.getElementById('db-tab');
-            if (dbTab) {
-                dbTab.addEventListener('shown.bs.tab', function() {
-                    loadDatabaseList();
-                });
-            }
-            
-            // Lade KI-Integrationen beim Öffnen des Tabs
-            const kiTab = document.getElementById('ki-integration-tab');
-            if (kiTab) {
-                kiTab.addEventListener('shown.bs.tab', function() {
-                    loadKIIntegrations();
-                });
-            }
-        });
+        // Lade DB-Liste beim Öffnen des Tabs (nur wenn alte Sektion vorhanden)
+        // Diese Funktion wird nicht mehr benötigt, da wir die neue DB-Verwaltung haben
+        // Die loadDatabaseList() Funktion prüft selbst, ob die Elemente existieren
     </script>
     </div> <!-- Ende adminContent -->
 </body>

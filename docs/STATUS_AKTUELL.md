@@ -1,10 +1,39 @@
 # 📊 Aktueller Stand - FAMO TrafficApp 3.0
 
-**Datum:** 16. November 2025
+**Datum:** 18. November 2025
 
 ---
 
-## ✅ **NEUESTE ERREICHUNGEN (16. November 2025)**
+## ✅ **NEUESTE ERREICHUNGEN (18. November 2025)**
+
+### 1. **OSRM Polyline-Fehler behoben** 🔴 KRITISCH
+- ✅ Koordinaten-Formatierungsfehler in `osrm_client.py` korrigiert
+- ✅ Validierung für ungültige Routen (`distance_m: 0`) hinzugefügt
+- ✅ Debug-Logging für OSRM-Requests implementiert
+- ✅ Frontend zeigt jetzt echte Straßenrouten statt nur Luftlinien
+- **Problem:** OSRM lieferte Routen mit `distance_m: 0` wegen vertauschter Koordinaten
+- **Fix:** `coord_string = ";".join(f"{lon},{lat}" for lon, lat in coords)` (statt `for lat, lon`)
+- **Dateien:** `services/osrm_client.py`, `backend/services/real_routing.py`, `frontend/index.html`
+- **Dokumentation:** `Regeln/LESSONS_LOG.md`, `ZIP/POLYLINE_FEHLER_AUDIT_*.zip`
+
+### 2. **Sub-Routen-Generator repariert**
+- ✅ Sub-Routen werden korrekt in Tour-Liste angezeigt
+- ✅ Gruppierungs-Problem behoben (Base-Tour-ID-Extraktion)
+- ✅ Nur Touren mit > 4 Kunden werden optimiert
+- ✅ Frontend-Fetch-Timeout hinzugefügt (60 Sekunden)
+- ✅ OSRM-Calls mit Timeout versehen (5 Sekunden)
+- **Dateien:** `frontend/index.html`, `backend/routes/workflow_api.py`, `services/osrm_client.py`
+
+### 3. **Route-Visualisierung verbessert**
+- ✅ OSRM-Routen-Linien sichtbarer gemacht (weight: 6, opacity: 0.9)
+- ✅ Fallback-Linien (Luftlinien) dezent gestylt (weight: 3, gestrichelt)
+- ✅ Prüfung auf identische Koordinaten im Frontend
+- ✅ Umfangreiches Debug-Logging für Route-Zeichnung
+- **Dateien:** `frontend/index.html`
+
+---
+
+## ✅ **VORHER ERREICHT (16. November 2025)**
 
 ### 1. **Synonym-Problem behoben**
 - ✅ Fehlende Adressen werden als Warnung statt Fehler behandelt
@@ -211,11 +240,11 @@
 ## 🚀 **NÄCHSTE SCHRITTE (Empfehlung)**
 
 ### Diese Woche:
-1. **OSRM-Visualisierung fixen** - Polyline-Decoder korrigieren
+1. ✅ **OSRM-Visualisierung fixen** - Polyline-Decoder korrigiert (Koordinaten-Formatierung)
 2. **Synonym-Datei vervollständigen** - Für 100% Adress-Erkennung
 3. **Proaktive Routen-Aufteilung** - Von Anfang an aufteilen (29 Kunden → 5-6 Routen direkt)
 4. **CSV-Import reparieren** - Geocoding aktivieren
-5. **Multi-Tour Generator debuggen** - Endpoint reparieren
+5. ✅ **Multi-Tour Generator debuggen** - Endpoint repariert
 
 ### Nächste Woche:
 1. **Frontend für Sektor-Planung** - UI erstellen
@@ -233,5 +262,5 @@
 
 ---
 
-**Zuletzt aktualisiert:** 16. November 2025
+**Zuletzt aktualisiert:** 18. November 2025
 

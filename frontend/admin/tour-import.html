@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour-Import & Vorladen - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #0d6efd;
+            background-color: #f0f7ff;
+        }
+        .upload-area.dragover {
+            border-color: #0d6efd;
+            background-color: #e7f3ff;
+        }
+        .batch-table {
+            margin-top: 20px;
+        }
+        .status-badge {
+            font-size: 0.85em;
+            padding: 0.35em 0.65em;
+        }
+        .stats-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stats-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .progress-container {
+            margin-top: 10px;
+        }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .admin-nav-item i {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Hauptseite</a>
+                <a class="nav-link active" href="/admin/tour-import.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <h1><i class="fas fa-upload"></i> Tour-Import</h1>
+        
+        <!-- Admin-Navigation -->
+        <nav class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin/system.html" class="admin-nav-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
+                </a>
+                <a href="/admin/statistik.html" class="admin-nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item active">
+                    <i class="fas fa-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item">
+                    <i class="fas fa-fill-drip"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                    <i class="fas fa-list-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+            </div>
+        </nav>
+        
+        <div class="mt-3">
+        <!-- Upload-Bereich -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-file-upload"></i> Dateien hochladen</h5>
+            </div>
+            <div class="card-body">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                    <h5>Dateien hier ablegen oder klicken zum Auswählen</h5>
+                    <p class="text-muted">CSV-Dateien oder ZIP-Archive mit mehreren CSVs</p>
+                    <input type="file" id="fileInput" multiple accept=".csv,.zip" style="display: none;">
+                    <button class="btn btn-primary mt-3" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-folder-open"></i> Dateien auswählen
+                    </button>
+                </div>
+                <div id="selectedFiles" class="mt-3" style="display: none;">
+                    <h6>Ausgewählte Dateien:</h6>
+                    <ul id="fileList" class="list-group"></ul>
+                </div>
+                <div class="mt-3">
+                    <label for="batchName" class="form-label">Import-Name:</label>
+                    <input type="text" class="form-control" id="batchName" placeholder="z.B. Kunde_X_2025-11-19">
+                    <small class="form-text text-muted">Optional: Name für diesen Import-Batch</small>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-success" id="startImportBtn" onclick="startImport()" disabled>
+                        <i class="fas fa-play"></i> Import starten
+                    </button>
+                    <button class="btn btn-secondary ms-2" onclick="clearSelection()">
+                        <i class="fas fa-times"></i> Auswahl löschen
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Batch-Geocoding für Tourenpläne -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-map-marked-alt"></i> Batch-Geocoding für Tourenpläne</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Laden Sie Tourenpläne hoch, lassen Sie die Adressen automatisch geocodieren und speichern Sie die Koordinaten direkt in die Datenbank.
+                </p>
+                
+                <div class="mb-4">
+                    <h6><i class="fas fa-upload"></i> Tourenpläne hochladen</h6>
+                    <div class="input-group mb-2">
+                        <input type="file" class="form-control" id="db-tourplan-upload" accept=".csv" multiple onchange="validateCSVFiles()">
+                        <button class="btn btn-primary" type="button" onclick="uploadTourplansForGeocoding()" id="db-upload-button">
+                            <i class="fas fa-cloud-upload-alt"></i> Hochladen
+                        </button>
+                    </div>
+                    <small class="form-text text-muted">
+                        Mehrere CSV-Dateien möglich (max. 10 Dateien, je max. 50 MB). Die Adressen werden automatisch geocodiert und in die DB gespeichert.
+                    </small>
+                    <div id="csv-validation-message" class="mt-2" style="display: none;"></div>
+                </div>
+
+                <div class="mb-4">
+                    <h6><i class="fas fa-list"></i> Verfügbare Tourenpläne</h6>
+                    <div class="d-flex gap-2 mb-2">
+                        <button class="btn btn-outline-primary btn-sm" onclick="loadAvailableTourplans()">
+                            <i class="fas fa-sync"></i> Liste aktualisieren
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="geocodeAllTourplans()">
+                            <i class="fas fa-magic"></i> Alle geocodieren
+                        </button>
+                    </div>
+                    <div id="tourplan-list" class="list-group" style="max-height: 400px; overflow-y: auto;">
+                        <div class="text-center text-muted py-3">
+                            <i class="fas fa-info-circle"></i> Klicken Sie auf "Liste aktualisieren" um verfügbare Tourenpläne zu laden
+                        </div>
+                    </div>
+                </div>
+
+                <div id="geocoding-progress-container" style="display: none;">
+                    <h6><i class="fas fa-tasks"></i> Geocoding-Fortschritt</h6>
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span id="geocoding-progress-text">0 / 0</span>
+                            <span id="geocoding-progress-percent">0%</span>
+                        </div>
+                        <div class="progress" style="height: 25px;">
+                            <div id="geocoding-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                 role="progressbar" style="width: 0%">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="geocoding-status" class="alert alert-info">
+                        <small>Bereit zum Starten...</small>
+                    </div>
+                    <div id="geocoding-results" class="mt-3" style="display: none;">
+                        <h6>Ergebnisse:</h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card text-center border-success">
+                                    <div class="card-body">
+                                        <h3 class="text-success" id="geocoding-success-count">0</h3>
+                                        <small>Erfolgreich</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-warning">
+                                    <div class="card-body">
+                                        <h3 class="text-warning" id="geocoding-skip-count">0</h3>
+                                        <small>Übersprungen</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-danger">
+                                    <div class="card-body">
+                                        <h3 class="text-danger" id="geocoding-error-count">0</h3>
+                                        <small>Fehler</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-info">
+                                    <div class="card-body">
+                                        <h3 class="text-info" id="geocoding-total-count">0</h3>
+                                        <small>Gesamt</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Füllstände & Statistiken -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Kunden gesamt</h6>
+                        <h3 id="statsTotalCustomers">-</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Geocoded OK</h6>
+                        <h3 class="text-success" id="statsGeocodedOk">-</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Geocoding fehlgeschlagen</h6>
+                        <h3 class="text-danger" id="statsGeocodedFailed">-</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Offene Jobs</h6>
+                        <h3 class="text-warning" id="statsPendingJobs">-</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Import-Batches Tabelle -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-list"></i> Import-Batches</h5>
+                <button class="btn btn-sm btn-light" onclick="loadBatches()">
+                    <i class="fas fa-sync"></i> Aktualisieren
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="batchesLoading" class="text-center py-3">
+                    <i class="fas fa-spinner fa-spin"></i> Lade Batches...
+                </div>
+                <div id="batchesTable" style="display: none;">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Datum</th>
+                                    <th>Status</th>
+                                    <th>Touren</th>
+                                    <th>Stops</th>
+                                    <th>Geocoding</th>
+                                    <th>Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="batchesTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="batchesError" class="alert alert-danger" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedFiles = [];
+        
+        // Upload-Area Drag & Drop
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            handleFiles(files);
+        });
+        
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            handleFiles(files);
+        });
+        
+        function handleFiles(files) {
+            const validFiles = files.filter(f => f.name.endsWith('.csv') || f.name.endsWith('.zip'));
+            selectedFiles = [...selectedFiles, ...validFiles];
+            updateFileList();
+            updateImportButton();
+        }
+        
+        function updateFileList() {
+            const fileList = document.getElementById('fileList');
+            const selectedFilesDiv = document.getElementById('selectedFiles');
+            
+            if (selectedFiles.length === 0) {
+                selectedFilesDiv.style.display = 'none';
+                return;
+            }
+            
+            selectedFilesDiv.style.display = 'block';
+            fileList.innerHTML = selectedFiles.map((file, index) => `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-file"></i> ${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>
+                    <button class="btn btn-sm btn-danger" onclick="removeFile(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </li>
+            `).join('');
+        }
+        
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+            updateImportButton();
+        }
+        
+        function clearSelection() {
+            selectedFiles = [];
+            fileInput.value = '';
+            updateFileList();
+            updateImportButton();
+        }
+        
+        function updateImportButton() {
+            const btn = document.getElementById('startImportBtn');
+            btn.disabled = selectedFiles.length === 0;
+        }
+        
+        async function startImport() {
+            if (selectedFiles.length === 0) {
+                alert('Bitte wählen Sie mindestens eine Datei aus.');
+                return;
+            }
+            
+            const batchName = document.getElementById('batchName').value || `Import_${new Date().toISOString().split('T')[0]}`;
+            
+            // Erstelle Batch
+            try {
+                const batchResponse = await fetch('/api/import/batch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: batchName,
+                        source: 'Manueller Upload',
+                        created_by: 'admin'
+                    })
+                });
+                
+                if (!batchResponse.ok) {
+                    throw new Error(`Batch konnte nicht erstellt werden: ${batchResponse.status}`);
+                }
+                
+                const batch = await batchResponse.json();
+                console.log('[IMPORT] Batch erstellt:', batch);
+                
+                // TODO: Dateien hochladen und Import starten
+                alert(`Import-Batch "${batchName}" wurde erstellt (ID: ${batch.id}).\n\nHinweis: Upload und Parsing werden noch implementiert.`);
+                
+                // Batches neu laden
+                loadBatches();
+                clearSelection();
+                
+            } catch (error) {
+                console.error('[IMPORT] Fehler:', error);
+                alert(`Fehler beim Erstellen des Import-Batches: ${error.message}`);
+            }
+        }
+        
+        async function loadBatches() {
+            const loading = document.getElementById('batchesLoading');
+            const table = document.getElementById('batchesTable');
+            const error = document.getElementById('batchesError');
+            const tbody = document.getElementById('batchesTableBody');
+            
+            loading.style.display = 'block';
+            table.style.display = 'none';
+            error.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/import/batches?limit=50');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const batches = await response.json();
+                
+                if (batches.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Keine Import-Batches vorhanden</td></tr>';
+                } else {
+                    tbody.innerHTML = batches.map(batch => {
+                        const date = new Date(batch.created_at);
+                        const statusClass = {
+                            'pending': 'warning',
+                            'running': 'info',
+                            'completed': 'success',
+                            'failed': 'danger'
+                        }[batch.status] || 'secondary';
+                        
+                        const geocodingProgress = batch.total_stops > 0 
+                            ? `${batch.geocoded_ok}/${batch.total_stops} (${Math.round((batch.geocoded_ok / batch.total_stops) * 100)}%)`
+                            : '-';
+                        
+                        return `
+                            <tr>
+                                <td><strong>${escapeHtml(batch.name)}</strong></td>
+                                <td>${date.toLocaleString('de-DE')}</td>
+                                <td><span class="badge bg-${statusClass} status-badge">${batch.status}</span></td>
+                                <td>${batch.total_tours}</td>
+                                <td>${batch.total_stops}</td>
+                                <td>${geocodingProgress}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showBatchDetails(${batch.id})">
+                                        <i class="fas fa-eye"></i> Details
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+                
+                loading.style.display = 'none';
+                table.style.display = 'block';
+                
+            } catch (error) {
+                console.error('[BATCHES] Fehler:', error);
+                loading.style.display = 'none';
+                error.style.display = 'block';
+                error.textContent = `Fehler beim Laden der Batches: ${error.message}`;
+            }
+        }
+        
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/import/stats');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const stats = await response.json();
+                
+                document.getElementById('statsTotalCustomers').textContent = stats.total_customers || 0;
+                document.getElementById('statsGeocodedOk').textContent = stats.customers_geocoded_ok || 0;
+                document.getElementById('statsGeocodedFailed').textContent = stats.customers_geocoded_failed || 0;
+                document.getElementById('statsPendingJobs').textContent = stats.open_geocoding_jobs || 0;
+                
+            } catch (error) {
+                console.error('[STATS] Fehler:', error);
+            }
+        }
+        
+        function showBatchDetails(batchId) {
+            // TODO: Modal oder separate Seite für Batch-Details
+            alert(`Batch-Details für ID ${batchId} werden noch implementiert.`);
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // CSV-Validierung
+        function validateCSVFiles() {
+            const fileInput = document.getElementById('db-tourplan-upload');
+            const files = fileInput.files;
+            const messageDiv = document.getElementById('csv-validation-message');
+            const uploadButton = document.getElementById('db-upload-button');
+            
+            messageDiv.style.display = 'none';
+            uploadButton.disabled = false;
+            
+            if (files.length === 0) return;
+            
+            if (files.length > 10) {
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'mt-2 alert alert-danger';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Maximal 10 Dateien erlaubt!';
+                uploadButton.disabled = true;
+                return;
+            }
+            
+            const maxSize = 50 * 1024 * 1024;
+            let errors = [];
+            
+            for (let file of files) {
+                if (!file.name.toLowerCase().endsWith('.csv')) {
+                    errors.push(`${file.name}: Nur CSV-Dateien erlaubt`);
+                }
+                if (file.size > maxSize) {
+                    errors.push(`${file.name}: Datei zu groß (max. 50 MB)`);
+                }
+                if (file.size === 0) {
+                    errors.push(`${file.name}: Datei ist leer`);
+                }
+            }
+            
+            if (errors.length > 0) {
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'mt-2 alert alert-danger';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> <strong>Validierung fehlgeschlagen:</strong><ul class="mb-0">' +
+                    errors.map(e => `<li>${e}</li>`).join('') + '</ul>';
+                uploadButton.disabled = true;
+            } else {
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'mt-2 alert alert-success';
+                messageDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${files.length} Datei(en) bereit zum Hochladen`;
+            }
+        }
+        
+        // Tourenpläne hochladen
+        async function uploadTourplansForGeocoding() {
+            const fileInput = document.getElementById('db-tourplan-upload');
+            const files = fileInput.files;
+            
+            if (files.length === 0) {
+                alert('Bitte wählen Sie mindestens eine CSV-Datei aus.');
+                return;
+            }
+            
+            document.getElementById('geocoding-progress-container').style.display = 'block';
+            document.getElementById('geocoding-results').style.display = 'none';
+            
+            let totalSuccess = 0, totalSkip = 0, totalError = 0, totalProcessed = 0, totalCustomers = 0;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                updateGeocodingStatus(`Verarbeite ${file.name} (${i + 1}/${files.length})...`, 'info');
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                try {
+                    const response = await fetch('/api/tourplan/batch-geocode', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        totalError++;
+                        continue;
+                    }
+                    
+                    const result = await response.json();
+                    totalSuccess += result.geocoded_count || 0;
+                    totalSkip += result.skipped_count || 0;
+                    totalError += result.error_count || 0;
+                    totalCustomers += result.total_customers || 0;
+                    totalProcessed++;
+                    
+                    const progress = ((i + 1) / files.length) * 100;
+                    updateGeocodingProgress(i + 1, files.length, progress);
+                } catch (error) {
+                    totalError++;
+                }
+            }
+            
+            document.getElementById('geocoding-results').style.display = 'block';
+            document.getElementById('geocoding-success-count').textContent = totalSuccess;
+            document.getElementById('geocoding-skip-count').textContent = totalSkip;
+            document.getElementById('geocoding-error-count').textContent = totalError;
+            document.getElementById('geocoding-total-count').textContent = totalCustomers;
+            
+            updateGeocodingStatus(`Abgeschlossen: ${totalProcessed} von ${files.length} Dateien verarbeitet`, 'success');
+            
+            loadAvailableTourplans();
+            fileInput.value = '';
+        }
+        
+        // Verfügbare Tourenpläne laden
+        async function loadAvailableTourplans() {
+            const listDiv = document.getElementById('tourplan-list');
+            if (!listDiv) return;
+            
+            listDiv.innerHTML = '<div class="text-center text-muted py-3"><i class="fas fa-spinner fa-spin"></i> Lade...</div>';
+            
+            try {
+                const response = await fetch('/api/tourplan/list');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                const tourplans = data.tourplans || [];
+                
+                if (tourplans.length === 0) {
+                    listDiv.innerHTML = '<div class="text-center text-muted py-3"><i class="fas fa-info-circle"></i> Keine Tourenpläne gefunden</div>';
+                    return;
+                }
+                
+                listDiv.innerHTML = tourplans.map(tp => `
+                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">${escapeHtml(tp.filename)}</h6>
+                            <small class="text-muted">
+                                ${tp.customer_count} Kunden | ${tp.geocoded_count} geocodiert (${tp.geocode_rate}%)
+                            </small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary" onclick="geocodeSingleTourplan('${escapeHtml(tp.filename).replace(/'/g, "\\'")}')">
+                            <i class="fas fa-map-marker-alt"></i> Geocodieren
+                        </button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                listDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> Fehler: ${error.message}</div>`;
+            }
+        }
+        
+        // Einzelnen Tourplan geocodieren
+        async function geocodeSingleTourplan(filename) {
+            updateGeocodingStatus(`Geocodiere ${filename}...`, 'info');
+            document.getElementById('geocoding-progress-container').style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/tourplan/geocode-file', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({filename: filename})
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const result = await response.json();
+                
+                document.getElementById('geocoding-results').style.display = 'block';
+                document.getElementById('geocoding-success-count').textContent = result.geocoded_count || 0;
+                document.getElementById('geocoding-skip-count').textContent = result.skipped_count || 0;
+                document.getElementById('geocoding-error-count').textContent = result.error_count || 0;
+                document.getElementById('geocoding-total-count').textContent = result.total_customers || 0;
+                
+                updateGeocodingStatus(`Abgeschlossen: ${filename}`, 'success');
+                loadAvailableTourplans();
+            } catch (error) {
+                updateGeocodingStatus(`Fehler: ${error.message}`, 'danger');
+            }
+        }
+        
+        // Alle Tourenpläne geocodieren
+        async function geocodeAllTourplans() {
+            if (!confirm('Wirklich ALLE Tourenpläne geocodieren? Dies kann lange dauern.')) return;
+            
+            updateGeocodingStatus('Lade Tourenpläne...', 'info');
+            document.getElementById('geocoding-progress-container').style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/tourplan/list');
+                const data = await response.json();
+                const tourplans = data.tourplans || [];
+                
+                let totalSuccess = 0, totalSkip = 0, totalError = 0, totalCustomers = 0;
+                
+                for (let i = 0; i < tourplans.length; i++) {
+                    const tp = tourplans[i];
+                    updateGeocodingStatus(`Verarbeite ${tp.filename} (${i + 1}/${tourplans.length})...`, 'info');
+                    
+                    try {
+                        const response = await fetch('/api/tourplan/geocode-file', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({filename: tp.filename})
+                        });
+                        
+                        const result = await response.json();
+                        totalSuccess += result.geocoded_count || 0;
+                        totalSkip += result.skipped_count || 0;
+                        totalError += result.error_count || 0;
+                        totalCustomers += result.total_customers || 0;
+                        
+                        const progress = ((i + 1) / tourplans.length) * 100;
+                        updateGeocodingProgress(i + 1, tourplans.length, progress);
+                    } catch (error) {
+                        totalError++;
+                    }
+                }
+                
+                document.getElementById('geocoding-results').style.display = 'block';
+                document.getElementById('geocoding-success-count').textContent = totalSuccess;
+                document.getElementById('geocoding-skip-count').textContent = totalSkip;
+                document.getElementById('geocoding-error-count').textContent = totalError;
+                document.getElementById('geocoding-total-count').textContent = totalCustomers;
+                
+                updateGeocodingStatus(`Abgeschlossen: ${tourplans.length} Tourenpläne verarbeitet`, 'success');
+                loadAvailableTourplans();
+            } catch (error) {
+                updateGeocodingStatus(`Fehler: ${error.message}`, 'danger');
+            }
+        }
+        
+        function updateGeocodingProgress(current, total, percent) {
+            document.getElementById('geocoding-progress-text').textContent = `${current} / ${total}`;
+            document.getElementById('geocoding-progress-percent').textContent = `${Math.round(percent)}%`;
+            document.getElementById('geocoding-progress-bar').style.width = `${percent}%`;
+        }
+        
+        function updateGeocodingStatus(message, type) {
+            const statusDiv = document.getElementById('geocoding-status');
+            statusDiv.className = `alert alert-${type}`;
+            statusDiv.innerHTML = `<small>${message}</small>`;
+        }
+        
+        // Beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBatches();
+            loadStats();
+            loadAvailableTourplans();
+            // Stats alle 30 Sekunden aktualisieren
+            setInterval(loadStats, 30000);
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

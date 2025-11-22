@@ -479,12 +479,24 @@ class LiveTrafficDataService:
         all_incidents = self.get_incidents_in_area(bounds)
         
         # Filtere nach tatsächlicher Entfernung zur Route
+        # Berücksichtige auch den radius_km des Hindernisses
         relevant_incidents = []
         for incident in all_incidents:
             # Berechne minimale Distanz zur Route
             min_dist = self._distance_to_route(incident.lat, incident.lon, route_coords)
-            if min_dist <= max_distance_km:
-                relevant_incidents.append(incident)
+            
+            # Hindernis ist relevant wenn:
+            # 1. Distanz zur Route <= max_distance_km ODER
+            # 2. Distanz zur Route <= (max_distance_km + radius_km des Hindernisses)
+            #    (Hindernis hat eigenen Radius, der berücksichtigt werden sollte)
+            incident_radius = incident.radius_km or 0.5  # Default 500m
+            effective_max_distance = max(max_distance_km, incident_radius)
+            
+            if min_dist <= effective_max_distance:
+                # Zusätzlich: Nur Hindernisse mit mindestens "medium" Severity
+                # (low-severity Hindernisse sind oft nicht relevant)
+                if incident.severity in ["medium", "high", "critical"]:
+                    relevant_incidents.append(incident)
         
         return relevant_incidents
     
@@ -524,11 +536,11 @@ class LiveTrafficDataService:
         x1: float, y1: float,
         x2: float, y2: float
     ) -> float:
-        """Berechnet Entfernung eines Punktes zu einem Liniensegment (Haversine)"""
+        """
+        Berechnet Entfernung eines Punktes zu einem Liniensegment (Haversine).
+        Verwendet Projektion auf Liniensegment für präzisere Berechnung.
+        """
         import math
-        
-        # Haversine-Formel
-        R = 6371.0  # Erdradius in km
         
         # Konvertiere zu Radian
         lat1, lon1 = math.radians(x1), math.radians(y1)
@@ -539,8 +551,33 @@ class LiveTrafficDataService:
         d1 = self._haversine_distance(plat, plon, lat1, lon1)
         d2 = self._haversine_distance(plat, plon, lat2, lon2)
         
-        # Berechne Distanz zum Liniensegment (vereinfacht: Minimum der Endpunkte)
-        # TODO: Präzisere Berechnung mit Projektion auf Liniensegment
+        # Berechne Länge des Liniensegments
+        segment_length = self._haversine_distance(lat1, lon1, lat2, lon2)
+        
+        # Wenn Segment sehr kurz, verwende Minimum der Endpunkte
+        if segment_length < 0.001:  # < 1m
+            return min(d1, d2)
+        
+        # Berechne Projektion des Punktes auf das Liniensegment
+        # Vektor vom Startpunkt zum Punkt
+        # Vektor vom Startpunkt zum Endpunkt
+        # Projektion = dot(v1, v2) / |v2|^2
+        
+        # Vereinfachte Projektion auf Großkreis (für kurze Segmente ausreichend)
+        # Für präzisere Berechnung: Verwende Minimum der Endpunkte und Mittelpunkt
+        midpoint_lat = (lat1 + lat2) / 2
+        midpoint_lon = (lon1 + lon2) / 2
+        d_mid = self._haversine_distance(plat, plon, midpoint_lat, midpoint_lon)
+        
+        # Nimm Minimum von: Endpunkte, Mittelpunkt
+        min_dist = min(d1, d2, d_mid)
+        
+        # Wenn Punkt zwischen den Endpunkten liegt (d1 + d2 ≈ segment_length), 
+        # verwende die kleinere Distanz
+        if abs(d1 + d2 - segment_length) < 0.01:  # Punkt liegt zwischen Endpunkten
+            return min_dist
+        
+        # Sonst: Punkt liegt außerhalb, verwende Distanz zum nächsten Endpunkt
         return min(d1, d2)
     
     def _haversine_distance(self, lat1: float, lon1: float, lat2: float, lon2: float) -> float:

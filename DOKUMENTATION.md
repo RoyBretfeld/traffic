@@ -1,7 +1,7 @@
 # 📚 FAMO TrafficApp - Zentrale Dokumentations-Übersicht
 
-**Version:** 2.1  
-**Stand:** 2025-11-16  
+**Version:** 2.2  
+**Stand:** 2025-11-18  
 **Zweck:** Single Source of Truth für alle Projektdokumente
 
 ---
@@ -29,7 +29,7 @@ TrafficApp/
 │   ├── AUDIT_CHECKLISTE.md           - 9-Punkte-Checkliste
 │   ├── CURSOR_PROMPT_TEMPLATE.md     - 12 fertige Cursor-Templates
 │   ├── CURSOR_WORKFLOW.md            - 6-Schritt-Workflow-Leitfaden
-│   ├── LESSONS_LOG.md                - Lernbuch (3 Einträge)
+│   ├── LESSONS_LOG.md                - Lernbuch (25 Einträge, 17 kritische Fehler)
 │   └── README.md                     - Übersicht aller Regeln
 │
 ├── 📍 REGELN_HIER.md                 ← Schnellzugriff (Pointer)

@@ -21,6 +21,7 @@
 - **`Regeln/LESSONS_LOG.md`** - Lernhistorie (bekannte Fehler)
 - **`Regeln/CURSOR_WORKFLOW.md`** - 6-Schritt-Workflow-Prozess
 - **`Regeln/AUDIT_FLOW_ROUTING.md`** - Modularer Audit-Flow (Routing/OSRM)
+- **`Regeln/ADMIN_NAVIGATION_STANDARDS.md`** - Admin-Bereich: Navigation & Layout-Standards (bei Admin-Änderungen!)
 - **`Global/CURSOR_USAGE_BEISPIEL.md`** - Copy & Paste Prompts (3 Szenarien)
 
 ---
@@ -92,6 +93,12 @@ Diese Verzeichnisse/Dateien sind **TABU** für Code-Änderungen:
 4. **Lies:** `PROJECT_PROFILE.md` → Abschnitt 3.2
 5. **Dann:** Problem analysieren
 
+### Szenario 5: Admin-Bereich erweitern / ändern
+1. **Lies:** `Regeln/CURSOR_WORKFLOW.md` → 6-Schritt-Prozess
+2. **Lies:** `Regeln/ADMIN_NAVIGATION_STANDARDS.md` - **KRITISCH:** Navigation-Standards
+3. **Lies:** `PROJECT_PROFILE.md` (Projektkontext)
+4. **Dann:** Admin-Änderung durchführen (nur Tabs in `admin.html`, keine separaten Seiten!)
+
 ---
 
 ## ⚠️ KRITISCHE REGELN (niemals ignorieren!)
@@ -140,6 +147,12 @@ Diese Verzeichnisse/Dateien sind **TABU** für Code-Änderungen:
    4. Änderung einbauen
    5. Tests & Health-Checks
    6. Lessons aktualisieren
+
+### 10. Admin-Bereich: Nur EINE Admin-Hauptseite
+❌ Keine separaten Admin-HTML-Seiten (`admin_*.html`) erstellen
+❌ Keine doppelte Navigation im Admin-Bereich
+✅ **Immer** `admin.html` mit Tabs erweitern (siehe `Regeln/ADMIN_NAVIGATION_STANDARDS.md`)
+✅ Neue Admin-Module als Tabs/Sektionen in bestehender Struktur integrieren
 
 ---
 
@@ -211,9 +224,9 @@ Diese Verzeichnisse/Dateien sind **TABU** für Code-Änderungen:
 **Infrastruktur:** Proxmox-LXC, Docker (OSRM), Leaflet  
 **Hauptfeatures:** Touren-Workflow, Sub-Routen-Generator, OSRM-Routing
 
-**Dokumentation:** 17 Dokumente (~6.500 Zeilen)  
-**Stand:** 2025-11-16  
-**Version:** 2.2 (konsolidiert mit Verzeichnis-Regeln, Golden-Tests, Git-Hooks/CI)
+**Dokumentation:** 18 Dokumente (~6.800 Zeilen)  
+**Stand:** 2025-11-19  
+**Version:** 2.3 (Admin-Navigation-Standards hinzugefügt)
 
 ---
 

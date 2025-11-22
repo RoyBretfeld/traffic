@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistik - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .stat-kpi-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+        }
+        .stat-kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .stat-kpi-card h4 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .admin-nav-item i {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Hauptseite</a>
+                <a class="nav-link active" href="/admin/statistik.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <h1><i class="fas fa-chart-bar"></i> Statistik</h1>
+        
+        <!-- Admin-Navigation -->
+        <nav class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin/system.html" class="admin-nav-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
+                </a>
+                <a href="/admin/statistik.html" class="admin-nav-item active">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item">
+                    <i class="fas fa-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                    <i class="fas fa-list-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- KPI-Boxen -->
+        <div class="row mb-4 mt-3" id="stats-kpi-boxes">
+            <div class="col-md-2 mb-3">
+                <div class="card text-center border-primary stat-kpi-card">
+                    <div class="card-body">
+                        <h4 class="text-primary mb-1" id="kpi-tours">-</h4>
+                        <small class="text-muted">Touren gesamt</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="card text-center border-success stat-kpi-card">
+                    <div class="card-body">
+                        <h4 class="text-success mb-1" id="kpi-km">-</h4>
+                        <small class="text-muted">Kilometer</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="card text-center border-info stat-kpi-card">
+                    <div class="card-body">
+                        <h4 class="text-info mb-1" id="kpi-avg-stops">-</h4>
+                        <small class="text-muted">Ø Stops/Tour</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="card text-center border-warning stat-kpi-card">
+                    <div class="card-body">
+                        <h4 class="text-warning mb-1" id="kpi-avg-delay">-</h4>
+                        <small class="text-muted">Ø Verspätung</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="card text-center border-secondary stat-kpi-card">
+                    <div class="card-body">
+                        <h4 class="text-secondary mb-1" id="kpi-avg-score">-</h4>
+                        <small class="text-muted">Ø Success-Score</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="card text-center border-danger stat-kpi-card">
+                    <div class="card-body">
+                        <h4 class="text-danger mb-1" id="kpi-abort-rate">-</h4>
+                        <small class="text-muted">Abbruchquote</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Kosten-KPI-Boxen -->
+        <div class="row mb-4" id="cost-kpi-boxes">
+            <div class="col-md-3 mb-3">
+                <div class="card text-center border-warning stat-kpi-card" style="border-left: 4px solid #ffc107;">
+                    <div class="card-body">
+                        <h4 class="text-warning mb-1" id="kpi-total-cost">-</h4>
+                        <small class="text-muted">Gesamtkosten</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center border-success stat-kpi-card" style="border-left: 4px solid #28a745;">
+                    <div class="card-body">
+                        <h4 class="text-success mb-1" id="kpi-avg-cost-tour">-</h4>
+                        <small class="text-muted">Ø Kosten/Tour</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center border-info stat-kpi-card" style="border-left: 4px solid #17a2b8;">
+                    <div class="card-body">
+                        <h4 class="text-info mb-1" id="kpi-avg-cost-stop">-</h4>
+                        <small class="text-muted">Ø Kosten/Stop</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center border-primary stat-kpi-card" style="border-left: 4px solid #007bff;">
+                    <div class="card-body">
+                        <h4 class="text-primary mb-1" id="kpi-avg-cost-km">-</h4>
+                        <small class="text-muted">Ø Kosten/km</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Statistik-Details</h5>
+                <div>
+                    <select id="stats-period" class="form-select form-select-sm d-inline-block" style="width: auto;">
+                        <option value="daily">Täglich</option>
+                        <option value="monthly" selected>Monatlich</option>
+                    </select>
+                    <select id="stats-count" class="form-select form-select-sm d-inline-block ms-2" style="width: auto;">
+                        <option value="7">7</option>
+                        <option value="14">14</option>
+                        <option value="30" selected>30</option>
+                        <option value="90">90</option>
+                        <option value="365">365</option>
+                    </select>
+                    <button class="btn btn-sm btn-primary ms-2" onclick="loadStats()">
+                        <i class="fas fa-sync"></i> Aktualisieren
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="stats-loading" class="text-center py-4">
+                    <i class="fas fa-spinner fa-spin"></i> Lade Statistiken...
+                </div>
+                <div id="stats-content" style="display: none;">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header"><h6 class="mb-0">Touren</h6></div>
+                                <div class="card-body">
+                                    <canvas id="chart-tours"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header"><h6 class="mb-0">Stops</h6></div>
+                                <div class="card-body">
+                                    <canvas id="chart-stops"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header"><h6 class="mb-0">Kilometer</h6></div>
+                                <div class="card-body">
+                                    <canvas id="chart-km"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header"><h6 class="mb-0">Verspätung & Score</h6></div>
+                                <div class="card-body">
+                                    <canvas id="chart-delay-score"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header"><h6 class="mb-0">Kosten pro Tag</h6></div>
+                                <div class="card-body">
+                                    <canvas id="chart-costs"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header"><h6 class="mb-0">Kosten pro Stop</h6></div>
+                                <div class="card-body">
+                                    <canvas id="chart-cost-per-stop"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header"><h6 class="mb-0">Kosten pro km</h6></div>
+                                <div class="card-body">
+                                    <canvas id="chart-cost-per-km"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-success" onclick="exportStats('csv')">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                        <button class="btn btn-info" onclick="exportStats('json')">
+                            <i class="fas fa-file-code"></i> Export JSON
+                        </button>
+                    </div>
+                </div>
+                <div id="stats-error" class="alert alert-danger" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        // Chart-Instanzen
+        let toursChart = null;
+        let stopsChart = null;
+        let kmChart = null;
+        let delayScoreChart = null;
+        let costsChart = null;
+        let costPerStopChart = null;
+        let costPerKmChart = null;
+        
+        // Formatierung für Währung
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('de-DE', { 
+                style: 'currency', 
+                currency: 'EUR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(value || 0);
+        }
+
+        // Statistiken laden
+        async function loadStats() {
+            const period = document.getElementById('stats-period').value;
+            const count = parseInt(document.getElementById('stats-count').value);
+            const loadingEl = document.getElementById('stats-loading');
+            const contentEl = document.getElementById('stats-content');
+            const errorEl = document.getElementById('stats-error');
+
+            loadingEl.style.display = 'block';
+            contentEl.style.display = 'none';
+            errorEl.style.display = 'none';
+
+            try {
+                const endpoint = period === 'daily' ? '/api/stats/daily' : '/api/stats/monthly';
+                const param = period === 'daily' ? 'days' : 'months';
+                const response = await fetch(`${endpoint}?${param}=${count}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const stats = period === 'daily' ? data.days : data.months;
+
+                // KPI-Boxen immer aktualisieren (auch wenn keine Daten)
+                updateKPIBoxes(stats || []);
+
+                if (!stats || stats.length === 0) {
+                    // Zeige Meldung, aber verstecke Loading
+                    loadingEl.style.display = 'none';
+                    contentEl.style.display = 'block';
+                    errorEl.textContent = 'Keine Daten verfügbar für den ausgewählten Zeitraum.';
+                    errorEl.style.display = 'block';
+                    return;
+                }
+
+                // Charts aktualisieren
+                updateCharts(stats, period);
+                
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+                errorEl.style.display = 'none';
+            } catch (e) {
+                loadingEl.style.display = 'none';
+                errorEl.textContent = `Fehler beim Laden der Statistiken: ${e.message}`;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // KPI-Boxen aktualisieren
+        function updateKPIBoxes(stats) {
+            // Wenn keine Daten vorhanden, zeige 0 oder "-"
+            if (!stats || stats.length === 0) {
+                document.getElementById('kpi-tours').textContent = '0';
+                document.getElementById('kpi-km').textContent = '0 km';
+                document.getElementById('kpi-avg-stops').textContent = '0.0';
+                document.getElementById('kpi-avg-delay').textContent = '-';
+                document.getElementById('kpi-avg-score').textContent = '-';
+                document.getElementById('kpi-abort-rate').textContent = '0.0 %';
+                
+                // Kosten-KPIs
+                document.getElementById('kpi-total-cost').textContent = '-';
+                document.getElementById('kpi-avg-cost-tour').textContent = '-';
+                document.getElementById('kpi-avg-cost-stop').textContent = '-';
+                document.getElementById('kpi-avg-cost-km').textContent = '-';
+                return;
+            }
+            
+            // Aggregiere über alle Perioden
+            const totalTours = stats.reduce((sum, s) => sum + (s.tours || 0), 0);
+            const totalKm = stats.reduce((sum, s) => sum + (s.km || 0), 0);
+            const totalStops = stats.reduce((sum, s) => sum + (s.stops || 0), 0);
+            const avgStops = totalTours > 0 ? (totalStops / totalTours).toFixed(1) : '0.0';
+            
+            // Durchschnittswerte berechnen (nur wenn Daten vorhanden)
+            const statsWithDelay = stats.filter(s => s.avg_delay_minutes !== undefined && s.avg_delay_minutes !== null);
+            const avgDelay = statsWithDelay.length > 0 
+                ? (statsWithDelay.reduce((sum, s) => sum + (s.avg_delay_minutes || 0), 0) / statsWithDelay.length)
+                : 0;
+            
+            const statsWithScore = stats.filter(s => s.avg_success_score !== undefined && s.avg_success_score !== null);
+            const avgScore = statsWithScore.length > 0
+                ? (statsWithScore.reduce((sum, s) => sum + (s.avg_success_score || 0), 0) / statsWithScore.length)
+                : 0;
+            
+            const totalAborted = stats.reduce((sum, s) => sum + (s.aborted_tours || 0), 0);
+            const abortRate = totalTours > 0 ? ((totalAborted / totalTours) * 100).toFixed(1) : '0.0';
+            
+            document.getElementById('kpi-tours').textContent = totalTours;
+            document.getElementById('kpi-km').textContent = totalKm.toFixed(0) + ' km';
+            document.getElementById('kpi-avg-stops').textContent = avgStops;
+            document.getElementById('kpi-avg-delay').textContent = avgDelay > 0 ? avgDelay.toFixed(1) + ' min' : '-';
+            document.getElementById('kpi-avg-score').textContent = avgScore > 0 ? avgScore.toFixed(1) : '-';
+            document.getElementById('kpi-abort-rate').textContent = abortRate + ' %';
+            
+            // Kosten-KPIs berechnen
+            const totalCost = stats.reduce((sum, s) => sum + (s.total_cost || 0), 0);
+            const avgCostPerTour = totalTours > 0 ? (totalCost / totalTours) : 0;
+            const avgCostPerStop = totalStops > 0 ? (totalCost / totalStops) : 0;
+            const avgCostPerKm = totalKm > 0 ? (totalCost / totalKm) : 0;
+            
+            document.getElementById('kpi-total-cost').textContent = formatCurrency(totalCost);
+            document.getElementById('kpi-avg-cost-tour').textContent = formatCurrency(avgCostPerTour);
+            document.getElementById('kpi-avg-cost-stop').textContent = formatCurrency(avgCostPerStop);
+            document.getElementById('kpi-avg-cost-km').textContent = formatCurrency(avgCostPerKm);
+        }
+        
+        // Charts aktualisieren
+        function updateCharts(stats, period) {
+            const labelKey = period === 'daily' ? 'date' : 'month';
+            const labels = stats.map(s => s[labelKey]).reverse();
+            const toursData = stats.map(s => s.tours).reverse();
+            const stopsData = stats.map(s => s.stops).reverse();
+            const kmData = stats.map(s => s.km || 0).reverse();
+            const delayData = stats.map(s => s.avg_delay_minutes || 0).reverse();
+            const scoreData = stats.map(s => s.avg_success_score || 0).reverse();
+
+            const chartConfig = {
+                type: 'line',
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            };
+
+            // Touren-Chart
+            if (toursChart) toursChart.destroy();
+            toursChart = new Chart(document.getElementById('chart-tours'), {
+                ...chartConfig,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Touren',
+                        data: toursData,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1
+                    }]
+                }
+            });
+
+            // Stops-Chart
+            if (stopsChart) stopsChart.destroy();
+            stopsChart = new Chart(document.getElementById('chart-stops'), {
+                ...chartConfig,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Stops',
+                        data: stopsData,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.1
+                    }]
+                }
+            });
+
+            // KM-Chart
+            if (kmChart) kmChart.destroy();
+            kmChart = new Chart(document.getElementById('chart-km'), {
+                ...chartConfig,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Kilometer',
+                        data: kmData,
+                        borderColor: 'rgb(54, 162, 235)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.1
+                    }]
+                }
+            });
+
+            // Verspätung & Score Chart
+            if (delayScoreChart) delayScoreChart.destroy();
+            delayScoreChart = new Chart(document.getElementById('chart-delay-score'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ø Verspätung (min)',
+                        data: delayData,
+                        backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                        borderColor: 'rgb(255, 206, 86)',
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Ø Success-Score',
+                        data: scoreData,
+                        type: 'line',
+                        borderColor: 'rgb(153, 102, 255)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        yAxisID: 'y1',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Verspätung (min)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Score (0-100)'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Kosten-Chart (Gesamtkosten pro Tag)
+            const costData = stats.map(s => s.total_cost || 0).reverse();
+            if (costsChart) costsChart.destroy();
+            costsChart = new Chart(document.getElementById('chart-costs'), {
+                ...chartConfig,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Gesamtkosten (€)',
+                        data: costData,
+                        borderColor: 'rgb(255, 193, 7)',
+                        backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    ...chartConfig.options,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Kosten pro Stop Chart
+            const costPerStopData = stats.map(s => s.avg_cost_per_stop || 0).reverse();
+            if (costPerStopChart) costPerStopChart.destroy();
+            costPerStopChart = new Chart(document.getElementById('chart-cost-per-stop'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ø Kosten/Stop (€)',
+                        data: costPerStopData,
+                        backgroundColor: 'rgba(23, 162, 184, 0.6)',
+                        borderColor: 'rgb(23, 162, 184)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Kosten pro km Chart
+            const costPerKmData = stats.map(s => s.avg_cost_per_km || 0).reverse();
+            if (costPerKmChart) costPerKmChart.destroy();
+            costPerKmChart = new Chart(document.getElementById('chart-cost-per-km'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ø Kosten/km (€)',
+                        data: costPerKmData,
+                        backgroundColor: 'rgba(0, 123, 255, 0.6)',
+                        borderColor: 'rgb(0, 123, 255)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Export-Funktion
+        function exportStats(format) {
+            const period = document.getElementById('stats-period').value;
+            const count = parseInt(document.getElementById('stats-count').value);
+            const url = `/api/stats/export/${format}?period=${period}&count=${count}`;
+            // Öffne Download-Link in neuem Tab
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = '';
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Beim Laden: Statistiken laden
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+        });
+    </script>
+</body>
+</html>
+

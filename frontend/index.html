@@ -55,6 +55,27 @@
         .list-group-item, .table tbody tr {
             will-change: transform, background-color;
         }
+        
+        /* Route-Polylines: Sehr sichtbar machen */
+        .route-polyline {
+            stroke-width: 4px !important;
+            stroke-opacity: 0.8 !important;
+            filter: drop-shadow(0 0 3px rgba(0,0,0,0.5));
+        }
+        .leaflet-interactive.route-polyline {
+            stroke-width: 4px !important;
+            stroke-opacity: 0.8 !important;
+        }
+        
+        /* Fallback-Linien: Sichtbar, aber dezent */
+        .route-polyline-fallback {
+            stroke-width: 2px !important;
+            stroke-opacity: 0.7 !important;
+        }
+        .leaflet-interactive.route-polyline-fallback {
+            stroke-width: 2px !important;
+            stroke-opacity: 0.7 !important;
+        }
         .tour-card-layout { display: flex; flex-direction: column; }
         @media (min-width: 768px) { .tour-card-layout { flex-direction: row; } }
         .tour-list-column { flex: 0 0 320px; padding: 1rem 1.5rem 1rem 0; border-right: 1px solid #dee2e6; }
@@ -121,12 +142,6 @@
                 <a class="nav-link" href="/admin.html">
                     <i class="fas fa-cog"></i> Admin
                 </a>
-                <a class="nav-link" href="/ui/test-dashboard">
-                    <i class="fas fa-vial"></i> Test-Dashboard
-                </a>
-                <a class="nav-link" href="/ui/ai-test">
-                    <i class="fas fa-robot"></i> AI Test
-                </a>
                 <a class="nav-link" href="/docs">API Docs</a>
             </div>
             
@@ -144,10 +159,6 @@
                 <span class="navbar-text me-3" id="dbStatus">
                     <i class="fas fa-database text-info"></i> DB prüfe...
                 </span>
-                <a href="/admin/ki-improvements" class="navbar-text me-3 text-decoration-none position-relative" id="ki-monitor-link" title="CC - CodeChecker Dashboard">
-                    <i class="fas fa-robot text-primary"></i> CC
-                    <span class="badge bg-success position-absolute top-0 start-100 translate-middle" id="ki-monitor-badge" style="font-size: 0.6em; display: none;">0</span>
-                </a>
             </div>
         </div>
     </nav>
@@ -239,21 +250,6 @@
                     <button id="toggleTrafficIncidentsBtn" class="btn btn-secondary" style="flex: 1;" onclick="toggleTrafficIncidents()" title="Baustellen, Unfälle, Sperrungen auf der Karte ein-/ausblenden">
                         <i class="fas fa-eye"></i> Hindernisse einblenden
                     </button>
-                </div>
-                
-                <!-- KI-Verbesserungen Widget -->
-                <div class="ki-improvements-widget mt-3">
-                    <h5><i class="fas fa-robot"></i> KI-Verbesserungen</h5>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>Heute:</span>
-                        <span class="badge bg-success" id="ki-improvements-badge">0</span>
-                    </div>
-                    <div id="ki-improvements-list" class="small">
-                        <div class="text-muted">Lade...</div>
-                    </div>
-                    <a href="/admin/ki-improvements" class="btn btn-sm btn-outline-primary w-100 mt-2">
-                        <i class="fas fa-chart-line"></i> Dashboard
-                    </a>
                 </div>
             </div>
             </div>
@@ -437,73 +433,73 @@
         // WICHTIG: Funktionen SOFORT definieren, damit sie für onclick/onchange verfügbar sind
         window.handleFileChange = function() {
             return safeExecute(() => {
-                console.log('[FILE-CHANGE] handleFileChange() aufgerufen');
-                
-                const input = document.getElementById('csvFile');
-                if (!input) {
+            console.log('[FILE-CHANGE] handleFileChange() aufgerufen');
+            
+            const input = document.getElementById('csvFile');
+            if (!input) {
                     console.warn('[FILE-CHANGE] csvFile Input nicht gefunden!');
-                    return;
+                return;
+            }
+            
+            const status = document.getElementById('workflowStatus');
+            const uploadInfo = document.getElementById('uploadInfo');
+            
+            if (!input.files || !input.files.length) {
+                console.log('[FILE-CHANGE] Keine Datei ausgewählt');
+                if (typeof currentFilename !== 'undefined') currentFilename = null;
+                if (status) {
+                    status.innerHTML = 'Noch kein Upload.';
+                    status.className = 'small text-muted mb-3';
                 }
-                
-                const status = document.getElementById('workflowStatus');
-                const uploadInfo = document.getElementById('uploadInfo');
-                
-                if (!input.files || !input.files.length) {
-                    console.log('[FILE-CHANGE] Keine Datei ausgewählt');
-                    if (typeof currentFilename !== 'undefined') currentFilename = null;
-                    if (status) {
-                        status.innerHTML = 'Noch kein Upload.';
-                        status.className = 'small text-muted mb-3';
-                    }
-                    if (uploadInfo) {
-                        uploadInfo.innerHTML = '';
-                    }
-                    return;
+                if (uploadInfo) {
+                    uploadInfo.innerHTML = '';
                 }
-                
-                const file = input.files[0];
-                if (typeof currentFilename !== 'undefined') currentFilename = file.name;
-                console.log('[FILE-CHANGE] Datei ausgewählt:', file.name, `(${(file.size/1024).toFixed(1)} KB)`);
-                
-                // Upload über neue API (wird später definiert)
-                if (typeof uploadCsvFile === 'function') {
-                    uploadCsvFile(file);
-                } else {
+                return;
+            }
+            
+            const file = input.files[0];
+            if (typeof currentFilename !== 'undefined') currentFilename = file.name;
+            console.log('[FILE-CHANGE] Datei ausgewählt:', file.name, `(${(file.size/1024).toFixed(1)} KB)`);
+            
+            // Upload über neue API (wird später definiert)
+            if (typeof uploadCsvFile === 'function') {
+                uploadCsvFile(file);
+            } else {
                     console.warn('[FILE-CHANGE] uploadCsvFile() noch nicht definiert - wird übersprungen');
-                }
+            }
             }, () => {}, 'handleFileChange');
         };
         
         window.runWorkflow = async function() {
             return await safeExecuteAsync(async () => {
-                console.log('[WORKFLOW] runWorkflow() aufgerufen');
-                
-                const fileInput = document.getElementById('csvFile');
-                if (!fileInput) {
+            console.log('[WORKFLOW] runWorkflow() aufgerufen');
+            
+            const fileInput = document.getElementById('csvFile');
+            if (!fileInput) {
                     const errorMsg = 'Fehler: Datei-Input nicht gefunden. Bitte Seite neu laden.';
                     console.error('[WORKFLOW]', errorMsg);
                     alert(errorMsg);
                     updateWorkflowStatus(`<span class="text-danger">${errorMsg}</span>`);
-                    return;
-                }
-                
-                const file = fileInput.files[0];
-                console.log('[WORKFLOW] Datei:', file ? file.name : 'KEINE DATEI');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            console.log('[WORKFLOW] Datei:', file ? file.name : 'KEINE DATEI');
 
-                if (!file) {
+            if (!file) {
                     const errorMsg = 'Bitte wählen Sie zuerst eine CSV-Datei aus!';
                     console.warn('[WORKFLOW]', errorMsg);
                     alert(errorMsg);
                     updateWorkflowStatus(`<span class="text-warning">${errorMsg}</span>`);
-                    return;
-                }
-                
-                console.log('[WORKFLOW] Starte Workflow für:', file.name);
-                
-                // Weiterleitung zur vollständigen runWorkflow-Funktion (wird später definiert)
-                if (window._runWorkflowFull) {
-                    await window._runWorkflowFull();
-                } else {
+                return;
+            }
+            
+            console.log('[WORKFLOW] Starte Workflow für:', file.name);
+            
+            // Weiterleitung zur vollständigen runWorkflow-Funktion (wird später definiert)
+            if (window._runWorkflowFull) {
+                await window._runWorkflowFull();
+            } else {
                     const errorMsg = 'Workflow-Funktion noch nicht geladen. Bitte warten Sie einen Moment und versuchen Sie es erneut.';
                     console.error('[WORKFLOW]', errorMsg);
                     alert(errorMsg);
@@ -612,7 +608,7 @@
                 // Problem: Wenn beide vorhanden sind, wurde allTourCustomers verwendet, was die alten
                 // Haupttouren enthielt. Jetzt löschen wir alte Einträge in allTourCustomers, die zu
                 // den Touren in workflowResult gehören, bevor wir rendern.
-                if (workflowResult && workflowResult.tours && workflowResult.tours.length > 0) {
+                    if (workflowResult && workflowResult.tours && workflowResult.tours.length > 0) {
                     // Lösche alte Einträge in allTourCustomers, die zu diesen Touren gehören
                     const baseTourIds = new Set();
                     workflowResult.tours.forEach(tour => {
@@ -656,21 +652,21 @@
                     }
                     
                     // Rendere aus workflowResult (enthält Sub-Routen)
-                    renderToursFromMatch(workflowResult);
+                        renderToursFromMatch(workflowResult);
                     // WICHTIG: Speichere die aktualisierten allTourCustomers sofort!
                     // renderToursFromMatch() erstellt neue Einträge in allTourCustomers,
                     // diese müssen gespeichert werden, damit sie nach Reload erhalten bleiben.
                     saveToursToStorage();
-                    // Sub-Routen Button aktualisieren nach dem Rendern
-                    updateSubRouteButtonVisibility();
-                } else if (Object.keys(allTourCustomers).length > 0) {
+                        // Sub-Routen Button aktualisieren nach dem Rendern
+                        updateSubRouteButtonVisibility();
+                    } else if (Object.keys(allTourCustomers).length > 0) {
                     // Nur wenn workflowResult leer ist, verwende allTourCustomers
                     console.log('[RESTORE] workflowResult leer, verwende allTourCustomers');
-                    renderToursFromCustomers();
-                    // WICHTIG: Button auch hier aktualisieren!
-                    updateSubRouteButtonVisibility();
-                }
-                
+                        renderToursFromCustomers();
+                        // WICHTIG: Button auch hier aktualisieren!
+                        updateSubRouteButtonVisibility();
+                    }
+                    
                 // WICHTIG: Normalisiere auch activeTourKey beim Laden
                 if (savedTourKey) {
                     let normalizedTourKey = savedTourKey;
@@ -698,9 +694,9 @@
                     }
                     
                     if (allTourCustomers[normalizedTourKey]) {
-                        setTimeout(() => {
+                    setTimeout(() => {
                             selectTour(normalizedTourKey);
-                        }, 100);
+                    }, 100);
                     } else {
                         console.warn(`[RESTORE] activeTourKey "${normalizedTourKey}" nicht in allTourCustomers gefunden`);
                     }
@@ -931,11 +927,26 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM geladen, starte...');
             console.log('[AUTO-LOG] Automatisches Fehler-Logging aktiviert - JEDER Fehler wird gespeichert!');
+            
+            // Phantomroute-Problem beheben: Prüfe ob wir vom Admin-Bereich kommen
+            const referrer = document.referrer;
+            const isFromAdmin = referrer && (referrer.includes('/admin/') || referrer.includes('/admin.html'));
+            
+            if (isFromAdmin) {
+                console.log('[RESTORE] Komme vom Admin-Bereich - lösche nur activeTourKey, behalte Touren');
+                // Lösche nur activeTourKey, damit keine Phantomroute angezeigt wird
+                // Aber behalte workflowResult und allTourCustomers, damit die Touren wiederhergestellt werden
+                localStorage.removeItem('activeTourKey');
+                // WICHTIG: restoreToursFromStorage() trotzdem aufrufen, damit Touren geladen werden
+                // Aber ohne activeTourKey wird keine Phantomroute angezeigt
+                restoreToursFromStorage();
+            } else {
+                // Normale Wiederherstellung
+                restoreToursFromStorage();
+            }
+            
             initializeMap();
             loadStatusData();
-            restoreToursFromStorage();
-            loadKIImprovementsWidget();
-            connectKIImprovementsWebSocket();
             refreshOsrmBadge(); // OSRM-Badge beim Laden
             
             // Button-Status beim Laden initialisieren
@@ -946,142 +957,6 @@
             }, 500);
         });
         
-        // KI-Verbesserungen Widget
-        async function loadKIImprovementsWidget() {
-            return await safeExecuteAsync(async () => {
-                const response = await fetch('/api/ki-improvements/stats');
-                if (!response.ok) {
-                    console.warn('[KI-WIDGET] Stats-API Fehler:', response.status);
-                    return;
-                }
-                
-                const stats = await response.json();
-                
-                const badge = document.getElementById('ki-improvements-badge');
-                if (badge) {
-                    badge.textContent = stats.improvements_today || 0;
-                }
-                
-                // Navbar-Badge aktualisieren
-                const navbarBadge = document.getElementById('ki-monitor-badge');
-                if (navbarBadge) {
-                    const count = stats.improvements_today || 0;
-                    if (count > 0) {
-                        navbarBadge.textContent = count;
-                        navbarBadge.style.display = 'inline-block';
-                    } else {
-                        navbarBadge.style.display = 'none';
-                    }
-                }
-                
-                // Lade letzte Verbesserungen
-                const recentResponse = await fetch('/api/ki-improvements/recent?limit=3');
-                if (!recentResponse.ok) {
-                    console.warn('[KI-WIDGET] Recent-API Fehler:', recentResponse.status);
-                    return;
-                }
-                
-                const improvements = await recentResponse.json();
-                
-                const list = document.getElementById('ki-improvements-list');
-                if (list && improvements.length > 0) {
-                    list.innerHTML = improvements.map(imp => {
-                        const file = imp.file.split('/').pop() || imp.file;
-                        const icon = imp.action === 'improved' ? '✅' : '⚠️';
-                        const time = new Date(imp.timestamp).toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
-                        return `<div class="mb-1"><small>${icon} ${file} (${time})</small></div>`;
-                    }).join('');
-                } else if (list) {
-                    list.innerHTML = '<div class="text-muted">Noch keine Verbesserungen</div>';
-                }
-            }, async (error) => {
-                console.error('[KI-WIDGET] Fehler beim Laden:', error);
-            }, 'loadKIImprovementsWidget');
-        }
-        
-        // WebSocket für Live-Updates
-        let kiWebSocket = null;
-        
-        function connectKIImprovementsWebSocket() {
-            try {
-                const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-                const wsUrl = `${protocol}//${window.location.host}/ws/ki-improvements`;
-                kiWebSocket = new WebSocket(wsUrl);
-                
-                kiWebSocket.onmessage = (event) => {
-                    const data = JSON.parse(event.data);
-                    
-                    if (data.type === 'improvement') {
-                        // Toast-Notification anzeigen
-                        showImprovementToast(data.data);
-                        // Widget aktualisieren
-                        loadKIImprovementsWidget();
-                    } else if (data.type === 'stats') {
-                        // Stats aktualisieren
-                        const badge = document.getElementById('ki-improvements-badge');
-                        if (badge && data.data) {
-                            badge.textContent = data.data.improvements_today || 0;
-                        }
-                        
-                        // Navbar-Badge aktualisieren
-                        const navbarBadge = document.getElementById('ki-monitor-badge');
-                        if (navbarBadge && data.data) {
-                            const count = data.data.improvements_today || 0;
-                            if (count > 0) {
-                                navbarBadge.textContent = count;
-                                navbarBadge.style.display = 'inline-block';
-                            } else {
-                                navbarBadge.style.display = 'none';
-                            }
-                        }
-                    }
-                };
-                
-                kiWebSocket.onerror = (error) => {
-                    // WebSocket-Fehler sind nicht kritisch - nur loggen, nicht in Konsole spammen
-                    // console.error('[KI-WEBSOCKET] Fehler:', error);
-                };
-                
-                kiWebSocket.onclose = () => {
-                    // Reconnect nach 5 Sekunden
-                    setTimeout(connectKIImprovementsWebSocket, 5000);
-                };
-            } catch (e) {
-                console.error('[KI-WEBSOCKET] Verbindungsfehler:', e);
-            }
-        }
-        
-        // Toast-Notification
-        function showImprovementToast(improvement) {
-            const file = improvement.file.split('/').pop() || improvement.file;
-            const icon = improvement.action === 'improved' ? '✅' : '⚠️';
-            const bgColor = improvement.action === 'improved' ? 'success' : 'warning';
-            
-            const toast = document.createElement('div');
-            toast.className = `toast-notification alert alert-${bgColor} alert-dismissible fade show`;
-            toast.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; max-width: 400px;';
-            toast.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-robot me-2"></i>
-                    <div class="flex-grow-1">
-                        <strong>CC - CodeChecker</strong><br>
-                        <small>${icon} ${file}</small><br>
-                        <small>${improvement.issues_fixed || 0} Issues behoben</small>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            `;
-            
-            document.body.appendChild(toast);
-            
-            // Auto-close nach 10 Sekunden
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.remove();
-                }
-            }, 10000);
-        }
-        
         // State-Management: Beim Verlassen der Seite speichern
         window.addEventListener('beforeunload', function() {
             saveToursToStorage();
@@ -1091,8 +966,24 @@
         function initializeMap() {
             console.log('Initialisiere Karte...');
             
+            // Prüfe ob Leaflet geladen ist
             if (typeof L === 'undefined') {
-                console.error('Leaflet nicht geladen!');
+                console.error('Leaflet nicht geladen! Warte 500ms und versuche erneut...');
+                setTimeout(initializeMap, 500);
+                return;
+            }
+            
+            // Prüfe ob das Map-Element existiert
+            const mapElement = document.getElementById('map');
+            if (!mapElement) {
+                console.error('Map-Element nicht gefunden! Warte 500ms und versuche erneut...');
+                setTimeout(initializeMap, 500);
+                return;
+            }
+            
+            // Prüfe ob Karte bereits initialisiert wurde
+            if (map) {
+                console.log('Karte bereits initialisiert, überspringe...');
                 return;
             }
             
@@ -1158,9 +1049,52 @@
                 `);
                 depotMarker.openPopup();
                 
+                // Karte-Größe aktualisieren (falls Container später sichtbar wird)
+                setTimeout(() => {
+                    if (map) {
+                        map.invalidateSize();
+                        console.log('Karten-Größe aktualisiert');
+                    }
+                }, 100);
+                
+                // Blitzer und Hindernisse beim Karten-Laden abrufen
+                map.on('load', function() {
+                    loadSpeedCameras();
+                    if (showTrafficIncidents) {
+                        loadTrafficIncidents();
+                    }
+                });
+                
+                // Blitzer und Hindernisse beim Zoomen/Pan aktualisieren
+                map.on('moveend', function() {
+                    if (showSpeedCameras) {
+                        loadSpeedCameras();
+                    }
+                    if (showTrafficIncidents) {
+                        loadTrafficIncidents();
+                    }
+                });
+                
+                // Initialer Ladevorgang (nach kurzer Verzögerung)
+                setTimeout(() => {
+                    if (showSpeedCameras) {
+                        loadSpeedCameras();
+                    }
+                }, 1000);
+                
                 console.log('Karte erfolgreich initialisiert!');
             } catch (error) {
                 console.error('Fehler beim Initialisieren der Karte:', error);
+                // Automatisch Fehler loggen
+                if (typeof autoLogError === 'function') {
+                    autoLogError(
+                        error.name || 'MapInitializationError',
+                        error.message || 'Unbekannter Fehler bei Karten-Initialisierung',
+                        'frontend/index.html',
+                        1156,
+                        error.stack || null
+                    );
+                }
             }
         }
 
@@ -1484,41 +1418,41 @@
         // WICHTIG: Zentrale fetch-Wrapper-Funktion mit automatischer Fehlerbehandlung
         async function fetchWithErrorHandling(url, options = {}) {
             return await safeExecuteAsync(async () => {
-                try {
-                    const response = await fetch(url, options);
+            try {
+                const response = await fetch(url, options);
+                
+                // Prüfe HTTP-Status-Code
+                if (!response.ok) {
+                    const statusCode = response.status;
+                    let errorData = null;
+                    let traceId = null;
                     
-                    // Prüfe HTTP-Status-Code
-                    if (!response.ok) {
-                        const statusCode = response.status;
-                        let errorData = null;
-                        let traceId = null;
-                        
-                        try {
-                            const text = await response.text();
-                            if (text) {
-                                errorData = JSON.parse(text);
-                                traceId = errorData.trace_id || null;
-                            }
-                        } catch (e) {
-                            // Response ist kein JSON
+                    try {
+                        const text = await response.text();
+                        if (text) {
+                            errorData = JSON.parse(text);
+                            traceId = errorData.trace_id || null;
                         }
-                        
-                        // Zeige Fehler-Banner basierend auf Status-Code
-                        const errorMessage = errorData?.error_detail || errorData?.error || errorData?.detail || `HTTP ${statusCode}`;
-                        showErrorBanner(statusCode, errorMessage, traceId);
-                        
-                        // Werfe Error weiter (für .catch() in aufrufendem Code)
-                        throw new Error(`HTTP ${statusCode}: ${errorMessage}`);
+                    } catch (e) {
+                        // Response ist kein JSON
                     }
                     
-                    return response;
-                } catch (error) {
-                    // Network-Fehler oder andere Exceptions
-                    if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                        showErrorBanner(0, 'Netzwerk-Fehler: Server nicht erreichbar', null);
-                    }
-                    throw error;
+                    // Zeige Fehler-Banner basierend auf Status-Code
+                    const errorMessage = errorData?.error_detail || errorData?.error || errorData?.detail || `HTTP ${statusCode}`;
+                    showErrorBanner(statusCode, errorMessage, traceId);
+                    
+                    // Werfe Error weiter (für .catch() in aufrufendem Code)
+                    throw new Error(`HTTP ${statusCode}: ${errorMessage}`);
                 }
+                
+                return response;
+            } catch (error) {
+                // Network-Fehler oder andere Exceptions
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    showErrorBanner(0, 'Netzwerk-Fehler: Server nicht erreichbar', null);
+                }
+                throw error;
+            }
             }, async () => {
                 // Fallback: Gib null zurück statt Fehler zu werfen
                 console.warn('[FETCH] Fehler beim Fetch, verwende Fallback');
@@ -1803,10 +1737,19 @@
                         errorMsg = data.error;
                     }
                     
-                    // Zeige auch Warnings falls vorhanden (inkl. Filter-Warnungen)
-                    if (data.warnings && data.warnings.length > 0) {
+                    // Zeige auch Warnings/Errors falls vorhanden (inkl. Filter-Warnungen)
+                    // Priorität: Errors > Filter-Warnungen > andere Warnungen
+                    if (data.errors && data.errors.length > 0) {
+                        // Errors haben höchste Priorität
+                        const filterError = data.errors.find(e => e.includes('Filter') || e.includes('gefiltert'));
+                        if (filterError) {
+                            errorMsg = filterError;
+                        } else {
+                            errorMsg = data.errors[0];
+                        }
+                    } else if (data.warnings && data.warnings.length > 0) {
                         // Prüfe ob Filter-Warnung vorhanden
-                        const filterWarning = data.warnings.find(w => w.includes('Filter entfernt') || w.includes('durch Filter-Liste'));
+                        const filterWarning = data.warnings.find(w => w.includes('Filter entfernt') || w.includes('durch Filter-Liste') || w.includes('gefiltert'));
                         if (filterWarning) {
                             errorMsg = filterWarning;
                         } else {
@@ -1814,6 +1757,11 @@
                         }
                         // Zeige erste 3 Warnungen in Konsole
                         console.warn('[WORKFLOW] Warnungen:', data.warnings.slice(0, 3));
+                    }
+                    
+                    // Zeige zusätzliche Info wenn Touren geparst wurden, aber alle gefiltert
+                    if (data.total_tours_parsed && data.total_tours_parsed > 0 && data.tour_count === 0) {
+                        errorMsg += ` (${data.total_tours_parsed} Touren geparst, aber alle durch Filter entfernt)`;
                     }
                     
                     updateWorkflowStatus(`<span class="text-warning">Workflow abgeschlossen, aber keine Touren gefunden: ${errorMsg}</span>`);
@@ -1833,7 +1781,7 @@
         // WICHTIG: Prüfe ob _runWorkflowFull existiert, sonst behalte Fallback
         if (typeof window._runWorkflowFull === 'function') {
             console.log('[WORKFLOW] Überschreibe runWorkflow mit vollständiger Funktion');
-            window.runWorkflow = window._runWorkflowFull;
+        window.runWorkflow = window._runWorkflowFull;
         } else {
             console.warn('[WORKFLOW] _runWorkflowFull nicht gefunden, verwende Fallback');
         }
@@ -1965,14 +1913,59 @@
                     `;
                 }
                 
-                // Fülle Daten ein
+                // Fülle Daten ein - verwende Frontend-State wenn DB leer ist
                 const toursEl = document.querySelector('#stat-tours-month');
                 const stopsEl = document.querySelector('#stat-stops-avg');
                 const kmEl = document.querySelector('#stat-km-osrm');
                 
-                if (toursEl) toursEl.textContent = data.monthly_tours ?? '0';
-                if (stopsEl) stopsEl.textContent = data.avg_stops?.toFixed(1) ?? '0';
-                if (kmEl) kmEl.textContent = data.km_osrm_month?.toFixed(1) ?? '0';
+                // Wenn DB-Daten leer sind, berechne aus aktuellen Frontend-Touren
+                let monthlyTours = data.monthly_tours ?? 0;
+                let avgStops = data.avg_stops ?? 0;
+                let kmOsm = data.km_osrm_month ?? 0;
+                
+                if (monthlyTours === 0 && Object.keys(allTourCustomers).length > 0) {
+                    // Berechne aus aktuellen Touren im Frontend
+                    const tourEntries = Object.entries(allTourCustomers);
+                    monthlyTours = tourEntries.length;
+                    
+                    let totalStops = 0;
+                    let totalKm = 0;
+                    tourEntries.forEach(([key, tour]) => {
+                        const stops = (tour.customers || []).length;
+                        totalStops += stops;
+                        
+                        // Versuche Distanz aus tour zu extrahieren (verschiedene Quellen)
+                        if (tour.total_distance_km) {
+                            // Direkt verfügbar
+                            totalKm += tour.total_distance_km;
+                        } else if (tour.estimated_driving_time_minutes) {
+                            // Berechne aus Fahrzeit: 50 km/h Durchschnitt in der Stadt
+                            totalKm += (tour.estimated_driving_time_minutes / 60) * 50;
+                        } else if (tour.driving_time_minutes) {
+                            // Fallback: Anderes Feld
+                            totalKm += (tour.driving_time_minutes / 60) * 50;
+                        } else if (tour.estimated_total_time_minutes) {
+                            // Gesamtzeit (inkl. Service) - nur Fahrzeit schätzen
+                            // Service-Zeit abziehen (ca. 2 Min pro Stop)
+                            const serviceTime = stops * 2;
+                            const drivingTime = Math.max(0, tour.estimated_total_time_minutes - serviceTime);
+                            totalKm += (drivingTime / 60) * 50;
+                        } else if (tour.segment_distances && Array.isArray(tour.segment_distances)) {
+                            // Summiere Segment-Distanzen
+                            const segmentKm = tour.segment_distances.reduce((sum, seg) => {
+                                return sum + (seg.distance_km || seg.adjusted_distance_km || 0);
+                            }, 0);
+                            totalKm += segmentKm;
+                        }
+                    });
+                    
+                    avgStops = monthlyTours > 0 ? totalStops / monthlyTours : 0;
+                    kmOsm = totalKm;
+                }
+                
+                if (toursEl) toursEl.textContent = monthlyTours;
+                if (stopsEl) stopsEl.textContent = avgStops.toFixed(1);
+                if (kmEl) kmEl.textContent = kmOsm.toFixed(1);
                 
                 // Box anzeigen (sollte bereits angezeigt sein, aber sicherheitshalber)
                 if (statsBox && toggle && toggle.checked) {
@@ -2566,7 +2559,7 @@
                 // Lösche ALLE Einträge, die zu diesen Touren gehören
                 // ABER: Nur wenn es KEINE Sub-Routen sind!
                 let deletedCount = 0;
-                Object.keys(allTourCustomers).forEach(key => {
+            Object.keys(allTourCustomers).forEach(key => {
                     const tour = allTourCustomers[key];
                     const tourBaseId = extractBaseTourId(tour);  // ✅ Helper verwenden
                     
@@ -2578,7 +2571,7 @@
                     // 2. KEINE Sub-Route ist
                     if (tourBaseId && baseTourIds.has(tourBaseId) && !isSubRoute) {
                         console.log(`[RENDER] Lösche alten Eintrag: ${key} (Tour: ${tourBaseId})`);
-                        delete allTourCustomers[key];
+                    delete allTourCustomers[key];
                         deletedCount++;
                     } else if (isSubRoute) {
                         console.log(`[RENDER] Überspringe Sub-Route: ${key} (Tour: ${tour.name})`);
@@ -2839,14 +2832,14 @@
                         // KEIN Erstellen - Sub-Routen haben Priorität!
                     } else if (!allTourCustomers[key]) {
                         // Eintrag existiert noch nicht → erstelle ihn
-                        allTourCustomers[key] = {
-                            name: tourMeta.tour_id || `Tour ${tourMeta.index + 1}`,
-                            type: isBar ? 'BAR' : 'Workflow',
-                            time: tourMeta.time,
-                            customers: customers,
+                    allTourCustomers[key] = {
+                        name: tourMeta.tour_id || `Tour ${tourMeta.index + 1}`,
+                        type: isBar ? 'BAR' : 'Workflow',
+                        time: tourMeta.time,
+                        customers: customers,
                             stops: stops,
                             optimization_method: tourMeta.optimization_method,
-                            optimized: tourMeta.optimized,
+                        optimized: tourMeta.optimized,
                             reasoning: tourMeta.reasoning,
                             _base_tour_id: extractBaseTourId(tourMeta),
                             _sub_route: tourMeta._sub_route || (tourMeta.tour_id?.match(/\s([A-Z])$/) ? tourMeta.tour_id.match(/\s([A-Z])$/)[1] : null),
@@ -3069,6 +3062,12 @@
             
             document.getElementById('tourSummary').textContent = 
                 `${tourEntries.length} Touren · ${totalStops} Stops`;
+            
+            // Aktualisiere Statistik-Box wenn aktiviert
+            const statsToggle = document.getElementById('stats-toggle');
+            if (statsToggle && statsToggle.checked) {
+                loadStatsBox();
+            }
             
             // Sortiere Touren (W-Touren zuerst, dann nach Zeit)
             tourEntries.sort((a, b) => {
@@ -3480,7 +3479,7 @@
             }
             
             return `
-                <div class="table-responsive" style="max-height: 60vh; overflow-y: auto;">
+                <div class="table-responsive" style="max-height: calc(100vh - 150px); overflow-y: auto;">
                     <table class="table table-sm align-middle table-hover">
                         <thead class="table-light" style="position: sticky; top: 0; z-index: 10; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
                             <tr>
@@ -3558,14 +3557,14 @@
 
         function selectTour(key) {
             return safeExecute(() => {
-                console.log('[SELECT-TOUR] Key:', key);
-                console.log('[SELECT-TOUR] allTourCustomers keys:', Object.keys(allTourCustomers));
-                
-                if (!key) {
+            console.log('[SELECT-TOUR] Key:', key);
+            console.log('[SELECT-TOUR] allTourCustomers keys:', Object.keys(allTourCustomers));
+            
+            if (!key) {
                     console.warn('[SELECT-TOUR] Kein Key angegeben');
-                    return;
-                }
-                
+                return;
+            }
+            
                 // Versuche 1: Exakter Match
                 if (allTourCustomers[key]) {
                     activeTourKey = key;
@@ -3606,7 +3605,7 @@
                     // Wenn Haupttour auf Sub-Route gemappt wurde, ist das normal (keine Warnung)
                     if (isMainTourKey && similarKey.match(/-[A-Z]$/)) {
                         console.log(`[SELECT-TOUR] Tour aufgeteilt: "${key}" → erste Sub-Route "${similarKey}" (normal)`);
-                    } else {
+                } else {
                         console.warn(`[SELECT-TOUR] ⚠️ Key-Mismatch erkannt: "${key}" → "${similarKey}"`);
                     }
                     activeTourKey = similarKey;
@@ -3861,12 +3860,8 @@
         function toggleSpeedCameras() {
             showSpeedCameras = !showSpeedCameras;
             if (showSpeedCameras) {
-                // Zeige alle Blitzer-Marker wieder an
-                speedCameraMarkers.forEach(marker => {
-                    if (marker && !map.hasLayer(marker)) {
-                        marker.addTo(map);
-                    }
-                });
+                // Lade Blitzer vom Backend
+                loadSpeedCameras();
                 updateSpeedCameraToggleButton();
             } else {
                 // Verstecke alle Blitzer-Marker
@@ -3877,6 +3872,39 @@
                 });
                 updateSpeedCameraToggleButton();
             }
+        }
+        
+        function loadSpeedCameras() {
+            if (!map || !showSpeedCameras) {
+                return;
+            }
+            
+            // Hole Karten-Grenzen
+            const bounds = map.getBounds();
+            const minLat = bounds.getSouth();
+            const minLon = bounds.getWest();
+            const maxLat = bounds.getNorth();
+            const maxLon = bounds.getEast();
+            
+            // Rufe API auf
+            fetch(`/api/traffic/cameras?min_lat=${minLat}&min_lon=${minLon}&max_lat=${maxLat}&max_lon=${maxLon}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cameras && Array.isArray(data.cameras)) {
+                        // Lösche alte Marker
+                        clearSpeedCameraMarkers();
+                        
+                        // Füge neue Marker hinzu
+                        data.cameras.forEach(camera => {
+                            addSpeedCameraMarker(camera);
+                        });
+                        
+                        console.log(`[BLITZER] ${data.cameras.length} Blitzer geladen`);
+                    }
+                })
+                .catch(error => {
+                    console.warn('[BLITZER] Fehler beim Laden der Blitzer:', error);
+                });
         }
 
         function updateSpeedCameraToggleButton() {
@@ -4112,11 +4140,38 @@
             bounds.push([depotLat, depotLon]);
             
             // Zeichne Routen-Linien zwischen Depot und Kunden (OSRM)
+            console.log(`[HIGHLIGHT-TOUR] 🗺️ Zeichne Route für ${customersWithCoords.length} Kunden, Farbe: ${tourColor}`);
             await drawRouteLines(customersWithCoords, tourColor, true);  // include_depot = true
+            console.log(`[HIGHLIGHT-TOUR] ✅ drawRouteLines abgeschlossen, tourRouteLines.length: ${tourRouteLines.length}`);
+            
+            // WICHTIG: Prüfe ob Linien noch auf der Karte sind (nach async drawRouteLines)
+            let visibleRouteLines = 0;
+            tourRouteLines.forEach((line, idx) => {
+                if (map.hasLayer(line)) {
+                    visibleRouteLines++;
+                } else {
+                    console.error(`[HIGHLIGHT-TOUR] ❌ Route-Linie ${idx} ist NICHT mehr auf der Karte!`);
+                }
+            });
+            console.log(`[HIGHLIGHT-TOUR] 📊 Route-Linien Status: ${visibleRouteLines}/${tourRouteLines.length} noch auf der Karte`);
 
             if (bounds.length) {
                 const featureGroup = L.featureGroup([...tourMarkers, ...tourRouteLines]);
+                console.log(`[HIGHLIGHT-TOUR] 📐 FitBounds: ${tourMarkers.length} Marker, ${tourRouteLines.length} Route-Linien`);
                 map.fitBounds(featureGroup.getBounds().pad(0.2));
+                
+                // WICHTIG: Nach fitBounds nochmal prüfen ob Linien noch da sind
+                setTimeout(() => {
+                    let stillVisible = 0;
+                    tourRouteLines.forEach((line, idx) => {
+                        if (map.hasLayer(line)) {
+                            stillVisible++;
+                        } else {
+                            console.error(`[HIGHLIGHT-TOUR] ❌ Route-Linie ${idx} nach fitBounds NICHT mehr auf der Karte!`);
+                        }
+                    });
+                    console.log(`[HIGHLIGHT-TOUR] 📊 Route-Linien nach fitBounds: ${stillVisible}/${tourRouteLines.length} noch sichtbar`);
+                }, 100);
             }
         }
 
@@ -4249,13 +4304,24 @@
 
         // Zeichne OSRM-Routen-Linien zwischen Stopps (inkl. Depot)
         async function drawRouteLines(customers, routeColor, includeDepot = false) {
-            if (!map || !customers || customers.length < 1) {
+            console.log(`[DRAW-ROUTE] 🔵 drawRouteLines aufgerufen: ${customers?.length || 0} Kunden, Farbe: ${routeColor}, includeDepot: ${includeDepot}`);
+            
+            if (!map) {
+                console.error('[DRAW-ROUTE] ❌ Karte nicht verfügbar!');
+                return;
+            }
+            
+            if (!customers || customers.length < 1) {
+                console.warn('[DRAW-ROUTE] ⚠️ Keine Kunden übergeben');
                 return;
             }
 
             // Filtere Kunden mit Koordinaten
             const customersWithCoords = customers.filter(c => hasCoordinates(c));
+            console.log(`[DRAW-ROUTE] 📍 Kunden mit Koordinaten: ${customersWithCoords.length}/${customers.length}`);
+            
             if (customersWithCoords.length < 1) {
+                console.warn('[DRAW-ROUTE] ⚠️ Keine Kunden mit Koordinaten gefunden');
                 return;
             }
 
@@ -4294,11 +4360,15 @@
                 }
 
                 // Hole Route-Details vom Backend
+                console.log(`[DRAW-ROUTE] 📡 Sende Request an /api/tour/route-details mit ${stops.length} Stopps:`, stops.slice(0, 3).map(s => `[${s.lat}, ${s.lon}]`));
+                
                 const response = await fetch('/api/tour/route-details', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ stops: stops }) // Backend erwartet nur stops, kein include_depot
                 });
+                
+                console.log(`[DRAW-ROUTE] 📡 Response Status: ${response.status} ${response.statusText}`);
 
                 if (!response.ok) {
                     console.warn('Route-Details nicht verfügbar, zeichne gerade Linien');
@@ -4308,7 +4378,14 @@
                 }
 
                 const routeData = await response.json();
-                console.log('[ROUTE-DETAILS] Response erhalten:', routeData);
+                console.log('[ROUTE-DETAILS] ✅ Response erhalten:', {
+                    source: routeData.source,
+                    distance_m: routeData.total_distance_m,
+                    duration_s: routeData.total_duration_s,
+                    geometry_length: routeData.geometry_polyline6?.length || 0,
+                    degraded: routeData.degraded,
+                    warnings: routeData.warnings
+                });
                 
                 // Backend gibt ein einzelnes Objekt zurück, nicht ein Array
                 // Struktur: { geometry_polyline6, total_distance_m, total_duration_s, source, warnings, degraded }
@@ -4337,11 +4414,33 @@
                         console.log(`[ROUTE-VIS] Erste Koordinate: [${decodedCoordinates[0][0]}, ${decodedCoordinates[0][1]}]`);
                         console.log(`[ROUTE-VIS] Letzte Koordinate: [${decodedCoordinates[decodedCoordinates.length-1][0]}, ${decodedCoordinates[decodedCoordinates.length-1][1]}]`);
                         
+                        // WICHTIG: Prüfe ob alle Koordinaten identisch sind (würde zu unsichtbarer Linie führen)
+                        const uniqueCoords = new Set(decodedCoordinates.map(c => `${c[0].toFixed(6)},${c[1].toFixed(6)}`));
+                        if (uniqueCoords.size === 1) {
+                            console.error(`[ROUTE-VIS] ❌ KRITISCH: Alle ${decodedCoordinates.length} Koordinaten sind identisch! Route-Linie wäre unsichtbar!`);
+                            console.error(`[ROUTE-VIS] Koordinate: [${decodedCoordinates[0][0]}, ${decodedCoordinates[0][1]}]`);
+                            console.error(`[ROUTE-VIS] Verwende Fallback: Gerade Linien zwischen Stopps`);
+                            drawStraightLines(customersWithCoords, routeColor, includeDepot);
+                            return;
+                        }
+                        
+                        console.log(`[ROUTE-VIS] ✅ ${uniqueCoords.size} eindeutige Koordinaten gefunden (von ${decodedCoordinates.length} total)`);
+                        
+                        // WICHTIG: Verwende sehr sichtbare Farbe und Stil
                         const polyline = L.polyline(decodedCoordinates, {
-                            color: routeColor || '#2196F3',
-                            weight: 4,
-                            opacity: 0.7
+                            color: routeColor || '#FF0000',  // Rot als Fallback (sehr sichtbar)
+                            weight: 4,  // Reduziert (von 6 auf 4)
+                            opacity: 0.8,  // Sichtbar
+                            smoothFactor: 1.0,
+                            lineCap: 'round',
+                            lineJoin: 'round',
+                            className: 'route-polyline'  // CSS-Klasse für zusätzliches Styling
                         });
+                        
+                        // WICHTIG: Setze Z-Index explizit (sehr hoch)
+                        if (polyline.setZIndex) {
+                            polyline.setZIndex(1000);
+                        }
                         
                         // Popup mit Distanz und Dauer
                         const distanceKm = (routeData.total_distance_m || 0) / 1000;
@@ -4354,9 +4453,78 @@
                             ${routeData.degraded ? '<br><span class="text-warning">⚠ Degradiert</span>' : ''}
                         `;
                         polyline.bindPopup(popupText);
+                        
+                        // WICHTIG: Speichere OSRM-Distanz in Tour-Objekten für Statistik
+                        // Suche passende Tour in allTourCustomers basierend auf Kunden
+                        if (distanceKm > 0 && customersWithCoords.length > 0) {
+                            Object.keys(allTourCustomers).forEach(key => {
+                                const tour = allTourCustomers[key];
+                                const tourCustomers = tour.customers || [];
+                                
+                                // Prüfe ob diese Tour die gleichen Kunden hat (anhand erster Koordinaten)
+                                if (tourCustomers.length === customersWithCoords.length) {
+                                    const firstCustomer = customersWithCoords[0];
+                                    const tourFirstCustomer = tourCustomers.find(c => 
+                                        (c.latitude === firstCustomer.latitude || c.lat === firstCustomer.lat) &&
+                                        (c.longitude === firstCustomer.longitude || c.lon === firstCustomer.lon)
+                                    );
+                                    
+                                    if (tourFirstCustomer) {
+                                        // Tour gefunden - speichere OSRM-Distanz
+                                        if (!tour.total_distance_km || tour.total_distance_km === 0) {
+                                            tour.total_distance_km = distanceKm;
+                                            console.log(`[STATS] OSRM-Distanz gespeichert für Tour ${key}: ${distanceKm.toFixed(1)} km`);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        
+                        // WICHTIG: Prüfe ob Karte existiert bevor wir hinzufügen
+                        if (!map) {
+                            console.error('[DRAW-ROUTE] ❌ Karte nicht verfügbar beim Hinzufügen der Polyline!');
+                            return;
+                        }
+                        
+                        console.log(`[DRAW-ROUTE] 🗺️ Füge Polyline zur Karte hinzu: ${decodedCoordinates.length} Punkte`);
                         polyline.addTo(map);
+                        
+                        // WICHTIG: Stelle sicher, dass Polyline sichtbar ist (Z-Index)
+                        polyline.bringToFront();
+                        
+                        // Prüfe ob Polyline wirklich auf der Karte ist
+                        if (map.hasLayer(polyline)) {
+                            console.log(`[DRAW-ROUTE] ✅ Polyline erfolgreich zur Karte hinzugefügt`);
+                            
+                            // WICHTIG: Prüfe ob Polyline sichtbar ist (Bounds)
+                            const bounds = polyline.getBounds();
+                            const center = bounds.getCenter();
+                            const zoom = map.getZoom();
+                            console.log(`[DRAW-ROUTE] 📐 Polyline Bounds:`, {
+                                north: bounds.getNorth(),
+                                south: bounds.getSouth(),
+                                east: bounds.getEast(),
+                                west: bounds.getWest(),
+                                center: [center.lat, center.lng],
+                                mapZoom: zoom,
+                                mapCenter: [map.getCenter().lat, map.getCenter().lng]
+                            });
+                            
+                            // Prüfe ob Polyline im sichtbaren Bereich ist
+                            const mapBounds = map.getBounds();
+                            if (bounds.intersects(mapBounds)) {
+                                console.log(`[DRAW-ROUTE] ✅ Polyline ist im sichtbaren Bereich`);
+                            } else {
+                                console.warn(`[DRAW-ROUTE] ⚠️ Polyline ist AUSSERHALB des sichtbaren Bereichs!`);
+                                console.warn(`[DRAW-ROUTE] Map Bounds:`, mapBounds);
+                                console.warn(`[DRAW-ROUTE] Polyline Bounds:`, bounds);
+                            }
+                        } else {
+                            console.error(`[DRAW-ROUTE] ❌ Polyline wurde NICHT zur Karte hinzugefügt!`);
+                        }
+                        
                         tourRouteLines.push(polyline);
-                        console.log(`[ROUTE-VIS] OSRM-Route gezeichnet: ${decodedCoordinates.length} Punkte`);
+                        console.log(`[ROUTE-VIS] ✅ OSRM-Route gezeichnet: ${decodedCoordinates.length} Punkte, Farbe: ${routeColor || '#2196F3'}, Gewicht: 5, tourRouteLines.length: ${tourRouteLines.length}`);
                     } else {
                         console.warn(`[ROUTE-VIS] ❌ Dekodierung gab keine Koordinaten zurück`);
                         // Fallback: Gerade Linien
@@ -4372,30 +4540,28 @@
                 console.log(`[ROUTE-VIS] Route gezeichnet (Source: ${routeData.source || 'unbekannt'})`);
 
                 // Zeige Blitzer entlang der Route (falls vorhanden)
-                // TODO: Blitzer-Integration später hinzufügen wenn Backend das unterstützt
-                // Das Backend liefert aktuell keine speed_cameras in der route-details Response
-                // if (routeData.speed_cameras && Array.isArray(routeData.speed_cameras) && routeData.speed_cameras.length > 0) {
-                //     console.log(`[ROUTE-VIS] ${routeData.speed_cameras.length} Blitzer entlang der Route gefunden`);
-                //     clearSpeedCameraMarkers();
-                //     routeData.speed_cameras.forEach(camera => {
-                //         addSpeedCameraMarker(camera);
-                //     });
-                //     showSpeedCameraInfo(routeData.speed_camera_count || routeData.speed_cameras.length);
-                // } else {
-                //     clearSpeedCameraMarkers();
-                // }
+                if (routeData.speed_cameras && Array.isArray(routeData.speed_cameras) && routeData.speed_cameras.length > 0) {
+                    console.log(`[ROUTE-VIS] ${routeData.speed_cameras.length} Blitzer entlang der Route gefunden`);
+                    clearSpeedCameraMarkers();
+                    routeData.speed_cameras.forEach(camera => {
+                        addSpeedCameraMarker(camera);
+                    });
+                    showSpeedCameraInfo(routeData.speed_camera_count || routeData.speed_cameras.length);
+                } else {
+                    clearSpeedCameraMarkers();
+                }
                 
-                // TODO: Hindernisse-Integration später hinzufügen wenn Backend das unterstützt
-                // if (routeData.traffic_incidents && Array.isArray(routeData.traffic_incidents) && routeData.traffic_incidents.length > 0) {
-                //     console.log(`[ROUTE-VIS] ${routeData.traffic_incidents.length} Hindernisse entlang der Route gefunden`);
-                //     clearTrafficIncidentMarkers();
-                //     routeData.traffic_incidents.forEach(incident => {
-                //         addTrafficIncidentMarker(incident);
-                //     });
-                //     showTrafficIncidentInfo(routeData.traffic_incident_count || routeData.traffic_incidents.length);
-                // } else {
-                //     clearTrafficIncidentMarkers();
-                // }
+                // Zeige Hindernisse entlang der Route (falls vorhanden)
+                if (routeData.traffic_incidents && Array.isArray(routeData.traffic_incidents) && routeData.traffic_incidents.length > 0) {
+                    console.log(`[ROUTE-VIS] ${routeData.traffic_incidents.length} Hindernisse entlang der Route gefunden`);
+                    clearTrafficIncidentMarkers();
+                    routeData.traffic_incidents.forEach(incident => {
+                        addTrafficIncidentMarker(incident);
+                    });
+                    showTrafficIncidentInfo(routeData.traffic_incident_count || routeData.traffic_incidents.length);
+                } else {
+                    clearTrafficIncidentMarkers();
+                }
             } catch (error) {
                 console.error('Fehler beim Zeichnen der Routen:', error);
                 // Fallback: Gerade Linien (inkl. Depot)
@@ -4453,12 +4619,8 @@
         function toggleTrafficIncidents() {
             showTrafficIncidents = !showTrafficIncidents;
             if (showTrafficIncidents) {
-                // Zeige alle Hindernisse-Marker wieder an
-                trafficIncidentMarkers.forEach(marker => {
-                    if (marker && !map.hasLayer(marker)) {
-                        marker.addTo(map);
-                    }
-                });
+                // Lade Hindernisse vom Backend
+                loadTrafficIncidents();
                 updateTrafficIncidentToggleButton();
             } else {
                 // Verstecke alle Hindernisse-Marker
@@ -4469,6 +4631,39 @@
                 });
                 updateTrafficIncidentToggleButton();
             }
+        }
+        
+        function loadTrafficIncidents() {
+            if (!map || !showTrafficIncidents) {
+                return;
+            }
+            
+            // Hole Karten-Grenzen
+            const bounds = map.getBounds();
+            const minLat = bounds.getSouth();
+            const minLon = bounds.getWest();
+            const maxLat = bounds.getNorth();
+            const maxLon = bounds.getEast();
+            
+            // Rufe API auf
+            fetch(`/api/traffic/incidents?min_lat=${minLat}&min_lon=${minLon}&max_lat=${maxLat}&max_lon=${maxLon}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.incidents && Array.isArray(data.incidents)) {
+                        // Lösche alte Marker
+                        clearTrafficIncidentMarkers();
+                        
+                        // Füge neue Marker hinzu
+                        data.incidents.forEach(incident => {
+                            addTrafficIncidentMarker(incident);
+                        });
+                        
+                        console.log(`[HINDERNISSE] ${data.incidents.length} Hindernisse geladen`);
+                    }
+                })
+                .catch(error => {
+                    console.warn('[HINDERNISSE] Fehler beim Laden der Hindernisse:', error);
+                });
         }
 
         function updateTrafficIncidentToggleButton() {
@@ -4628,7 +4823,32 @@
 
         // Fallback: Zeichne gerade Linien zwischen Stopps (inkl. Depot)
         function drawStraightLines(customersWithCoords, routeColor, includeDepot = false) {
-            if (!map || customersWithCoords.length < 1) {
+            console.log(`[FALLBACK-LINES] 🔵 drawStraightLines aufgerufen: ${customersWithCoords.length} Kunden, Farbe: ${routeColor}, includeDepot: ${includeDepot}`);
+            
+            if (!map) {
+                console.error('[FALLBACK-LINES] ❌ Karte nicht verfügbar!');
+                return;
+            }
+            
+            // WICHTIG: Lösche NUR die Fallback-Linien, die von dieser Funktion erstellt wurden
+            // (nicht alle Route-Linien, da OSRM-Linien möglicherweise auch vorhanden sind)
+            // Aber: Wenn wir Fallback verwenden, sollten wir alle Route-Linien löschen, da OSRM fehlgeschlagen ist
+            console.log(`[FALLBACK-LINES] 🧹 Lösche ${tourRouteLines.length} alte Route-Linien vor dem Zeichnen neuer Fallback-Linien`);
+            if (tourRouteLines && Array.isArray(tourRouteLines) && tourRouteLines.length) {
+                tourRouteLines.forEach(line => {
+                    try {
+                        if (line && map.hasLayer(line)) {
+                            map.removeLayer(line);
+                        }
+                    } catch (e) {
+                        console.warn('[FALLBACK-LINES] Fehler beim Entfernen alter Route-Linie:', e);
+                    }
+                });
+                tourRouteLines = [];
+            }
+            
+            if (customersWithCoords.length < 1) {
+                console.warn('[FALLBACK-LINES] ⚠️ Keine Kunden übergeben');
                 return;
             }
 
@@ -4636,11 +4856,15 @@
             const depotLat = 51.01127;  // FAMO Depot (Gittersee)
             const depotLon = 13.70161;
 
-            // Wenn includeDepot, füge Depot am Anfang und Ende hinzu
-            let points = customersWithCoords.map(c => ({
-                lat: parseFloat(c.latitude),
-                lon: parseFloat(c.longitude)
-            }));
+            // WICHTIG: Verwende lat/lon (nicht latitude/longitude)
+            let points = customersWithCoords.map(c => {
+                // Unterstütze beide Formate: lat/lon und latitude/longitude
+                const lat = parseFloat(c.lat || c.latitude);
+                const lon = parseFloat(c.lon || c.longitude);
+                return { lat, lon };
+            }).filter(p => !isNaN(p.lat) && !isNaN(p.lon));
+            
+            console.log(`[FALLBACK-LINES] 📍 Gültige Punkte nach Filterung: ${points.length}/${customersWithCoords.length}`);
 
             if (includeDepot) {
                 points = [
@@ -4651,9 +4875,13 @@
             }
 
             if (points.length < 2) {
+                console.warn(`[FALLBACK-LINES] ⚠️ Zu wenige Punkte: ${points.length} (benötigt: 2)`);
                 return;
             }
 
+            console.log(`[FALLBACK-LINES] 🗺️ Zeichne ${points.length - 1} gerade Linien zwischen ${points.length} Punkten`);
+            
+            let linesDrawn = 0;
             for (let i = 0; i < points.length - 1; i++) {
                 const from = points[i];
                 const to = points[i + 1];
@@ -4664,20 +4892,99 @@
                 const toLon = to.lon;
 
                 if (isNaN(fromLat) || isNaN(fromLon) || isNaN(toLat) || isNaN(toLon)) {
+                    console.warn(`[FALLBACK-LINES] ⚠️ Überspringe Segment ${i}: Ungültige Koordinaten`, { from, to });
                     continue;
                 }
 
+                // Fallback-Linien: Sichtbar, aber nicht zu dick
                 const polyline = L.polyline(
                     [[fromLat, fromLon], [toLat, toLon]],
                     {
-                        color: routeColor || '#2196F3',
-                        weight: 3,
-                        opacity: 0.6,
-                        dashArray: '10, 5'  // Gestrichelt für Fallback
+                        color: routeColor || '#FF6B6B',  // Verwende Tour-Farbe oder sanftes Rot
+                        weight: 2,  // Reduziert (von 3 auf 2)
+                        opacity: 0.7,  // Leicht transparent
+                        dashArray: '10, 5',  // Gestrichelt für Fallback (unterscheidet von OSRM-Routen)
+                        className: 'route-polyline-fallback'
                     }
                 );
+                
+                // WICHTIG: Setze Z-Index explizit (sehr hoch, über allem)
+                if (polyline.setZIndex) {
+                    polyline.setZIndex(9999);
+                }
+                
+                // WICHTIG: Füge zur Karte hinzu (Leaflet verwaltet Pane automatisch)
                 polyline.addTo(map);
+                
+                // WICHTIG: Stelle sicher, dass Linie über allem liegt
+                polyline.bringToFront();
+                
+                // WICHTIG: Prüfe ob Linie wirklich auf der Karte ist
+                if (map.hasLayer(polyline)) {
+                    console.log(`[FALLBACK-LINES] ✅ Linie ${i + 1}/${points.length - 1} erfolgreich zur Karte hinzugefügt`);
+                    
+                    // WICHTIG: Prüfe ob SVG-Element existiert
+                    const element = polyline.getElement();
+                    if (element) {
+                        console.log(`[FALLBACK-LINES] 📍 SVG-Element gefunden:`, {
+                            tagName: element.tagName,
+                            style: window.getComputedStyle(element).stroke,
+                            strokeWidth: window.getComputedStyle(element).strokeWidth,
+                            opacity: window.getComputedStyle(element).opacity
+                        });
+                    } else {
+                        console.error(`[FALLBACK-LINES] ❌ Kein SVG-Element gefunden!`);
+                    }
+                } else {
+                    console.error(`[FALLBACK-LINES] ❌ Linie ${i + 1} wurde NICHT zur Karte hinzugefügt!`);
+                }
+                
                 tourRouteLines.push(polyline);
+                linesDrawn++;
+                
+                console.log(`[FALLBACK-LINES] 📍 Linie ${i + 1}/${points.length - 1}: [${fromLat.toFixed(6)}, ${fromLon.toFixed(6)}] → [${toLat.toFixed(6)}, ${toLon.toFixed(6)}]`);
+            }
+            
+            // WICHTIG: Finale Prüfung - sind alle Linien noch auf der Karte?
+            let visibleLines = 0;
+            tourRouteLines.forEach((line, idx) => {
+                if (map.hasLayer(line)) {
+                    visibleLines++;
+                } else {
+                    console.error(`[FALLBACK-LINES] ❌ Linie ${idx} ist NICHT mehr auf der Karte!`);
+                }
+            });
+            
+            console.log(`[FALLBACK-LINES] ✅ ${linesDrawn} Fallback-Linien gezeichnet, ${visibleLines}/${tourRouteLines.length} noch auf der Karte`);
+            
+            // WICHTIG: Prüfe ob Linien sichtbar sind (Bounds)
+            if (tourRouteLines.length > 0) {
+                const firstLine = tourRouteLines[0];
+                if (map.hasLayer(firstLine)) {
+                    try {
+                        const bounds = firstLine.getBounds();
+                        const mapBounds = map.getBounds();
+                        console.log(`[FALLBACK-LINES] 📐 Erste Linie Bounds:`, {
+                            north: bounds.getNorth(),
+                            south: bounds.getSouth(),
+                            east: bounds.getEast(),
+                            west: bounds.getWest()
+                        });
+                        console.log(`[FALLBACK-LINES] 📐 Map Bounds:`, {
+                            north: mapBounds.getNorth(),
+                            south: mapBounds.getSouth(),
+                            east: mapBounds.getEast(),
+                            west: mapBounds.getWest()
+                        });
+                        if (bounds.intersects(mapBounds)) {
+                            console.log(`[FALLBACK-LINES] ✅ Linien sind im sichtbaren Bereich`);
+                        } else {
+                            console.warn(`[FALLBACK-LINES] ⚠️ Linien sind AUSSERHALB des sichtbaren Bereichs!`);
+                        }
+                    } catch (e) {
+                        console.warn(`[FALLBACK-LINES] ⚠️ Fehler beim Prüfen der Bounds:`, e);
+                    }
+                }
             }
         }
 
@@ -5939,6 +6246,41 @@
                 ];
                 return colors[hour % colors.length] || '#2196F3'; // Fallback: Blau
             }
+            
+            // PIR Anlief-Touren: Extrahiere Zeit aus Tour-ID (z.B. "PIR Anlief. 7.45 Uhr" → "7.45")
+            const pirMatch = tourId.match(/PIR\s+Anlief\.?\s+(\d+)\.(\d+)/i);
+            if (pirMatch) {
+                const hour = parseInt(pirMatch[1]);
+                const minute = parseInt(pirMatch[2]);
+                // Kombiniere Stunde und Minute für eindeutige Farbzuweisung
+                const timeIndex = hour * 60 + minute; // z.B. 7.45 = 7*60+45 = 465
+                const colors = [
+                    '#2196F3', // Blau
+                    '#4CAF50', // Grün
+                    '#FF9800', // Orange
+                    '#9C27B0', // Lila
+                    '#F44336', // Rot
+                    '#00BCD4', // Cyan
+                    '#795548', // Braun
+                    '#607D8B', // Blau-Grau
+                    '#E91E63', // Pink
+                    '#3F51B5', // Indigo
+                    '#FF5722', // Deep Orange
+                    '#009688', // Teal
+                    '#673AB7', // Deep Purple
+                    '#CDDC39', // Lime
+                    '#FFC107', // Amber
+                    '#8BC34A', // Light Green
+                    '#FF4081', // Pink
+                    '#00E676', // Green A400
+                    '#FF6D00', // Orange A700
+                    '#2962FF', // Blue A700
+                    '#AA00FF', // Purple A700
+                    '#00BFA5', // Teal A700
+                ];
+                return colors[timeIndex % colors.length] || '#2196F3'; // Fallback: Blau
+            }
+            
             return '#2196F3'; // Standard: Blau
         }
         

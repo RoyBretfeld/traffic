@@ -1,8 +1,0 @@
-{
-  "stops": [
-    { "lat": 51.01127, "lon": 13.70161, "name": "Depot" },
-    { "lat": 51.013179, "lon": 13.804567, "name": "36 Nici zu RP" }
-  ],
-  "include_depot": false
-}
-

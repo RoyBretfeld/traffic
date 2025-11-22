@@ -12,7 +12,7 @@ import sqlite3
 from typing import Optional, List, Dict, Any
 from backend.parsers.tour_plan_parser import parse_tour_plan_to_dict
 from repositories.geo_repo import get as geo_get, upsert as geo_upsert
-from backend.services.geocode import geocode_address
+# from backend.services.geocode import geocode_address  # Nicht mehr verwendet - verwende _geocode_one() stattdessen
 from services.llm_optimizer import LLMOptimizer
 from services.llm_monitoring import LLMMonitoringService
 from services.prompt_manager import PromptManager
@@ -102,9 +102,48 @@ def load_tour_filter_lists() -> tuple[list, list]:
         log_to_file(f"[WARNUNG] Traceback: {traceback.format_exc()}")
         return ["DBD", "DPD", "DVD"], []
 
-def should_process_tour(tour_name: str, ignore_list: list, allow_list: list) -> bool:
+def is_w_tour_or_pir_anlief(tour_name: str) -> bool:
     """
-    Prüft ob eine Tour verarbeitet werden soll.
+    Prüft ob eine Tour eine W-Tour oder Pir-Anlief-Tour ist.
+    
+    W-Touren: Beginnen mit "W" oder "W-" oder "W " gefolgt von einer Zahl
+    Pir-Anlief: Enthalten "PIR" und "ANLIEF" (case-insensitive)
+    """
+    if not tour_name:
+        return False
+    
+    tour_name_upper = tour_name.upper().strip()
+    
+    # W-Tour: Beginnt mit "W" gefolgt von Zahl, Leerzeichen, Bindestrich oder direkt Zahl
+    if tour_name_upper.startswith('W'):
+        # Prüfe ob nach "W" eine Zahl kommt (z.B. "W-7", "W 7", "W7", "W-08", etc.)
+        remaining = tour_name_upper[1:].strip()
+        if remaining and (remaining[0].isdigit() or remaining.startswith('-') or remaining.startswith(' ')):
+            return True
+    
+    # Pir-Anlief: Enthält "PIR" und "ANLIEF"
+    if 'PIR' in tour_name_upper and 'ANLIEF' in tour_name_upper:
+        return True
+    
+    return False
+
+
+def should_process_tour_workflow(tour_name: str) -> bool:
+    """
+    Filter-Logik für WORKFLOW (Hauptseite).
+    
+    Nur W-Touren und Pir-Anlief-Touren werden verarbeitet.
+    Ignore-Liste wird NICHT angewendet.
+    """
+    if not tour_name:
+        return False
+    
+    return is_w_tour_or_pir_anlief(tour_name)
+
+
+def should_process_tour_admin(tour_name: str, ignore_list: list, allow_list: list) -> bool:
+    """
+    Filter-Logik für ADMIN-Bereich.
     
     Logik:
     1. Ignore-Liste hat IMMER Vorrang (wird zuerst geprüft)
@@ -117,6 +156,7 @@ def should_process_tour(tour_name: str, ignore_list: list, allow_list: list) -> 
     tour_name_upper = tour_name.upper()
     
     # 1. Ignore-Liste hat Vorrang - flexibleres Pattern-Matching
+    # WICHTIG: Prüfe zuerst exakte Matches (z.B. "CB Anlief. T16"), dann allgemeine Patterns
     for ignore_pattern in ignore_list:
         pattern_upper = ignore_pattern.upper()
         # Normalisiere Pattern (entferne Punkte, Leerzeichen, Backticks für flexibleres Matching)
@@ -137,11 +177,43 @@ def should_process_tour(tour_name: str, ignore_list: list, allow_list: list) -> 
                 log_to_file(f"[FILTER] Tour '{tour_name}' ignoriert (Pattern: '{ignore_pattern}')")
                 return False  # Tour wird ignoriert
         else:
-            # Längere Patterns: Flexibleres Matching (wie bisher)
-            if (tour_name_upper.startswith(pattern_upper) or 
-                pattern_upper in tour_name_upper or
-                pattern_normalized in tour_normalized or
-                tour_normalized.startswith(pattern_normalized)):
+            # Längere Patterns: Flexibleres Matching, aber präziser
+            matches = False
+            
+            # 1. Exakter Start-Match (höchste Priorität) - Tour beginnt direkt mit Pattern
+            if tour_name_upper.startswith(pattern_upper):
+                matches = True
+            # 2. Pattern als ganzes Wort (mit Leerzeichen/Trennzeichen davor und danach)
+            elif f' {pattern_upper} ' in f' {tour_name_upper} ':
+                matches = True
+            # 3. Spezialfall: "Anlief"-Patterns - nur matchen wenn Präfix auch in Ignore-Liste steht
+            elif pattern_upper.startswith('ANLIEF'):
+                # Prüfe ob Tour mit einem Präfix beginnt, das auch in der Ignore-Liste steht
+                # Extrahiere mögliche Präfixe aus der Ignore-Liste (kurze Patterns am Anfang)
+                prefix_matches = []
+                for other_pattern in ignore_list:
+                    other_upper = other_pattern.upper()
+                    # Wenn Pattern kurz ist (1-3 Zeichen) und Tour damit beginnt
+                    if len(other_upper) <= 3 and tour_name_upper.startswith(other_upper):
+                        prefix_matches.append(other_upper)
+                
+                # Wenn Tour mit einem Präfix beginnt, das in Ignore-Liste steht, UND Pattern danach kommt
+                if prefix_matches:
+                    for prefix in prefix_matches:
+                        # Prüfe ob Pattern nach dem Präfix kommt
+                        remaining = tour_name_upper[len(prefix):].strip()
+                        if remaining.startswith(pattern_upper) or pattern_upper in remaining:
+                            matches = True
+                            break
+                # Fallback: Wenn Pattern direkt am Anfang steht (ohne Präfix)
+                elif tour_name_upper.startswith(pattern_upper):
+                    matches = True
+            # 4. Normalisiertes Matching (Fallback für andere Patterns) - nur für längere Patterns
+            elif len(pattern_upper) >= 5:
+                if pattern_normalized in tour_normalized or tour_normalized.startswith(pattern_normalized):
+                    matches = True
+            
+            if matches:
                 log_to_file(f"[FILTER] Tour '{tour_name}' ignoriert (Pattern: '{ignore_pattern}')")
                 return False  # Tour wird ignoriert
     
@@ -976,7 +1048,7 @@ def optimize_tour_stops(stops, use_llm: bool = True):
         except Exception as e:
             log_to_file(f"LLM optimization failed, using fallback: {e}")
     
-    # Fallback: Nearest-Neighbor Optimierung
+    # Fallback: Nearest-Neighbor Optimierung + 2-Opt Verbesserung
     import math
     
     def haversine_distance(lat1, lon1, lat2, lon2):
@@ -987,7 +1059,19 @@ def optimize_tour_stops(stops, use_llm: bool = True):
         a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
         return 2 * R * math.asin(math.sqrt(a))
     
-    # Starte mit dem ersten Stop
+    def calculate_route_distance(route):
+        """Berechnet Gesamtdistanz einer Route"""
+        if len(route) < 2:
+            return 0.0
+        total = 0.0
+        for i in range(len(route) - 1):
+            total += haversine_distance(
+                route[i]['lat'], route[i]['lon'],
+                route[i+1]['lat'], route[i+1]['lon']
+            )
+        return total
+    
+    # Starte mit dem ersten Stop (Nearest-Neighbor)
     optimized = [valid_stops[0]]
     remaining = valid_stops[1:]
     
@@ -1000,6 +1084,37 @@ def optimize_tour_stops(stops, use_llm: bool = True):
                             remaining[i]['lat'], remaining[i]['lon']
                         ))
         optimized.append(remaining.pop(nearest_idx))
+    
+    # 2-Opt Verbesserung: Entferne Kreuzungen
+    # Iteriere solange Verbesserungen gefunden werden (max. 10 Iterationen)
+    improved = True
+    iterations = 0
+    max_iterations = 10
+    
+    while improved and iterations < max_iterations:
+        improved = False
+        iterations += 1
+        best_distance = calculate_route_distance(optimized)
+        
+        # Teste alle möglichen 2-Opt Swaps
+        for i in range(1, len(optimized) - 2):
+            for j in range(i + 1, len(optimized)):
+                if j - i == 1:
+                    continue  # Überspringe benachbarte Punkte
+                
+                # Erstelle neue Route durch Umkehrung des Segments zwischen i und j
+                new_route = optimized[:i] + optimized[i:j+1][::-1] + optimized[j+1:]
+                new_distance = calculate_route_distance(new_route)
+                
+                # Wenn neue Route kürzer ist, verwende sie
+                if new_distance < best_distance:
+                    optimized = new_route
+                    best_distance = new_distance
+                    improved = True
+                    break  # Beginne neue Iteration
+            
+            if improved:
+                break
     
     return optimized
 
@@ -1277,10 +1392,23 @@ async def workflow_upload(file: UploadFile = File(...)):
                 # Verwende bestehenden TEHA-Parser
                 try:
                     tour_data = parse_tour_plan_to_dict(tmp_path_str)
+                    total_tours_parsed = len(tour_data.get('tours', []))
+                    total_customers_parsed = sum(len(tour.get('customers', [])) for tour in tour_data.get('tours', []))
+                    log_to_file(f"[WORKFLOW] ✅ Parser erfolgreich: {total_tours_parsed} Touren, {total_customers_parsed} Kunden gefunden")
+                    
+                    # Zeige Tour-Namen für Debugging
+                    tour_names = [tour.get('name', 'Unbekannt') for tour in tour_data.get('tours', [])]
+                    if tour_names:
+                        log_to_file(f"[WORKFLOW] Gefundene Touren: {', '.join(tour_names[:10])}{'...' if len(tour_names) > 10 else ''}")
+                    else:
+                        log_to_file(f"[WORKFLOW] ⚠️ WARNUNG: Parser hat keine Touren gefunden in {file.filename}")
+                        errors.append(f"Parser hat keine Touren in der CSV-Datei gefunden. Bitte Datei prüfen.")
                 except Exception as parse_error:
                     import traceback
                     error_trace = traceback.format_exc()
-                    log_to_file(f"[WORKFLOW] FEHLER: Parser-Fehler für {tmp_path_str}: {parse_error}")
+                    log_to_file(f"[WORKFLOW] ❌ FEHLER: Parser-Fehler für {tmp_path_str}: {parse_error}")
+                    log_to_file(f"[WORKFLOW] Traceback: {error_trace}")
+                    errors.append(f"Parser-Fehler: {str(parse_error)}")
                     raise Exception(f"Parser-Fehler: {str(parse_error)}. Datei: {tmp_path_str}")
                 
                 # Geocode fehlende Adressen
@@ -1299,184 +1427,195 @@ async def workflow_upload(file: UploadFile = File(...)):
                 
                 processed_count = 0
                 
-                for tour in tour_data.get('tours', []):
-                    customers = tour.get('customers', [])
-                    
-                    # Geocode fehlende Adressen - ABER: ALLE Kunden behalten (auch ohne Koordinaten)
-                    all_customers_for_tour = []
-                    for customer in customers:
-                        processed_count += 1
-                        customer_name = customer.get('name', 'Unbekannt')
-                        _geocoding_progress[session_id]["processed"] = processed_count
-                        _geocoding_progress[session_id]["current"] = f"Verarbeite: {customer_name} ({processed_count}/{total_customers})"
-                        # Prüfe ob Koordinaten bereits vorhanden sind (z.B. aus Synonymen im Parser)
-                        # Prüfe auf Koordinaten (aus Synonymen oder bereits vorhanden)
-                        has_coords = bool(customer.get('lat') and customer.get('lon'))
-                        warning_message = None
+                # HTTP-Client für asynchrones Geocoding erstellen (einmal für alle Adressen)
+                import httpx
+                from services.geocode_fill import _geocode_one
+                
+                async with httpx.AsyncClient(timeout=20.0) as geocode_client:
+                    for tour in tour_data.get('tours', []):
+                        # ✅ FILTER: Workflow (Hauptseite) - nur W-Touren und Pir-Anlief-Touren
+                        # Prüfe BEVOR wir die Tour verarbeiten (früh aussteigen spart Zeit)
+                        tour_name = tour.get('name', 'Unbekannt')
+                        if not should_process_tour_workflow(tour_name):
+                            log_to_file(f"[WORKFLOW] Tour '{tour_name}' übersprungen (nur W-Touren und Pir-Anlief werden verarbeitet)")
+                            warnings.append(f"Tour '{tour_name}' wurde durch Workflow-Filter entfernt (nur W-Touren und Pir-Anlief werden verarbeitet)")
+                            continue  # Überspringe diese Tour - weiter mit nächster
                         
-                        if has_coords:
-                            # Koordinaten bereits vorhanden (z.B. aus Synonymen im Parser)
-                            log_to_file(f"[WORKFLOW] Kunde {customer.get('name', '?')} hat bereits Koordinaten: lat={customer.get('lat')}, lon={customer.get('lon')}")
-                            # Koordinaten bereits vorhanden (z.B. aus Synonymen) → direkt verwenden
-                            # Aber: Speichere auch in geo_cache für zukünftige Verwendung
-                            address = customer.get('address', '')
-                            if not address:
-                                street = customer.get('street', '').strip()
-                                postal_code = customer.get('postal_code', '').strip()
-                                city = customer.get('city', '').strip()
-                                if street or postal_code or city:
-                                    address = ", ".join(filter(None, [street, f"{postal_code} {city}".strip()]))
+                        customers = tour.get('customers', [])
+                        
+                        # Geocode fehlende Adressen - ABER: ALLE Kunden behalten (auch ohne Koordinaten)
+                        all_customers_for_tour = []
+                        for customer in customers:
+                            processed_count += 1
+                            customer_name = customer.get('name', 'Unbekannt')
+                            _geocoding_progress[session_id]["processed"] = processed_count
+                            _geocoding_progress[session_id]["current"] = f"Verarbeite: {customer_name} ({processed_count}/{total_customers})"
+                            # Prüfe ob Koordinaten bereits vorhanden sind (z.B. aus Synonymen im Parser)
+                            # Prüfe auf Koordinaten (aus Synonymen oder bereits vorhanden)
+                            has_coords = bool(customer.get('lat') and customer.get('lon'))
+                            warning_message = None
                             
-                            if address:
-                                # Prüfe ob bereits in geo_cache, wenn nicht: speichere
-                                existing = geo_get(address)
-                                if not existing:
-                                    lat = float(customer.get('lat'))
-                                    lon = float(customer.get('lon'))
-                                    geo_upsert(
-                                        address=address,
-                                        lat=lat,
-                                        lon=lon,
-                                        source="synonym",  # Markiere als Synonym-basiert
-                                        company_name=customer.get('name')
-                                    )
-                                    log_to_file(f"[GEOCODE] Synonym-Koordinaten in geo_cache gespeichert: {address} -> ({lat}, {lon})")
-                            
-                            ok_count += 1
-                            _geocoding_progress[session_id]["db_hits"] = _geocoding_progress[session_id].get("db_hits", 0) + 1
-                        elif not has_coords:
-                            # Versuche Geocoding
-                            address = customer.get('address', '')
-                            if not address:
-                                # Baue Adresse aus Street/PLZ/City
-                                street = customer.get('street', '').strip()
-                                postal_code = customer.get('postal_code', '').strip()
-                                city = customer.get('city', '').strip()
-                                if street or postal_code or city:
-                                    address = ", ".join(filter(None, [street, f"{postal_code} {city}".strip()]))
-                            
-                            if address:
-                                # SCHRITT 1: Zuerst DB prüfen (schnell)
-                                geo_result = geo_get(address)
+                            if has_coords:
+                                # Koordinaten bereits vorhanden (z.B. aus Synonymen im Parser)
+                                log_to_file(f"[WORKFLOW] Kunde {customer.get('name', '?')} hat bereits Koordinaten: lat={customer.get('lat')}, lon={customer.get('lon')}")
+                                # Koordinaten bereits vorhanden (z.B. aus Synonymen) → direkt verwenden
+                                # Aber: Speichere auch in geo_cache für zukünftige Verwendung
+                                address = customer.get('address', '')
+                                if not address:
+                                    street = customer.get('street', '').strip()
+                                    postal_code = customer.get('postal_code', '').strip()
+                                    city = customer.get('city', '').strip()
+                                    if street or postal_code or city:
+                                        address = ", ".join(filter(None, [street, f"{postal_code} {city}".strip()]))
                                 
-                                if geo_result:
-                                    # In DB gefunden → direkt verwenden
-                                    customer['lat'] = geo_result['lat']
-                                    customer['lon'] = geo_result['lon']
-                                    ok_count += 1
-                                    has_coords = True
-                                    _geocoding_progress[session_id]["db_hits"] = _geocoding_progress[session_id].get("db_hits", 0) + 1
-                                    log_to_file(f"[GEOCODE] OK DB-Hit: {address} -> ({geo_result['lat']}, {geo_result['lon']})")
-                                else:
-                                    # Nicht in DB → Geoapify aufrufen (live während Upload)
-                                    _geocoding_progress[session_id]["current"] = f"Geoapify: {customer_name} ({processed_count}/{total_customers})"
-                                    log_to_file(f"[GEOCODE] DB-Miss: {address}, rufe Geoapify auf...")
-                                    geo_result = geocode_address(address)
-                                    _geocoding_progress[session_id]["geoapify_calls"] = _geocoding_progress[session_id].get("geoapify_calls", 0) + 1
-                                    
-                                    if geo_result and geo_result.get('lat') and geo_result.get('lon'):
-                                        # Geoapify erfolgreich → direkt in DB speichern
-                                        lat = float(geo_result['lat'])
-                                        lon = float(geo_result['lon'])
+                                if address:
+                                    # Prüfe ob bereits in geo_cache, wenn nicht: speichere
+                                    existing = geo_get(address)
+                                    if not existing:
+                                        lat = float(customer.get('lat'))
+                                        lon = float(customer.get('lon'))
                                         geo_upsert(
                                             address=address,
                                             lat=lat,
                                             lon=lon,
-                                            source="geoapify",
+                                            source="synonym",  # Markiere als Synonym-basiert
                                             company_name=customer.get('name')
                                         )
-                                        customer['lat'] = lat
-                                        customer['lon'] = lon
+                                        log_to_file(f"[GEOCODE] Synonym-Koordinaten in geo_cache gespeichert: {address} -> ({lat}, {lon})")
+                                
+                                ok_count += 1
+                                _geocoding_progress[session_id]["db_hits"] = _geocoding_progress[session_id].get("db_hits", 0) + 1
+                            elif not has_coords:
+                                # Versuche Geocoding
+                                address = customer.get('address', '')
+                                if not address:
+                                    # Baue Adresse aus Street/PLZ/City
+                                    street = customer.get('street', '').strip()
+                                    postal_code = customer.get('postal_code', '').strip()
+                                    city = customer.get('city', '').strip()
+                                    if street or postal_code or city:
+                                        address = ", ".join(filter(None, [street, f"{postal_code} {city}".strip()]))
+                                
+                                if address:
+                                    # SCHRITT 1: Zuerst DB prüfen (schnell)
+                                    geo_result = geo_get(address)
+                                    
+                                    if geo_result:
+                                        # In DB gefunden → direkt verwenden
+                                        customer['lat'] = geo_result['lat']
+                                        customer['lon'] = geo_result['lon']
                                         ok_count += 1
                                         has_coords = True
-                                        _geocoding_progress[session_id]["current"] = f"Gespeichert: {customer_name} ({processed_count}/{total_customers})"
-                                        log_to_file(f"[GEOCODE] OK Geoapify + DB-Save: {address} -> ({lat}, {lon})")
-                                        # Kurze Pause für Rate Limiting
-                                        await asyncio.sleep(0.2)
+                                        _geocoding_progress[session_id]["db_hits"] = _geocoding_progress[session_id].get("db_hits", 0) + 1
+                                        log_to_file(f"[GEOCODE] OK DB-Hit: {address} -> ({geo_result['lat']}, {geo_result['lon']})")
                                     else:
-                                        # Auch Geoapify fehlgeschlagen
-                                        warn_count += 1
-                                        _geocoding_progress[session_id]["errors"] = _geocoding_progress[session_id].get("errors", 0) + 1
-                                        warning_message = f"Keine Koordinaten für {customer.get('name', 'Unbekannt')} - {address}"
-                                        warnings.append(warning_message)
-                                        _geocoding_progress[session_id]["current"] = f"Fehler: {customer_name} ({processed_count}/{total_customers})"
-                                        log_to_file(f"[GEOCODE] FEHLER: Fehlgeschlagen für Adresse: '{address}' (Kunde: {customer_name})")
-                                        # WICHTIG: Kunde wird trotzdem hinzugefügt (ohne Koordinaten), damit Tour erstellt wird
-                            else:
-                                # Keine Adresse - aber Kunde wird trotzdem hinzugefügt (z.B. für PF-Kunden ohne Synonym)
-                                # WICHTIG: Nicht als kritischer Fehler behandeln, sondern als Warnung
-                                warn_count += 1  # Ändere von bad_count zu warn_count
-                                warning_message = f"Keine Adresse für {customer.get('name', 'Unbekannt')}"
-                                warnings.append(warning_message)  # Ändere von errors zu warnings
-                                log_to_file(f"[WORKFLOW] WARNUNG: {warning_message} (Kunde wird trotzdem hinzugefügt)")
-                        else:
-                            ok_count += 1
-                        
-                        # WICHTIG: ALLE Kunden hinzufügen (auch ohne Koordinaten), damit Warnungen sichtbar sind
-                        # Konvertiere Kunden zu Stops-Format für Frontend
-                        stop_data = {
-                            "order_id": customer.get('customer_number', customer.get('kdnr', '')),
-                            "customer": customer.get('name', 'Unbekannt'),
-                            "customer_number": customer.get('customer_number', customer.get('kdnr', '')),
-                            "street": customer.get('street', ''),
-                            "postal_code": customer.get('postal_code', ''),
-                            "city": customer.get('city', ''),
-                            "lat": customer.get('lat'),
-                            "lon": customer.get('lon'),
-                            "address": customer.get('address', f"{customer.get('street', '')}, {customer.get('postal_code', '')} {customer.get('city', '')}".strip(', ')),
-                            "bar_flag": customer.get('bar_flag', False),  # BAR-Flag vom Parser übernehmen
-                            "has_coordinates": has_coords,  # Flag für Frontend
-                            "warning": warning_message  # Warnung direkt beim Kunden
-                        }
-                        all_customers_for_tour.append(stop_data)
+                                        # Nicht in DB → Asynchrones Geocoding aufrufen (live während Upload)
+                                        _geocoding_progress[session_id]["current"] = f"Geoapify: {customer_name} ({processed_count}/{total_customers})"
+                                        log_to_file(f"[GEOCODE] DB-Miss: {address}, rufe Geoapify auf...")
+                                        
+                                        try:
+                                            # Asynchrones Geocoding (nicht blockierend!)
+                                            geo_result = await _geocode_one(address, geocode_client, company_name=customer.get('name'))
+                                            _geocoding_progress[session_id]["geoapify_calls"] = _geocoding_progress[session_id].get("geoapify_calls", 0) + 1
+                                            
+                                            if geo_result and geo_result.get('lat') and geo_result.get('lon'):
+                                                # Geocoding erfolgreich → Koordinaten extrahieren
+                                                # _geocode_one speichert bereits automatisch in DB über write_result
+                                                lat = float(geo_result['lat']) if isinstance(geo_result['lat'], str) else geo_result['lat']
+                                                lon = float(geo_result['lon']) if isinstance(geo_result['lon'], str) else geo_result['lon']
+                                                
+                                                # Zusätzlich in geo_cache speichern (falls noch nicht geschehen)
+                                                existing = geo_get(address)
+                                                if not existing:
+                                                    geo_upsert(
+                                                        address=address,
+                                                        lat=lat,
+                                                        lon=lon,
+                                                        source="geoapify",
+                                                        company_name=customer.get('name')
+                                                    )
+                                                
+                                                customer['lat'] = lat
+                                                customer['lon'] = lon
+                                                ok_count += 1
+                                                has_coords = True
+                                                _geocoding_progress[session_id]["current"] = f"Gespeichert: {customer_name} ({processed_count}/{total_customers})"
+                                                log_to_file(f"[GEOCODE] OK Geoapify + DB-Save: {address} -> ({lat}, {lon})")
+                                            else:
+                                                # Geocoding fehlgeschlagen
+                                                warn_count += 1
+                                                _geocoding_progress[session_id]["errors"] = _geocoding_progress[session_id].get("errors", 0) + 1
+                                                warning_message = f"Keine Koordinaten für {customer.get('name', 'Unbekannt')} - {address}"
+                                                warnings.append(warning_message)
+                                                _geocoding_progress[session_id]["current"] = f"Fehler: {customer_name} ({processed_count}/{total_customers})"
+                                                log_to_file(f"[GEOCODE] FEHLER: Fehlgeschlagen für Adresse: '{address}' (Kunde: {customer_name})")
+                                                # WICHTIG: Kunde wird trotzdem hinzugefügt (ohne Koordinaten), damit Tour erstellt wird
+                                        except Exception as geocode_error:
+                                            # Fehler beim Geocoding
+                                            warn_count += 1
+                                            _geocoding_progress[session_id]["errors"] = _geocoding_progress[session_id].get("errors", 0) + 1
+                                            warning_message = f"Geocoding-Fehler für {customer.get('name', 'Unbekannt')} - {address}: {str(geocode_error)}"
+                                            warnings.append(warning_message)
+                                            _geocoding_progress[session_id]["current"] = f"Fehler: {customer_name} ({processed_count}/{total_customers})"
+                                            log_to_file(f"[GEOCODE] EXCEPTION: Fehler beim Geocoding für '{address}' (Kunde: {customer_name}): {geocode_error}")
+                                            # WICHTIG: Kunde wird trotzdem hinzugefügt (ohne Koordinaten), damit Tour erstellt wird
+                                else:
+                                    # Keine Adresse - aber Kunde wird trotzdem hinzugefügt (z.B. für PF-Kunden ohne Synonym)
+                                    # WICHTIG: Nicht als kritischer Fehler behandeln, sondern als Warnung
+                                    warn_count += 1  # Ändere von bad_count zu warn_count
+                                    warning_message = f"Keine Adresse für {customer.get('name', 'Unbekannt')}"
+                                    warnings.append(warning_message)  # Ändere von errors zu warnings
+                                    log_to_file(f"[WORKFLOW] WARNUNG: {warning_message} (Kunde wird trotzdem hinzugefügt)")
+                            
+                            # WICHTIG: ALLE Kunden hinzufügen (auch ohne Koordinaten), damit Warnungen sichtbar sind
+                            # Konvertiere Kunden zu Stops-Format für Frontend
+                            stop_data = {
+                                "order_id": customer.get('customer_number', customer.get('kdnr', '')),
+                                "customer": customer.get('name', 'Unbekannt'),
+                                "customer_number": customer.get('customer_number', customer.get('kdnr', '')),
+                                "street": customer.get('street', ''),
+                                "postal_code": customer.get('postal_code', ''),
+                                "city": customer.get('city', ''),
+                                "lat": customer.get('lat'),
+                                "lon": customer.get('lon'),
+                                "address": customer.get('address', f"{customer.get('street', '')}, {customer.get('postal_code', '')} {customer.get('city', '')}".strip(', ')),
+                                "bar_flag": customer.get('bar_flag', False),  # BAR-Flag vom Parser übernehmen
+                                "has_coordinates": has_coords,  # Flag für Frontend
+                                "warning": warning_message  # Warnung direkt beim Kunden
+                            }
+                            all_customers_for_tour.append(stop_data)
                     
-                    # WICHTIG: Automatische Sektor-Planung für W-Touren (Teil der normalen Routing-Optimierung)
-                    if all_customers_for_tour:
-                        tour_name = tour.get('name', 'Unbekannt')
-                        
-                        # ✅ FILTER: Tour-Ignore-Liste und Allow-Liste prüfen
-                        ignore_list, allow_list = load_tour_filter_lists()
-                        if not should_process_tour(tour_name, ignore_list, allow_list):
-                            ignored_reasons = []
-                            for p in ignore_list:
-                                if p in tour_name.upper():
-                                    ignored_reasons.append(f"Ignore: {p}")
-                            if allow_list and len(allow_list) > 0:
-                                if not any(p in tour_name.upper() for p in allow_list):
-                                    ignored_reasons.append(f"Nicht in Allow-Liste: {allow_list}")
-                            log_to_file(f"[WORKFLOW] Tour '{tour_name}' übersprungen ({', '.join(ignored_reasons) if ignored_reasons else 'Filter-Regel'})")
-                            # WICHTIG: Füge Warnung hinzu, damit Benutzer sieht warum Tour fehlt
-                            warnings.append(f"Tour '{tour_name}' wurde durch Filter entfernt ({', '.join(ignored_reasons) if ignored_reasons else 'Filter-Regel'})")
-                            continue  # Überspringe diese Tour komplett
-                        
-                        # WICHTIG: Workflow soll NUR zusammenfassen, NICHT aufteilen!
-                        # Sektor-Planung und Clustering werden NICHT im Workflow durchgeführt.
-                        # Die Aufteilung erfolgt erst bei der Routen-Optimierung.
-                        # Erstelle Tour mit allen Kunden (zusammenfassen, nicht aufteilen)
-                        # Jede Route bekommt eine eindeutige Farbe basierend auf ihrem Index
-                        route_index = len(optimized_tours)  # Index für Farbzuweisung
-                        tour_dict = {
-                            "tour_id": tour_name,
-                            "stops": all_customers_for_tour,
-                            "stop_count": len(all_customers_for_tour),
-                            "estimated_time_minutes": None,  # Wird bei Optimierung berechnet
-                            "estimated_return_time_minutes": None,
-                            "estimated_total_with_return_minutes": None,
-                            "_route_index": route_index  # Eindeutiger Index für Farbzuweisung
-                        }
-                        optimized_tours.append(tour_dict)
-                        log_to_file(f"[WORKFLOW] Tour {tour_name} zusammengefasst: {len(all_customers_for_tour)} Kunden (Aufteilung erfolgt bei Optimierung), Route-Index: {route_index}")
-                    else:
-                        # ANLIEF-Touren können auch mit 0 Kunden existieren (z.B. wenn nur Kommentar)
-                        tour_name = tour.get('name', 'Unbekannt')
-                        if 'Anlief' in tour_name or 'Anlief.' in tour_name:
-                            # Für ANLIEF-Touren: Warnung statt Fehler
-                            warnings.append(f"Tour {tour_name} hat keine Kunden (möglicherweise leere Tour).")
+                        # WICHTIG: Automatische Sektor-Planung für W-Touren (Teil der normalen Routing-Optimierung)
+                        # Tour wird verarbeitet (Filter wurde bereits oben geprüft)
+                        if all_customers_for_tour:
+                            # WICHTIG: Workflow soll NUR zusammenfassen, NICHT aufteilen!
+                            # Sektor-Planung und Clustering werden NICHT im Workflow durchgeführt.
+                            # Die Aufteilung erfolgt erst bei der Routen-Optimierung.
+                            # Erstelle Tour mit allen Kunden (zusammenfassen, nicht aufteilen)
+                            # Jede Route bekommt eine eindeutige Farbe basierend auf ihrem Index
+                            route_index = len(optimized_tours)  # Index für Farbzuweisung
+                            tour_dict = {
+                                "tour_id": tour_name,
+                                "stops": all_customers_for_tour,
+                                "stop_count": len(all_customers_for_tour),
+                                "estimated_time_minutes": None,  # Wird bei Optimierung berechnet
+                                "estimated_return_time_minutes": None,
+                                "estimated_total_with_return_minutes": None,
+                                "_route_index": route_index  # Eindeutiger Index für Farbzuweisung
+                            }
+                            optimized_tours.append(tour_dict)
+                            log_to_file(f"[WORKFLOW] Tour {tour_name} zusammengefasst: {len(all_customers_for_tour)} Kunden (Aufteilung erfolgt bei Optimierung), Route-Index: {route_index}")
                         else:
-                            # Leere Tour als Warnung behandeln
-                            warnings.append(f"Tour {tour_name} hat keine Kunden.")
+                            # ANLIEF-Touren können auch mit 0 Kunden existieren (z.B. wenn nur Kommentar)
+                            if 'Anlief' in tour_name or 'Anlief.' in tour_name:
+                                # Für ANLIEF-Touren: Warnung statt Fehler
+                                warnings.append(f"Tour {tour_name} hat keine Kunden (möglicherweise leere Tour).")
+                            else:
+                                # Leere Tour als Warnung behandeln
+                                warnings.append(f"Tour {tour_name} hat keine Kunden.")
                 
                 # WICHTIG: Konsolidiere kleine T-Touren (z.B. T10 mit ≤3 Stopps) NACH Optimierung
+                # (außerhalb der for tour-Schleife, aber innerhalb des async with-Blocks)
                 tours_before_consolidation = len(optimized_tours)
                 optimized_tours = consolidate_t10_tours(optimized_tours, max_stops=3)
                 tours_after_consolidation = len(optimized_tours)
@@ -1493,20 +1632,124 @@ async def workflow_upload(file: UploadFile = File(...)):
                 
                 # ✅ FILTER: Ignorierte Touren aus der Antwort entfernen (werden nicht angezeigt)
                 ignore_list, allow_list = load_tour_filter_lists()
+                # Workflow: Nur W-Touren und Pir-Anlief-Touren behalten
                 filtered_tours = []
                 filtered_out_count = 0
                 for tour in optimized_tours:
                     tour_id = tour.get("tour_id") if isinstance(tour, dict) else getattr(tour, "tour_id", None)
-                    if tour_id and not should_process_tour(tour_id, ignore_list, allow_list):
+                    if tour_id and not should_process_tour_workflow(tour_id):
                         filtered_out_count += 1
-                        log_to_file(f"[WORKFLOW] Tour '{tour_id}' durch Filter entfernt (Ignore/Allow-Liste)")
+                        log_to_file(f"[WORKFLOW] Tour '{tour_id}' durch Workflow-Filter entfernt (nur W-Touren und Pir-Anlief)")
                         continue  # Tour überspringen - nicht in Antwort aufnehmen
                     filtered_tours.append(tour)
                 
                 # WICHTIG: Wenn ALLE Touren gefiltert wurden, füge Warnung hinzu
                 if len(optimized_tours) > 0 and len(filtered_tours) == 0:
-                    warnings.append(f"ALLE {len(optimized_tours)} Touren wurden durch Filter-Liste entfernt (Allow-Liste: {allow_list}, Ignore-Liste: {ignore_list[:3]}...)")
+                    # Erstelle detaillierte Fehlermeldung mit allen gefilterten Touren
+                    filtered_tour_names = [tour.get("tour_id", "Unbekannt") if isinstance(tour, dict) else getattr(tour, "tour_id", "Unbekannt") for tour in optimized_tours]
+                    error_msg = f"ALLE {len(optimized_tours)} Touren wurden durch Filter-Liste entfernt. Gefilterte Touren: {', '.join(filtered_tour_names[:5])}{'...' if len(filtered_tour_names) > 5 else ''}"
+                    warnings.append(error_msg)
+                    errors.append(error_msg)  # Auch als Error markieren, damit Frontend es sieht
                     log_to_file(f"[WORKFLOW] ⚠️ KRITISCH: Alle Touren gefiltert! Allow-Liste: {allow_list}, Ignore-Liste: {ignore_list}")
+                    log_to_file(f"[WORKFLOW] Gefilterte Touren: {filtered_tour_names}")
+                
+                # Prüfe ob überhaupt Touren geparst wurden
+                total_tours_parsed = len(tour_data.get('tours', []))
+                if total_tours_parsed == 0:
+                    errors.append("Parser hat keine Touren in der CSV-Datei gefunden. Bitte Datei prüfen.")
+                    log_to_file(f"[WORKFLOW] ⚠️ KRITISCH: Parser hat keine Touren gefunden in {file.filename}")
+                elif total_tours_parsed > 0 and len(filtered_tours) == 0:
+                    # Touren wurden geparst, aber alle gefiltert
+                    log_to_file(f"[WORKFLOW] ⚠️ INFO: {total_tours_parsed} Touren geparst, aber alle durch Filter entfernt")
+                
+                # ✅ SPEICHERE W-TOUREN UND PIR ANLIEF-TOUREN IN DIE DATENBANK
+                if filtered_tours:
+                    try:
+                        from backend.db.dao import insert_tour
+                        from datetime import datetime
+                        
+                        # Extrahiere Datum aus Dateinamen (z.B. "Tourenplan 18.08.2025.csv" -> "2025-08-18")
+                        # Oder verwende aktuelles Datum als Fallback
+                        datum = datetime.now().strftime("%Y-%m-%d")
+                        date_match = re.search(r'(\d{2})\.(\d{2})\.(\d{4})', file.filename)
+                        if date_match:
+                            day, month, year = date_match.groups()
+                            datum = f"{year}-{month}-{day}"
+                        
+                        saved_count = 0
+                        skipped_count = 0
+                        
+                        for tour in filtered_tours:
+                            tour_id = tour.get("tour_id") if isinstance(tour, dict) else getattr(tour, "tour_id", None)
+                            if not tour_id:
+                                continue
+                            
+                            # Extrahiere Kunden-IDs aus Stops
+                            stops = tour.get("stops", []) if isinstance(tour, dict) else getattr(tour, "stops", [])
+                            kunden_ids = []
+                            seen_ids = set()  # Verhindere Duplikate
+                            
+                            for stop in stops:
+                                # Versuche verschiedene Felder für Kunden-ID (in dieser Reihenfolge)
+                                customer_id = None
+                                if isinstance(stop, dict):
+                                    customer_id = stop.get("customer_number") or stop.get("kdnr") or stop.get("order_id")
+                                else:
+                                    customer_id = getattr(stop, "customer_number", None) or getattr(stop, "kdnr", None) or getattr(stop, "order_id", None)
+                                
+                                if customer_id:
+                                    try:
+                                        # Konvertiere zu Integer falls möglich (entferne Leerzeichen)
+                                        customer_id_str = str(customer_id).strip()
+                                        if customer_id_str and customer_id_str.isdigit():
+                                            kunden_id = int(customer_id_str)
+                                            # Nur hinzufügen wenn noch nicht vorhanden
+                                            if kunden_id not in seen_ids and kunden_id > 0:
+                                                kunden_ids.append(kunden_id)
+                                                seen_ids.add(kunden_id)
+                                    except (ValueError, TypeError, AttributeError):
+                                        # Ignoriere nicht-numerische IDs
+                                        pass
+                            
+                            # Speichere Tour in DB (nur wenn Kunden vorhanden)
+                            if kunden_ids:
+                                try:
+                                    # Prüfe ob Tour bereits existiert (verhindere Duplikate)
+                                    from db.core import ENGINE
+                                    from sqlalchemy import text
+                                    with ENGINE.connect() as conn:
+                                        existing = conn.execute(
+                                            text("SELECT 1 FROM touren WHERE tour_id = :tour_id AND datum = :datum"),
+                                            {"tour_id": tour_id, "datum": datum}
+                                        ).fetchone()
+                                        
+                                        if not existing:
+                                            insert_tour(
+                                                tour_id=tour_id,
+                                                datum=datum,
+                                                kunden_ids=kunden_ids,
+                                                dauer_min=None,  # Wird später bei Routenberechnung gesetzt
+                                                distanz_km=None,  # Wird später bei Routenberechnung gesetzt
+                                                fahrer=None
+                                            )
+                                            saved_count += 1
+                                            log_to_file(f"[WORKFLOW] Tour '{tour_id}' in DB gespeichert (Datum: {datum}, {len(kunden_ids)} Kunden)")
+                                        else:
+                                            skipped_count += 1
+                                            log_to_file(f"[WORKFLOW] Tour '{tour_id}' bereits in DB vorhanden (übersprungen)")
+                                except Exception as db_error:
+                                    log_to_file(f"[WORKFLOW] Fehler beim Speichern von Tour '{tour_id}' in DB: {db_error}")
+                                    warnings.append(f"Tour '{tour_id}' konnte nicht in Datenbank gespeichert werden: {str(db_error)}")
+                            else:
+                                log_to_file(f"[WORKFLOW] Tour '{tour_id}' hat keine Kunden-IDs - nicht in DB gespeichert")
+                        
+                        if saved_count > 0:
+                            log_to_file(f"[WORKFLOW] ✅ {saved_count} Touren in Datenbank gespeichert (Datum: {datum})")
+                        if skipped_count > 0:
+                            log_to_file(f"[WORKFLOW] ⚠️ {skipped_count} Touren übersprungen (bereits vorhanden)")
+                    except Exception as save_error:
+                        log_to_file(f"[WORKFLOW] Fehler beim Speichern der Touren in DB: {save_error}", exc_info=True)
+                        warnings.append(f"Fehler beim Speichern der Touren in Datenbank: {str(save_error)}")
                 
                 return JSONResponse({
                     "success": True,
@@ -1521,6 +1764,7 @@ async def workflow_upload(file: UploadFile = File(...)):
                     "errors": errors,
                     "tours": filtered_tours,
                     "tour_count": len(filtered_tours),
+                    "total_tours_parsed": total_tours_parsed,  # Neu: Zeige wie viele Touren geparst wurden
                     "total_stops": sum(len(tour.get("stops", []) if isinstance(tour, dict) else getattr(tour, "stops", [])) for tour in filtered_tours),
                     "tours_consolidated": tours_before_consolidation != tours_after_consolidation,
                     "tours_before_consolidation": tours_before_consolidation,
@@ -1612,14 +1856,12 @@ async def workflow_upload(file: UploadFile = File(...)):
         result = run_workflow(content, column_map=column_map, geocoder=geocoder)
         
         # Ergebnis für UI aufbereiten
-        # ✅ FILTER: Ignorierte Touren aus der Antwort entfernen (werden nicht angezeigt)
-        ignore_list, allow_list = load_tour_filter_lists()
-        
+        # ✅ FILTER: Workflow (Hauptseite) - nur W-Touren und Pir-Anlief-Touren
         tours_data = []
         for tour in result.tours:
             # Prüfe ob Tour ignoriert werden soll
             tour_id = getattr(tour, 'tour_id', None) or (tour.get('tour_id') if isinstance(tour, dict) else None)
-            if tour_id and not should_process_tour(tour_id, ignore_list, allow_list):
+            if tour_id and not should_process_tour_workflow(tour_id):
                 # Tour überspringen - nicht in Antwort aufnehmen
                 continue
             stops_data = []
@@ -1826,7 +2068,6 @@ Antworte NUR mit JSON in diesem Format:
             
         except Exception as e:
             # Fallback bei KI-Fehler
-            import re
             is_bar = bool(re.search(r'\bBAR\b', tour_id, re.IGNORECASE))
             base_name = re.sub(r'\s*(Uhr\s*)?(BAR|Tour)$', '', tour_id, flags=re.IGNORECASE).strip()
             time_match = re.search(r'(\d{1,2})[.:](\d{2})', tour_id)
@@ -1929,7 +2170,6 @@ Antworte NUR mit JSON in diesem Format:
         except Exception as e:
             # Fallback bei KI-Fehler
             groups = []
-            import re
             for i, tour in enumerate(tours):
                 tour_id = tour.get('name', tour.get('id', f'Tour {i}'))
                 base_name = re.sub(r'\s*(Uhr\s*)?(BAR|Tour)$', '', tour_id, flags=re.IGNORECASE).strip()
@@ -2031,17 +2271,9 @@ async def optimize_tour_with_ai(request: Request):
         tour_id = validated_request.tour_id
         stops = validated_request.stops
         
-        # ✅ FILTER: Tour-Ignore-Liste und Allow-Liste prüfen (BEVOR Optimierung startet)
-        ignore_list, allow_list = load_tour_filter_lists()
-        if not should_process_tour(tour_id, ignore_list, allow_list):
-            ignored_reasons = []
-            for p in ignore_list:
-                if p.upper() in tour_id.upper():
-                    ignored_reasons.append(f"Ignore: {p}")
-            if allow_list and len(allow_list) > 0:
-                if not any(p.upper() in tour_id.upper() for p in allow_list):
-                    ignored_reasons.append(f"Nicht in Allow-Liste: {allow_list}")
-            log_to_file(f"[TOUR-OPTIMIZE] Tour '{tour_id}' übersprungen ({', '.join(ignored_reasons) if ignored_reasons else 'Filter-Regel'})")
+        # ✅ FILTER: Workflow (Hauptseite) - nur W-Touren und Pir-Anlief-Touren
+        if not should_process_tour_workflow(tour_id):
+            log_to_file(f"[TOUR-OPTIMIZE] Tour '{tour_id}' übersprungen (nur W-Touren und Pir-Anlief werden verarbeitet)")
             return JSONResponse(
                 status_code=200,  # 200 OK, aber mit skipped=True
                 content={

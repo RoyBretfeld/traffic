@@ -116,6 +116,68 @@ def insert_tour(
         return int(cur.lastrowid)
 
 
+def update_tour_route_data(
+    tour_id: str,
+    datum: str,
+    distanz_km: Optional[float] = None,
+    gesamtzeit_min: Optional[int] = None,
+) -> bool:
+    """
+    Aktualisiert Distanz und Gesamtzeit für eine bestehende Tour.
+    
+    Args:
+        tour_id: Tour-Identifikator
+        datum: Tour-Datum (YYYY-MM-DD)
+        distanz_km: Gesamtstrecke in km (inkl. Rückfahrt)
+        gesamtzeit_min: Gesamtzeit in Minuten (Fahren + Service)
+    
+    Returns:
+        True wenn Tour aktualisiert wurde, False wenn Tour nicht gefunden wurde
+    """
+    with _connect() as conn:
+        # Stelle sicher, dass gesamtzeit_min Spalte existiert
+        cur = conn.execute("PRAGMA table_info(touren)")
+        columns = {row[1] for row in cur.fetchall()}
+        if "gesamtzeit_min" not in columns:
+            try:
+                conn.execute("ALTER TABLE touren ADD COLUMN gesamtzeit_min INTEGER")
+                conn.commit()
+            except sqlite3.OperationalError:
+                pass  # Spalte existiert bereits oder Fehler
+        
+        # Prüfe ob Tour existiert
+        cur = conn.execute(
+            "SELECT id FROM touren WHERE tour_id = ? AND datum = ?",
+            (tour_id, datum)
+        )
+        if not cur.fetchone():
+            return False
+        
+        # Erstelle UPDATE-Statement nur mit vorhandenen Werten
+        updates = []
+        params = []
+        
+        if distanz_km is not None:
+            updates.append("distanz_km = ?")
+            params.append(distanz_km)
+        
+        if gesamtzeit_min is not None:
+            updates.append("gesamtzeit_min = ?")
+            params.append(gesamtzeit_min)
+        
+        if not updates:
+            return True  # Nichts zu aktualisieren
+        
+        params.extend([tour_id, datum])
+        
+        conn.execute(
+            f"UPDATE touren SET {', '.join(updates)} WHERE tour_id = ? AND datum = ?",
+            params
+        )
+        conn.commit()
+        return True
+
+
 def geocache_get(adresse: str) -> Optional[tuple[float, float, Optional[str]]]:
     with _connect() as conn:
         _ensure_geocache_columns(conn)

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Systemregeln - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .admin-nav-item i {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Hauptseite</a>
+                <a class="nav-link active" href="/admin/systemregeln.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <h1><i class="fas fa-book"></i> Systemregeln</h1>
+        
+        <!-- Admin-Navigation -->
+        <nav class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin/system.html" class="admin-nav-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
+                </a>
+                <a href="/admin/statistik.html" class="admin-nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item active">
+                    <i class="fas fa-book"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item">
+                    <i class="fas fa-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                    <i class="fas fa-list-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+            </div>
+        </nav>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <h3><i class="fas fa-book"></i> Systemregeln für Routen-Aufsplittung</h3>
+                <p class="text-muted">Diese Regeln werden vom LLM und der Optimierungs-Engine verwendet.</p>
+                
+                <!-- Editier-Formular für Systemregeln (oben) -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-edit"></i> Systemregeln bearbeiten</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="system-rules-form">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-time-budget-without-return" class="form-label">
+                                        Zeitbudget ohne Rückfahrt (Minuten)
+                                    </label>
+                                    <input type="number" class="form-control" id="edit-time-budget-without-return" 
+                                           min="1" max="120" step="1" required>
+                                    <small class="form-text text-muted">Hauptregel: Tour muss ≤ diesem Wert sein (ohne Rückfahrt)</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-time-budget-with-return" class="form-label">
+                                        Zeitbudget mit Rückfahrt (Minuten)
+                                    </label>
+                                    <input type="number" class="form-control" id="edit-time-budget-with-return" 
+                                           min="1" max="180" step="1" required>
+                                    <small class="form-text text-muted">Gesamtzeit inkl. Rückfahrt</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-service-time-per-stop" class="form-label">
+                                        Service-Zeit pro Stop (Minuten)
+                                    </label>
+                                    <input type="number" class="form-control" id="edit-service-time-per-stop" 
+                                           min="0.5" max="10" step="0.1" required>
+                                    <small class="form-text text-muted">Standard-Service-Zeit pro Kunde</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-speed-kmh" class="form-label">
+                                        Durchschnittsgeschwindigkeit (km/h)
+                                    </label>
+                                    <input type="number" class="form-control" id="edit-speed-kmh" 
+                                           min="10" max="100" step="1" required>
+                                    <small class="form-text text-muted">Für Stadtverkehr</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-safety-factor" class="form-label">
+                                        Sicherheitsfaktor (Stadtverkehr)
+                                    </label>
+                                    <input type="number" class="form-control" id="edit-safety-factor" 
+                                           min="1.0" max="2.0" step="0.1" required>
+                                    <small class="form-text text-muted">
+                                        <strong>Was ist das?</strong><br>
+                                        Der Sicherheitsfaktor kompensiert die Differenz zwischen Luftlinie (Haversine) und tatsächlicher Straßenentfernung im Stadtverkehr.<br>
+                                        <strong>Standard: 1.3</strong> bedeutet: Luftlinie × 1.3 = geschätzte Straßenentfernung<br>
+                                        <strong>Beispiel:</strong> 10 km Luftlinie → 13 km Straßenentfernung (bei Faktor 1.3)<br>
+                                        <strong>Warum?</strong> In Städten sind Straßen länger als die direkte Luftlinie (Einbahnstraßen, Umwege, Verkehrsführung).<br>
+                                        <strong>Anpassung:</strong> Höhere Werte (z.B. 1.5) für komplexe Stadtgebiete, niedrigere (z.B. 1.1) für einfache Routen.
+                                    </small>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="edit-depot-lat" class="form-label">
+                                        Depot Latitude
+                                    </label>
+                                    <input type="number" class="form-control" id="edit-depot-lat" 
+                                           min="-90" max="90" step="0.0000001" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="edit-depot-lon" class="form-label">
+                                        Depot Longitude
+                                    </label>
+                                    <input type="number" class="form-control" id="edit-depot-lon" 
+                                           min="-180" max="180" step="0.0000001" required>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Speichern
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="resetSystemRulesForm()">
+                                    <i class="fas fa-undo"></i> Zurücksetzen
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="resetToDefaults()">
+                                    <i class="fas fa-redo"></i> Standard-Werte
+                                </button>
+                            </div>
+                            <div id="rules-save-message" class="mt-3"></div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> 1. Zeit-Constraints (HÖCHSTE PRIORITÄT)</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Hauptregel: Tour-Zeit OHNE Rückfahrt</h6>
+                        <ul>
+                            <li><strong>KRITISCH:</strong> Jede Tour muss <strong>≤ <span id="time-budget-without-return">65</span> Minuten (OHNE Rückfahrt)</strong> sein!</li>
+                            <li>Berechnung: <code>Fahrzeit + Servicezeit ≤ <span id="time-budget-without-return-2">65</span> Minuten</code></li>
+                            <li>Rückfahrt zum Depot kommt <strong>DANACH</strong> und zählt <strong>NICHT</strong> in die <span id="time-budget-without-return-3">65</span> Minuten!</li>
+                            <li>Wenn eine Gruppe zu groß wäre → <strong>ERSTELLE MEHRERE SEPARATE TOUREN (A, B, C, D, E)</strong>, NICHT Unterrouten!</li>
+                        </ul>
+                        
+                        <h6 class="mt-3">Zeitbox-Regel: Gesamtzeit INKL. Rückfahrt</h6>
+                        <ul>
+                            <li>Gesamtzeit inkl. Rückfahrt darf <strong>≤ <span id="time-budget-with-return">90</span> Minuten</strong> betragen</li>
+                            <li>Dies ist eine zusätzliche Prüfung nach der Hauptregel</li>
+                        </ul>
+                        
+                        <h6 class="mt-3">Service-Zeit pro Kunde</h6>
+                        <ul>
+                            <li><strong>Standard:</strong> <span id="service-time-per-stop">2</span> Minuten pro Kunde</li>
+                            <li>Kann pro Kunde individuell angepasst werden</li>
+                            <li>Wird zur Fahrzeit addiert</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-map-marked-alt"></i> 2. Geografische Optimierung</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Priorität (Reihenfolge ist wichtig!)</h6>
+                        <ol>
+                            <li><strong>Zeit-Constraint ≤ <span id="time-budget-without-return-4">65</span> Min (ohne Rückfahrt)</strong> - MUSS erfüllt sein</li>
+                            <li><strong>Geografische Nähe</strong> - Gruppiere Kunden nach Entfernung zueinander</li>
+                            <li><strong>Max. Stopps pro Tour</strong> - Nur wenn Zeit-Constraint erfüllt ist!</li>
+                        </ol>
+                        
+                        <h6 class="mt-3">Max. Stopps pro Tour</h6>
+                        <ul>
+                            <li><strong>KEIN Limit</strong> - so viele Stopps wie möglich, solange Zeit-Constraint (≤ <span id="time-budget-without-return-5">65</span> Min ohne Rückfahrt) erfüllt ist!</li>
+                            <li>Wenn Zeit-Constraint nicht erfüllt → weniger Stopps pro Tour, mehr Touren erstellen!</li>
+                        </ul>
+                        
+                        <h6 class="mt-3">Straßenbasierte Clustering</h6>
+                        <ul>
+                            <li><strong>Priorität:</strong> Kunden auf derselben Straße zusammenhalten</li>
+                            <li>Beispiel: Alle "Fröbelstraße"-Stopps sollten zusammen bleiben, bevor zu "Tharandter Straße" gewechselt wird</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-warehouse"></i> 3. Depot als Start- und Endpunkt</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Depot-Koordinaten</h6>
+                        <ul>
+                            <li><strong>FAMO Dresden:</strong> <code id="depot-coords">51.0111988, 13.7016485</code></li>
+                            <li>Alle Touren starten und enden am Depot</li>
+                            <li>Depot wird <strong>nicht</strong> als Stop in der Tour-Liste angezeigt</li>
+                        </ul>
+                        
+                        <h6 class="mt-3">Rückfahrt-Berechnung</h6>
+                        <ul>
+                            <li>Rückfahrt vom letzten Kunden zum Depot wird <strong>separat</strong> berechnet</li>
+                            <li>Zählt <strong>NICHT</strong> in die <span id="time-budget-without-return-6">65</span>-Minuten-Regel</li>
+                            <li>Wird zur finalen Gesamtzeit addiert</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="fas fa-sitemap"></i> 4. Tour-Aufteilung</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Wenn Tour zu groß ist</h6>
+                        <ul>
+                            <li><strong>NICHT:</strong> Sub-Routen (C1, C2) erstellen</li>
+                            <li><strong>SONDERN:</strong> Separate Touren (A, B, C, D, E) erstellen</li>
+                            <li>Jede separate Tour muss die <span id="time-budget-without-return-7">65</span>-Minuten-Regel erfüllen</li>
+                        </ul>
+                        
+                        <h6 class="mt-3">Tour-Namen für separate Touren</h6>
+                        <ul>
+                            <li>Format: <code>{Original-Name} Tour {Buchstabe}</code></li>
+                            <li>Beispiel: <code>W-07.00 Uhr Tour A</code>, <code>W-07.00 Uhr Tour B</code>, etc.</li>
+                            <li>Buchstaben: A, B, C, D, E, ...</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-route"></i> 5. OSRM-First Strategie</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Distanz- und Zeitberechnung</h6>
+                        <ol>
+                            <li><strong>Priorität 1:</strong> OSRM (Open Source Routing Machine) - straßenbasierte Routen</li>
+                            <li><strong>Priorität 2:</strong> Haversine-Distanz × <span id="safety-factor">1.3</span> (Fallback für Stadtverkehr)</li>
+                            <li><strong>NICHT:</strong> Luftlinie ohne Anpassung verwenden!</li>
+                        </ol>
+                        
+                        <h6 class="mt-3">Durchschnittsgeschwindigkeit</h6>
+                        <ul>
+                            <li><strong>Stadtverkehr:</strong> <span id="speed-kmh">50</span> km/h</li>
+                        </ul>
+                        
+                        <h6 class="mt-3">Sicherheitsfaktor für Stadtverkehr</h6>
+                        <ul>
+                            <li><strong>Standard:</strong> <span id="safety-factor-2">1.3</span> (30% Aufschlag auf Luftlinie)</li>
+                            <li><strong>Berechnung:</strong> <code>Straßenentfernung = Haversine-Distanz × Sicherheitsfaktor</code></li>
+                            <li><strong>Beispiel:</strong> 10 km Luftlinie → 13 km Straßenentfernung (bei Faktor 1.3)</li>
+                            <li><strong>Zweck:</strong> Kompensiert die Differenz zwischen Luftlinie (Haversine) und tatsächlicher Straßenentfernung im Stadtverkehr</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="fas fa-compass"></i> 6. Sektor-Planung (W-Touren)</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Automatische Sektor-Planung</h6>
+                        <ul>
+                            <li><strong>Nur für W-Touren</strong> (Tour-Name beginnt mit "W-")</li>
+                            <li>Dresden wird in 4 Sektoren aufgeteilt: <strong>Nord (N), Ost (O), Süd (S), West (W)</strong></li>
+                            <li>Stopps werden nach Himmelsrichtung (Bearing) vom Depot zugeordnet</li>
+                            <li><strong>Feste Cluster:</strong> Stopps bleiben in ihrem Sektor (keine Verschiebung zwischen Sektoren)</li>
+                        </ul>
+                        
+                        <h6 class="mt-3">Zeitbox für W-Touren</h6>
+                        <ul>
+                            <li>Start: <strong>07:00 Uhr</strong></li>
+                            <li>Hard Deadline: <strong>09:00 Uhr</strong></li>
+                            <li>Time Budget: <strong><span id="time-budget-with-return-2">90</span> Minuten</strong> (inkl. Rückfahrt)</li>
+                            <li>Aber: Hauptregel (≤ <span id="time-budget-without-return-8">65</span> Min ohne Rückfahrt) hat weiterhin Priorität!</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mt-3">
+                    <h6><i class="fas fa-info-circle"></i> Hinweis</h6>
+                    <p>Diese Regeln werden automatisch vom System angewendet. Änderungen werden in <code>config/system_rules.json</code> gespeichert.</p>
+                    <p><small>Quelle: <code>config/system_rules.json</code> (wird automatisch erstellt)</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Lade Systemregeln vom Backend
+        async function loadSystemRules() {
+            try {
+                const response = await fetch('/api/system/rules');
+                const data = await response.json();
+                
+                const timeWithoutReturn = data.time_budget_without_return || 65;
+                const timeWithReturn = data.time_budget_with_return || 90;
+                const serviceTime = data.service_time_per_stop || 2;
+                const speedKmh = data.speed_kmh || 50;
+                const safetyFactor = data.safety_factor || 1.3;
+                const depotCoords = data.depot_coords || '51.0111988, 13.7016485';
+                
+                document.querySelectorAll('#time-budget-without-return, #time-budget-without-return-2, #time-budget-without-return-3, #time-budget-without-return-4, #time-budget-without-return-5, #time-budget-without-return-6, #time-budget-without-return-7, #time-budget-without-return-8').forEach(el => {
+                    if (el) el.textContent = timeWithoutReturn;
+                });
+                document.querySelectorAll('#time-budget-with-return, #time-budget-with-return-2').forEach(el => {
+                    if (el) el.textContent = timeWithReturn;
+                });
+                const serviceTimeEl = document.getElementById('service-time-per-stop');
+                if (serviceTimeEl) serviceTimeEl.textContent = serviceTime;
+                const speedEl = document.getElementById('speed-kmh');
+                if (speedEl) speedEl.textContent = speedKmh;
+                document.querySelectorAll('#safety-factor, #safety-factor-2').forEach(el => {
+                    if (el) el.textContent = safetyFactor;
+                });
+                const depotEl = document.getElementById('depot-coords');
+                if (depotEl) depotEl.textContent = depotCoords;
+                
+                const editTimeWithoutReturn = document.getElementById('edit-time-budget-without-return');
+                if (editTimeWithoutReturn) editTimeWithoutReturn.value = timeWithoutReturn;
+                const editTimeWithReturn = document.getElementById('edit-time-budget-with-return');
+                if (editTimeWithReturn) editTimeWithReturn.value = timeWithReturn;
+                const editServiceTime = document.getElementById('edit-service-time-per-stop');
+                if (editServiceTime) editServiceTime.value = serviceTime;
+                const editSpeed = document.getElementById('edit-speed-kmh');
+                if (editSpeed) editSpeed.value = speedKmh;
+                const editSafetyFactor = document.getElementById('edit-safety-factor');
+                if (editSafetyFactor) editSafetyFactor.value = safetyFactor;
+                const editDepotLat = document.getElementById('edit-depot-lat');
+                if (editDepotLat) editDepotLat.value = data.depot_lat || 51.0111988;
+                const editDepotLon = document.getElementById('edit-depot-lon');
+                if (editDepotLon) editDepotLon.value = data.depot_lon || 13.7016485;
+            } catch (error) {
+                console.error('Fehler beim Laden der Systemregeln:', error);
+            }
+        }
+        
+        // Systemregeln speichern
+        async function saveSystemRules(event) {
+            event.preventDefault();
+            const messageDiv = document.getElementById('rules-save-message');
+            messageDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Speichere...</div>';
+            
+            try {
+                const rules = {
+                    time_budget_without_return: parseInt(document.getElementById('edit-time-budget-without-return').value),
+                    time_budget_with_return: parseInt(document.getElementById('edit-time-budget-with-return').value),
+                    service_time_per_stop: parseFloat(document.getElementById('edit-service-time-per-stop').value),
+                    speed_kmh: parseFloat(document.getElementById('edit-speed-kmh').value),
+                    safety_factor: parseFloat(document.getElementById('edit-safety-factor').value),
+                    depot_lat: parseFloat(document.getElementById('edit-depot-lat').value),
+                    depot_lon: parseFloat(document.getElementById('edit-depot-lon').value)
+                };
+                
+                if (isNaN(rules.time_budget_without_return) || rules.time_budget_without_return < 1 || rules.time_budget_without_return > 120) {
+                    throw new Error('Zeitbudget ohne Rückfahrt muss zwischen 1 und 120 Minuten liegen');
+                }
+                if (isNaN(rules.time_budget_with_return) || rules.time_budget_with_return < 1 || rules.time_budget_with_return > 180) {
+                    throw new Error('Zeitbudget mit Rückfahrt muss zwischen 1 und 180 Minuten liegen');
+                }
+                if (isNaN(rules.service_time_per_stop) || rules.service_time_per_stop < 0.5 || rules.service_time_per_stop > 10.0) {
+                    throw new Error('Service-Zeit pro Stop muss zwischen 0.5 und 10.0 Minuten liegen');
+                }
+                if (isNaN(rules.speed_kmh) || rules.speed_kmh < 10 || rules.speed_kmh > 100) {
+                    throw new Error('Geschwindigkeit muss zwischen 10 und 100 km/h liegen');
+                }
+                if (isNaN(rules.safety_factor) || rules.safety_factor < 1.0 || rules.safety_factor > 2.0) {
+                    throw new Error('Sicherheitsfaktor muss zwischen 1.0 und 2.0 liegen');
+                }
+                if (isNaN(rules.depot_lat) || rules.depot_lat < -90 || rules.depot_lat > 90) {
+                    throw new Error('Depot-Latitude muss zwischen -90 und 90 liegen');
+                }
+                if (isNaN(rules.depot_lon) || rules.depot_lon < -180 || rules.depot_lon > 180) {
+                    throw new Error('Depot-Longitude muss zwischen -180 und 180 liegen');
+                }
+                
+                const response = await fetch('/api/system/rules', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(rules)
+                });
+                
+                if (!response.ok) {
+                    let errorMessage = 'Fehler beim Speichern';
+                    try {
+                        const errorData = await response.json();
+                        if (errorData.detail) {
+                            if (Array.isArray(errorData.detail)) {
+                                errorMessage = errorData.detail.map(e => `${e.loc.join('.')}: ${e.msg}`).join(', ');
+                            } else {
+                                errorMessage = errorData.detail;
+                            }
+                        } else if (errorData.message) {
+                            errorMessage = errorData.message;
+                        }
+                        if (response.status === 401) {
+                            errorMessage = 'Authentifizierung erforderlich. Bitte melden Sie sich an.';
+                        } else if (response.status === 422) {
+                            errorMessage = 'Validierungsfehler: ' + errorMessage;
+                        }
+                    } catch (e) {
+                        errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+                    }
+                    throw new Error(errorMessage);
+                }
+                
+                messageDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> Systemregeln erfolgreich gespeichert!</div>';
+                setTimeout(() => loadSystemRules(), 500);
+            } catch (error) {
+                console.error('Fehler beim Speichern der Systemregeln:', error);
+                messageDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> <strong>Fehler:</strong> ${error.message || 'Unbekannter Fehler'}</div>`;
+            }
+        }
+        
+        function resetSystemRulesForm() {
+            loadSystemRules();
+            const messageDiv = document.getElementById('rules-save-message');
+            if (messageDiv) messageDiv.innerHTML = '';
+        }
+        
+        function resetToDefaults() {
+            if (!confirm('Möchten Sie wirklich alle Werte auf die Standard-Werte zurücksetzen?')) {
+                return;
+            }
+            document.getElementById('edit-time-budget-without-return').value = 65;
+            document.getElementById('edit-time-budget-with-return').value = 90;
+            document.getElementById('edit-service-time-per-stop').value = 2.0;
+            document.getElementById('edit-speed-kmh').value = 50;
+            document.getElementById('edit-safety-factor').value = 1.3;
+            document.getElementById('edit-depot-lat').value = 51.0111988;
+            document.getElementById('edit-depot-lon').value = 13.7016485;
+            const messageDiv = document.getElementById('rules-save-message');
+            if (messageDiv) {
+                messageDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> Werte auf Standard zurückgesetzt. Bitte auf "Speichern" klicken, um zu übernehmen.</div>';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSystemRules();
+            const form = document.getElementById('system-rules-form');
+            if (form) {
+                form.addEventListener('submit', saveSystemRules);
+            }
+        });
+    </script>
+</body>
+</html>
+

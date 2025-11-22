@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-Integration - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .admin-nav-item i {
+            font-size: 1.1em;
+        }
+        .cost-stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .cost-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+        .cost-stat-card h3 {
+            margin: 10px 0;
+            font-size: 2.5em;
+        }
+        .metric-card {
+            border-left: 4px solid #007bff;
+            transition: transform 0.2s;
+        }
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .status-indicator.active {
+            background-color: #28a745;
+            animation: pulse 2s infinite;
+        }
+        .status-indicator.inactive {
+            background-color: #dc3545;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Hauptseite</a>
+                <a class="nav-link active" href="/admin/ki-integration.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <h1><i class="fas fa-robot"></i> KI-Integration</h1>
+        
+        <!-- Admin-Navigation -->
+        <nav class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin/system.html" class="admin-nav-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
+                </a>
+                <a href="/admin/statistik.html" class="admin-nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item active">
+                    <i class="fas fa-robot"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item">
+                    <i class="fas fa-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                    <i class="fas fa-list-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Kosten-Übersicht (Kostenkontrolle) -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="fas fa-coins"></i> Kosten-Übersicht (Kostenkontrolle)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="card text-center border-primary">
+                                    <div class="card-body">
+                                        <h6 class="text-muted mb-2">Durchschnittliche Calls/Tag</h6>
+                                        <h3 class="text-primary mb-0" id="avg-calls-per-day">-</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-success">
+                                    <div class="card-body">
+                                        <h6 class="text-muted mb-2">Durchschnittliche Kosten/Tag</h6>
+                                        <h3 class="text-success mb-0" id="avg-cost-per-day">-</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-info">
+                                    <div class="card-body">
+                                        <h6 class="text-muted mb-2">Gesamt Calls (7 Tage)</h6>
+                                        <h3 class="text-info mb-0" id="total-calls-7days">-</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-warning">
+                                    <div class="card-body">
+                                        <h6 class="text-muted mb-2">Gesamt Kosten (7 Tage)</h6>
+                                        <h3 class="text-warning mb-0" id="total-cost-7days">-</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance & Verhalten -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-line"></i> Performance (7 Tage)</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="performance-chart" height="200"></canvas>
+                        <div id="performance-metrics" class="mt-3">
+                            <p class="text-muted">Lade Metriken...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-tachometer-alt"></i> Live-Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="card metric-card" id="status-code-checker">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <span class="status-indicator inactive" id="indicator-code-checker"></span>
+                                            Code-Checker
+                                        </h6>
+                                        <p class="card-text text-muted mb-0 small" id="status-code-checker-text">Prüfe...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card metric-card" id="status-background-job">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <span class="status-indicator inactive" id="indicator-background-job"></span>
+                                            Background-Job
+                                        </h6>
+                                        <p class="card-text text-muted mb-0 small" id="status-background-job-text">Prüfe...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card metric-card" id="status-live-analysis">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <span class="status-indicator inactive" id="indicator-live-analysis"></span>
+                                            Live-Analyse
+                                        </h6>
+                                        <p class="card-text text-muted mb-0 small" id="status-live-analysis-text">Prüfe...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card metric-card" id="status-api">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <span class="status-indicator inactive" id="indicator-api"></span>
+                                            API
+                                        </h6>
+                                        <p class="card-text text-muted mb-0 small" id="status-api-text">Prüfe...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weitere Funktionen -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-cogs"></i> Weitere KI-Funktionen</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <a href="/admin/ki-improvements.html" class="card text-decoration-none text-dark h-100">
+                                    <div class="card-body text-center">
+                                        <div class="text-primary mb-2">
+                                            <i class="fas fa-code fa-3x"></i>
+                                        </div>
+                                        <h5 class="card-title">KI-CodeChecker</h5>
+                                        <p class="card-text text-muted">Code-Verbesserungen</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/ki-kosten.html" class="card text-decoration-none text-dark h-100">
+                                    <div class="card-body text-center">
+                                        <div class="text-warning mb-2">
+                                            <i class="fas fa-coins fa-3x"></i>
+                                        </div>
+                                        <h5 class="card-title">KI-Kosten (Details)</h5>
+                                        <p class="card-text text-muted">Detaillierte Kostenanalyse</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/ki-verhalten.html" class="card text-decoration-none text-dark h-100">
+                                    <div class="card-body text-center">
+                                        <div class="text-info mb-2">
+                                            <i class="fas fa-chart-bar fa-3x"></i>
+                                        </div>
+                                        <h5 class="card-title">KI-Verhalten (Details)</h5>
+                                        <p class="card-text text-muted">Detaillierte Verhaltensanalyse</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let performanceChart = null;
+
+        // Formatierung für Währung
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('de-DE', { 
+                style: 'currency', 
+                currency: 'EUR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 4
+            }).format(value || 0);
+        }
+
+        // Alle Daten laden
+        async function loadAllData() {
+            await Promise.all([
+                loadCostData(),
+                loadPerformanceMetrics(),
+                loadLiveStatus()
+            ]);
+        }
+
+        // Kosten-Daten laden
+        async function loadCostData() {
+            try {
+                const response = await fetch('/api/cost-tracker/stats');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const stats = await response.json();
+                
+                // Letzte 7 Tage aus trend
+                const last7Days = stats.trend ? stats.trend.slice(-7) : [];
+                
+                // Berechne Gesamt Calls und Kosten (7 Tage)
+                const totalCalls7Days = last7Days.reduce((sum, day) => sum + (day.api_calls || 0), 0);
+                const totalCost7Days = last7Days.reduce((sum, day) => sum + (day.cost || 0), 0);
+                
+                // Berechne Durchschnitte (nur Tage mit Daten)
+                const daysWithData = last7Days.filter(d => (d.api_calls || 0) > 0 || (d.cost || 0) > 0);
+                const avgCallsPerDay = daysWithData.length > 0 
+                    ? (totalCalls7Days / daysWithData.length).toFixed(1)
+                    : '0.0';
+                const avgCostPerDay = daysWithData.length > 0
+                    ? (totalCost7Days / daysWithData.length)
+                    : 0;
+                
+                // Aktualisiere die vier Felder
+                document.getElementById('avg-calls-per-day').textContent = avgCallsPerDay;
+                document.getElementById('avg-cost-per-day').textContent = formatCurrency(avgCostPerDay);
+                document.getElementById('total-calls-7days').textContent = totalCalls7Days;
+                document.getElementById('total-cost-7days').textContent = formatCurrency(totalCost7Days);
+            } catch (e) {
+                console.error('Fehler beim Laden der Kosten-Daten:', e);
+                // Zeige "-" bei Fehler
+                document.getElementById('avg-calls-per-day').textContent = '-';
+                document.getElementById('avg-cost-per-day').textContent = '-';
+                document.getElementById('total-calls-7days').textContent = '-';
+                document.getElementById('total-cost-7days').textContent = '-';
+            }
+        }
+
+        // Performance-Metriken laden
+        async function loadPerformanceMetrics() {
+            try {
+                const response = await fetch('/api/ki/activity-summary?days=7');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                
+                if (data.success && data.daily_summary) {
+                    const ctx = document.getElementById('performance-chart');
+                    if (ctx) {
+                        if (performanceChart) performanceChart.destroy();
+                        
+                        const labels = data.daily_summary.map(d => d.date);
+                        const calls = data.daily_summary.map(d => d.calls || 0);
+                        const costs = data.daily_summary.map(d => d.cost || 0);
+                        
+                        performanceChart = new Chart(ctx.getContext('2d'), {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'API-Calls',
+                                    data: calls,
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                                    yAxisID: 'y'
+                                }, {
+                                    label: 'Kosten (€)',
+                                    data: costs,
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                                    yAxisID: 'y1'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        position: 'left'
+                                    },
+                                    y1: {
+                                        beginAtZero: true,
+                                        position: 'right',
+                                        grid: { drawOnChartArea: false },
+                                        ticks: {
+                                            callback: function(value) {
+                                                return value.toFixed(4) + ' €';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Metriken anzeigen
+                    const metricsContainer = document.getElementById('performance-metrics');
+                    if (metricsContainer && data.totals) {
+                        const avgCalls = data.totals.total_calls / 7;
+                        const avgCost = data.totals.total_cost / 7;
+                        
+                        metricsContainer.innerHTML = `
+                            <ul class="list-unstyled mb-0">
+                                <li><strong>Durchschnittliche Calls/Tag:</strong> ${avgCalls.toFixed(1)}</li>
+                                <li><strong>Durchschnittliche Kosten/Tag:</strong> ${formatCurrency(avgCost)}</li>
+                                <li><strong>Gesamt Calls (7 Tage):</strong> ${data.totals.total_calls}</li>
+                                <li><strong>Gesamt Kosten (7 Tage):</strong> ${formatCurrency(data.totals.total_cost)}</li>
+                            </ul>
+                        `;
+                    }
+                }
+            } catch (e) {
+                console.error('Fehler beim Laden der Performance-Metriken:', e);
+                document.getElementById('performance-metrics').innerHTML = 
+                    '<p class="text-danger">Fehler beim Laden der Metriken</p>';
+            }
+        }
+
+        // Live-Status laden
+        async function loadLiveStatus() {
+            try {
+                // Code-Checker Status
+                try {
+                    const checkerResponse = await fetch('/api/code-checker/status');
+                    if (checkerResponse.ok) {
+                        const checkerData = await checkerResponse.json();
+                        updateStatusCard('code-checker', checkerData.available, 
+                            checkerData.available ? 'Verfügbar' : 'Nicht verfügbar');
+                    } else {
+                        updateStatusCard('code-checker', false, 'Fehler');
+                    }
+                } catch (e) {
+                    updateStatusCard('code-checker', false, 'Nicht erreichbar');
+                }
+
+                // Background-Job Status
+                try {
+                    const jobResponse = await fetch('/api/code-improvement-job/status');
+                    if (jobResponse.ok) {
+                        const jobData = await jobResponse.json();
+                        const isRunning = jobData.is_running || false;
+                        updateStatusCard('background-job', isRunning, isRunning ? 'Läuft' : 'Gestoppt');
+                    } else {
+                        updateStatusCard('background-job', false, 'Fehler');
+                    }
+                } catch (e) {
+                    updateStatusCard('background-job', false, 'Nicht erreichbar');
+                }
+
+                // Live Code-Analyse Status
+                try {
+                    await fetch('/api/code-checker/analyze?file_path=tests/test_ai_checker_demo.py', { method: 'POST' });
+                    updateStatusCard('live-analysis', true, 'Verfügbar');
+                } catch (e) {
+                    updateStatusCard('live-analysis', false, 'Nicht erreichbar');
+                }
+
+                // API-Verfügbarkeit
+                try {
+                    const healthResponse = await fetch('/health');
+                    updateStatusCard('api', healthResponse.ok, healthResponse.ok ? 'Online' : 'Fehler');
+                } catch (e) {
+                    updateStatusCard('api', false, 'Offline');
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden des Live-Status:', error);
+            }
+        }
+
+        function updateStatusCard(id, isActive, text) {
+            const indicator = document.getElementById(`indicator-${id}`);
+            const textElement = document.getElementById(`status-${id}-text`);
+            const card = document.getElementById(`status-${id}`);
+            
+            if (indicator && textElement && card) {
+                indicator.className = `status-indicator ${isActive ? 'active' : 'inactive'}`;
+                textElement.textContent = text;
+                card.className = `card metric-card ${isActive ? 'success' : 'danger'}`;
+            }
+        }
+
+        // Beim Laden: Daten laden
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllData();
+            // Auto-Refresh alle 30 Sekunden
+            setInterval(loadAllData, 30000);
+        });
+    </script>
+</body>
+</html>

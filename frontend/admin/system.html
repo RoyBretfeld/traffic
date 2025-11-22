@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/Health - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .health-card { margin-bottom: 1rem; }
+        .health-ok { border-left: 4px solid #28a745; }
+        .health-error { border-left: 4px solid #dc3545; }
+        .health-warning { border-left: 4px solid #ffc107; }
+        .latency { font-size: 0.9em; color: #6c757d; }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .admin-nav-item i {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Hauptseite</a>
+                <a class="nav-link active" href="/admin/system.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <h1><i class="fas fa-heartbeat"></i> System/Health</h1>
+        
+        <!-- Admin-Navigation -->
+        <nav class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin/system.html" class="admin-nav-item active">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
+                </a>
+                <a href="/admin/statistik.html" class="admin-nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item">
+                    <i class="fas fa-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                    <i class="fas fa-list-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+            </div>
+        </nav>
+        
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card health-card" id="health-app-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-server"></i> App Health</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="health-app-content">Lade...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card health-card" id="health-osrm-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-route"></i> OSRM Health</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="health-osrm-content">Lade...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card health-card" id="health-db-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-database"></i> Database Health</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="health-db-content">Lade...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card health-card" id="health-osrm-sample-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-map"></i> OSRM Sample Route</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="health-osrm-sample-content">Lade...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card health-card" id="health-workflow-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-cogs"></i> Workflow Engine</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="health-workflow-content">Lade...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card health-card" id="health-llm-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-robot"></i> LLM Integration</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="health-llm-content">Lade...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card health-card" id="health-system-rules-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-book"></i> Systemregeln</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="health-system-rules-content">Lade...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card health-card" id="health-combined-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-check-circle"></i> Gesamt-Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="health-combined-content">Lade...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function loadHealthChecks() {
+            // App Health
+            try {
+                const startTime = performance.now();
+                const response = await fetch('/health/app');
+                const latency = Math.round(performance.now() - startTime);
+                const data = await response.json();
+                
+                const card = document.getElementById('health-app-card');
+                const content = document.getElementById('health-app-content');
+                
+                if (data.status === 'ok') {
+                    card.classList.add('health-ok');
+                    content.innerHTML = `
+                        <div class="text-success"><i class="fas fa-check-circle"></i> Status: OK</div>
+                        <div class="mt-2"><strong>Environment:</strong> ${data.env || 'unknown'}</div>
+                        <div><strong>Feature Flags:</strong></div>
+                        <ul class="small">
+                            <li>Stats-Box: ${data.feature_flags?.stats_box_enabled ? '✅' : '❌'}</li>
+                            <li>AI-Ops: ${data.feature_flags?.ai_ops_enabled ? '✅' : '❌'}</li>
+                        </ul>
+                        <div class="latency">Latenz: ${latency}ms</div>
+                    `;
+                } else {
+                    card.classList.add('health-error');
+                    content.innerHTML = `<div class="text-danger">Status: ERROR</div>`;
+                }
+            } catch (e) {
+                document.getElementById('health-app-card').classList.add('health-error');
+                document.getElementById('health-app-content').innerHTML = `<div class="text-danger">Fehler: ${e.message}</div>`;
+            }
+
+            // OSRM Health
+            try {
+                const startTime = performance.now();
+                const response = await fetch('/health/osrm').catch(err => {
+                    console.warn('OSRM Health-Check fehlgeschlagen:', err);
+                    return null;
+                });
+                
+                if (!response || !response.ok) {
+                    const card = document.getElementById('health-osrm-card');
+                    const content = document.getElementById('health-osrm-content');
+                    if (card && content) {
+                        card.className = 'card border-warning';
+                        content.innerHTML = `
+                            <div class="alert alert-warning mb-0">
+                                <i class="fas fa-exclamation-triangle"></i> 
+                                <strong>OSRM nicht erreichbar</strong><br>
+                                <small>Bitte prüfen Sie, ob Docker Desktop läuft und OSRM gestartet ist.</small>
+                            </div>
+                        `;
+                    }
+                    return;
+                }
+                
+                const latency = Math.round(performance.now() - startTime);
+                const data = await response.json();
+                
+                const card = document.getElementById('health-osrm-card');
+                const content = document.getElementById('health-osrm-content');
+                
+                if (data.ok === true || data.status === 'up' || data.status === 'ok') {
+                    card.classList.add('health-ok');
+                    card.classList.remove('health-error', 'health-warning');
+                    content.innerHTML = `
+                        <div class="text-success"><i class="fas fa-check-circle"></i> Status: OK</div>
+                        <div class="mt-2"><strong>URL:</strong> ${data.url || 'unknown'}</div>
+                        <div><strong>Status:</strong> ${data.status || 'unknown'}</div>
+                        <div class="latency">Latenz: ${data.latency_ms || latency}ms</div>
+                    `;
+                } else {
+                    card.classList.add('health-error');
+                    card.classList.remove('health-ok', 'health-warning');
+                    const errorMsg = data.error || data.message || 'Unknown error';
+                    content.innerHTML = `
+                        <div class="text-danger"><i class="fas fa-times-circle"></i> Status: ERROR</div>
+                        <div class="mt-2"><strong>URL:</strong> ${data.url || 'unknown'}</div>
+                        <div class="mt-2"><strong>Fehler:</strong> ${errorMsg}</div>
+                        <div class="latency">Latenz: ${data.latency_ms || latency}ms</div>
+                    `;
+                }
+            } catch (e) {
+                document.getElementById('health-osrm-card').classList.add('health-error');
+                document.getElementById('health-osrm-content').innerHTML = `<div class="text-danger">Fehler: ${e.message}</div>`;
+            }
+
+            // DB Health
+            try {
+                const startTime = performance.now();
+                const response = await fetch('/health/db');
+                const latency = Math.round(performance.now() - startTime);
+                const data = await response.json();
+                
+                const card = document.getElementById('health-db-card');
+                const content = document.getElementById('health-db-content');
+                
+                if (data.status === 'online') {
+                    card.classList.add('health-ok');
+                    content.innerHTML = `
+                        <div class="text-success"><i class="fas fa-check-circle"></i> Status: Online</div>
+                        <div class="latency">Latenz: ${latency}ms</div>
+                    `;
+                } else {
+                    card.classList.add('health-error');
+                    content.innerHTML = `
+                        <div class="text-danger"><i class="fas fa-times-circle"></i> Status: Offline</div>
+                        <div class="mt-2"><strong>Error:</strong> ${data.error || 'Unknown'}</div>
+                    `;
+                }
+            } catch (e) {
+                document.getElementById('health-db-card').classList.add('health-error');
+                document.getElementById('health-db-content').innerHTML = `<div class="text-danger">Fehler: ${e.message}</div>`;
+            }
+
+            // OSRM Sample Route
+            try {
+                const startTime = performance.now();
+                const response = await fetch('/health/osrm/sample-route').catch(err => {
+                    console.warn('OSRM Sample-Route-Check fehlgeschlagen:', err);
+                    return null;
+                });
+                
+                if (!response || !response.ok) {
+                    const card = document.getElementById('health-osrm-sample-card');
+                    const content = document.getElementById('health-osrm-sample-content');
+                    if (card && content) {
+                        card.className = 'card border-warning';
+                        content.innerHTML = `
+                            <div class="alert alert-warning mb-0">
+                                <i class="fas fa-exclamation-triangle"></i> 
+                                <strong>OSRM Sample-Route nicht verfügbar</strong><br>
+                                <small>OSRM-Service ist möglicherweise nicht gestartet oder nicht erreichbar.</small>
+                            </div>
+                        `;
+                    }
+                    return;
+                }
+                
+                const latency = Math.round(performance.now() - startTime);
+                const data = await response.json();
+                
+                const card = document.getElementById('health-osrm-sample-card');
+                const content = document.getElementById('health-osrm-sample-content');
+                
+                if (data.ok) {
+                    card.classList.add('health-ok');
+                    content.innerHTML = `
+                        <div class="text-success"><i class="fas fa-check-circle"></i> Polyline6 verfügbar</div>
+                        <div class="mt-2"><strong>Polyline-Länge:</strong> ${data.polyline6_len || 0} Zeichen</div>
+                        <div><strong>Status:</strong> ${data.status || 'unknown'}</div>
+                        <div class="latency">Latenz: ${data.latency_ms || latency}ms</div>
+                    `;
+                } else {
+                    card.classList.add('health-warning');
+                    content.innerHTML = `
+                        <div class="text-warning"><i class="fas fa-exclamation-triangle"></i> Polyline6 nicht verfügbar</div>
+                        <div class="mt-2"><strong>Error:</strong> ${data.error || 'Unknown'}</div>
+                        <div class="latency">Latenz: ${latency}ms</div>
+                    `;
+                }
+            } catch (e) {
+                document.getElementById('health-osrm-sample-card').classList.add('health-error');
+                document.getElementById('health-osrm-sample-content').innerHTML = `<div class="text-danger">Fehler: ${e.message}</div>`;
+            }
+            
+            // Workflow Engine Status
+            try {
+                const workflowResponse = await fetch('/api/workflow/status');
+                const workflowData = await workflowResponse.json();
+                const workflowContent = document.getElementById('health-workflow-content');
+                
+                if (workflowResponse.ok) {
+                    const llmStatus = workflowData.llm_status || 'unknown';
+                    const llmModel = workflowData.llm_model || 'N/A';
+                    const optimizer = workflowData.optimizer || 'N/A';
+                    
+                    workflowContent.innerHTML = `
+                        <div><i class="fas fa-check-circle text-success"></i> <strong>Status:</strong> Verfügbar</div>
+                        <div class="mt-2"><strong>Optimizer:</strong> ${escapeHtml(optimizer)}</div>
+                        <div><strong>LLM-Status:</strong> <span class="badge ${llmStatus === 'ok' ? 'bg-success' : 'bg-warning'}">${escapeHtml(llmStatus)}</span></div>
+                        <div><strong>LLM-Modell:</strong> ${escapeHtml(llmModel)}</div>
+                    `;
+                } else {
+                    workflowContent.innerHTML = `<div class="text-danger">Fehler: ${workflowData.detail || 'Unbekannt'}</div>`;
+                }
+            } catch (e) {
+                document.getElementById('health-workflow-content').innerHTML = `<div class="text-danger">Fehler: ${e.message}</div>`;
+            }
+            
+            // LLM Integration Status
+            try {
+                const llmResponse = await fetch('/api/llm/monitoring');
+                const llmData = await llmResponse.json();
+                const llmContent = document.getElementById('health-llm-content');
+                
+                if (llmResponse.ok) {
+                    const status = llmData.status || 'unknown';
+                    const model = llmData.model || 'N/A';
+                    const calls = llmData.total_calls || 0;
+                    const errors = llmData.total_errors || 0;
+                    
+                    llmContent.innerHTML = `
+                        <div><i class="fas fa-check-circle text-success"></i> <strong>Status:</strong> <span class="badge ${status === 'ok' ? 'bg-success' : 'bg-warning'}">${escapeHtml(status)}</span></div>
+                        <div class="mt-2"><strong>Modell:</strong> ${escapeHtml(model)}</div>
+                        <div><strong>API-Calls:</strong> ${calls}</div>
+                        <div><strong>Fehler:</strong> ${errors}</div>
+                    `;
+                } else {
+                    llmContent.innerHTML = `<div class="text-warning">LLM-Monitoring nicht verfügbar</div>`;
+                }
+            } catch (e) {
+                document.getElementById('health-llm-content').innerHTML = `<div class="text-warning">LLM-Status nicht verfügbar</div>`;
+            }
+            
+            // Systemregeln Status
+            try {
+                const rulesResponse = await fetch('/api/system/rules');
+                const rulesData = await rulesResponse.json();
+                const rulesContent = document.getElementById('health-system-rules-content');
+                
+                if (rulesResponse.ok) {
+                    const source = rulesData.source || 'unknown';
+                    const timeBudget = rulesData.time_budget_without_return || 'N/A';
+                    
+                    rulesContent.innerHTML = `
+                        <div><i class="fas fa-check-circle text-success"></i> <strong>Status:</strong> Verfügbar</div>
+                        <div class="mt-2"><strong>Quelle:</strong> ${escapeHtml(source)}</div>
+                        <div><strong>Zeitbudget:</strong> ${timeBudget} Min (ohne Rückfahrt)</div>
+                    `;
+                } else {
+                    rulesContent.innerHTML = `<div class="text-warning">Systemregeln nicht verfügbar</div>`;
+                }
+            } catch (e) {
+                document.getElementById('health-system-rules-content').innerHTML = `<div class="text-warning">Systemregeln-Status nicht verfügbar</div>`;
+            }
+            
+            // Gesamt-Status (kombiniert) - Berechnung basierend auf wichtigen Endpunkten
+            try {
+                const combinedContent = document.getElementById('health-combined-content');
+                
+                // Wichtige Endpunkte definieren (100% = alle verfügbar)
+                const importantEndpoints = [
+                    { name: 'App', url: '/health/app', key: 'app' },
+                    { name: 'Datenbank', url: '/health/db', key: 'db' },
+                    { name: 'OSRM', url: '/health/osrm', key: 'osrm' },
+                    { name: 'Workflow Engine', url: '/api/workflow/status', key: 'workflow' },
+                    { name: 'Systemregeln', url: '/api/system/rules', key: 'rules' }
+                ];
+                
+                // Alle wichtigen Endpunkte prüfen
+                const endpointChecks = await Promise.allSettled(
+                    importantEndpoints.map(async (endpoint) => {
+                        try {
+                            const response = await fetch(endpoint.url, { timeout: 5000 });
+                            const data = await response.json();
+                            
+                            // Prüfen ob Endpoint OK ist
+                            let isOk = false;
+                            if (endpoint.key === 'app') {
+                                isOk = data.status === 'ok';
+                            } else if (endpoint.key === 'db') {
+                                isOk = data.status === 'online';
+                            } else if (endpoint.key === 'osrm') {
+                                isOk = data.ok === true || data.status === 'up' || data.status === 'ok';
+                            } else if (endpoint.key === 'workflow') {
+                                isOk = response.ok;
+                            } else if (endpoint.key === 'rules') {
+                                isOk = response.ok;
+                            }
+                            
+                            return { name: endpoint.name, ok: isOk, data: data };
+                        } catch (e) {
+                            return { name: endpoint.name, ok: false, error: e.message };
+                        }
+                    })
+                );
+                
+                // Ergebnisse verarbeiten
+                const results = endpointChecks.map((result, index) => {
+                    if (result.status === 'fulfilled') {
+                        return result.value;
+                    } else {
+                        return { name: importantEndpoints[index].name, ok: false, error: 'Request failed' };
+                    }
+                });
+                
+                // Prozentsatz berechnen
+                const totalEndpoints = results.length;
+                const availableEndpoints = results.filter(r => r.ok).length;
+                const percentage = Math.round((availableEndpoints / totalEndpoints) * 100);
+                
+                // Farbliche Abstufung: 100% = grün, 50-99% = gelb, <50% = rot
+                let badgeClass, statusText, statusColor;
+                if (percentage === 100) {
+                    badgeClass = 'bg-success';
+                    statusText = 'OK';
+                    statusColor = 'text-success';
+                } else if (percentage >= 50) {
+                    badgeClass = 'bg-warning';
+                    statusText = 'WARNUNG';
+                    statusColor = 'text-warning';
+                } else {
+                    badgeClass = 'bg-danger';
+                    statusText = 'FEHLER';
+                    statusColor = 'text-danger';
+                }
+                
+                // HTML generieren
+                let statusHtml = `
+                    <div class="mb-2">
+                        <strong>Gesamt-Status:</strong> 
+                        <span class="badge ${badgeClass}">${percentage}% - ${statusText}</span>
+                    </div>
+                    <div class="mb-2">
+                        <strong>Verfügbarkeit:</strong> 
+                        <span class="${statusColor}">${availableEndpoints} von ${totalEndpoints} Services verfügbar</span>
+                    </div>
+                    <div class="mb-2">
+                        <strong>Endpunkte:</strong> 
+                        <span class="text-muted">${totalEndpoints} Endpunkte geprüft</span>
+                    </div>
+                    <div class="mt-2"><strong>Services:</strong></div>
+                    <ul class="small mb-0">
+                `;
+                
+                results.forEach(result => {
+                    const serviceBadgeClass = result.ok ? 'bg-success' : 'bg-danger';
+                    const serviceIcon = result.ok ? 'fa-check-circle' : 'fa-times-circle';
+                    const serviceColor = result.ok ? 'text-success' : 'text-danger';
+                    statusHtml += `
+                        <li>
+                            <i class="fas ${serviceIcon} ${serviceColor}"></i> 
+                            ${escapeHtml(result.name)}: 
+                            <span class="badge ${serviceBadgeClass}">${result.ok ? 'OK' : 'FEHLER'}</span>
+                        </li>
+                    `;
+                });
+                
+                statusHtml += '</ul>';
+                
+                combinedContent.innerHTML = statusHtml;
+                
+                // Card-Farbe anpassen
+                const combinedCard = document.getElementById('health-combined-card');
+                combinedCard.classList.remove('health-ok', 'health-warning', 'health-error');
+                if (percentage === 100) {
+                    combinedCard.classList.add('health-ok');
+                } else if (percentage >= 50) {
+                    combinedCard.classList.add('health-warning');
+                } else {
+                    combinedCard.classList.add('health-error');
+                }
+                
+            } catch (e) {
+                document.getElementById('health-combined-content').innerHTML = `<div class="text-danger">Fehler beim Berechnen des Gesamt-Status: ${e.message}</div>`;
+                document.getElementById('health-combined-card').classList.add('health-error');
+            }
+        }
+
+        // Beim Laden: Health-Checks ausführen
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHealthChecks();
+            // Alle 30 Sekunden aktualisieren
+            setInterval(loadHealthChecks, 30000);
+        });
+    </script>
+</body>
+</html>
+

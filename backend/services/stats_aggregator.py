@@ -1,14 +1,96 @@
 """
 Stats-Aggregator für echte DB-Daten (Phase 1)
 KEINE Mock-Daten - nur echte DB-Aggregationen
+Erweitert: Kosten-KPIs gemäß STATISTIK_KOSTEN_KPIS.md
 """
 import logging
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 from sqlalchemy import text
 from db.core import ENGINE
+from backend.config import cfg
 
 logger = logging.getLogger(__name__)
+
+
+def get_cost_config() -> Dict[str, float]:
+    """
+    Lädt Kosten-Konfiguration aus app_settings oder verwendet Defaults.
+    
+    Returns:
+        Dict mit cost_per_km, cost_driver_per_hour, cost_vehicle_per_hour
+    """
+    # Versuche aus app_settings zu laden
+    try:
+        with ENGINE.connect() as conn:
+            result = conn.execute(text("""
+                SELECT name FROM sqlite_master 
+                WHERE type='table' AND name='app_settings'
+            """))
+            if result.fetchone():
+                # Lade Kosten-Parameter
+                cost_per_km = conn.execute(text("""
+                    SELECT value FROM app_settings 
+                    WHERE key = 'cost_per_km'
+                """)).scalar()
+                cost_driver = conn.execute(text("""
+                    SELECT value FROM app_settings 
+                    WHERE key = 'cost_driver_per_hour'
+                """)).scalar()
+                cost_vehicle = conn.execute(text("""
+                    SELECT value FROM app_settings 
+                    WHERE key = 'cost_vehicle_per_hour'
+                """)).scalar()
+                
+                return {
+                    "cost_per_km": float(cost_per_km) if cost_per_km else 0.50,
+                    "cost_driver_per_hour": float(cost_driver) if cost_driver else 25.0,
+                    "cost_vehicle_per_hour": float(cost_vehicle) if cost_vehicle else 0.0
+                }
+    except Exception as e:
+        logger.debug(f"Fehler beim Laden der Kosten-Konfiguration: {e}")
+    
+    # Defaults (können auch aus config/app.yaml kommen)
+    return {
+        "cost_per_km": cfg("costs:cost_per_km", 0.50),
+        "cost_driver_per_hour": cfg("costs:cost_driver_per_hour", 25.0),
+        "cost_vehicle_per_hour": cfg("costs:cost_vehicle_per_hour", 0.0)
+    }
+
+
+def calculate_tour_cost(
+    distance_km: float,
+    total_time_min: float,
+    stops_count: int,
+    cost_config: Optional[Dict[str, float]] = None
+) -> Dict[str, float]:
+    """
+    Berechnet Kosten für eine einzelne Tour.
+    
+    Args:
+        distance_km: Gesamtstrecke in km (inkl. Rückfahrt)
+        total_time_min: Gesamtzeit in Minuten (Fahren + Service)
+        stops_count: Anzahl Stops
+        cost_config: Optional, sonst wird get_cost_config() verwendet
+    
+    Returns:
+        Dict mit tour_cost_total, cost_per_stop, cost_per_km
+    """
+    if cost_config is None:
+        cost_config = get_cost_config()
+    
+    hours_total = total_time_min / 60.0
+    vehicle_cost_km = distance_km * cost_config["cost_per_km"]
+    driver_cost = hours_total * cost_config["cost_driver_per_hour"]
+    vehicle_hour_cost = hours_total * cost_config["cost_vehicle_per_hour"]
+    
+    tour_cost_total = vehicle_cost_km + driver_cost + vehicle_hour_cost
+    
+    return {
+        "tour_cost_total": round(tour_cost_total, 2),
+        "cost_per_stop": round(tour_cost_total / stops_count, 2) if stops_count > 0 else 0.0,
+        "cost_per_km": round(tour_cost_total / distance_km, 2) if distance_km > 0 else 0.0
+    }
 
 
 def get_monthly_stats(months: int = 12) -> List[Dict]:
@@ -85,11 +167,60 @@ def get_monthly_stats(months: int = 12) -> List[Dict]:
             """), {"start": month_start, "end": month_end}).scalar()
             km = float(km_result) if km_result else 0.0
             
+            # Berechne Kosten-KPIs (analog zu get_daily_stats)
+            cost_config = get_cost_config()
+            total_cost = 0.0
+            total_time_min = 0.0
+            
+            try:
+                # Prüfe ob gesamtzeit_min Spalte existiert (dynamische Spaltenprüfung)
+                column_check = conn.execute(text("PRAGMA table_info(touren)")).fetchall()
+                has_gesamtzeit_min = any(col[1] == 'gesamtzeit_min' for col in column_check)
+                has_dauer_min = any(col[1] == 'dauer_min' for col in column_check)
+                time_column = "gesamtzeit_min" if has_gesamtzeit_min else ("dauer_min" if has_dauer_min else "NULL")
+                
+                tour_rows_with_data = conn.execute(text(f"""
+                    SELECT 
+                        COALESCE(distanz_km, 0) as distanz,
+                        COALESCE({time_column}, 0) as zeit,
+                        COALESCE(stops_count, 0) as stops
+                    FROM touren 
+                    WHERE datum >= :start AND datum <= :end
+                """), {"start": month_start, "end": month_end}).fetchall()
+                
+                for row in tour_rows_with_data:
+                    dist, time_min, stops = row[0] or 0, row[1] or 0, row[2] or 0
+                    if dist > 0 and time_min > 0 and stops > 0:
+                        tour_cost = calculate_tour_cost(dist, time_min, stops, cost_config)
+                        total_cost += tour_cost["tour_cost_total"]
+                        total_time_min += time_min
+                    elif dist > 0:
+                        estimated_time = (dist / 50.0) * 60
+                        estimated_stops = max(stops, 1) if stops > 0 else 1
+                        tour_cost = calculate_tour_cost(dist, estimated_time, estimated_stops, cost_config)
+                        total_cost += tour_cost["tour_cost_total"]
+                        total_time_min += estimated_time
+            except Exception as e:
+                logger.debug(f"Kostenberechnung für {month_str} fehlgeschlagen: {e}")
+                if km > 0:
+                    estimated_time = (km / 50.0) * 60
+                    estimated_stops = max(stop_count, 1) if stop_count > 0 else 1
+                    tour_cost = calculate_tour_cost(km, estimated_time, estimated_stops, cost_config)
+                    total_cost = tour_cost["tour_cost_total"] * tour_count if tour_count > 0 else 0.0
+                    total_time_min = estimated_time * tour_count if tour_count > 0 else 0.0
+            
             stats.append({
                 "month": month_str,
                 "tours": tour_count,
                 "stops": stop_count,
-                "km": round(km, 2)
+                "km": round(km, 2),
+                "total_time_min": round(total_time_min, 1),
+                "total_cost": round(total_cost, 2),
+                "avg_cost_per_tour": round(total_cost / tour_count, 2) if tour_count > 0 else 0.0,
+                "avg_cost_per_stop": round(total_cost / stop_count, 2) if stop_count > 0 else 0.0,
+                "avg_cost_per_km": round(total_cost / km, 2) if km > 0 else 0.0,
+                "avg_stops_per_tour": round(stop_count / tour_count, 2) if tour_count > 0 else 0.0,
+                "avg_distance_per_tour_km": round(km / tour_count, 2) if tour_count > 0 else 0.0
             })
         
         return stats
@@ -156,11 +287,64 @@ def get_daily_stats(days: int = 30) -> List[Dict]:
             """), {"date": day_str}).scalar()
             km = float(km_result) if km_result else 0.0
             
+            # Berechne Kosten-KPIs (falls distanz_km vorhanden)
+            cost_config = get_cost_config()
+            total_cost = 0.0
+            total_time_min = 0.0
+            
+            # Versuche Zeit- und Kosten-Daten aus touren zu holen
+            # Falls Felder nicht existieren, verwende Schätzungen
+            try:
+                # Prüfe ob Zeit-Felder existieren (dynamische Spaltenprüfung)
+                column_check = conn.execute(text("PRAGMA table_info(touren)")).fetchall()
+                has_gesamtzeit_min = any(col[1] == 'gesamtzeit_min' for col in column_check)
+                has_dauer_min = any(col[1] == 'dauer_min' for col in column_check)
+                time_column = "gesamtzeit_min" if has_gesamtzeit_min else ("dauer_min" if has_dauer_min else "NULL")
+                
+                tour_rows_with_data = conn.execute(text(f"""
+                    SELECT 
+                        COALESCE(distanz_km, 0) as distanz,
+                        COALESCE({time_column}, 0) as zeit,
+                        COALESCE(stops_count, 0) as stops
+                    FROM touren 
+                    WHERE datum = :date
+                """), {"date": day_str}).fetchall()
+                
+                for row in tour_rows_with_data:
+                    dist, time_min, stops = row[0] or 0, row[1] or 0, row[2] or 0
+                    if dist > 0 and time_min > 0 and stops > 0:
+                        tour_cost = calculate_tour_cost(dist, time_min, stops, cost_config)
+                        total_cost += tour_cost["tour_cost_total"]
+                        total_time_min += time_min
+                    elif dist > 0:
+                        # Fallback: Schätze Zeit basierend auf Distanz (50 km/h Durchschnitt)
+                        estimated_time = (dist / 50.0) * 60  # Minuten
+                        estimated_stops = max(stops, 1) if stops > 0 else 1
+                        tour_cost = calculate_tour_cost(dist, estimated_time, estimated_stops, cost_config)
+                        total_cost += tour_cost["tour_cost_total"]
+                        total_time_min += estimated_time
+            except Exception as e:
+                logger.debug(f"Kostenberechnung für {day_str} fehlgeschlagen (Felder fehlen?): {e}")
+                # Fallback: Schätze basierend auf km
+                if km > 0:
+                    estimated_time = (km / 50.0) * 60  # Minuten bei 50 km/h
+                    estimated_stops = max(stop_count, 1) if stop_count > 0 else 1
+                    tour_cost = calculate_tour_cost(km, estimated_time, estimated_stops, cost_config)
+                    total_cost = tour_cost["tour_cost_total"] * tour_count if tour_count > 0 else 0.0
+                    total_time_min = estimated_time * tour_count if tour_count > 0 else 0.0
+            
             stats.append({
                 "date": day_str,
                 "tours": tour_count,
                 "stops": stop_count,
-                "km": round(km, 2)
+                "km": round(km, 2),
+                "total_time_min": round(total_time_min, 1),
+                "total_cost": round(total_cost, 2),
+                "avg_cost_per_tour": round(total_cost / tour_count, 2) if tour_count > 0 else 0.0,
+                "avg_cost_per_stop": round(total_cost / stop_count, 2) if stop_count > 0 else 0.0,
+                "avg_cost_per_km": round(total_cost / km, 2) if km > 0 else 0.0,
+                "avg_stops_per_tour": round(stop_count / tour_count, 2) if tour_count > 0 else 0.0,
+                "avg_distance_per_tour_km": round(km / tour_count, 2) if tour_count > 0 else 0.0
             })
         
         return stats
