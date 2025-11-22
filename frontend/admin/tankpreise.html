@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tank- und Strompreise - FAMO TrafficApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .admin-nav-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .admin-nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            position: relative;
+        }
+        .admin-nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .admin-nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-bottom: 3px solid #ffffff;
+            font-weight: 600;
+        }
+        .admin-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .price-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .price-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .price-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .price-change {
+            font-size: 0.9rem;
+        }
+        .price-change.positive {
+            color: #dc3545;
+        }
+        .price-change.negative {
+            color: #28a745;
+        }
+        .last-update {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FAMO TrafficApp</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Hauptseite</a>
+                <a class="nav-link active" href="/admin.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <h1><i class="fas fa-gas-pump"></i> Tank- und Strompreise</h1>
+        
+        <!-- Admin-Navigation -->
+        <nav class="admin-nav-bar">
+            <div class="admin-nav-items">
+                <a href="/admin/system.html" class="admin-nav-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System/Health</span>
+                </a>
+                <a href="/admin/statistik.html" class="admin-nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="/admin/systemregeln.html" class="admin-nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Systemregeln</span>
+                </a>
+                <a href="/admin/ki-integration.html" class="admin-nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>KI-Integration</span>
+                </a>
+                <a href="/admin/db-verwaltung.html" class="admin-nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>DB-Verwaltung</span>
+                </a>
+                <a href="/admin/tour-filter.html" class="admin-nav-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Tour-Filter</span>
+                </a>
+                <a href="/admin/tour-import.html" class="admin-nav-item">
+                    <i class="fas fa-upload"></i>
+                    <span>Tour-Import</span>
+                </a>
+                <a href="/admin/geo-cache-vorverarbeitung.html" class="admin-nav-item">
+                    <i class="fas fa-globe"></i>
+                    <span>Geo-Cache Vorverarbeitung</span>
+                </a>
+                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                    <i class="fas fa-list-alt"></i>
+                    <span>Tourplan-Übersicht</span>
+                </a>
+                <a href="/admin/tankpreise.html" class="admin-nav-item active">
+                    <i class="fas fa-gas-pump"></i>
+                    <span>Tank- & Strompreise</span>
+                </a>
+                <a href="/admin/dataflow.html" class="admin-nav-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Datenfluss</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Info-Banner (wiederverwendbare Komponente) -->
+        <div id="admin-info-banner"></div>
+
+        <!-- Tankpreise -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-gas-pump"></i> Aktuelle Tankpreise (Dresden)</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <div class="card price-card border-primary">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">Diesel</h6>
+                                <div class="price-value text-primary" id="price-diesel">-</div>
+                                <div class="price-change" id="change-diesel"></div>
+                                <div class="last-update mt-2" id="update-diesel">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card price-card border-success">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">Super E10</h6>
+                                <div class="price-value text-success" id="price-e10">-</div>
+                                <div class="price-change" id="change-e10"></div>
+                                <div class="last-update mt-2" id="update-e10">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card price-card border-info">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">Super E5</h6>
+                                <div class="price-value text-info" id="price-e5">-</div>
+                                <div class="price-change" id="change-e5"></div>
+                                <div class="last-update mt-2" id="update-e5">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card price-card border-warning">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">AdBlue</h6>
+                                <div class="price-value text-warning" id="price-adblue">-</div>
+                                <div class="price-change" id="change-adblue"></div>
+                                <div class="last-update mt-2" id="update-adblue">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-primary" onclick="loadFuelPrices()">
+                        <i class="fas fa-sync"></i> Preise aktualisieren
+                    </button>
+                    <small class="text-muted" id="fuel-last-update">Letzte Aktualisierung: -</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strompreise (vorsorglich) -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-bolt"></i> Strompreise (E-Autos)</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Hinweis:</strong> Die Berechnung der Strompreise folgt später. Hier werden vorerst nur Platzhalter angezeigt.
+                </div>
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <div class="card price-card border-success">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">Ladestation (AC)</h6>
+                                <div class="price-value text-success" id="price-ac">-</div>
+                                <div class="last-update mt-2">€/kWh</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card price-card border-info">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">Schnellladung (DC)</h6>
+                                <div class="price-value text-info" id="price-dc">-</div>
+                                <div class="last-update mt-2">€/kWh</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card price-card border-warning">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">Hausladung</h6>
+                                <div class="price-value text-warning" id="price-home">-</div>
+                                <div class="last-update mt-2">€/kWh</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-success" onclick="loadElectricityPrices()" disabled>
+                        <i class="fas fa-sync"></i> Preise aktualisieren
+                    </button>
+                    <small class="text-muted">Berechnung folgt später</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preisverlauf (Chart) -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-line"></i> Preisverlauf (letzte 7 Tage)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="priceChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/admin-info-banner.js"></script>
+    <script>
+        // Info-Banner anzeigen
+        showPredefinedBanner('tankpreise');
+        
+        let priceChart = null;
+
+        // Formatierung
+        function formatPrice(price) {
+            if (!price || price === '-') return '-';
+            return parseFloat(price).toFixed(3) + ' €';
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('de-DE', {
+                style: 'currency',
+                currency: 'EUR',
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3
+            }).format(value || 0);
+        }
+
+        // Deutsche Datums- und Zeitformatierung
+        function formatGermanDateTime(isoString) {
+            if (!isoString || isoString === '-') return '-';
+            try {
+                const date = new Date(isoString);
+                // Deutsches Format: DD.MM.YYYY HH:MM:SS
+                return date.toLocaleString('de-DE', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+            } catch (e) {
+                return isoString; // Fallback: Original-String zurückgeben
+            }
+        }
+
+        // Tankpreise laden
+        async function loadFuelPrices() {
+            try {
+                const response = await fetch('/api/fuel-prices/current');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Diesel
+                    if (data.prices.diesel) {
+                        document.getElementById('price-diesel').textContent = formatPrice(data.prices.diesel.price);
+                        updatePriceChange('change-diesel', data.prices.diesel.change);
+                        const dieselTime = formatGermanDateTime(data.prices.diesel.last_update);
+                        document.getElementById('update-diesel').textContent = `Stand: ${dieselTime}`;
+                    }
+                    
+                    // Super E10
+                    if (data.prices.e10) {
+                        document.getElementById('price-e10').textContent = formatPrice(data.prices.e10.price);
+                        updatePriceChange('change-e10', data.prices.e10.change);
+                        const e10Time = formatGermanDateTime(data.prices.e10.last_update);
+                        document.getElementById('update-e10').textContent = `Stand: ${e10Time}`;
+                    }
+                    
+                    // Super E5
+                    if (data.prices.e5) {
+                        document.getElementById('price-e5').textContent = formatPrice(data.prices.e5.price);
+                        updatePriceChange('change-e5', data.prices.e5.change);
+                        const e5Time = formatGermanDateTime(data.prices.e5.last_update);
+                        document.getElementById('update-e5').textContent = `Stand: ${e5Time}`;
+                    }
+                    
+                    // AdBlue (fest oder aus API)
+                    if (data.prices.adblue) {
+                        document.getElementById('price-adblue').textContent = formatPrice(data.prices.adblue.price);
+                        updatePriceChange('change-adblue', data.prices.adblue.change);
+                        const adblueTime = formatGermanDateTime(data.prices.adblue.last_update);
+                        document.getElementById('update-adblue').textContent = `Stand: ${adblueTime}`;
+                    } else {
+                        // Fallback: Fester Preis (0.80 €/L)
+                        document.getElementById('price-adblue').textContent = '0.800 €';
+                        document.getElementById('update-adblue').textContent = 'Standard-Preis';
+                    }
+                    
+                    // Letzte Aktualisierung im deutschen Format
+                    const now = new Date();
+                    const lastUpdate = now.toLocaleString('de-DE', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    });
+                    document.getElementById('fuel-last-update').textContent = 
+                        `Letzte Aktualisierung: ${lastUpdate}`;
+                    
+                    // Chart aktualisieren
+                    if (data.history) {
+                        updatePriceChart(data.history);
+                    }
+                } else {
+                    throw new Error(data.error || 'Unbekannter Fehler');
+                }
+            } catch (e) {
+                console.error('Fehler beim Laden der Tankpreise:', e);
+                alert(`Fehler beim Laden der Tankpreise: ${e.message}`);
+            }
+        }
+
+        function updatePriceChange(elementId, change) {
+            const element = document.getElementById(elementId);
+            if (!change || change === 0) {
+                element.textContent = '';
+                element.className = 'price-change';
+                return;
+            }
+            
+            const sign = change > 0 ? '+' : '';
+            element.textContent = `${sign}${change.toFixed(3)} €`;
+            element.className = `price-change ${change > 0 ? 'positive' : 'negative'}`;
+        }
+
+        // Strompreise laden (vorsorglich)
+        async function loadElectricityPrices() {
+            // TODO: Implementierung folgt später
+            document.getElementById('price-ac').textContent = '-';
+            document.getElementById('price-dc').textContent = '-';
+            document.getElementById('price-home').textContent = '-';
+        }
+
+        // Preisverlauf-Chart
+        function updatePriceChart(history) {
+            const ctx = document.getElementById('priceChart');
+            if (!ctx) return;
+            
+            if (priceChart) {
+                priceChart.destroy();
+            }
+            
+            const labels = history.map(h => h.date);
+            const dieselData = history.map(h => h.diesel || null);
+            const e10Data = history.map(h => h.e10 || null);
+            const e5Data = history.map(h => h.e5 || null);
+            
+            priceChart = new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Diesel',
+                            data: dieselData,
+                            borderColor: 'rgba(0, 123, 255, 1)',
+                            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Super E10',
+                            data: e10Data,
+                            borderColor: 'rgba(40, 167, 69, 1)',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Super E5',
+                            data: e5Data,
+                            borderColor: 'rgba(23, 162, 184, 1)',
+                            backgroundColor: 'rgba(23, 162, 184, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(3) + ' €';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toFixed(3) + ' €';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFuelPrices();
+            // Auto-Update alle 5 Minuten
+            setInterval(loadFuelPrices, 5 * 60 * 1000);
+        });
+    </script>
+</body>
+</html>
+

@@ -3,7 +3,7 @@
 **Projekt:** FAMO TrafficApp 3.0  
 **Zweck:** Dokumentation aller kritischen Fehler und deren Lösungen als Lernbasis für zukünftige Audits
 
-**Letzte Aktualisierung:** 2025-11-19 18:00
+**Letzte Aktualisierung:** 2025-11-22 18:30
 
 ---
 
@@ -3350,7 +3350,360 @@ tour_rows_with_data = conn.execute(text(f"""
 
 ---
 
+## 2025-11-22 – Leaflet Marker: bringToFront() Fehler + Blitzer/Hindernisse-Anzeige
+
+**Kategorie:** Frontend (Leaflet/Visualisierung)  
+**Schweregrad:** 🟡 MEDIUM  
+**Dateien:** `frontend/index.html` (Zeilen 4101-4245, 4824-4887)
+
+### Symptom
+
+1. **Blitzer-Marker werden nicht angezeigt:**
+   - Console zeigt: `[BLITZER] ✅ 0/7 Blitzer-Marker erfolgreich auf Karte angezeigt`
+   - API gibt Daten zurück (`cameras: Array(7)`), aber Marker erscheinen nicht auf Karte
+   - Console-Fehler: `TypeError: marker.bringToFront is not a function`
+
+2. **Hindernisse ausblenden funktioniert nicht:**
+   - Button "Hindernisse ausblenden" entfernt Marker nicht korrekt
+   - Marker bleiben auf Karte sichtbar
+
+3. **Separate Filter für Baustelle/Sperrung fehlen:**
+   - Nur ein allgemeiner "Hindernisse" Toggle vorhanden
+   - Keine Möglichkeit, Baustellen und Sperrungen separat zu filtern
+
+### Ursache
+
+1. **bringToFront() Fehler:**
+   - `marker.bringToFront()` existiert nicht für Leaflet-Marker
+   - Diese Methode ist nur für Polylines/Layers verfügbar
+   - Fehler wird in try-catch gefangen, aber Marker wird trotzdem nicht angezeigt
+
+2. **Hindernisse ausblenden:**
+   - Verwendet manuelle `forEach`-Schleife statt `clearTrafficIncidentMarkers()`
+   - Marker werden nicht vollständig entfernt
+
+3. **Fehlende Filter:**
+   - Keine separaten Toggle-Variablen für `construction` und `closure`
+   - `addTrafficIncidentMarker()` filtert nicht nach Typ
+
+### Fix
+
+**Datei:** `frontend/index.html`
+
+**1. bringToFront() entfernt (Zeile 4218-4245):**
+
+```javascript
+// VORHER:
+marker.bringToFront();  // ❌ Fehler: Methode existiert nicht
+
+// NACHHER:
+// bringToFront() entfernt - nicht nötig für Marker
+// Stattdessen: map.hasLayer() Prüfung hinzugefügt
+if (!map.hasLayer(marker)) {
+    console.error(`[BLITZER-MARKER] ❌ Marker wurde NICHT zur Karte hinzugefügt`);
+    return null;
+}
+```
+
+**2. Hindernisse ausblenden repariert (Zeile 4824-4839):**
+
+```javascript
+// VORHER:
+trafficIncidentMarkers.forEach(marker => {
+    if (marker && map.hasLayer(marker)) {
+        map.removeLayer(marker);
+    }
+});
+
+// NACHHER:
+clearTrafficIncidentMarkers();  // ✅ Verwendet zentrale Funktion
+```
+
+**3. Separate Filter hinzugefügt (Zeile 274-282, 3963-3964, 4824-4887):**
+
+```javascript
+// Neue Variablen:
+let showConstruction = true;  // Baustellen anzeigen
+let showClosure = true;  // Sperrungen anzeigen
+
+// Neue Buttons:
+<button id="toggleConstructionBtn" onclick="toggleConstruction()">
+    <i class="fas fa-hard-hat"></i> Baustelle
+</button>
+<button id="toggleClosureBtn" onclick="toggleClosure()">
+    <i class="fas fa-road"></i> Sperrung
+</button>
+
+// Filter in addTrafficIncidentMarker():
+if (incident.type === 'construction' && !showConstruction) {
+    return null;
+}
+if (incident.type === 'closure' && !showClosure) {
+    return null;
+}
+```
+
+**4. Blitzer-Marker größer/sichtbarer gemacht:**
+- Größe: 40x40px (statt 30x30px)
+- zIndexOffset: 1000 (statt 500)
+- Stärkerer Schatten für bessere Sichtbarkeit
+
+**5. Test-Daten hinzugefügt:**
+- Script `scripts/create_test_speed_cameras.py` erstellt
+- 10 Beispiel-Blitzer in Region Dresden eingefügt
+
+### Ergebnis
+
+- ✅ Blitzer-Marker werden korrekt angezeigt (nach Test-Daten-Einfügung)
+- ✅ `bringToFront()` Fehler behoben
+- ✅ Hindernisse ausblenden funktioniert korrekt
+- ✅ Separate Filter für Baustelle/Sperrung verfügbar
+- ✅ Marker größer und sichtbarer
+
+### Was die KI künftig tun soll
+
+1. **Leaflet API-Kenntnis:**
+   - `bringToFront()` existiert NUR für Polylines/Layers, NICHT für Marker
+   - Marker haben `zIndexOffset` in den Options, nicht `bringToFront()`
+   - Verwende `map.hasLayer(marker)` um zu prüfen, ob Marker auf Karte ist
+
+2. **Zentrale Funktionen verwenden:**
+   - Wenn `clearTrafficIncidentMarkers()` existiert, IMMER diese verwenden
+   - Nicht manuell `forEach`-Schleifen schreiben
+   - Zentrale Funktionen sind getestet und robuster
+
+3. **Filter-Logik:**
+   - Bei mehreren Filter-Optionen (z.B. Baustelle/Sperrung) separate Toggle-Variablen verwenden
+   - Filter in `addMarker()` Funktionen prüfen, nicht nur beim Laden
+
+4. **Marker-Sichtbarkeit:**
+   - Marker sollten mindestens 40x40px groß sein für gute Sichtbarkeit
+   - `zIndexOffset` hoch genug setzen (1000+) damit Marker über anderen Layern sind
+   - Starke Schatten für besseren Kontrast
+
+5. **Test-Daten:**
+   - Wenn Features Daten aus DB benötigen, Test-Scripts erstellen
+   - Scripts sollten idempotent sein (mehrfach ausführbar ohne Fehler)
+
+---
+
+## 2025-11-22 – Tourplan-Übersicht: 404 Fehler für /api/tourplan/overview
+
+**Kategorie:** Backend (API-Endpoint)  
+**Schweregrad:** 🟡 MEDIUM  
+**Dateien:** `backend/routes/tourplan_api.py`, `backend/app_setup.py`, `frontend/admin/tourplan-uebersicht.html`
+
+### Symptom
+
+- Frontend ruft `/api/tourplan/overview?datum=2025-10-07` auf
+- Server gibt `404 Not Found` zurück
+- Tourplan-Übersicht-Seite zeigt "Lade Touren..." aber keine Daten
+- KPI-Boxen zeigen "-" (keine Daten)
+
+### Ursache
+
+**Mögliche Ursachen:**
+1. Server wurde nicht neu gestartet nach Router-Registrierung
+2. Router-Registrierung erfolgt in falscher Reihenfolge
+3. Route-Konflikt mit anderem Router (gleicher Pfad)
+
+**Prüfung:**
+- Router `tourplan_api_router` ist in `app_setup.py` registriert (Zeile 220)
+- Endpoint `/api/tourplan/overview` existiert in `tourplan_api.py` (Zeile 152)
+- Router hat Prefix `/api/tourplan` (korrekt)
+
+### Fix
+
+**1. Server neu starten:**
+```bash
+# Server stoppen und neu starten
+python start_server.py
+```
+
+**2. Prüfe Router-Registrierung:**
+- Router ist in `setup_routers()` registriert
+- Reihenfolge: `tourplan_api_router` VOR `db_management_api_router` (Kommentar in Zeile 220)
+
+**3. Prüfe Route-Konflikte:**
+- Keine anderen Router mit `/api/tourplan/overview` gefunden
+- Router sollte korrekt registriert sein
+
+**4. Debug-Endpoint prüfen:**
+```bash
+# Prüfe ob Route registriert ist
+curl http://localhost:8111/_debug/routes | grep tourplan
+```
+
+### Ergebnis
+
+- ✅ Router ist korrekt registriert
+- ⚠️ Server muss möglicherweise neu gestartet werden
+- ⚠️ Route sollte nach Server-Neustart verfügbar sein
+
+### Was die KI künftig tun soll
+
+1. **Router-Registrierung prüfen:**
+   - Wenn 404-Fehler auftritt, IMMER prüfen ob Router registriert ist
+   - Prüfe `app_setup.py` → `setup_routers()` → Router-Liste
+   - Prüfe Router-Prefix stimmt mit aufgerufener URL überein
+
+2. **Server-Neustart:**
+   - Nach Router-Änderungen IMMER Server-Neustart erwähnen
+   - FastAPI lädt Router beim Start, nicht dynamisch
+
+3. **Route-Konflikte:**
+   - Prüfe ob mehrere Router gleichen Pfad verwenden
+   - Reihenfolge der Router-Registrierung kann wichtig sein
+   - Kommentare in Code beachten (z.B. "Muss VOR ... sein")
+
+4. **Debug-Endpoints:**
+   - Nutze `/_debug/routes` um alle registrierten Routen zu sehen
+   - Prüfe ob Route wirklich registriert ist
+
+---
+
+## 2025-11-22 – Tankpreise-Integration: 500-Fehler durch fahrzeug_typ Unpacking + 404 für JavaScript
+
+**Kategorie:** Backend (API) + Frontend (Static Files)  
+**Schweregrad:** 🔴 KRITISCH  
+**Dateien:** `backend/routes/tourplan_api.py` (Zeile 315), `frontend/admin/tankpreise.html`
+
+### Symptom
+
+1. **500 Internal Server Error** bei `/api/tourplan/tours`:
+   - `ValueError: too many values to unpack (expected 7)`
+   - Endpoint funktioniert nicht mehr nach Hinzufügen von `fahrzeug_typ` Spalte
+
+2. **404 Not Found** bei `/js/admin-info-banner.js`:
+   - JavaScript-Datei wird nicht gefunden
+   - Info-Banner funktioniert nicht auf Tankpreise-Seite
+
+### Ursache
+
+**Problem 1: SQL gibt immer 8 Werte zurück, Code entpackt manchmal nur 7:**
+```python
+# SQL-Abfrage gibt IMMER fahrzeug_typ zurück (entweder aus Spalte oder als 'diesel' String)
+SELECT 
+    tour_id,
+    kunden_ids,
+    dauer_min,
+    distanz_km,
+    gesamtzeit_min,
+    fahrer,
+    COALESCE(fahrzeug_typ, 'diesel') as fahrzeug_typ,  # ← IMMER 8 Werte
+    created_at
+FROM touren
+
+# Code versuchte manchmal nur 7 zu entpacken:
+if has_vehicle_type:
+    tour_id, kunden_ids, dauer_min, distanz_km, gesamtzeit_min, fahrer, vehicle_type, created_at = row  # ✅ 8 Werte
+else:
+    tour_id, kunden_ids, dauer_min, distanz_km, gesamtzeit_min, fahrer, created_at = row  # ❌ Nur 7 Werte!
+    vehicle_type = 'diesel'  # Default
+```
+
+**Problem 2: Falscher Static-Files-Pfad:**
+```html
+<!-- Falsch: -->
+<script src="/js/admin-info-banner.js"></script>
+
+<!-- Static Files sind auf /static gemountet, nicht /js -->
+```
+
+### Fix
+
+**Fix 1: Immer 8 Werte entpacken:**
+```python
+# Nachher: Immer 8 Werte entpacken (SQL gibt immer fahrzeug_typ zurück)
+tour_id, kunden_ids, dauer_min, distanz_km, gesamtzeit_min, fahrer, vehicle_type, created_at = row
+
+# Falls vehicle_type None ist (sollte nicht passieren, aber sicherheitshalber)
+if not vehicle_type:
+    vehicle_type = 'diesel'
+```
+
+**Fix 2: Korrekter Static-Files-Pfad:**
+```html
+<!-- Korrekt: -->
+<script src="/static/js/admin-info-banner.js"></script>
+```
+
+### Was die KI künftig tun soll
+
+1. **Bei Schema-Änderungen:**
+   - ✅ Prüfe ALLE SQL-Abfragen, die betroffene Tabelle verwenden
+   - ✅ Prüfe ALLE Unpacking-Operationen (row unpacking)
+   - ✅ SQL gibt immer die gleiche Anzahl Spalten zurück (auch wenn Spalte nicht existiert, wird sie als NULL/String zurückgegeben)
+   - ✅ Wenn SQL `COALESCE(column, 'default')` verwendet, gibt es IMMER einen Wert zurück
+
+2. **Bei Static Files:**
+   - ✅ Prüfe wo Static Files gemountet sind (`/static` in diesem Projekt)
+   - ✅ Verwende korrekte Pfade: `/static/js/...` statt `/js/...`
+   - ✅ Prüfe ob Datei wirklich im erwarteten Verzeichnis liegt
+
+3. **Bei neuen Admin-Seiten:**
+   - ✅ Route in `backend/app.py` hinzufügen (nicht nur HTML-Datei erstellen)
+   - ✅ Navigation in allen Admin-Seiten aktualisieren
+   - ✅ Static-Files-Pfade prüfen
+
+---
+
+## 2025-11-22 – Admin-Seite: Route fehlt für tankpreise.html
+
+**Kategorie:** Backend (Routing)  
+**Schweregrad:** 🔴 KRITISCH  
+**Dateien:** `backend/app.py` (Zeile 437)
+
+### Symptom
+
+- **404 Not Found** bei `/admin/tankpreise.html`
+- Seite existiert, aber Server findet sie nicht
+- Log zeigt: `"GET /admin/tankpreise.html HTTP/1.1" 404 Not Found`
+
+### Ursache
+
+**Admin-HTML-Seiten werden nicht über Static Files bereitgestellt:**
+- Admin-Seiten haben explizite Routen in `backend/app.py`
+- Neue Seite `tankpreise.html` wurde erstellt, aber Route fehlte
+- FastAPI kann HTML-Datei nicht finden ohne explizite Route
+
+### Fix
+
+**Route in `backend/app.py` hinzugefügt:**
+```python
+@app.get("/admin/tankpreise.html", response_class=HTMLResponse)
+async def admin_tankpreise_page(request: Request):
+    """Tank- und Strompreise-Seite (geschützt)."""
+    from backend.routes.auth_api import get_session_from_request
+    session_id = get_session_from_request(request)
+    if not session_id:
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(url="/admin/login.html?redirect=/admin/tankpreise.html", status_code=302)
+    
+    try:
+        from backend.utils.path_helpers import read_frontend_file
+        content = read_frontend_file("admin/tankpreise.html")
+        return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Tank- und Strompreise-Seite nicht gefunden")
+```
+
+### Was die KI künftig tun soll
+
+1. **Bei neuen Admin-Seiten:**
+   - ✅ HTML-Datei erstellen
+   - ✅ Route in `backend/app.py` hinzufügen (nach Muster der anderen Admin-Seiten)
+   - ✅ Navigation in allen Admin-Seiten aktualisieren
+   - ✅ Auth-Check implementieren (Redirect zu Login)
+
+2. **Bei 404-Fehlern:**
+   - ✅ Prüfe ob Route existiert (in `backend/app.py`)
+   - ✅ Prüfe ob Datei existiert (in `frontend/admin/`)
+   - ✅ Prüfe ob Static Files korrekt gemountet sind (falls über Static Files)
+
+---
+
 **Ende des LESSONS_LOG**  
-**Letzte Aktualisierung:** 2025-11-20 20:55  
-**Statistik:** 30 Einträge (20 kritische Fehler, 8 mittlere Fehler, 2 Enhancements)
+**Letzte Aktualisierung:** 2025-11-22 18:30  
+**Statistik:** 34 Einträge (22 kritische Fehler, 10 mittlere Fehler, 2 Enhancements)
 

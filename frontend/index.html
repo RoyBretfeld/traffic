@@ -128,6 +128,35 @@
         .list-group-item:hover .optimize-tour-btn {
             opacity: 1;
         }
+        
+        /* Drag-and-Drop Styles für Tourboard */
+        .draggable-row {
+            cursor: move;
+            transition: all 0.2s ease;
+        }
+        .draggable-row:hover {
+            background-color: #f0f4f8 !important;
+        }
+        .draggable-row.drag-over {
+            background-color: #e3f2fd !important;
+            border-top: 3px solid #2196F3 !important;
+        }
+        .draggable-row[draggable="true"]:active {
+            cursor: grabbing;
+        }
+        .draggable-row .fa-grip-vertical {
+            transition: opacity 0.2s;
+        }
+        .draggable-row:hover .fa-grip-vertical {
+            opacity: 1 !important;
+        }
+        /* Depot-Zeilen nicht verschiebbar */
+        .depot-row {
+            cursor: default !important;
+        }
+        .depot-row:hover {
+            background-color: #e1bee7 !important;
+        }
     </style>
 </head>
 <body>
@@ -247,8 +276,16 @@
                     <button id="toggleSpeedCamerasBtn" class="btn btn-warning" style="flex: 1;" onclick="toggleSpeedCameras()" title="Blitzer auf der Karte ein-/ausblenden">
                         <i class="fas fa-eye-slash"></i> Blitzer ausblenden
                     </button>
-                    <button id="toggleTrafficIncidentsBtn" class="btn btn-secondary" style="flex: 1;" onclick="toggleTrafficIncidents()" title="Baustellen, Unfälle, Sperrungen auf der Karte ein-/ausblenden">
+                    <button id="toggleTrafficIncidentsBtn" class="btn btn-secondary" style="flex: 1;" onclick="toggleTrafficIncidents()" title="Alle Hindernisse auf der Karte ein-/ausblenden">
                         <i class="fas fa-eye"></i> Hindernisse einblenden
+                    </button>
+                </div>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <button id="toggleConstructionBtn" class="btn btn-outline-warning" style="flex: 1;" onclick="toggleConstruction()" title="Baustellen auf der Karte ein-/ausblenden">
+                        <i class="fas fa-hard-hat"></i> Baustelle
+                    </button>
+                    <button id="toggleClosureBtn" class="btn btn-outline-danger" style="flex: 1;" onclick="toggleClosure()" title="Sperrungen auf der Karte ein-/ausblenden">
+                        <i class="fas fa-road"></i> Sperrung
                     </button>
                 </div>
             </div>
@@ -1080,6 +1117,9 @@
                     if (showSpeedCameras) {
                         loadSpeedCameras();
                     }
+                    // Initialisiere Button-States
+                    updateConstructionButton();
+                    updateClosureButton();
                 }, 1000);
                 
                 console.log('Karte erfolgreich initialisiert!');
@@ -3314,9 +3354,9 @@
             let cumulativeTimeMinutes = 0;
             const rows = [];
             
-            // WICHTIG: Depot als ersten Eintrag hinzufügen
+            // WICHTIG: Depot als ersten Eintrag hinzufügen (nicht draggable)
             const depotRow = `
-                <tr style="background-color: #e1bee7; font-weight: bold;">
+                <tr class="depot-row" style="background-color: #e1bee7; font-weight: bold;" draggable="false">
                     <td>0</td>
                     <td>FAMO Depot <span class="badge ms-1" style="background-color: #9c27b0; color: #fff;">DEPOT</span></td>
                     <td>Gittersee, Dresden</td>
@@ -3326,6 +3366,10 @@
                             <div class="text-muted">Start</div>
                             <div class="text-primary fw-bold">0.0 Min</div>
                         </div>
+                    </td>
+                    <td class="text-center small">—</td>
+                    <td class="text-center">
+                        <span class="text-success" title="Depot"><i class="fas fa-warehouse"></i></span>
                     </td>
                 </tr>
             `;
@@ -3414,9 +3458,9 @@
                 const activeClass = isFirstRow ? ' active-row' : '';
                 
                 rows.push(`
-                    <tr${rowClass}${barRowClass} class="${activeClass}" data-customer-index="${idx}" data-customer-key="${key}">
+                    <tr${rowClass}${barRowClass} class="${activeClass} draggable-row" data-customer-index="${idx}" data-customer-key="${key}" draggable="true">
                         <td><span class="badge rounded-pill" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff;">${idx + 1}</span></td>
-                        <td><strong>${c.name}</strong>${barBadge}${warningBadge}</td>
+                        <td><strong>${c.name}</strong>${barBadge}${warningBadge} <i class="fas fa-grip-vertical text-muted ms-2" style="cursor: move; opacity: 0.5;"></i></td>
                         <td>${c.resolved_address || c.address || (() => {
                             const clean = (v) => String(v ?? '').trim().replace(/^'+|'+$/g, '').replace(/^"+|"+$/g, '');
                             const parts = [c.street, c.postal_code, c.city].map(clean).filter(Boolean);
@@ -3450,9 +3494,9 @@
                     cumulativeTimeMinutes += returnTimeMinutes;
                     totalTimeMinutes = cumulativeTimeMinutes;
                     
-                    // WICHTIG: Depot als letzten Eintrag hinzufügen (Rückfahrt)
+                    // WICHTIG: Depot als letzten Eintrag hinzufügen (Rückfahrt, nicht draggable)
                     const depotReturnRow = `
-                        <tr style="background-color: #e1bee7; font-weight: bold;">
+                        <tr class="depot-row" style="background-color: #e1bee7; font-weight: bold;" draggable="false">
                             <td>${customers.length + 1}</td>
                             <td>FAMO Depot <span class="badge ms-1" style="background-color: #9c27b0; color: #fff;">DEPOT</span></td>
                             <td>Gittersee, Dresden</td>
@@ -3480,7 +3524,7 @@
             
             return `
                 <div class="table-responsive" style="max-height: calc(100vh - 150px); overflow-y: auto;">
-                    <table class="table table-sm align-middle table-hover">
+                    <table class="table table-sm align-middle table-hover" id="tourboard-table">
                         <thead class="table-light" style="position: sticky; top: 0; z-index: 10; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
                             <tr>
                                 <th style="width: 50px;">#</th>
@@ -3492,7 +3536,7 @@
                                 <th class="text-center" style="width: 60px;">Geo</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tourboard-tbody">
                             ${rows.join('')}
                         </tbody>
                         <tfoot class="table-info" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); position: sticky; bottom: 0;">
@@ -3515,6 +3559,128 @@
                         </tfoot>
                     </table>
                 </div>`;
+        }
+
+        // Drag-and-Drop für Tourboard
+        function initializeTourboardDragAndDrop(tourData, customers) {
+            const tbody = document.getElementById('tourboard-tbody');
+            if (!tbody) {
+                console.warn('[DRAG-DROP] Tourboard tbody nicht gefunden');
+                return;
+            }
+
+            // Warte kurz, damit DOM vollständig gerendert ist
+            setTimeout(() => {
+                const rows = tbody.querySelectorAll('.draggable-row');
+                if (rows.length === 0) {
+                    console.warn('[DRAG-DROP] Keine draggable Zeilen gefunden');
+                    return;
+                }
+
+                let draggedRow = null;
+                let draggedIndex = null;
+
+                function handleDragStart(e) {
+                    draggedRow = this;
+                    draggedIndex = parseInt(this.getAttribute('data-customer-index'));
+                    this.style.opacity = '0.5';
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/html', this.innerHTML);
+                    console.log(`[DRAG-DROP] Start: Index ${draggedIndex}`);
+                }
+
+                function handleDragOver(e) {
+                    if (e.preventDefault) {
+                        e.preventDefault();
+                    }
+                    e.dataTransfer.dropEffect = 'move';
+                    
+                    // Visuelles Feedback: Hervorhebung der Drop-Zone
+                    const targetRow = e.target.closest('.draggable-row');
+                    if (targetRow && targetRow !== draggedRow) {
+                        const allRows = Array.from(tbody.querySelectorAll('.draggable-row'));
+                        allRows.forEach(row => {
+                            row.classList.remove('drag-over');
+                            row.style.borderTop = '';
+                        });
+                        targetRow.classList.add('drag-over');
+                        targetRow.style.borderTop = '3px solid #2196F3';
+                    }
+                    return false;
+                }
+
+                function handleDrop(e) {
+                    if (e.stopPropagation) {
+                        e.stopPropagation();
+                    }
+
+                    const targetRow = e.target.closest('.draggable-row');
+                    if (!targetRow || targetRow === draggedRow || !draggedRow) {
+                        return false;
+                    }
+
+                    const targetIndex = parseInt(targetRow.getAttribute('data-customer-index'));
+                    
+                    if (draggedIndex === targetIndex) {
+                        return false;
+                    }
+
+                    console.log(`[DRAG-DROP] Drop: Von Index ${draggedIndex} nach ${targetIndex}`);
+
+                    // Sortiere Kundenliste neu
+                    const newCustomers = [...customers];
+                    const [movedCustomer] = newCustomers.splice(draggedIndex, 1);
+                    newCustomers.splice(targetIndex, 0, movedCustomer);
+
+                    // Aktualisiere Tour-Daten
+                    tourData.customers = newCustomers;
+                    
+                    // Aktualisiere allTourCustomers
+                    const currentTourKey = activeTourKey || window.currentTourKey;
+                    if (currentTourKey && allTourCustomers[currentTourKey]) {
+                        allTourCustomers[currentTourKey].customers = newCustomers;
+                        console.log(`[DRAG-DROP] Tour ${currentTourKey} aktualisiert`);
+                    }
+
+                    // Rendere Tabelle neu
+                    renderTourDetails(tourData);
+
+                    // Aktualisiere Karte
+                    highlightTourOnMap(newCustomers);
+
+                    return false;
+                }
+
+                function handleDragEnd(e) {
+                    // Entferne visuelle Markierungen
+                    const allRows = Array.from(tbody.querySelectorAll('.draggable-row'));
+                    allRows.forEach(row => {
+                        row.classList.remove('drag-over');
+                        row.style.opacity = '';
+                        row.style.borderTop = '';
+                    });
+                    draggedRow = null;
+                    draggedIndex = null;
+                }
+
+                // Entferne alte Event-Listener (falls vorhanden)
+                rows.forEach(row => {
+                    row.removeEventListener('dragstart', handleDragStart);
+                    row.removeEventListener('dragover', handleDragOver);
+                    row.removeEventListener('drop', handleDrop);
+                    row.removeEventListener('dragend', handleDragEnd);
+                });
+
+                // Füge Event-Listener hinzu
+                rows.forEach(row => {
+                    row.addEventListener('dragstart', handleDragStart);
+                    row.addEventListener('dragover', handleDragOver);
+                    row.addEventListener('drop', handleDrop);
+                    row.addEventListener('dragend', handleDragEnd);
+                });
+
+                console.log(`[DRAG-DROP] Initialisiert: ${rows.length} Zeilen`);
+            }, 100);
         }
 
         function hasCoordinates(customer) {
@@ -3754,6 +3920,9 @@
                 ${renderCustomerList(customers)}
             `;
 
+            // Initialisiere Drag-and-Drop für Tourboard
+            initializeTourboardDragAndDrop(tourData, customers);
+
             highlightTourOnMap(customers);
         }
 
@@ -3798,10 +3967,13 @@
         // Globale Variablen für Blitzer-Marker
         let speedCameraMarkers = [];
         let showSpeedCameras = true;  // Toggle für Blitzer-Anzeige (standardmäßig an)
+        let speedCamerasInitialized = false;  // Flag für Initialisierung
         
         // Globale Variablen für Hindernisse-Marker
         let trafficIncidentMarkers = [];
         let showTrafficIncidents = false;  // Toggle für Hindernisse-Anzeige (standardmäßig aus)
+        let showConstruction = true;  // Baustellen anzeigen (standardmäßig an)
+        let showClosure = true;  // Sperrungen anzeigen (standardmäßig an)
 
         function clearTourMarkers() {
             if (!map) {
@@ -3876,6 +4048,7 @@
         
         function loadSpeedCameras() {
             if (!map || !showSpeedCameras) {
+                console.log('[BLITZER] Übersprungen: map=', !!map, 'showSpeedCameras=', showSpeedCameras);
                 return;
             }
             
@@ -3886,24 +4059,51 @@
             const maxLat = bounds.getNorth();
             const maxLon = bounds.getEast();
             
+            console.log(`[BLITZER] Lade Blitzer für Bereich: [${minLat}, ${minLon}] bis [${maxLat}, ${maxLon}]`);
+            
             // Rufe API auf
             fetch(`/api/traffic/cameras?min_lat=${minLat}&min_lon=${minLon}&max_lat=${maxLat}&max_lon=${maxLon}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('[BLITZER] API Response:', data);
+                    
                     if (data.cameras && Array.isArray(data.cameras)) {
                         // Lösche alte Marker
                         clearSpeedCameraMarkers();
                         
                         // Füge neue Marker hinzu
+                        let addedCount = 0;
                         data.cameras.forEach(camera => {
-                            addSpeedCameraMarker(camera);
+                            // Prüfe ob Kamera-Daten vollständig sind
+                            if (!camera.lat || !camera.lon) {
+                                console.warn(`[BLITZER] ⚠️ Unvollständige Kamera-Daten:`, camera);
+                                return;
+                            }
+                            
+                            const marker = addSpeedCameraMarker(camera);
+                            if (marker) {
+                                addedCount++;
+                                console.log(`[BLITZER] ✅ Marker hinzugefügt: ${camera.camera_id || 'unbekannt'} bei [${camera.lat}, ${camera.lon}], Typ: ${camera.type || 'unbekannt'}`);
+                            } else {
+                                console.warn(`[BLITZER] ⚠️ Marker konnte nicht hinzugefügt werden:`, camera);
+                            }
                         });
                         
-                        console.log(`[BLITZER] ${data.cameras.length} Blitzer geladen`);
+                        console.log(`[BLITZER] ✅ ${addedCount}/${data.cameras.length} Blitzer-Marker erfolgreich auf Karte angezeigt`);
+                        console.log(`[BLITZER] Marker-Array Länge: ${speedCameraMarkers.length}`);
+                        speedCamerasInitialized = true;
+                    } else {
+                        console.warn('[BLITZER] ⚠️ Keine Blitzer-Daten in Response:', data);
                     }
                 })
                 .catch(error => {
-                    console.warn('[BLITZER] Fehler beim Laden der Blitzer:', error);
+                    console.error('[BLITZER] ❌ Fehler beim Laden der Blitzer:', error);
+                    console.error('[BLITZER] Error details:', error.message, error.stack);
                 });
         }
 
@@ -3953,27 +4153,30 @@
                 html: `
                     <div style="
                         position: relative;
-                        width: 30px;
-                        height: 30px;
-                        background-color: rgba(255, 255, 255, 0.9);
-                        border: 2px solid ${iconColor};
+                        width: 40px;
+                        height: 40px;
+                        background-color: rgba(255, 255, 255, 0.95);
+                        border: 3px solid ${iconColor};
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+                        z-index: 1000;
                     ">
                         ${iconHtml}
                     </div>
                 `,
-                iconSize: [30, 30],
-                iconAnchor: [15, 15],
-                popupAnchor: [0, -15]
+                iconSize: [40, 40],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, -20]
             });
 
             const marker = L.marker([camera.lat, camera.lon], {
                 icon: cameraIcon,
-                zIndexOffset: 500  // Über Kunden-Markern, unter Depot
+                zIndexOffset: 1000,  // Sehr hoch, damit Marker sichtbar sind
+                riseOnHover: true,   // Marker hebt sich beim Hover
+                keyboard: true       // Tastatur-Navigation aktivieren
             });
 
             // Popup mit Blitzer-Details
@@ -4013,10 +4216,32 @@
             }
 
             marker.bindPopup(popupContent);
-            marker.addTo(map);
-            speedCameraMarkers.push(marker);
-
-            return marker;
+            
+            // WICHTIG: Prüfe ob Marker wirklich zur Karte hinzugefügt wird
+            try {
+                // Füge Marker zur Karte hinzu
+                marker.addTo(map);
+                
+                // Prüfe ob Marker wirklich auf der Karte ist
+                if (!map.hasLayer(marker)) {
+                    console.error(`[BLITZER-MARKER] ❌ Marker wurde NICHT zur Karte hinzugefügt: ${camera.camera_id || 'unbekannt'}`);
+                    return null;
+                }
+                
+                // Füge zum Array hinzu
+                speedCameraMarkers.push(marker);
+                
+                // Debug: Prüfe ob Marker sichtbar ist
+                const bounds = map.getBounds();
+                const isVisible = bounds.contains([camera.lat, camera.lon]);
+                console.log(`[BLITZER-MARKER] ✅ Marker hinzugefügt: [${camera.lat}, ${camera.lon}], sichtbar: ${isVisible}, Typ: ${camera.type || 'unbekannt'}, ID: ${camera.camera_id || 'unbekannt'}`);
+                
+                return marker;
+            } catch (error) {
+                console.error('[BLITZER-MARKER] ❌ Fehler beim Hinzufügen des Markers:', error);
+                console.error('[BLITZER-MARKER] Error details:', error.message, error.stack);
+                return null;
+            }
         }
 
         async function highlightTourOnMap(customers) {
@@ -4624,12 +4849,62 @@
                 updateTrafficIncidentToggleButton();
             } else {
                 // Verstecke alle Hindernisse-Marker
-                trafficIncidentMarkers.forEach(marker => {
-                    if (marker && map.hasLayer(marker)) {
-                        map.removeLayer(marker);
-                    }
-                });
+                clearTrafficIncidentMarkers();
                 updateTrafficIncidentToggleButton();
+            }
+        }
+        
+        function toggleConstruction() {
+            showConstruction = !showConstruction;
+            updateConstructionButton();
+            // Aktualisiere Marker-Anzeige
+            refreshTrafficIncidentMarkers();
+        }
+        
+        function toggleClosure() {
+            showClosure = !showClosure;
+            updateClosureButton();
+            // Aktualisiere Marker-Anzeige
+            refreshTrafficIncidentMarkers();
+        }
+        
+        function refreshTrafficIncidentMarkers() {
+            // Lösche alle Marker
+            clearTrafficIncidentMarkers();
+            
+            // Lade neu, wenn Hindernisse aktiviert sind
+            if (showTrafficIncidents) {
+                loadTrafficIncidents();
+            }
+        }
+        
+        function updateConstructionButton() {
+            const btn = document.getElementById('toggleConstructionBtn');
+            if (btn) {
+                if (showConstruction) {
+                    btn.classList.remove('btn-outline-warning');
+                    btn.classList.add('btn-warning');
+                    btn.innerHTML = '<i class="fas fa-hard-hat"></i> Baustelle';
+                } else {
+                    btn.classList.remove('btn-warning');
+                    btn.classList.add('btn-outline-warning');
+                    btn.innerHTML = '<i class="fas fa-hard-hat"></i> Baustelle';
+                }
+            }
+        }
+        
+        function updateClosureButton() {
+            const btn = document.getElementById('toggleClosureBtn');
+            if (btn) {
+                if (showClosure) {
+                    btn.classList.remove('btn-outline-danger');
+                    btn.classList.add('btn-danger');
+                    btn.innerHTML = '<i class="fas fa-road"></i> Sperrung';
+                } else {
+                    btn.classList.remove('btn-danger');
+                    btn.classList.add('btn-outline-danger');
+                    btn.innerHTML = '<i class="fas fa-road"></i> Sperrung';
+                }
             }
         }
         
@@ -4683,6 +4958,14 @@
 
         function addTrafficIncidentMarker(incident) {
             if (!map || !showTrafficIncidents) {
+                return null;
+            }
+            
+            // Filter nach Typ
+            if (incident.type === 'construction' && !showConstruction) {
+                return null;
+            }
+            if (incident.type === 'closure' && !showClosure) {
                 return null;
             }
 

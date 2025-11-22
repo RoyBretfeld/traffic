@@ -434,6 +434,22 @@ def create_app() -> FastAPI:
         except FileNotFoundError:
             raise HTTPException(status_code=404, detail="Geo-Cache Vorverarbeitung-Seite nicht gefunden")
     
+    @app.get("/admin/tankpreise.html", response_class=HTMLResponse)
+    async def admin_tankpreise_page(request: Request):
+        """Tank- und Strompreise-Seite (geschützt)."""
+        from backend.routes.auth_api import get_session_from_request
+        session_id = get_session_from_request(request)
+        if not session_id:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/admin/login.html?redirect=/admin/tankpreise.html", status_code=302)
+        
+        try:
+            from backend.utils.path_helpers import read_frontend_file
+            content = read_frontend_file("admin/tankpreise.html")
+            return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Tank- und Strompreise-Seite nicht gefunden")
+    
     @app.get("/admin.html", response_class=HTMLResponse)
     async def admin_page(request: Request):
         """Admin-Hauptseite (geschützt)."""

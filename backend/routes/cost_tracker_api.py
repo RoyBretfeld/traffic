@@ -25,6 +25,17 @@ async def get_cost_stats():
     # Trend (letzte 30 Tage)
     trend = tracker.get_cost_trend(days=30)
     
+    # Konvertiere Trend-Format für Frontend (cost_eur -> cost)
+    trend_formatted = [
+        {
+            "date": day["date"],
+            "cost": day.get("cost_eur", day.get("cost", 0.0)),
+            "api_calls": day.get("api_calls", 0),
+            "improvements": day.get("improvements", 0)
+        }
+        for day in trend
+    ]
+    
     # Limits
     limits = {
         "daily_limit": tracker.daily_limit_eur,
@@ -33,8 +44,8 @@ async def get_cost_stats():
     }
     
     # Berechne Gesamtkosten
-    total_cost = sum(day["cost"] for day in trend)
-    total_calls = sum(day["api_calls"] for day in trend)
+    total_cost = sum(day.get("cost_eur", day.get("cost", 0.0)) for day in trend)
+    total_calls = sum(day.get("api_calls", 0) for day in trend)
     
     # Detaillierte API-Call-Statistiken (pro Modell, pro Operation)
     import sqlite3
@@ -156,7 +167,7 @@ async def get_cost_stats():
     
     return JSONResponse({
         "today": today_stats,
-        "trend": trend,
+        "trend": trend_formatted,  # Verwende formatierten Trend
         "total_30d": {
             "cost": total_cost,
             "api_calls": total_calls

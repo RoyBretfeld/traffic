@@ -163,6 +163,14 @@ async def batch_geocode_tourplan(file: UploadFile = File(...)):
                     cached = geo_repo_get(address_normalized)
                     if cached and cached.get('lat') and cached.get('lon'):
                         # Bereits im Cache - Cache-Hit!
+                        # WICHTIG: Speichere Kunde trotzdem in kunden-Tabelle (falls noch nicht vorhanden)
+                        try:
+                            from backend.db.dao import upsert_kunden, Kunde
+                            kunde = Kunde(name=name, adresse=address, lat=cached['lat'], lon=cached['lon'])
+                            upsert_kunden([kunde])
+                        except Exception as kunde_error:
+                            safe_print(f"[DB-API] Warnung: Kunde konnte nicht gespeichert werden (ignoriert): {kunde_error}")
+                        
                         stats["cached_count"] += 1
                         safe_print(f"[DB-API] Cache-Hit: {name} @ {address}")
                         continue
@@ -179,6 +187,14 @@ async def batch_geocode_tourplan(file: UploadFile = File(...)):
                         except Exception as upsert_error:
                             # Ignoriere Fehler beim Upsert (kann bereits vorhanden sein)
                             safe_print(f"[DB-API] Warnung: geo_upsert fehlgeschlagen (ignoriert): {upsert_error}")
+                        
+                        # WICHTIG: Speichere Kunde auch in kunden-Tabelle
+                        try:
+                            from backend.db.dao import upsert_kunden, Kunde
+                            kunde = Kunde(name=name, adresse=address, lat=result['lat'], lon=result['lon'])
+                            upsert_kunden([kunde])
+                        except Exception as kunde_error:
+                            safe_print(f"[DB-API] Warnung: Kunde konnte nicht gespeichert werden (ignoriert): {kunde_error}")
                         
                         stats["geocoded_count"] += 1
                         safe_print(f"[DB-API] Neu geocodiert: {name} @ {address} -> ({result['lat']}, {result['lon']})")

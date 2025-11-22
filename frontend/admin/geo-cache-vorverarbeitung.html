@@ -165,6 +165,10 @@
                     <i class="fas fa-map-marked-alt"></i>
                     <span>Tourplan-Übersicht</span>
                 </a>
+                <a href="/admin/tankpreise.html" class="admin-nav-item">
+                    <i class="fas fa-gas-pump"></i>
+                    <span>Tank- & Strompreise</span>
+                </a>
             </div>
         </div>
 
@@ -189,13 +193,18 @@
                     <h5>Dateien hier ablegen oder klicken zum Auswählen</h5>
                     <p class="text-muted">Mehrere CSV-Dateien möglich (max. 20 Dateien, je max. 50 MB)</p>
                     <input type="file" id="fileInput" class="d-none" accept=".csv" multiple>
-                    <button class="btn btn-primary mt-3" onclick="document.getElementById('fileInput').click()">
+                    <button class="btn btn-primary mt-3" id="selectFilesBtn">
                         <i class="fas fa-folder-open"></i> Dateien auswählen
                     </button>
                 </div>
                 
                 <div id="selectedFiles" class="mt-4" style="display: none;">
-                    <h6><i class="fas fa-list"></i> Ausgewählte Dateien:</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0"><i class="fas fa-list"></i> Ausgewählte Dateien: <span id="fileCount" class="badge bg-primary">0</span></h6>
+                        <button class="btn btn-sm btn-danger" onclick="clearAllFiles()" id="clearAllBtn" disabled>
+                            <i class="fas fa-trash-alt"></i> Alle löschen
+                        </button>
+                    </div>
                     <div id="fileList"></div>
                     <div class="mt-3">
                         <button class="btn btn-success" id="startProcessingBtn" onclick="startProcessing()" disabled>
@@ -296,6 +305,12 @@
             handleFiles(e.target.files);
         });
 
+        // Button für Dateiauswahl
+        document.getElementById('selectFilesBtn').addEventListener('click', (e) => {
+            e.stopPropagation(); // Verhindere, dass der Click auch auf uploadArea ausgelöst wird
+            document.getElementById('fileInput').click();
+        });
+
         // Drag & Drop
         const uploadArea = document.getElementById('uploadArea');
         uploadArea.addEventListener('dragover', (e) => {
@@ -310,8 +325,12 @@
             uploadArea.classList.remove('dragover');
             handleFiles(e.dataTransfer.files);
         });
-        uploadArea.addEventListener('click', () => {
-            document.getElementById('fileInput').click();
+        // Click auf Upload-Area (aber nicht auf Button)
+        uploadArea.addEventListener('click', (e) => {
+            // Nur öffnen, wenn nicht auf Button oder Input geklickt wurde
+            if (e.target.id !== 'selectFilesBtn' && e.target.id !== 'fileInput' && !e.target.closest('button')) {
+                document.getElementById('fileInput').click();
+            }
         });
 
         function handleFiles(files) {
@@ -344,20 +363,26 @@
             const fileListDiv = document.getElementById('fileList');
             const selectedFilesDiv = document.getElementById('selectedFiles');
             const startBtn = document.getElementById('startProcessingBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const fileCount = document.getElementById('fileCount');
 
             if (selectedFiles.length === 0) {
                 selectedFilesDiv.style.display = 'none';
                 startBtn.disabled = true;
+                if (clearAllBtn) clearAllBtn.disabled = true;
+                if (fileCount) fileCount.textContent = '0';
                 return;
             }
 
             selectedFilesDiv.style.display = 'block';
             startBtn.disabled = false;
+            if (clearAllBtn) clearAllBtn.disabled = false;
+            if (fileCount) fileCount.textContent = selectedFiles.length;
 
             fileListDiv.innerHTML = selectedFiles.map((file, index) => `
-                <div class="file-item">
-                    <span><i class="fas fa-file-csv"></i> ${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>
-                    <button class="btn btn-sm btn-danger" onclick="removeFile(${index})">
+                <div class="file-item d-flex justify-content-between align-items-center p-2 mb-2 border rounded">
+                    <span><i class="fas fa-file-csv text-primary"></i> ${file.name} <small class="text-muted">(${(file.size / 1024).toFixed(1)} KB)</small></span>
+                    <button class="btn btn-sm btn-danger" onclick="removeFile(${index})" title="Diese Datei entfernen">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -373,6 +398,18 @@
             selectedFiles = [];
             document.getElementById('fileInput').value = '';
             updateFileList();
+        }
+
+        function clearAllFiles() {
+            if (selectedFiles.length === 0) {
+                return;
+            }
+            
+            if (confirm(`Möchten Sie wirklich alle ${selectedFiles.length} ausgewählten Dateien entfernen?`)) {
+                selectedFiles = [];
+                document.getElementById('fileInput').value = '';
+                updateFileList();
+            }
         }
 
         async function startProcessing() {

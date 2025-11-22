@@ -93,6 +93,7 @@ def setup_middleware(app: FastAPI) -> None:
 def setup_static_files(app: FastAPI) -> None:
     """Konfiguriert Static Files."""
     from fastapi.staticfiles import StaticFiles
+    from fastapi.responses import RedirectResponse
     from pathlib import Path
     import os
     
@@ -107,6 +108,13 @@ def setup_static_files(app: FastAPI) -> None:
     
     # Static Files
     app.mount("/static", StaticFiles(directory=str(frontend_path)), name="static")
+    
+    # Redirect für favicon.ico zu favicon.svg
+    @app.get("/favicon.ico")
+    async def favicon_redirect():
+        """Redirect favicon.ico zu favicon.svg"""
+        return RedirectResponse(url="/static/favicon.svg", status_code=301)
+    
     enhanced_logger.success("Static Files konfiguriert", 
                            context={'frontend_dir': str(frontend_path)})
 
@@ -165,6 +173,7 @@ def setup_routers(app: FastAPI) -> None:
     from backend.routes.ki_effectiveness_api import router as ki_effectiveness_api_router
     from backend.routes.tour_filter_api import router as tour_filter_api_router
     from backend.routes.tourplan_api import router as tourplan_api_router
+    from backend.routes.fuel_price_api import router as fuel_price_api_router
     
     # Registriere alle Router
     routers = [
@@ -210,6 +219,7 @@ def setup_routers(app: FastAPI) -> None:
         debug_health_router,
         system_rules_api_router,
         tourplan_api_router,  # Muss VOR db_management_api_router sein (gleicher Pfad)
+        fuel_price_api_router,
         db_management_api_router,
         db_schema_api_router,
         error_logger_api_router,

@@ -58,11 +58,52 @@ def get_cost_config() -> Dict[str, float]:
     }
 
 
+def get_vehicle_cost_config(vehicle_type: str = "diesel") -> Dict[str, float]:
+    """
+    Gibt Kosten-Konfiguration für spezifischen Fahrzeugtyp zurück.
+    
+    Args:
+        vehicle_type: 'diesel', 'e_auto', 'benzin'
+    
+    Returns:
+        Dict mit fuel_cost_per_km, adblue_cost_per_km (nur Diesel), etc.
+    """
+    # Standard-Werte (können später aus app_settings geladen werden)
+    configs = {
+        "diesel": {
+            "fuel_consumption_per_100km": 8.5,  # Liter pro 100km
+            "fuel_price_per_liter": 1.45,  # Euro pro Liter Diesel
+            "adblue_consumption_per_100km": 1.5,  # Liter AdBlue pro 100km
+            "adblue_price_per_liter": 0.80,  # Euro pro Liter AdBlue
+            "fuel_cost_per_km": (8.5 / 100) * 1.45,  # ~0.123 €/km
+            "adblue_cost_per_km": (1.5 / 100) * 0.80,  # ~0.012 €/km
+            "total_fuel_cost_per_km": (8.5 / 100) * 1.45 + (1.5 / 100) * 0.80  # ~0.135 €/km
+        },
+        "e_auto": {
+            "power_consumption_per_100km": 20.0,  # kWh pro 100km
+            "power_price_per_kwh": 0.30,  # Euro pro kWh (Ladestation)
+            "fuel_cost_per_km": (20.0 / 100) * 0.30,  # ~0.06 €/km
+            "adblue_cost_per_km": 0.0,  # Kein AdBlue
+            "total_fuel_cost_per_km": (20.0 / 100) * 0.30  # ~0.06 €/km
+        },
+        "benzin": {
+            "fuel_consumption_per_100km": 9.0,  # Liter pro 100km
+            "fuel_price_per_liter": 1.55,  # Euro pro Liter Benzin
+            "fuel_cost_per_km": (9.0 / 100) * 1.55,  # ~0.140 €/km
+            "adblue_cost_per_km": 0.0,  # Kein AdBlue
+            "total_fuel_cost_per_km": (9.0 / 100) * 1.55  # ~0.140 €/km
+        }
+    }
+    
+    return configs.get(vehicle_type.lower(), configs["diesel"])
+
+
 def calculate_tour_cost(
     distance_km: float,
     total_time_min: float,
     stops_count: int,
-    cost_config: Optional[Dict[str, float]] = None
+    cost_config: Optional[Dict[str, float]] = None,
+    vehicle_type: str = "diesel"
 ) -> Dict[str, float]:
     """
     Berechnet Kosten für eine einzelne Tour.
@@ -72,25 +113,49 @@ def calculate_tour_cost(
         total_time_min: Gesamtzeit in Minuten (Fahren + Service)
         stops_count: Anzahl Stops
         cost_config: Optional, sonst wird get_cost_config() verwendet
+        vehicle_type: 'diesel', 'e_auto', 'benzin' (Standard: 'diesel')
     
     Returns:
-        Dict mit tour_cost_total, cost_per_stop, cost_per_km
+        Dict mit tour_cost_total, cost_per_stop, cost_per_km, fuel_cost, adblue_cost (nur Diesel)
     """
     if cost_config is None:
         cost_config = get_cost_config()
     
+    # Fahrzeugtyp-spezifische Kosten
+    vehicle_cost_config = get_vehicle_cost_config(vehicle_type)
+    
     hours_total = total_time_min / 60.0
-    vehicle_cost_km = distance_km * cost_config["cost_per_km"]
+    
+    # Treibstoff-Kosten (Diesel + AdBlue, E-Auto, oder Benzin)
+    fuel_cost = distance_km * vehicle_cost_config["total_fuel_cost_per_km"]
+    adblue_cost = distance_km * vehicle_cost_config.get("adblue_cost_per_km", 0.0) if vehicle_type.lower() == "diesel" else 0.0
+    
+    # Fahrer-Kosten
     driver_cost = hours_total * cost_config["cost_driver_per_hour"]
+    
+    # Fahrzeug-Abschreibung/Stundenkosten
     vehicle_hour_cost = hours_total * cost_config["cost_vehicle_per_hour"]
+    vehicle_depreciation_km = distance_km * cost_config.get("cost_per_km", 0.50)  # Abschreibung pro km
     
-    tour_cost_total = vehicle_cost_km + driver_cost + vehicle_hour_cost
+    # Gesamtkosten
+    tour_cost_total = fuel_cost + driver_cost + vehicle_hour_cost + vehicle_depreciation_km
     
-    return {
+    result = {
         "tour_cost_total": round(tour_cost_total, 2),
         "cost_per_stop": round(tour_cost_total / stops_count, 2) if stops_count > 0 else 0.0,
-        "cost_per_km": round(tour_cost_total / distance_km, 2) if distance_km > 0 else 0.0
+        "cost_per_km": round(tour_cost_total / distance_km, 2) if distance_km > 0 else 0.0,
+        "fuel_cost": round(fuel_cost, 2),
+        "driver_cost": round(driver_cost, 2),
+        "vehicle_cost": round(vehicle_hour_cost + vehicle_depreciation_km, 2),
+        "vehicle_type": vehicle_type
     }
+    
+    # AdBlue-Kosten nur für Diesel
+    if vehicle_type.lower() == "diesel":
+        result["adblue_cost"] = round(adblue_cost, 2)
+        result["diesel_cost"] = round(fuel_cost - adblue_cost, 2)
+    
+    return result
 
 
 def get_monthly_stats(months: int = 12) -> List[Dict]:

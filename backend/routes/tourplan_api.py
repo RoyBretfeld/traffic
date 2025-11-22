@@ -151,10 +151,15 @@ async def list_tourplans():
 
 @router.get("/overview")
 async def get_tourplan_overview(
-    datum: str = Query(..., description="Tourplan-Datum (YYYY-MM-DD)")
+    datum: str = Query(..., description="Tourplan-Datum (YYYY-MM-DD)"),
+    include_all: bool = Query(True, description="Alle Touren einbeziehen (inkl. Ignor-Touren) für statistische Zwecke. Standard: True (alle Touren werden gezählt)")
 ):
     """
     Gibt Gesamt-KPIs für einen Tourplan zurück.
+    
+    Standardmäßig werden alle Touren gezählt (include_all=True).
+    Dies beinhaltet auch Touren, die normalerweise in der Ignore-Liste stehen,
+    da diese für statistische Zwecke (Kosten, KM, Zeit) relevant sind.
     """
     # Validiere Datum-Format
     import re
@@ -193,13 +198,15 @@ async def get_tourplan_overview(
                 WHERE datum = :datum
             """), {"datum": datum}).fetchone()
             
-            if not stats or stats[0] == 0:
-                return JSONResponse({
-                    "success": False,
-                    "error": f"Keine Touren für Datum {datum} gefunden"
-                }, status_code=404)
-            
-            tour_count, total_stops, total_km, total_time_min, tours_with_distance, tours_with_time = stats
+            # Auch bei 0 Touren Daten zurückgeben (mit 0-Werten)
+            if not stats:
+                # Fallback: Alle Werte auf 0 setzen
+                tour_count, total_stops, total_km, total_time_min, tours_with_distance, tours_with_time = 0, 0, 0.0, 0, 0, 0
+            else:
+                tour_count, total_stops, total_km, total_time_min, tours_with_distance, tours_with_time = stats
+                # Wenn tour_count 0 ist, setze alle Werte auf 0
+                if tour_count == 0:
+                    total_stops, total_km, total_time_min, tours_with_distance, tours_with_time = 0, 0.0, 0, 0, 0
             
             # Berechne Kosten (falls Konfiguration vorhanden)
             from backend.services.stats_aggregator import get_cost_config, calculate_tour_cost
@@ -207,31 +214,38 @@ async def get_tourplan_overview(
             cost_config = get_cost_config()
             total_cost = 0.0
             
-            # Berechne Kosten für jede Tour mit Distanz und Zeit
-            tour_rows = conn.execute(text(f"""
-                SELECT 
-                    COALESCE(distanz_km, 0) as distanz,
-                    COALESCE({time_column}, 0) as zeit,
-                    CASE 
-                        WHEN kunden_ids IS NOT NULL AND kunden_ids != '' 
-                        THEN (LENGTH(kunden_ids) - LENGTH(REPLACE(kunden_ids, ',', '')) + 1)
-                        ELSE 0
-                    END as stops
-                FROM touren
-                WHERE datum = :datum
-            """), {"datum": datum}).fetchall()
-            
-            for row in tour_rows:
-                dist, time_min, stops = row[0] or 0, row[1] or 0, row[2] or 0
-                if dist > 0 and time_min > 0 and stops > 0:
-                    tour_cost = calculate_tour_cost(dist, time_min, stops, cost_config)
-                    total_cost += tour_cost["tour_cost_total"]
-                elif dist > 0:
-                    # Fallback: Schätze Zeit basierend auf Distanz
-                    estimated_time = (dist / 50.0) * 60
-                    estimated_stops = max(stops, 1) if stops > 0 else 1
-                    tour_cost = calculate_tour_cost(dist, estimated_time, estimated_stops, cost_config)
-                    total_cost += tour_cost["tour_cost_total"]
+            # Berechne Kosten für jede Tour mit Distanz und Zeit (nur wenn Touren vorhanden)
+            if tour_count > 0:
+                # Prüfe ob fahrzeug_typ Spalte existiert
+                column_check = conn.execute(text("PRAGMA table_info(touren)")).fetchall()
+                has_vehicle_type = any(col[1] == 'fahrzeug_typ' for col in column_check)
+                vehicle_type_column = "fahrzeug_typ" if has_vehicle_type else "NULL"
+                
+                tour_rows = conn.execute(text(f"""
+                    SELECT 
+                        COALESCE(distanz_km, 0) as distanz,
+                        COALESCE({time_column}, 0) as zeit,
+                        CASE 
+                            WHEN kunden_ids IS NOT NULL AND kunden_ids != '' 
+                            THEN (LENGTH(kunden_ids) - LENGTH(REPLACE(kunden_ids, ',', '')) + 1)
+                            ELSE 0
+                        END as stops,
+                        COALESCE({vehicle_type_column}, 'diesel') as fahrzeug_typ
+                    FROM touren
+                    WHERE datum = :datum
+                """), {"datum": datum}).fetchall()
+                
+                for row in tour_rows:
+                    dist, time_min, stops, vehicle_type = row[0] or 0, row[1] or 0, row[2] or 0, (row[3] or 'diesel') if len(row) > 3 else 'diesel'
+                    if dist > 0 and time_min > 0 and stops > 0:
+                        tour_cost = calculate_tour_cost(dist, time_min, stops, cost_config, vehicle_type=vehicle_type)
+                        total_cost += tour_cost["tour_cost_total"]
+                    elif dist > 0:
+                        # Fallback: Schätze Zeit basierend auf Distanz
+                        estimated_time = (dist / 50.0) * 60
+                        estimated_stops = max(stops, 1) if stops > 0 else 1
+                        tour_cost = calculate_tour_cost(dist, estimated_time, estimated_stops, cost_config, vehicle_type=vehicle_type)
+                        total_cost += tour_cost["tour_cost_total"]
             
             return JSONResponse({
                 "success": True,
@@ -257,10 +271,15 @@ async def get_tourplan_overview(
 
 @router.get("/tours")
 async def get_tourplan_tours(
-    datum: str = Query(..., description="Tourplan-Datum (YYYY-MM-DD)")
+    datum: str = Query(..., description="Tourplan-Datum (YYYY-MM-DD)"),
+    include_all: bool = Query(True, description="Alle Touren einbeziehen (inkl. Ignor-Touren) für statistische Zwecke. Standard: True (alle Touren werden zurückgegeben)")
 ):
     """
     Gibt alle Touren eines Tourplans zurück.
+    
+    Standardmäßig werden alle Touren zurückgegeben (include_all=True).
+    Dies beinhaltet auch Touren, die normalerweise in der Ignore-Liste stehen,
+    da diese für statistische Zwecke (Kosten, KM, Zeit) relevant sind.
     """
     # Validiere Datum-Format
     import re
@@ -278,6 +297,11 @@ async def get_tourplan_tours(
             has_gesamtzeit_min = any(col[1] == 'gesamtzeit_min' for col in column_check)
             time_column = "gesamtzeit_min" if has_gesamtzeit_min else "dauer_min"
             
+            # Prüfe ob fahrzeug_typ Spalte existiert
+            column_check = conn.execute(text("PRAGMA table_info(touren)")).fetchall()
+            has_vehicle_type = any(col[1] == 'fahrzeug_typ' for col in column_check)
+            vehicle_type_column = "COALESCE(fahrzeug_typ, 'diesel')" if has_vehicle_type else "'diesel'"
+            
             tours = conn.execute(text(f"""
                 SELECT 
                     tour_id,
@@ -286,6 +310,7 @@ async def get_tourplan_tours(
                     distanz_km,
                     {time_column} as gesamtzeit_min,
                     fahrer,
+                    {vehicle_type_column} as fahrzeug_typ,
                     created_at
                 FROM touren
                 WHERE datum = :datum
@@ -294,7 +319,13 @@ async def get_tourplan_tours(
             
             tour_list = []
             for row in tours:
-                tour_id, kunden_ids, dauer_min, distanz_km, gesamtzeit_min, fahrer, created_at = row
+                # SQL gibt immer fahrzeug_typ zurück (entweder aus Spalte oder als 'diesel' String)
+                # Daher immer 8 Werte entpacken
+                tour_id, kunden_ids, dauer_min, distanz_km, gesamtzeit_min, fahrer, vehicle_type, created_at = row
+                
+                # Falls vehicle_type None ist (sollte nicht passieren, aber sicherheitshalber)
+                if not vehicle_type:
+                    vehicle_type = 'diesel'
                 
                 # Berechne Anzahl Stops aus kunden_ids
                 stops_count = 0
@@ -307,12 +338,12 @@ async def get_tourplan_tours(
                         # Fallback: Zähle Kommas
                         stops_count = kunden_ids.count(',') + 1 if kunden_ids else 0
                 
-                # Berechne Kosten (falls vorhanden)
+                # Berechne Kosten (falls vorhanden) - mit Fahrzeugtyp
                 cost = None
                 if distanz_km and gesamtzeit_min and stops_count > 0:
                     from backend.services.stats_aggregator import get_cost_config, calculate_tour_cost
                     cost_config = get_cost_config()
-                    cost_data = calculate_tour_cost(distanz_km, gesamtzeit_min, stops_count, cost_config)
+                    cost_data = calculate_tour_cost(distanz_km, gesamtzeit_min, stops_count, cost_config, vehicle_type=vehicle_type)
                     cost = cost_data["tour_cost_total"]
                 
                 tour_list.append({
