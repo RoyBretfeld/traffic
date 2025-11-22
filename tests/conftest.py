@@ -5,6 +5,9 @@ import sys
 from pathlib import Path
 import pytest
 
+# Globale Variable für AI-Tests
+_run_ai_tests = False
+
 
 def _ensure_project_on_path() -> None:
     """Fügt das Projektwurzelverzeichnis zum Pythonpfad hinzu."""
@@ -28,6 +31,22 @@ def _configure_environment() -> None:
 
 _ensure_project_on_path()
 _configure_environment()
+
+
+def pytest_addoption(parser):
+    """Füge --run-ai-tests Option hinzu."""
+    parser.addoption(
+        "--run-ai-tests",
+        action="store_true",
+        default=False,
+        help="Führe AI-Tests aus (benötigt OPENAI_API_KEY)"
+    )
+
+
+def pytest_configure(config):
+    """Setze globale Variable für AI-Tests."""
+    global _run_ai_tests
+    _run_ai_tests = config.getoption("--run-ai-tests", default=False)
 
 
 def pytest_sessionstart(session) -> None:

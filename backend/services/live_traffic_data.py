@@ -618,6 +618,8 @@ class LiveTrafficDataService:
         
         # Prüfe Cache
         if self._is_camera_cache_valid():
+            # Cache enthält ALLE Blitzer aus der Datenbank (nicht nur die im ersten Bereich)
+            # Filtere nach Bounds
             cameras = [
                 cam for cam in self.cached_cameras
                 if min_lat <= cam.lat <= max_lat and min_lon <= cam.lon <= max_lon
@@ -626,17 +628,27 @@ class LiveTrafficDataService:
             if camera_types:
                 cameras = [cam for cam in cameras if cam.type in camera_types]
             
+            self.logger.debug(f"[BLITZER-CACHE] {len(cameras)} Blitzer aus Cache (Bereich: [{min_lat:.4f}, {min_lon:.4f}] bis [{max_lat:.4f}, {max_lon:.4f}])")
             return cameras
         
-        # Hole neue Daten
+        # Cache abgelaufen oder nicht vorhanden - hole ALLE Blitzer aus der DB
         try:
-            cameras = self._fetch_speed_cameras(bounds)
-            self.cached_cameras = cameras
+            # WICHTIG: Hole ALLE Blitzer (nicht nur die im aktuellen Bereich)
+            # Der Cache speichert dann alle Blitzer, damit beim Zoomen/Pan alle verfügbar sind
+            all_cameras = self._fetch_all_speed_cameras()
+            self.cached_cameras = all_cameras
             self.last_camera_fetch_time = datetime.now()
+            
+            # Filtere nach Bounds
+            cameras = [
+                cam for cam in all_cameras
+                if min_lat <= cam.lat <= max_lat and min_lon <= cam.lon <= max_lon
+            ]
             
             if camera_types:
                 cameras = [cam for cam in cameras if cam.type in camera_types]
             
+            self.logger.info(f"[BLITZER] {len(cameras)} Blitzer im Bereich gefunden (von {len(all_cameras)} insgesamt in DB)")
             return cameras
         except Exception as e:
             self.logger.error(f"Fehler beim Abrufen von Blitzer-Daten: {e}")
@@ -695,6 +707,11 @@ class LiveTrafficDataService:
                     logger.info("Tabelle 'speed_cameras' erstellt. Bitte Daten manuell eintragen oder importieren.")
                     return []
                 
+                # Zähle ALLE Blitzer in der Datenbank (für Debugging)
+                total_count_result = conn.execute(text("SELECT COUNT(*) FROM speed_cameras"))
+                total_count = total_count_result.fetchone()[0]
+                logger.info(f"[BLITZER-DB] Gesamtanzahl Blitzer in DB: {total_count}")
+                
                 # Hole Blitzer im Gebiet
                 result = conn.execute(text("""
                     SELECT camera_id, lat, lon, type, direction, speed_limit, 
@@ -721,8 +738,61 @@ class LiveTrafficDataService:
                         verified=bool(row[7]),
                         last_seen=datetime.fromisoformat(row[8]) if row[8] else None
                     ))
+                
+                # Logging für Debugging
+                logger.info(f"[BLITZER-DB] Bereich: [{min_lat:.4f}, {min_lon:.4f}] bis [{max_lat:.4f}, {max_lon:.4f}]")
+                logger.info(f"[BLITZER-DB] Gefunden: {len(cameras)} Blitzer im Bereich (von {total_count} insgesamt)")
+                
+                # Warnung wenn nur wenige Blitzer gefunden werden
+                if len(cameras) < 10 and total_count < 50:
+                    logger.warning(f"[BLITZER-DB] ⚠️ Nur {len(cameras)} Blitzer im Bereich gefunden. Datenbank enthält nur {total_count} Blitzer insgesamt. Bitte mehr Daten importieren!")
+                    
         except Exception as e:
             logger.error(f"Fehler beim Abrufen von Blitzer-Daten aus DB: {e}")
+        
+        return cameras
+    
+    def _fetch_all_speed_cameras(self) -> List[SpeedCamera]:
+        """
+        Holt ALLE Blitzer aus der Datenbank (ohne Bereichs-Filterung).
+        Wird für Cache verwendet.
+        """
+        cameras = []
+        
+        try:
+            with ENGINE.connect() as conn:
+                # Prüfe ob Tabelle existiert
+                result = conn.execute(text("""
+                    SELECT name FROM sqlite_master 
+                    WHERE type='table' AND name='speed_cameras'
+                """))
+                if not result.fetchone():
+                    return []
+                
+                # Hole ALLE Blitzer (ohne Bereichs-Filterung)
+                result = conn.execute(text("""
+                    SELECT camera_id, lat, lon, type, direction, speed_limit, 
+                           description, verified, last_seen
+                    FROM speed_cameras
+                """))
+                
+                for row in result.fetchall():
+                    cameras.append(SpeedCamera(
+                        camera_id=row[0],
+                        lat=row[1],
+                        lon=row[2],
+                        type=row[3],
+                        direction=row[4],
+                        speed_limit=row[5],
+                        description=row[6],
+                        verified=bool(row[7]),
+                        last_seen=datetime.fromisoformat(row[8]) if row[8] else None
+                    ))
+                
+                logger.info(f"[BLITZER-DB] Alle Blitzer geladen: {len(cameras)} insgesamt")
+                
+        except Exception as e:
+            logger.error(f"Fehler beim Abrufen aller Blitzer-Daten aus DB: {e}")
         
         return cameras
     

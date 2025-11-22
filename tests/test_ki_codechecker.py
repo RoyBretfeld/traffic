@@ -233,12 +233,12 @@ class TestNotificationService:
 class TestAICodeChecker:
     """Tests für AI-Code-Checker (benötigt OPENAI_API_KEY)."""
     
-    @pytest.mark.skipif(
-        not pytest.config.getoption("--run-ai-tests", default=False),
-        reason="AI-Tests benötigen OPENAI_API_KEY"
-    )
-    def test_ai_code_checker_initialization(self, monkeypatch):
+    def test_ai_code_checker_initialization(self, monkeypatch, request):
         """Test: AI-Code-Checker initialisiert korrekt."""
+        # Prüfe ob --run-ai-tests Flag gesetzt ist
+        if not request.config.getoption("--run-ai-tests", default=False):
+            pytest.skip("AI-Tests benötigen --run-ai-tests Flag")
+        
         import os
         api_key = os.getenv("OPENAI_API_KEY")
         
@@ -252,12 +252,12 @@ class TestAICodeChecker:
         assert checker.model == "gpt-4o-mini"
         assert checker.client is not None
     
-    @pytest.mark.skipif(
-        not pytest.config.getoption("--run-ai-tests", default=False),
-        reason="AI-Tests benötigen OPENAI_API_KEY"
-    )
-    def test_analyze_and_improve(self, tmp_path, monkeypatch):
+    def test_analyze_and_improve(self, tmp_path, monkeypatch, request):
         """Test: Code-Analyse und Verbesserung funktioniert."""
+        # Prüfe ob --run-ai-tests Flag gesetzt ist
+        if not request.config.getoption("--run-ai-tests", default=False):
+            pytest.skip("AI-Tests benötigen --run-ai-tests Flag")
+        
         import os
         api_key = os.getenv("OPENAI_API_KEY")
         

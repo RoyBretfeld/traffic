@@ -3851,8 +3851,13 @@
             buttons.forEach(btn => {
                 if (btn.getAttribute('data-tour-key') === key) {
                     btn.classList.add('active');
-                    // Scroll zu aktiver Tour (sanft)
-                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    // Scroll zu aktiver Tour (sanft) - aber nur wenn nicht bereits sichtbar
+                    // Verwende 'center' statt 'nearest', damit die Tour besser sichtbar ist
+                    const rect = btn.getBoundingClientRect();
+                    const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+                    if (!isVisible) {
+                        btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
                 } else {
                     btn.classList.remove('active');
                 }
@@ -3868,7 +3873,12 @@
                 const firstRow = document.querySelector('.table tbody tr[data-customer-index="0"]');
                 if (firstRow) {
                     firstRow.classList.add('active-row');
-                    firstRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    // Scroll nur wenn nicht bereits sichtbar
+                    const rect = firstRow.getBoundingClientRect();
+                    const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+                    if (!isVisible) {
+                        firstRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
                 }
             }, 150);
         }
@@ -3968,6 +3978,7 @@
         let speedCameraMarkers = [];
         let showSpeedCameras = true;  // Toggle für Blitzer-Anzeige (standardmäßig an)
         let speedCamerasInitialized = false;  // Flag für Initialisierung
+        let speedCamerasFromRoute = false;  // Flag: Blitzer stammen von Route-Daten (nicht von Karten-Bereich)
         
         // Globale Variablen für Hindernisse-Marker
         let trafficIncidentMarkers = [];
@@ -4005,8 +4016,12 @@
                 });
                 tourRouteLines = [];
             }
-            // Lösche Blitzer-Marker
-            clearSpeedCameraMarkers();
+            // Lösche Blitzer-Marker nur wenn sie von einer Route stammen
+            // (nicht wenn sie für die gesamte Karte geladen wurden)
+            if (speedCamerasFromRoute) {
+                clearSpeedCameraMarkers();
+                speedCamerasFromRoute = false;
+            }
             // Lösche Hindernisse-Marker
             clearTrafficIncidentMarkers();
         }
@@ -4075,6 +4090,7 @@
                     if (data.cameras && Array.isArray(data.cameras)) {
                         // Lösche alte Marker
                         clearSpeedCameraMarkers();
+                        speedCamerasFromRoute = false;  // Blitzer stammen von Karten-Bereich, nicht von Route
                         
                         // Füge neue Marker hinzu
                         let addedCount = 0;
@@ -4383,7 +4399,30 @@
             if (bounds.length) {
                 const featureGroup = L.featureGroup([...tourMarkers, ...tourRouteLines]);
                 console.log(`[HIGHLIGHT-TOUR] 📐 FitBounds: ${tourMarkers.length} Marker, ${tourRouteLines.length} Route-Linien`);
-                map.fitBounds(featureGroup.getBounds().pad(0.2));
+                
+                // WICHTIG: Warte kurz, damit alle Route-Linien vollständig gezeichnet sind
+                setTimeout(() => {
+                    try {
+                        const bounds = featureGroup.getBounds();
+                        if (bounds.isValid()) {
+                            map.fitBounds(bounds.pad(0.2), { 
+                                animate: true,
+                                duration: 0.5,
+                                padding: [50, 50]  // Mehr Padding für bessere Sichtbarkeit
+                            });
+                            console.log(`[HIGHLIGHT-TOUR] ✅ Karte zur Route gescrollt`);
+                        } else {
+                            console.warn(`[HIGHLIGHT-TOUR] ⚠️ Ungültige Bounds, verwende Fallback`);
+                            // Fallback: Nur zu Markern scrollen
+                            if (tourMarkers.length > 0) {
+                                const markerGroup = L.featureGroup(tourMarkers);
+                                map.fitBounds(markerGroup.getBounds().pad(0.2));
+                            }
+                        }
+                    } catch (e) {
+                        console.error(`[HIGHLIGHT-TOUR] ❌ Fehler beim fitBounds:`, e);
+                    }
+                }, 100);
                 
                 // WICHTIG: Nach fitBounds nochmal prüfen ob Linien noch da sind
                 setTimeout(() => {
@@ -4396,7 +4435,7 @@
                         }
                     });
                     console.log(`[HIGHLIGHT-TOUR] 📊 Route-Linien nach fitBounds: ${stillVisible}/${tourRouteLines.length} noch sichtbar`);
-                }, 100);
+                }, 200);
             }
         }
 
@@ -4768,12 +4807,20 @@
                 if (routeData.speed_cameras && Array.isArray(routeData.speed_cameras) && routeData.speed_cameras.length > 0) {
                     console.log(`[ROUTE-VIS] ${routeData.speed_cameras.length} Blitzer entlang der Route gefunden`);
                     clearSpeedCameraMarkers();
+                    speedCamerasFromRoute = true;  // Markiere dass Blitzer von Route stammen
                     routeData.speed_cameras.forEach(camera => {
                         addSpeedCameraMarker(camera);
                     });
                     showSpeedCameraInfo(routeData.speed_camera_count || routeData.speed_cameras.length);
                 } else {
-                    clearSpeedCameraMarkers();
+                    // Route hat keine Blitzer-Daten - lade Blitzer für gesamte Karte (falls aktiviert)
+                    console.log(`[ROUTE-VIS] Route hat keine Blitzer-Daten, lade Blitzer für gesamte Karte`);
+                    speedCamerasFromRoute = false;  // Blitzer stammen von Karten-Bereich, nicht von Route
+                    if (showSpeedCameras) {
+                        loadSpeedCameras();
+                    } else {
+                        clearSpeedCameraMarkers();
+                    }
                 }
                 
                 // Zeige Hindernisse entlang der Route (falls vorhanden)

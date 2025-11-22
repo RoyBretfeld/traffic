@@ -2,6 +2,9 @@
 """
 Script zum Erstellen von Test-Blitzern in der Datenbank
 Fügt Beispiel-Blitzer in der Region Dresden ein
+
+⚠️  WICHTIG: Dieses Script ist nur für Tests gedacht!
+    Die Test-Blitzer können mit scripts/remove_test_speed_cameras.py entfernt werden.
 """
 import sys
 from pathlib import Path
@@ -202,6 +205,10 @@ def main():
     print("=" * 60)
     print("Test-Blitzer in Datenbank einfuegen")
     print("=" * 60)
+    print()
+    print("⚠️  WARNUNG: Dieses Script fügt nur Test-Daten ein!")
+    print("   Für Produktion sollten echte Blitzer-Daten verwendet werden.")
+    print("   Test-Blitzer können mit scripts/remove_test_speed_cameras.py entfernt werden.")
     print()
     
     # Prüfe aktuelle Anzahl

@@ -348,11 +348,14 @@ def setup_startup_handlers(app: FastAPI) -> None:
         startup_start_time = time.time()
         
         # Error-Pattern-Aggregator starten (Hintergrund-Job)
+        # STATUS: Aggregator sammelt nur Daten (keine KI-Eingriffe), kann aber deaktiviert werden
+        # wenn gewünscht. Aktuell aktiv, da er nur Daten sammelt und keine Code-Änderungen macht.
         try:
             from backend.services.error_pattern_aggregator import run_aggregator_loop
             # Starte Aggregator-Loop im Hintergrund (alle 5 Minuten)
+            # HINWEIS: Aggregator sammelt nur Fehler-Patterns in DB, greift nicht in Code ein
             asyncio.create_task(run_aggregator_loop(interval_minutes=5))
-            log.info("[STARTUP] ✅ Error-Pattern-Aggregator gestartet")
+            log.info("[STARTUP] ✅ Error-Pattern-Aggregator gestartet (nur Daten-Sammlung, keine KI-Eingriffe)")
         except Exception as e:
             log.warning(f"[STARTUP] ⚠️ Error-Pattern-Aggregator konnte nicht gestartet werden: {e}")
         

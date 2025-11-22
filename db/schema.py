@@ -231,6 +231,16 @@ def ensure_schema():
         import logging
         logging.getLogger(__name__).warning(f"[SCHEMA] Error-Learning-Schema fehlgeschlagen: {e}")
     
+    # Phase 4: Users-Schema (Authentifizierung & Benutzerverwaltung)
+    try:
+        from db.schema_users import ensure_users_schema
+        ensure_users_schema()
+        import logging
+        logging.getLogger(__name__).info("[SCHEMA] Benutzer-Tabellen erstellt/verifiziert")
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"[SCHEMA] Users-Schema fehlgeschlagen: {e}")
+    
     # Migration 020: Tour-Import & Vorladen
     try:
         from pathlib import Path

@@ -160,6 +160,10 @@
                     <i class="fas fa-project-diagram"></i>
                     <span>Datenfluss</span>
                 </a>
+                <a href="#" class="admin-nav-item" onclick="showUsersTab(event); return false;">
+                    <i class="fas fa-users-cog"></i>
+                    <span>Benutzerverwaltung</span>
+                </a>
             </div>
         </nav>
         
@@ -847,6 +851,142 @@
                         <div id="stats-error" class="alert alert-danger" style="display: none;"></div>
                     </div>
                 </div>
+            
+            <!-- Benutzerverwaltung Tab -->
+            <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab" style="display: none;">
+                <h3 class="mb-4"><i class="fas fa-users-cog"></i> Benutzerverwaltung</h3>
+                
+                <!-- Benutzer-Liste -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-users"></i> Benutzer</h5>
+                        <button class="btn btn-light btn-sm" onclick="showCreateUserForm()">
+                            <i class="fas fa-plus"></i> Neuer Benutzer
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="users-alert-container"></div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Benutzername</th>
+                                        <th>Rolle</th>
+                                        <th>E-Mail</th>
+                                        <th>Vollständiger Name</th>
+                                        <th>Aktiv</th>
+                                        <th>Letzter Login</th>
+                                        <th>Aktionen</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body">
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted">
+                                            <i class="fas fa-spinner fa-spin"></i> Lade Benutzer...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benutzer erstellen/bearbeiten Modal -->
+                <div class="modal fade" id="userModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="userModalTitle">
+                                    <i class="fas fa-user-plus"></i> Neuer Benutzer
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="userForm">
+                                    <input type="hidden" id="user-id" name="user_id">
+                                    
+                                    <div class="mb-3">
+                                        <label for="user-username" class="form-label">Benutzername *</label>
+                                        <input type="text" class="form-control" id="user-username" name="username" required>
+                                    </div>
+                                    
+                                    <div class="mb-3" id="password-fields">
+                                        <label for="user-password" class="form-label">Passwort *</label>
+                                        <input type="password" class="form-control" id="user-password" name="password" required>
+                                        <small class="form-text text-muted">Mindestens 8 Zeichen</small>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="user-role" class="form-label">Rolle *</label>
+                                        <select class="form-select" id="user-role" name="role" required>
+                                            <option value="normal">Normal</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="user-email" class="form-label">E-Mail</label>
+                                        <input type="email" class="form-control" id="user-email" name="email">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="user-fullname" class="form-label">Vollständiger Name</label>
+                                        <input type="text" class="form-control" id="user-fullname" name="full_name">
+                                    </div>
+                                    
+                                    <div class="mb-3" id="user-active-field" style="display: none;">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="user-active" name="active" checked>
+                                            <label class="form-check-label" for="user-active">
+                                                Aktiv
+                                            </label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                                <button type="button" class="btn btn-primary" onclick="saveUser()">
+                                    <i class="fas fa-save"></i> Speichern
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passwort ändern Modal -->
+                <div class="modal fade" id="passwordModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-key"></i> Passwort ändern
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="passwordForm">
+                                    <input type="hidden" id="password-user-id" name="user_id">
+                                    
+                                    <div class="mb-3">
+                                        <label for="new-password" class="form-label">Neues Passwort *</label>
+                                        <input type="password" class="form-control" id="new-password" name="new_password" required>
+                                        <small class="form-text text-muted">Mindestens 8 Zeichen</small>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                                <button type="button" class="btn btn-primary" onclick="savePassword()">
+                                    <i class="fas fa-save"></i> Passwort ändern
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- DB-Verwaltung Tab -->
             <div class="tab-pane fade" id="db" role="tabpanel" aria-labelledby="db-tab">
                 <h3 class="mb-4"><i class="fas fa-database"></i> Datenbank-Verwaltung</h3>
@@ -1127,10 +1267,14 @@
         
         // Health-Checks laden
         async function loadHealthChecks() {
+            console.log('[HEALTH] Starte Health-Checks...');
+            
             // App Health
             try {
                 const startTime = performance.now();
-                const response = await fetch('/health/app');
+                const response = await fetch('/health/app', { 
+                    signal: AbortSignal.timeout(5000) // 5 Sekunden Timeout
+                });
                 const latency = Math.round(performance.now() - startTime);
                 const data = await response.json();
                 
@@ -1161,8 +1305,10 @@
             // OSRM Health
             try {
                 const startTime = performance.now();
-                const response = await fetch('/health/osrm').catch(err => {
-                    console.warn('OSRM Health-Check fehlgeschlagen:', err);
+                const response = await fetch('/health/osrm', { 
+                    signal: AbortSignal.timeout(5000) // 5 Sekunden Timeout
+                }).catch(err => {
+                    console.warn('[HEALTH] OSRM Health-Check fehlgeschlagen:', err);
                     return null;
                 });
                 
@@ -1218,7 +1364,9 @@
             // DB Health
             try {
                 const startTime = performance.now();
-                const response = await fetch('/health/db');
+                const response = await fetch('/health/db', { 
+                    signal: AbortSignal.timeout(5000) // 5 Sekunden Timeout
+                });
                 const latency = Math.round(performance.now() - startTime);
                 const data = await response.json();
                 
@@ -1246,8 +1394,10 @@
             // OSRM Sample Route
             try {
                 const startTime = performance.now();
-                const response = await fetch('/health/osrm/sample-route').catch(err => {
-                    console.warn('OSRM Sample-Route-Check fehlgeschlagen:', err);
+                const response = await fetch('/health/osrm/sample-route', { 
+                    signal: AbortSignal.timeout(10000) // 10 Sekunden Timeout (kann länger dauern)
+                }).catch(err => {
+                    console.warn('[HEALTH] OSRM Sample-Route-Check fehlgeschlagen:', err);
                     return null;
                 });
                 
@@ -1297,7 +1447,9 @@
             
             // Workflow Engine Status
             try {
-                const workflowResponse = await fetch('/api/workflow/status');
+                const workflowResponse = await fetch('/api/workflow/status', { 
+                    signal: AbortSignal.timeout(5000) 
+                });
                 const workflowData = await workflowResponse.json();
                 const workflowContent = document.getElementById('health-workflow-content');
                 
@@ -1321,7 +1473,9 @@
             
             // LLM Integration Status
             try {
-                const llmResponse = await fetch('/api/llm/monitoring');
+                const llmResponse = await fetch('/api/llm/monitoring', { 
+                    signal: AbortSignal.timeout(5000) 
+                });
                 const llmData = await llmResponse.json();
                 const llmContent = document.getElementById('health-llm-content');
                 
@@ -1346,7 +1500,9 @@
             
             // Systemregeln Status
             try {
-                const rulesResponse = await fetch('/api/system/rules');
+                const rulesResponse = await fetch('/api/system/rules', { 
+                    signal: AbortSignal.timeout(5000) 
+                });
                 const rulesData = await rulesResponse.json();
                 const rulesContent = document.getElementById('health-system-rules-content');
                 
@@ -3015,6 +3171,296 @@
         // Lade DB-Liste beim Öffnen des Tabs (nur wenn alte Sektion vorhanden)
         // Diese Funktion wird nicht mehr benötigt, da wir die neue DB-Verwaltung haben
         // Die loadDatabaseList() Funktion prüft selbst, ob die Elemente existieren
+
+        // ===== BENUTZERVERWALTUNG FUNKTIONEN =====
+        
+        function showUsersTab(event) {
+            // Verstecke alle Tab-Panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.style.display = 'none';
+            });
+            
+            // Zeige Benutzerverwaltung Tab
+            const usersTab = document.getElementById('users');
+            if (usersTab) {
+                usersTab.style.display = 'block';
+                loadUsers();
+            } else {
+                console.error('[USERS] Tab mit id="users" nicht gefunden!');
+                alert('Fehler: Benutzerverwaltungs-Tab nicht gefunden. Bitte Seite neu laden.');
+                return;
+            }
+            
+            // Aktiviere Navigation-Item
+            document.querySelectorAll('.admin-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            if (event && event.target) {
+                event.target.closest('.admin-nav-item')?.classList.add('active');
+            } else {
+                // Fallback: Finde den Link manuell
+                document.querySelectorAll('.admin-nav-item').forEach(item => {
+                    if (item.textContent.includes('Benutzerverwaltung')) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        }
+
+        async function loadUsers() {
+            const tbody = document.getElementById('users-table-body');
+            if (!tbody) return;
+            
+            try {
+                const response = await fetch('/api/users');
+                if (!response.ok) {
+                    if (response.status === 403) {
+                        showUsersAlert('Sie haben keine Berechtigung für die Benutzerverwaltung.', 'danger');
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Zugriff verweigert</td></tr>';
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const users = data.users || [];
+                
+                if (users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Keine Benutzer gefunden</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td><strong>${escapeHtml(user.username)}</strong></td>
+                        <td>
+                            <span class="badge ${user.role === 'admin' ? 'bg-danger' : 'bg-secondary'}">
+                                ${escapeHtml(user.role)}
+                            </span>
+                        </td>
+                        <td>${user.email ? escapeHtml(user.email) : '-'}</td>
+                        <td>${user.full_name ? escapeHtml(user.full_name) : '-'}</td>
+                        <td>
+                            <span class="badge ${user.active ? 'bg-success' : 'bg-secondary'}">
+                                ${user.active ? 'Aktiv' : 'Inaktiv'}
+                            </span>
+                        </td>
+                        <td>${user.last_login ? new Date(user.last_login).toLocaleString('de-DE') : '-'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="editUser(${user.id})" title="Bearbeiten">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning" onclick="changeUserPassword(${user.id})" title="Passwort ändern">
+                                <i class="fas fa-key"></i>
+                            </button>
+                            ${user.active ? `
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteUserConfirm(${user.id}, '${escapeHtml(user.username)}')" title="Löschen">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Fehler beim Laden der Benutzer:', error);
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger">Fehler: ${error.message}</td></tr>`;
+            }
+        }
+
+        function showCreateUserForm() {
+            document.getElementById('userModalTitle').innerHTML = '<i class="fas fa-user-plus"></i> Neuer Benutzer';
+            document.getElementById('userForm').reset();
+            document.getElementById('user-id').value = '';
+            document.getElementById('password-fields').style.display = 'block';
+            document.getElementById('user-active-field').style.display = 'none';
+            document.getElementById('user-password').required = true;
+            
+            const modal = new bootstrap.Modal(document.getElementById('userModal'));
+            modal.show();
+        }
+
+        async function editUser(userId) {
+            try {
+                const response = await fetch('/api/users');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                const user = data.users.find(u => u.id === userId);
+                
+                if (!user) {
+                    showUsersAlert('Benutzer nicht gefunden.', 'danger');
+                    return;
+                }
+                
+                document.getElementById('userModalTitle').innerHTML = '<i class="fas fa-user-edit"></i> Benutzer bearbeiten';
+                document.getElementById('user-id').value = user.id;
+                document.getElementById('user-username').value = user.username;
+                document.getElementById('user-username').readOnly = true;
+                document.getElementById('user-role').value = user.role;
+                document.getElementById('user-email').value = user.email || '';
+                document.getElementById('user-fullname').value = user.full_name || '';
+                document.getElementById('user-active').checked = user.active;
+                document.getElementById('password-fields').style.display = 'none';
+                document.getElementById('user-active-field').style.display = 'block';
+                document.getElementById('user-password').required = false;
+                
+                const modal = new bootstrap.Modal(document.getElementById('userModal'));
+                modal.show();
+                
+            } catch (error) {
+                console.error('Fehler beim Laden des Benutzers:', error);
+                showUsersAlert('Fehler beim Laden des Benutzers.', 'danger');
+            }
+        }
+
+        async function saveUser() {
+            const form = document.getElementById('userForm');
+            const userId = document.getElementById('user-id').value;
+            const formData = new FormData(form);
+            
+            const userData = {
+                username: formData.get('username'),
+                role: formData.get('role'),
+                email: formData.get('email') || null,
+                full_name: formData.get('full_name') || null
+            };
+            
+            if (userId) {
+                // Update
+                userData.active = document.getElementById('user-active').checked;
+                
+                try {
+                    const response = await fetch(`/api/users/${userId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(userData)
+                    });
+                    
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.detail || 'Fehler beim Aktualisieren');
+                    }
+                    
+                    showUsersAlert('Benutzer erfolgreich aktualisiert.', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
+                    loadUsers();
+                } catch (error) {
+                    showUsersAlert(`Fehler: ${error.message}`, 'danger');
+                }
+            } else {
+                // Create
+                userData.password = formData.get('password');
+                
+                if (!userData.password || userData.password.length < 8) {
+                    showUsersAlert('Passwort muss mindestens 8 Zeichen lang sein.', 'danger');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/users', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(userData)
+                    });
+                    
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.detail || 'Fehler beim Erstellen');
+                    }
+                    
+                    showUsersAlert('Benutzer erfolgreich erstellt.', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
+                    loadUsers();
+                } catch (error) {
+                    showUsersAlert(`Fehler: ${error.message}`, 'danger');
+                }
+            }
+        }
+
+        function changeUserPassword(userId) {
+            document.getElementById('password-user-id').value = userId;
+            document.getElementById('passwordForm').reset();
+            
+            const modal = new bootstrap.Modal(document.getElementById('passwordModal'));
+            modal.show();
+        }
+
+        async function savePassword() {
+            const userId = document.getElementById('password-user-id').value;
+            const newPassword = document.getElementById('new-password').value;
+            
+            if (!newPassword || newPassword.length < 8) {
+                showUsersAlert('Passwort muss mindestens 8 Zeichen lang sein.', 'danger');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/users/${userId}/password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ new_password: newPassword })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Fehler beim Ändern des Passworts');
+                }
+                
+                showUsersAlert('Passwort erfolgreich geändert.', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('passwordModal')).hide();
+            } catch (error) {
+                showUsersAlert(`Fehler: ${error.message}`, 'danger');
+            }
+        }
+
+        async function deleteUserConfirm(userId, username) {
+            if (!confirm(`Möchten Sie den Benutzer "${username}" wirklich löschen?\n\nDer Benutzer wird deaktiviert und kann nicht mehr einloggen.`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/users/${userId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Fehler beim Löschen');
+                }
+                
+                showUsersAlert('Benutzer erfolgreich gelöscht.', 'success');
+                loadUsers();
+            } catch (error) {
+                showUsersAlert(`Fehler: ${error.message}`, 'danger');
+            }
+        }
+
+        function showUsersAlert(message, type) {
+            const container = document.getElementById('users-alert-container');
+            if (!container) return;
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            container.innerHTML = '';
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
     </div> <!-- Ende adminContent -->
 </body>
