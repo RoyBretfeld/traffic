@@ -3,7 +3,7 @@
 **Projekt:** FAMO TrafficApp 3.0  
 **Zweck:** Dokumentation aller kritischen Fehler und deren Lösungen als Lernbasis für zukünftige Audits
 
-**Letzte Aktualisierung:** 2025-11-22 18:30
+**Letzte Aktualisierung:** 2025-11-22 20:15
 
 ---
 
@@ -993,11 +993,208 @@ if len(coords) > 0:
 
 ---
 
+## 2025-11-22 – CI: pytest.config AttributeError (pytest 8.x Kompatibilität)
+
+**Kategorie:** Testing (CI/CD)  
+**Schweregrad:** 🟡 MITTEL  
+**Dateien:** `tests/test_ki_codechecker.py`, `tests/conftest.py`
+
+### Symptom
+
+- CI-Pipeline schlägt fehl: `AttributeError: module 'pytest' has no attribute 'config'`
+- Fehler in `tests/test_ki_codechecker.py` Zeile 23
+- Code verwendet `pytest.config.getoption("--run-ai-tests")` in `@pytest.mark.skipif`
+
+### Ursache
+
+**pytest.config ist in pytest 8.x deprecated:**
+- `pytest.config` wurde entfernt (war bereits in pytest 7.x deprecated)
+- `@pytest.mark.skipif` kann nicht direkt auf `pytest.config` zugreifen
+- Option muss über `request.config.getoption()` im Test-Body geprüft werden
+
+### Fix
+
+**1. Option-Registrierung in `tests/conftest.py`:**
+```python
+def pytest_addoption(parser):
+    """Füge --run-ai-tests Option hinzu."""
+    parser.addoption(
+        "--run-ai-tests",
+        action="store_true",
+        default=False,
+        help="Führe AI-Tests aus (benötigt OPENAI_API_KEY)"
+    )
+```
+
+**2. Test-Funktion angepasst:**
+```python
+# VORHER (falsch):
+@pytest.mark.skipif(not pytest.config.getoption("--run-ai-tests"), reason="...")
+def test_ai_code_checker_initialization(self):
+    ...
+
+# NACHHER (korrekt):
+def test_ai_code_checker_initialization(self, request):
+    if not request.config.getoption("--run-ai-tests"):
+        pytest.skip("AI-Tests benötigen --run-ai-tests Flag")
+    ...
+```
+
+### Ergebnis
+
+- ✅ CI-Pipeline läuft wieder durch
+- ✅ AI-Tests können optional mit `--run-ai-tests` ausgeführt werden
+- ✅ Kompatibel mit pytest 8.x
+
+### Was die KI künftig tun soll
+
+1. **pytest-Version prüfen:**
+   - Bei pytest 8.x: `pytest.config` nicht verwenden
+   - Stattdessen: `request.config` in Test-Funktionen
+
+2. **Option-Prüfung:**
+   - Options in `conftest.py` mit `pytest_addoption` registrieren
+   - In Tests: `request.config.getoption()` verwenden
+   - Oder: `pytest.skip()` im Test-Body statt `@pytest.mark.skipif`
+
+3. **Deprecation-Warnings beachten:**
+   - pytest gibt Warnungen für deprecated Features
+   - Diese sollten ernst genommen werden
+
+---
+
+## 2025-11-22 – Fehlende Dependencies: bcrypt und email-validator
+
+**Kategorie:** Infrastruktur (Dependencies)  
+**Schweregrad:** 🟡 MITTEL  
+**Dateien:** `requirements.txt`, `backend/services/user_service.py`, `backend/routes/auth_api.py`
+
+### Symptom
+
+- Server startet nicht: `ModuleNotFoundError: No module named 'bcrypt'`
+- Nach bcrypt-Installation: `ModuleNotFoundError: No module named 'email_validator'`
+- Fehler beim Import von `backend.routes.auth_api`
+
+### Ursache
+
+**Dependencies fehlten in requirements.txt:**
+- `bcrypt>=4.1.0` wurde verwendet, aber nicht in `requirements.txt` dokumentiert
+- `email-validator>=2.0.0` wird von Pydantic `EmailStr` benötigt, aber nicht installiert
+- Neue Dependencies wurden nicht zu `requirements.txt` hinzugefügt
+
+### Fix
+
+**requirements.txt aktualisiert:**
+```txt
+bcrypt>=4.1.0
+email-validator>=2.0.0
+```
+
+**Installation:**
+```bash
+pip install bcrypt>=4.1.0 email-validator>=2.0.0
+```
+
+### Ergebnis
+
+- ✅ Server startet wieder
+- ✅ Benutzerverwaltung funktioniert
+- ✅ Dependencies dokumentiert
+
+### Was die KI künftig tun soll
+
+1. **Immer requirements.txt aktualisieren:**
+   - Bei neuen Imports: Prüfen ob Dependency in `requirements.txt`
+   - Wenn nicht: Sofort hinzufügen
+
+2. **Import-Fehler prüfen:**
+   - Wenn `ModuleNotFoundError`: Dependency zu `requirements.txt` hinzufügen
+   - Nicht nur installieren, sondern auch dokumentieren
+
+3. **Pydantic-Erweiterungen:**
+   - `EmailStr` benötigt `email-validator`
+   - `pydantic[email]` installieren oder `email-validator` separat
+
+---
+
+## 2025-11-22 – Benutzerverwaltung: Tab fehlte in admin.html
+
+**Kategorie:** Frontend (Admin-Interface)  
+**Schweregrad:** 🟡 MITTEL  
+**Dateien:** `frontend/admin.html`
+
+### Symptom
+
+- Benutzerverwaltung lässt sich nicht aufrufen
+- Klick auf "Benutzerverwaltung" in Navigation tut nichts
+- JavaScript-Fehler: `getElementById('users')` gibt `null` zurück
+- Console zeigt: `Tab mit id="users" nicht gefunden`
+
+### Ursache
+
+**Tab wurde nicht korrekt eingefügt:**
+- JavaScript-Funktion `showUsersTab()` wurde erstellt
+- Navigation-Link wurde hinzugefügt
+- Aber: Tab-Pane mit `id="users"` fehlte komplett im HTML
+- Zusätzlich: `event.target` wurde ohne Parameter verwendet
+
+### Fix
+
+**1. Tab-Pane hinzugefügt:**
+```html
+<!-- Benutzerverwaltung Tab -->
+<div class="tab-pane fade" id="users" role="tabpanel" ...>
+    <!-- Benutzer-Liste, Modals, etc. -->
+</div>
+```
+
+**2. JavaScript-Funktion korrigiert:**
+```javascript
+// VORHER (falsch):
+function showUsersTab() {
+    event.target.closest('.admin-nav-item')?.classList.add('active');
+}
+
+// NACHHER (korrekt):
+function showUsersTab(event) {
+    if (event && event.target) {
+        event.target.closest('.admin-nav-item')?.classList.add('active');
+    }
+}
+```
+
+**3. Navigation-Link korrigiert:**
+```html
+<a href="#" onclick="showUsersTab(event); return false;">
+```
+
+### Ergebnis
+
+- ✅ Benutzerverwaltung funktioniert
+- ✅ Tab wird korrekt angezeigt
+- ✅ Navigation funktioniert
+
+### Was die KI künftig tun soll
+
+1. **Immer vollständig implementieren:**
+   - Wenn JavaScript-Funktion erstellt wird: Prüfen ob HTML-Elemente existieren
+   - Wenn Navigation-Link erstellt wird: Prüfen ob Ziel-Tab existiert
+
+2. **Event-Parameter:**
+   - `onclick="function()"` → `onclick="function(event)"`
+   - Event immer als Parameter übergeben
+
+3. **Defensive Programmierung:**
+   - `getElementById()` prüfen: `if (!element) { console.error(...); return; }`
+   - Fehlermeldungen statt stillem Fehlschlagen
+
+---
+
 ## Statistiken
 
-**Gesamt-Einträge:** 18  
+**Gesamt-Einträge:** 21  
 **Kritische Fehler:** 12 (alle behoben)  
-**Medium Fehler:** 4  
+**Medium Fehler:** 7  
 **Low Fehler:** 0  
 **Enhancements:** 2 (KI-Integration, Tour-Filter-UI)
 
@@ -3704,6 +3901,6 @@ async def admin_tankpreise_page(request: Request):
 ---
 
 **Ende des LESSONS_LOG**  
-**Letzte Aktualisierung:** 2025-11-22 18:30  
+**Letzte Aktualisierung:** 2025-11-22 20:15  
 **Statistik:** 34 Einträge (22 kritische Fehler, 10 mittlere Fehler, 2 Enhancements)
 
