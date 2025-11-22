@@ -4,7 +4,7 @@ DB-Verwaltungs-API für den Admin-Bereich
 Ermöglicht Batch-Geocoding und DB-Statistiken
 """
 
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
 from pathlib import Path
 from typing import List, Dict, Any
@@ -17,6 +17,7 @@ from sqlalchemy import text
 # Geocode wird jetzt asynchron verwendet (siehe batch_geocode_tourplan)
 from repositories.geo_repo import upsert as geo_upsert
 from backend.utils.safe_print import safe_print
+from backend.routes.auth_api import require_admin
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -31,7 +32,7 @@ class GeocodeFileRequest(BaseModel):
 
 
 @router.post("/api/tourplan/batch-geocode")
-async def batch_geocode_tourplan(file: UploadFile = File(...)):
+async def batch_geocode_tourplan(file: UploadFile = File(...), session: dict = Depends(require_admin)):
     """
     Lädt einen Tourplan hoch, geocodiert alle Adressen und speichert sie in die DB.
     Trackt Cache-Hit-Rate (wie viele waren bereits im Cache vs. neu geocodiert).
