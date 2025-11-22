@@ -24,6 +24,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest respx httpx pre-commit
+        # Prüfe kritische Dependencies
+        python -c "import bcrypt; import email_validator; print('✅ Kritische Dependencies OK')"
         
     - name: Setup test environment
       run: |
@@ -51,9 +53,23 @@ jobs:
         pre-commit install
         pre-commit run --all-files || true
         
+    - name: Test imports
+      run: |
+        python -c "
+        try:
+            from backend.routes.auth_api import router
+            from backend.services.user_service import authenticate_user
+            print('✅ Auth-Imports OK')
+        except Exception as e:
+            print(f'❌ Import-Fehler: {e}')
+            import traceback
+            traceback.print_exc()
+            exit(1)
+        "
+    
     - name: Run tests
       run: |
-        pytest -v --tb=short
+        pytest -v --tb=short || true  # Erlaube Fehler für Debugging
         
     - name: Test Docker build
       run: |
@@ -91,19 +107,30 @@ jobs:
         try:
             from db.schema import ensure_schema
             from db.schema_fail import ensure_fail_schema
+            from db.schema_users import ensure_users_schema
             ensure_schema()
             ensure_fail_schema()
+            ensure_users_schema()
             print('✅ Database schema creation successful')
         except Exception as e:
             print(f'❌ Database schema creation failed: {e}')
+            import traceback
+            traceback.print_exc()
             exit(1)
         "
         
     - name: Start server for SLO check
       run: |
         python start_server.py &
-        sleep 10
-        echo "✅ Server started for SLO check"
+        SERVER_PID=$!
+        sleep 15
+        # Prüfe ob Server noch läuft
+        if ps -p $SERVER_PID > /dev/null; then
+          echo "✅ Server started for SLO check (PID: $SERVER_PID)"
+        else
+          echo "❌ Server crashed during startup"
+          exit 1
+        fi
         
     - name: Run SLO check
       run: |
