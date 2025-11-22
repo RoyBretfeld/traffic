@@ -3610,6 +3610,170 @@
             div.textContent = text;
             return div.innerHTML;
         }
+        
+        // AR-05: Geocoding-Fehler Tab Funktionen
+        function showGeocodeFailuresTab(event) {
+            if (event) event.preventDefault();
+            // Verstecke alle Tabs
+            document.querySelectorAll('.tab-pane').forEach(tab => {
+                tab.style.display = 'none';
+                tab.classList.remove('show', 'active');
+            });
+            // Entferne active von allen Nav-Items
+            document.querySelectorAll('.admin-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            // Zeige Geocoding-Fehler Tab
+            const failuresTab = document.getElementById('geocode-failures');
+            if (failuresTab) {
+                failuresTab.style.display = 'block';
+                failuresTab.classList.add('show', 'active');
+            }
+            // Setze active auf Nav-Item
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+            // Lade Fehler-Liste
+            loadGeocodeFailures();
+        }
+        
+        async function loadGeocodeFailures() {
+            const loadingEl = document.getElementById('geocode-failures-loading');
+            const contentEl = document.getElementById('geocode-failures-content');
+            const errorEl = document.getElementById('geocode-failures-error');
+            const tableBody = document.getElementById('geocode-failures-table-body');
+            
+            if (!loadingEl || !contentEl || !errorEl || !tableBody) {
+                console.error('[GEOCODE-FAILURES] Tab-Elemente nicht gefunden');
+                return;
+            }
+            
+            const reason = document.getElementById('geocode-filter-reason')?.value || '';
+            const search = document.getElementById('geocode-filter-search')?.value || '';
+            
+            loadingEl.style.display = 'block';
+            contentEl.style.display = 'none';
+            errorEl.style.display = 'none';
+            
+            try {
+                let url = '/api/geocode/fail-cache?limit=200&active_only=false';
+                if (reason) url += `&reason=${encodeURIComponent(reason)}`;
+                if (search) url += `&q=${encodeURIComponent(search)}`;
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                // Tabelle befüllen
+                tableBody.innerHTML = '';
+                
+                if (data.items && data.items.length > 0) {
+                    data.items.forEach(item => {
+                        const row = document.createElement('tr');
+                        
+                        // TTL-Badge
+                        let ttlBadge = '';
+                        if (item.ttl_min !== null && item.ttl_min > 0) {
+                            const hours = Math.floor(item.ttl_min / 60);
+                            const mins = item.ttl_min % 60;
+                            ttlBadge = `<span class="badge bg-warning">${hours}h ${mins}m</span>`;
+                        } else if (item.ttl_min === 0) {
+                            ttlBadge = '<span class="badge bg-success">Bereit</span>';
+                        } else {
+                            ttlBadge = '<span class="badge bg-secondary">Unbekannt</span>';
+                        }
+                        
+                        const addressEscaped = escapeHtml(item.address || '-');
+                        row.innerHTML = `
+                            <td>${addressEscaped}</td>
+                            <td><span class="badge bg-danger">${escapeHtml(item.reason || 'Unbekannt')}</span></td>
+                            <td>-</td>
+                            <td>${ttlBadge} ${item.until ? '<br><small class="text-muted">' + escapeHtml(item.until) + '</small>' : ''}</td>
+                            <td><small class="text-muted">${escapeHtml(item.updated_at || '-')}</small></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="retryGeocode('${addressEscaped.replace(/'/g, "\\'")}')">
+                                    <i class="fas fa-redo"></i> Erneut versuchen
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteGeocodeFailure('${addressEscaped.replace(/'/g, "\\'")}')">
+                                    <i class="fas fa-trash"></i> Löschen
+                                </button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Keine Fehler gefunden</td></tr>';
+                }
+                
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+            } catch (e) {
+                loadingEl.style.display = 'none';
+                errorEl.textContent = `Fehler beim Laden: ${e.message}`;
+                errorEl.style.display = 'block';
+            }
+        }
+        
+        async function retryGeocode(address) {
+            if (!confirm(`Möchten Sie die Geocodierung für "${address}" erneut versuchen?`)) {
+                return;
+            }
+            
+            try {
+                // TODO: API-Endpoint für Retry erstellen
+                alert('Retry-Funktion wird noch implementiert');
+                loadGeocodeFailures();
+            } catch (error) {
+                alert(`Fehler: ${error.message}`);
+            }
+        }
+        
+        async function deleteGeocodeFailure(address) {
+            if (!confirm(`Möchten Sie den Fehler-Eintrag für "${address}" wirklich löschen?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/geocode/fail-cache/clear`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address: address })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                alert('Fehler-Eintrag gelöscht');
+                loadGeocodeFailures();
+            } catch (error) {
+                alert(`Fehler beim Löschen: ${error.message}`);
+            }
+        }
+        
+        async function clearAllGeocodeFailures() {
+            if (!confirm('Möchten Sie ALLE Geocoding-Fehler-Einträge wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden!')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/geocode/fail-cache/clear-all', {
+                    method: 'POST'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                alert('Alle Fehler-Einträge gelöscht');
+                loadGeocodeFailures();
+            } catch (error) {
+                alert(`Fehler beim Löschen: ${error.message}`);
+            }
+        }
     </script>
     </div> <!-- Ende adminContent -->
 </body>
