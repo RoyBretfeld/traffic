@@ -246,7 +246,7 @@ async def batch_geocode_tourplan(file: UploadFile = File(...), session: dict = D
 
 
 @router.get("/api/tourplan/list-legacy")
-async def list_tourplans_legacy():
+async def list_tourplans_legacy(session: dict = Depends(require_admin)):
     """
     LEGACY: Gibt eine Liste aller verfügbaren Tourenpläne zurück (nur CSV-Dateien).
     DEPRECATED: Verwenden Sie /api/tourplan/list stattdessen (kombiniert DB + Dateien).
@@ -294,7 +294,7 @@ async def list_tourplans_legacy():
 
 
 @router.post("/api/tourplan/geocode-file")
-async def geocode_single_file(request: GeocodeFileRequest):
+async def geocode_single_file(request: GeocodeFileRequest, session: dict = Depends(require_admin)):
     """
     Geocodiert einen einzelnen Tourplan (aus dem Tourplaene-Verzeichnis).
     """
@@ -360,7 +360,7 @@ async def geocode_single_file(request: GeocodeFileRequest):
 
 
 @router.get("/api/db/info")
-async def get_db_info():
+async def get_db_info(session: dict = Depends(require_admin)):
     """
     Gibt DB-Info zurück (Pfad, Größe, Anzahl Tabellen, Schema-Version).
     """
@@ -452,7 +452,7 @@ async def get_db_info():
 
 
 @router.get("/api/db/tables")
-async def get_db_tables():
+async def get_db_tables(session: dict = Depends(require_admin)):
     """
     Gibt eine Liste aller Tabellen mit Beschreibungen und Row-Counts zurück.
     """
@@ -535,7 +535,7 @@ async def get_db_tables():
 
 
 @router.get("/api/db/table/{table_name}")
-async def get_table_details(table_name: str):
+async def get_table_details(table_name: str, session: dict = Depends(require_admin)):
     """
     Gibt Details zu einer Tabelle zurück (Spalten, Indizes, Vorschau).
     """
@@ -606,7 +606,7 @@ async def get_table_details(table_name: str):
 
 
 @router.get("/api/db/stats")
-async def get_db_stats():
+async def get_db_stats(session: dict = Depends(require_admin)):
     """
     Gibt DB-Statistiken zurück (Geocodes, Touren, Events, Embeddings).
     """

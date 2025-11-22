@@ -1,13 +1,14 @@
 """API für Test-Dashboard mit Modularitäts-Übersicht."""
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends
 from fastapi.responses import JSONResponse
 import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, List, Any
+from backend.routes.auth_api import require_admin
 
-router = APIRouter(prefix="/api/tests", tags=["tests"])
+router = APIRouter(prefix="/api/tests", tags=["tests"], dependencies=[Depends(require_admin)])
 
 
 def run_pytest_collect_only() -> List[Dict[str, Any]]:

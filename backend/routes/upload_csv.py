@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query, HTTPException, UploadFile, File
+from fastapi import APIRouter, Query, HTTPException, UploadFile, File, Depends
 from fastapi.responses import JSONResponse
 from pathlib import Path
 import os
@@ -7,6 +7,7 @@ import time
 from ingest.guards import assert_no_mojibake, trace_text
 from common.text_cleaner import repair_cp_mojibake
 from backend.utils.enhanced_logging import get_enhanced_logger
+from backend.routes.auth_api import require_admin
 
 # Enhanced Logger initialisieren
 enhanced_logger = get_enhanced_logger(__name__)
@@ -160,7 +161,7 @@ async def list_tourplaene():
         raise HTTPException(500, detail=f"Fehler beim Auflisten der Dateien: {str(e)}")
 
 @router.post("/api/process-csv-direct")
-async def process_csv_direct(filename: str):
+async def process_csv_direct(filename: str, session: dict = Depends(require_admin)):
     """
     Verarbeitet eine CSV-Datei direkt aus dem Tourplaene-Verzeichnis.
     
@@ -201,7 +202,7 @@ async def process_csv_direct(filename: str):
         raise HTTPException(500, detail=f"Fehler bei der Verarbeitung: {str(e)}")
 
 @router.post("/api/upload/csv")
-async def upload_csv(file: UploadFile = File(...)):
+async def upload_csv(file: UploadFile = File(...), session: dict = Depends(require_admin)):
     """
     Upload einer CSV-Datei (FALLBACK für externe Dateien).
     

@@ -2,7 +2,7 @@
 API-Endpoint für Systemregeln (Routen-Aufsplittung).
 Refactored: Nutzt Service-Layer für saubere Trennung.
 """
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Depends
 from fastapi.responses import JSONResponse
 from backend.models.system_rules import SystemRulesUpdate
 from backend.services.system_rules_service import (
@@ -13,10 +13,11 @@ from backend.services.system_rules_service import (
 import logging
 from sqlalchemy import text
 from db.core import ENGINE
+from backend.routes.auth_api import require_admin
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_admin)])
 
 
 def log_audit_entry(

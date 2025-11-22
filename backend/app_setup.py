@@ -4,7 +4,7 @@ Teilt die create_app Funktion in logische Module auf.
 """
 from pathlib import Path
 from typing import Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 import logging
 import os
 from backend.utils.enhanced_logging import get_enhanced_logger
@@ -216,7 +216,6 @@ def setup_routers(app: FastAPI) -> None:
         audit_status_router,
         health_check_router,
         summary_api_router,
-        test_dashboard_router,
         address_recognition_router,
         endpoint_flow_router,
         ai_test_router,
@@ -227,7 +226,6 @@ def setup_routers(app: FastAPI) -> None:
         stats_api_router,
         live_traffic_api_router,
         ki_improvements_api_router,
-        code_checker_api_router,
         code_improvement_job_api_router,
         cost_tracker_api_router,
         osrm_metrics_api_router,
@@ -250,15 +248,36 @@ def setup_routers(app: FastAPI) -> None:
     for router in routers:
         app.include_router(router)
     
-    # Optionale Debug-Routen
+    # Optionale Debug-Routen (SC-09: Nur mit Flag + Admin)
     ENABLE_DEBUG_ROUTES = os.getenv("ENABLE_DEBUG_ROUTES", "0") == "1"
     if ENABLE_DEBUG_ROUTES:
         try:
             from backend.debug.routes import router as debug_routes
-            app.include_router(debug_routes, prefix="/_debug", tags=["debug"])
-            logger.info("Debug-Router aktiviert")
+            from backend.routes.auth_api import require_admin
+            app.include_router(
+                debug_routes,
+                prefix="/_debug",
+                tags=["debug"],
+                dependencies=[Depends(require_admin)]
+            )
+            logger.info("Debug-Router aktiviert (nur mit Admin-Auth)")
         except Exception as e:
             logger.warning("Debug-Router nicht verfügbar: %s", e)
+    
+    # Test-Dashboard und Code-Checker nur mit Flag + Admin (SC-09)
+    if ENABLE_DEBUG_ROUTES:
+        from backend.routes.auth_api import require_admin
+        app.include_router(
+            test_dashboard_router,
+            dependencies=[Depends(require_admin)]
+        )
+        app.include_router(
+            code_checker_api_router,
+            dependencies=[Depends(require_admin)]
+        )
+        logger.info("Test-Dashboard und Code-Checker aktiviert (nur mit Admin-Auth)")
+    else:
+        logger.info("Test-Dashboard und Code-Checker deaktiviert (ENABLE_DEBUG_ROUTES=0)")
 
 
 def setup_health_routes(app: FastAPI) -> None:

@@ -1,15 +1,16 @@
 """
 API-Endpoints für KI-CodeChecker.
 """
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from fastapi.responses import JSONResponse
 from pathlib import Path
 from typing import List, Optional
 from backend.services.ai_code_checker import get_ai_code_checker
 from backend.services.safety_manager import SafetyManager
 from backend.services.code_analyzer import analyze_code_file
+from backend.routes.auth_api import require_admin
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_admin)])
 
 @router.post("/api/code-checker/analyze")
 async def analyze_code(

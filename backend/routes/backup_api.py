@@ -2,16 +2,17 @@
 API-Endpunkte für Datenbank-Backup
 """
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from fastapi.responses import JSONResponse
 from pathlib import Path
 from datetime import datetime
 import sys
+from backend.routes.auth_api import require_admin
 
 # Projekt-Root finden
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_admin)])
 
 
 @router.post("/api/backup/create")
