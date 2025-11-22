@@ -79,10 +79,16 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             response = await call_next(request)
             
             # Wenn Login fehlgeschlagen: Versuch aufzeichnen
+            # WICHTIG: Nur bei 401 (Unauthorized) - nicht bei erfolgreichem Login!
             if response.status_code == 401:
                 record_attempt(ip)
                 # Füge Rate-Limit-Header hinzu
                 response.headers["X-RateLimit-Remaining"] = str(max(0, remaining - 1))
+                response.headers["X-RateLimit-Limit"] = str(LOGIN_RATE_LIMIT["max_attempts"])
+                response.headers["X-RateLimit-Reset"] = str(LOGIN_RATE_LIMIT["window_minutes"] * 60)
+            else:
+                # Bei erfolgreichem Login: Rate-Limit-Header für Info
+                response.headers["X-RateLimit-Remaining"] = str(remaining)
                 response.headers["X-RateLimit-Limit"] = str(LOGIN_RATE_LIMIT["max_attempts"])
             
             return response
