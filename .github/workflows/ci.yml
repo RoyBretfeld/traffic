@@ -95,14 +95,18 @@ jobs:
         
     - name: Test PathPolicy initialization
       run: |
-        python -c "
+        python3 -c "
+        import sys
+        sys.path.insert(0, '.')
         try:
             from fs.safefs import init_policy
             init_policy('./Tourplaene', './data/staging', './data/output', './routen')
             print('✅ PathPolicy initialization successful')
         except Exception as e:
             print(f'❌ PathPolicy initialization failed: {e}')
-            exit(1)
+            import traceback
+            traceback.print_exc()
+            sys.exit(1)
         "
         
     - name: Test database schema
@@ -147,5 +151,5 @@ jobs:
         
     - name: Stop server
       run: |
-        pkill -f "python start_server.py" || true
+        pkill -f "python3 start_server.py" || true
         echo "✅ Server stopped"
