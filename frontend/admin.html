@@ -3723,11 +3723,27 @@
             }
             
             try {
-                // TODO: API-Endpoint für Retry erstellen
-                alert('Retry-Funktion wird noch implementiert');
-                loadGeocodeFailures();
+                const response = await fetch('/api/geocode/retry', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address: address, force: false })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error?.message || `HTTP ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`Geocoding erfolgreich!\n\nAdresse: ${result.address}\nKoordinaten: ${result.result.lat}, ${result.result.lon}`);
+                    loadGeocodeFailures();
+                } else {
+                    throw new Error(result.error?.message || 'Geocoding fehlgeschlagen');
+                }
             } catch (error) {
-                alert(`Fehler: ${error.message}`);
+                alert(`Fehler beim Retry: ${error.message}`);
             }
         }
         

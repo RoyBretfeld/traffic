@@ -104,15 +104,13 @@ async def export_csv(period: str = "monthly", count: int = 12):
             filename = f"stats_monthly_{count}months.csv"
             headers = ["month", "tours", "stops", "km"]
         
-        # Erstelle CSV
-        output = StringIO()
-        writer = csv.DictWriter(output, fieldnames=headers)
-        writer.writeheader()
-        writer.writerows(data)
+        # HT-05: Erstelle CSV mit CSV-Injection-Schutz
+        from backend.utils.csv_export import export_to_csv_file
+        csv_bytes = export_to_csv_file(data, fieldnames=headers)
         
         return Response(
-            content=output.getvalue(),
-            media_type="text/csv",
+            content=csv_bytes,
+            media_type="text/csv; charset=utf-8",
             headers={"Content-Disposition": f"attachment; filename={filename}"}
         )
     except Exception as e:
