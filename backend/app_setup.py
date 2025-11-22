@@ -80,13 +80,29 @@ def setup_middleware(app: FastAPI) -> None:
     app.add_middleware(RequestIdMiddleware)
     app.add_middleware(TraceIDMiddleware)
     
-    # CORS Middleware
+    # Rate-Limiting für Login (SC-04)
+    from backend.middlewares.rate_limit import RateLimitMiddleware
+    app.add_middleware(RateLimitMiddleware)
+    
+    # CORS Middleware (SC-06: Kein "*" mit Credentials in Prod)
+    # In Development: Erlaube alle Origins für lokale Entwicklung
+    # In Production: Nur erlaubte Domains
+    is_production = os.getenv("APP_ENV", "development") == "production"
+    allowed_origins = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if is_production else ["*"]
+    
+    # Entferne leere Strings aus Liste
+    allowed_origins = [origin.strip() for origin in allowed_origins if origin.strip()]
+    
+    # Fallback: Wenn keine Origins gesetzt, aber Production: Nur localhost
+    if is_production and not allowed_origins:
+        allowed_origins = ["http://localhost:8111", "https://localhost:8111"]
+    
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=allowed_origins if allowed_origins else ["*"],  # Development: "*", Production: Whitelist
         allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type", "X-Requested-With"],
     )
 
 

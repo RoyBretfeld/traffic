@@ -150,15 +150,15 @@ async def login(login_req: LoginRequest, request: Request):
         }
     })
     
-    # Setze Cookie (HttpOnly, Secure in Produktion)
+    # Setze Cookie (HttpOnly, Secure in Produktion, SameSite=Strict für Admin-UI)
     is_production = os.getenv("APP_ENV", "development") == "production"
     response.set_cookie(
         key="admin_session",
         value=session_id,
         max_age=SESSION_DURATION_HOURS * 3600,
         httponly=True,
-        samesite="lax",
-        secure=is_production  # HTTPS in Produktion
+        samesite="strict",  # SC-03: Strict für Admin-UI (keine Cross-Site-Requests)
+        secure=is_production  # SC-03: HTTPS in Produktion
     )
     
     return response
