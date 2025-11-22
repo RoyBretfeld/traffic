@@ -78,6 +78,25 @@
         .admin-nav-item i {
             font-size: 1.1em;
         }
+        .kpi-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+        }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .kpi-card h4 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .tour-table {
+            font-size: 0.9rem;
+        }
+        .tour-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -148,7 +167,7 @@
                     <i class="fas fa-fill-drip"></i>
                     <span>Geo-Cache Vorverarbeitung</span>
                 </a>
-                <a href="/admin/tourplan-uebersicht.html" class="admin-nav-item">
+                <a href="#" class="admin-nav-item" onclick="showTourplanTab(event); return false;">
                     <i class="fas fa-list-alt"></i>
                     <span>Tourplan-Übersicht</span>
                 </a>
@@ -988,6 +1007,132 @@
             </div>
 
             <!-- DB-Verwaltung Tab -->
+            <!-- Tourplan-Übersicht Tab (AR-09: Konsolidiert aus tourplan-uebersicht.html) -->
+            <div class="tab-pane fade" id="tourplan" role="tabpanel" aria-labelledby="tourplan-tab" style="display: none;">
+                <h3 class="mb-4"><i class="fas fa-list-alt"></i> Tourplan-Übersicht</h3>
+                
+                <!-- Tourplan-Auswahl -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-calendar-alt"></i> Tourplan auswählen</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="tourplan-select" class="form-label">Tourplan auswählen:</label>
+                                <select id="tourplan-select" class="form-select" onchange="loadTourplanOverview()">
+                                    <option value="">-- Bitte Tourplan auswählen --</option>
+                                </select>
+                                <small class="text-muted" id="tourplan-filename"></small>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end gap-2">
+                                <button class="btn btn-primary" onclick="loadTourplanList()">
+                                    <i class="fas fa-sync"></i> Liste aktualisieren
+                                </button>
+                                <button class="btn btn-success" onclick="document.getElementById('file-upload').click()">
+                                    <i class="fas fa-upload"></i> Tourplan hochladen
+                                </button>
+                                <input type="file" id="file-upload" accept=".csv" style="display: none;" onchange="uploadTourplan(event)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gesamt-KPIs -->
+                <div id="kpi-section" style="display: none;">
+                    <div class="row mb-4">
+                        <div class="col-md-2 mb-3">
+                            <div class="card text-center border-primary kpi-card">
+                                <div class="card-body">
+                                    <h4 class="text-primary mb-1" id="kpi-tours">-</h4>
+                                    <small class="text-muted">Touren</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card text-center border-success kpi-card">
+                                <div class="card-body">
+                                    <h4 class="text-success mb-1" id="kpi-stops">-</h4>
+                                    <small class="text-muted">Stops</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card text-center border-info kpi-card">
+                                <div class="card-body">
+                                    <h4 class="text-info mb-1" id="kpi-km">-</h4>
+                                    <small class="text-muted">Kilometer</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card text-center border-warning kpi-card">
+                                <div class="card-body">
+                                    <h4 class="text-warning mb-1" id="kpi-time">-</h4>
+                                    <small class="text-muted">Zeit (Min)</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card text-center border-danger kpi-card">
+                                <div class="card-body">
+                                    <h4 class="text-danger mb-1" id="kpi-cost">-</h4>
+                                    <small class="text-muted">Kosten</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card text-center border-secondary kpi-card">
+                                <div class="card-body">
+                                    <h4 class="text-secondary mb-1" id="kpi-avg-stops">-</h4>
+                                    <small class="text-muted">Ø Stops/Tour</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Touren-Liste -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-list"></i> Touren-Liste</h5>
+                            <button class="btn btn-sm btn-primary" onclick="loadTourplanTours()">
+                                <i class="fas fa-sync"></i> Aktualisieren
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="tours-loading" class="text-center py-4">
+                                <i class="fas fa-spinner fa-spin"></i> Lade Touren...
+                            </div>
+                            <div id="tours-content" style="display: none;">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover tour-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tour-ID</th>
+                                                <th>Stops</th>
+                                                <th>Distanz (km)</th>
+                                                <th>Zeit (Min)</th>
+                                                <th>Kosten (€)</th>
+                                                <th>Fahrer</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tours-table-body">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="tours-error" class="alert alert-danger" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Keine Daten -->
+                <div id="no-data" class="alert alert-info" style="display: none;">
+                    <i class="fas fa-info-circle"></i> Bitte wählen Sie einen Tourplan aus.
+                </div>
+            </div>
+            
             <div class="tab-pane fade" id="db" role="tabpanel" aria-labelledby="db-tab">
                 <h3 class="mb-4"><i class="fas fa-database"></i> Datenbank-Verwaltung</h3>
                 

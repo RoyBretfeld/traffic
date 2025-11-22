@@ -238,15 +238,15 @@ def setup_routers(app: FastAPI) -> None:
         system_rules_api_router,
         tourplan_api_router,  # Muss VOR db_management_api_router sein (gleicher Pfad)
         fuel_price_api_router,
-        db_management_api_router,
-        db_schema_api_router,
+        # db_management_api_router,  # AR-02: Jetzt in admin_router gebündelt
+        # db_schema_api_router,  # AR-02: Jetzt in admin_router gebündelt
         error_logger_api_router,
         error_learning_api_router,
         ki_learning_api_router,
         ki_activity_api_router,
         ki_effectiveness_api_router,
-        tour_filter_api_router,
-        tour_import_router
+        # tour_filter_api_router,  # AR-02: Jetzt in admin_router gebündelt
+        # tour_import_router  # AR-02: Jetzt in admin_router gebündelt
     ]
     
     for router in routers:

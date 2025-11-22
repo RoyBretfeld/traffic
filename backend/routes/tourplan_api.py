@@ -377,6 +377,10 @@ async def get_tourplan_tours(
 @router.post("/upload")
 async def upload_tourplan(file: UploadFile = File(...), session: dict = Depends(require_admin)):
     """
+    AR-02: Sollte unter /api/admin/tourplan/upload sein, aber bleibt hier für Kompatibilität.
+    Wird später migriert.
+    """
+    """
     Lädt einen Tourplan hoch und speichert ihn im tourplaene Verzeichnis.
     """
     try:

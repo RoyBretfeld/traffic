@@ -20,6 +20,7 @@ from repositories.geo_repo import upsert as geo_upsert
 from backend.utils.safe_print import safe_print
 from backend.routes.auth_api import require_admin
 
+# AR-02: Router ohne Prefix (wird von admin_api.py unter /api/admin gebündelt)
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
